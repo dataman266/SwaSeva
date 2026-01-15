@@ -29,10 +29,9 @@
             color: #E8F0E8;
             margin: 0;
             padding: 0;
-            -webkit-tap-highlight-color: rgba(245, 158, 11, 0.1); /* Android Ripple simulation */
+            -webkit-tap-highlight-color: rgba(245, 158, 11, 0.1);
         }
 
-        /* Material Ripple Effect */
         .ripple {
             position: relative;
             overflow: hidden;
@@ -59,7 +58,6 @@
             transition: 0s;
         }
 
-        /* Anamorphic Backgrounds */
         .blob {
             position: fixed;
             width: 100vw;
@@ -83,7 +81,7 @@
             background: rgba(255, 255, 255, 0.04);
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 28px; /* MD3 Standard */
+            border-radius: 28px;
         }
 
         .scrollbar-hide::-webkit-scrollbar { display: none; }
@@ -104,5 +102,16 @@
     <div class="blob blob-1"></div>
     <div class="blob blob-2"></div>
     <div id="root"></div>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').then(reg => {
+                    console.log('SW registered!', reg);
+                }).catch(err => {
+                    console.log('SW registration failed:', err);
+                });
+            });
+        }
+    </script>
 </body>
 </html>
