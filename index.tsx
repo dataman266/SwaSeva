@@ -1,7 +1,12 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App';
+import App from './App.tsx';
+
+// Ensure process.env is shimmed for browser environments to prevent crashes
+if (typeof window !== 'undefined' && !window.process) {
+  window.process = { env: {} } as any;
+}
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {

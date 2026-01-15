@@ -1,8 +1,8 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Search, ChevronRight, CheckCircle2, Scale, MessageCircle, MapPin, Filter } from 'lucide-react';
-import { Language, Product } from '../types';
-import { PRODUCTS, SELLERS, CATEGORIES, TRANSLATIONS } from '../constants';
+import { Language, Product } from '../types.ts';
+import { PRODUCTS, SELLERS, CATEGORIES, TRANSLATIONS } from '../constants.tsx';
 
 interface HomeScreenProps {
   lang: Language;
@@ -163,17 +163,16 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ lang, onViewDetails, onOpenAssi
         </div>
       </div>
 
-      {/* MD3 Floating Action Button for Assistant */}
+      {/* Assistant FAB */}
       <button 
         onClick={onOpenAssistant}
         className="fixed bottom-28 right-6 w-16 h-16 bg-[#2D5A27] text-[#F59E0B] rounded-[24px] flex items-center justify-center shadow-[0_12px_40px_rgba(0,0,0,0.6)] border border-white/10 z-[60] active:scale-90 transition-all hover:brightness-110 active:rotate-12"
       >
         <MessageCircle size={30} strokeWidth={2.5} />
-        {/* Visual Cue/Badge */}
         <div className="absolute -top-1 -right-1 w-4 h-4 bg-[#F59E0B] rounded-full border-2 border-[#0E1A0E] animate-pulse"></div>
       </button>
 
-      {/* Compare Floating Tool */}
+      {/* Compare Tool */}
       {selectedIds.length > 1 && (
         <div className="fixed bottom-28 left-6 z-[60] animate-in slide-in-from-left duration-500">
           <button 

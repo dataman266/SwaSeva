@@ -1,9 +1,9 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { ArrowLeft, Mic, Send, Sparkles, User, Bot, RefreshCw } from 'lucide-react';
-import { Language } from '../types';
-import { PRODUCTS } from '../constants';
-import { getAiMarketAssistance } from '../services/geminiService';
+import { Language } from '../types.ts';
+import { PRODUCTS } from '../constants.tsx';
+import { getAiMarketAssistance } from '../services/geminiService.ts';
 
 interface AssistantScreenProps {
   lang: Language;
@@ -48,13 +48,11 @@ const AssistantScreen: React.FC<AssistantScreenProps> = ({ lang, onBack }) => {
 
   return (
     <div className="fixed inset-0 bg-[#0E1A0E] z-[100] flex flex-col ios-safe-top overflow-hidden">
-      {/* Immersive Background Blobs */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-[-15%] right-[-10%] w-[100vw] h-[100vw] bg-[#2D5A27] rounded-full blur-[140px] opacity-20"></div>
         <div className="absolute bottom-[-10%] left-[-15%] w-[100vw] h-[100vw] bg-[#F59E0B] rounded-full blur-[160px] opacity-10"></div>
       </div>
 
-      {/* Android Top App Bar Style */}
       <div className="relative px-4 py-4 flex items-center gap-4 border-b border-white/5 backdrop-blur-3xl bg-white/5 z-20">
         <button onClick={onBack} className="p-3 text-white/70 hover:bg-white/5 rounded-full transition-colors active:scale-90">
           <ArrowLeft size={24} strokeWidth={2.5} />
@@ -76,7 +74,6 @@ const AssistantScreen: React.FC<AssistantScreenProps> = ({ lang, onBack }) => {
         </button>
       </div>
 
-      {/* Chat Canvas */}
       <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-8 pb-36 relative z-10 scrollbar-hide">
         {messages.map((m, i) => (
           <div key={i} className={`flex flex-col ${m.role === 'user' ? 'items-end' : 'items-start'} space-y-2 animate-in fade-in slide-in-from-bottom-2 duration-300`}>
@@ -107,7 +104,6 @@ const AssistantScreen: React.FC<AssistantScreenProps> = ({ lang, onBack }) => {
         )}
       </div>
 
-      {/* MD3 Rounded Input Field */}
       <div className="absolute bottom-0 left-0 right-0 p-4 pb-8 bg-gradient-to-t from-[#0E1A0E] via-[#0E1A0E] to-transparent z-30">
         <div className="max-w-3xl mx-auto flex items-center gap-3 bg-[#1A2E1A] p-2.5 rounded-[32px] shadow-2xl border border-white/10 group focus-within:ring-2 ring-[#F59E0B]/20 transition-all">
           <button className="w-12 h-12 bg-[#2D5A27] text-[#F59E0B] rounded-full flex items-center justify-center shadow-lg active:scale-90 transition-transform">

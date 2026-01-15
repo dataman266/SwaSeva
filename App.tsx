@@ -1,15 +1,15 @@
 
 import React, { useState, useEffect } from 'react';
-import { AppScreen, AppState, Language, Product } from './types';
-import { TRANSLATIONS } from './constants';
-import HomeScreen from './components/HomeScreen';
-import DetailsScreen from './components/DetailsScreen';
-import SellScreen from './components/SellScreen';
-import OrdersScreen from './components/OrdersScreen';
-import ProfileScreen from './components/ProfileScreen';
-import AssistantScreen from './components/AssistantScreen';
-import BottomNav from './components/BottomNav';
-import Header from './components/Header';
+import { AppScreen, AppState, Language, Product } from './types.ts';
+import { TRANSLATIONS } from './constants.tsx';
+import HomeScreen from './components/HomeScreen.tsx';
+import DetailsScreen from './components/DetailsScreen.tsx';
+import SellScreen from './components/SellScreen.tsx';
+import OrdersScreen from './components/OrdersScreen.tsx';
+import ProfileScreen from './components/ProfileScreen.tsx';
+import AssistantScreen from './components/AssistantScreen.tsx';
+import BottomNav from './components/BottomNav.tsx';
+import Header from './components/Header.tsx';
 
 const App: React.FC = () => {
   const [state, setState] = useState<AppState>({
@@ -49,7 +49,6 @@ const App: React.FC = () => {
       case 'ORDERS': return <OrdersScreen lang={state.userLanguage} />;
       case 'PROFILE': return <ProfileScreen lang={state.userLanguage} />;
       case 'ASSISTANT': return <AssistantScreen lang={state.userLanguage} onBack={() => changeScreen('HOME')} />;
-      // Fix: Added missing onOpenAssistant prop to HomeScreen in the default case to satisfy HomeScreenProps
       default: return <HomeScreen lang={state.userLanguage} onViewDetails={(p) => changeScreen('DETAILS', p)} onOpenAssistant={() => changeScreen('ASSISTANT')} />;
     }
   };
