@@ -1,0 +1,8 @@
+{
+  "name": "Copy of Kisan Mandi Connect",
+  "description": "A trusted digital marketplace for rural farmers to buy and sell agricultural raw materials like seeds, saplings, and fertilizers with ease and transparency.",
+  "requestFramePermissions": [
+    "geolocation",
+    "camera"
+  ]
+}
