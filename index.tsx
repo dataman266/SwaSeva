@@ -1,9 +1,9 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App.tsx';
+import App from './App';
 
-// Ensure process.env is shimmed for browser environments to prevent crashes
+// Ensure process.env is shimmed for browser environments
 if (typeof window !== 'undefined' && !window.process) {
   window.process = { env: {} } as any;
 }
