@@ -49,7 +49,8 @@ const App: React.FC = () => {
       case 'ORDERS': return <OrdersScreen lang={state.userLanguage} />;
       case 'PROFILE': return <ProfileScreen lang={state.userLanguage} />;
       case 'ASSISTANT': return <AssistantScreen lang={state.userLanguage} onBack={() => changeScreen('HOME')} />;
-      default: return <HomeScreen lang={state.userLanguage} onViewDetails={(p) => changeScreen('DETAILS', p)} />;
+      // Fix: Added missing onOpenAssistant prop to HomeScreen in the default case to satisfy HomeScreenProps
+      default: return <HomeScreen lang={state.userLanguage} onViewDetails={(p) => changeScreen('DETAILS', p)} onOpenAssistant={() => changeScreen('ASSISTANT')} />;
     }
   };
 

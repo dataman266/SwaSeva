@@ -1,31 +1,37 @@
 
 import { GoogleGenAI } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-
 export async function getAiMarketAssistance(query: string, products: any[], language: string = 'en') {
   try {
+    // Fix: Always initialize GoogleGenAI inside the function to ensure the most current API key is used
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    
     const isMr = language === 'mr';
     const langInstructions = isMr 
-      ? "Please respond only in Marathi (मराठी). Use simple, friendly language suitable for a farmer from Maharashtra."
+      ? "Please respond ONLY in Marathi (मराठी). Use simple, friendly language suitable for a farmer from Maharashtra."
       : "Please respond in English. Keep it simple and helpful for a farmer.";
 
+    // Using ai.models.generateContent directly with model name as per guidelines
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
-      contents: `User asks: "${query}". Here are the available products in the market: ${JSON.stringify(products)}. 
-      Act as a helpful agricultural advisor for a farmer. Recommend the best products or answer their query.
-      ${langInstructions}
-      Keep it very concise. Maximum 2 sentences.`,
+      contents: `User query: "${query}". 
+      Available products: ${JSON.stringify(products)}. 
+      Context: You are "Kisan Sahayak", an expert agricultural advisor. 
+      Task: Recommend products or provide advice based on the products listed.
+      Rules: ${langInstructions} Keep it very concise (max 2 sentences). Avoid technical jargon.`,
       config: {
-        temperature: 0.7,
-        topP: 0.95,
+        temperature: 0.8,
+        topP: 0.9,
+        topK: 40,
       },
     });
-    return response.text;
+
+    // Extracting text using the .text property (not a method)
+    return response.text || (isMr ? "क्षमस्व, मी आता प्रतिसाद देऊ शकत नाही." : "I'm sorry, I can't respond right now.");
   } catch (error) {
-    console.error("Gemini Error:", error);
+    console.error("Gemini Assistant Error:", error);
     return language === 'mr' 
-      ? "क्षमस्व, मला सध्या जोडण्यात समस्या येत आहे. कृपया पुन्हा प्रयत्न करा."
-      : "I'm sorry, I'm having trouble connecting right now. Please try again.";
+      ? "नेटवर्क समस्या. कृपया पुन्हा प्रयत्न करा."
+      : "Connection issue. Please try again.";
   }
 }
