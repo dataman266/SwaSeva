@@ -18,7 +18,7 @@ const Header: React.FC<HeaderProps> = ({ location, language, onLanguageChange })
           <Menu size={24} />
         </button>
         <div className="flex flex-col">
-          <h1 className="text-xl font-black text-white leading-tight tracking-tight italic">Mandi<span className="text-[#F59E0B] not-italic">.</span>Connect</h1>
+          <h1 className="text-xl font-black text-white leading-tight tracking-tight italic">Apla<span className="text-[#F59E0B] not-italic">.</span>AgriMart</h1>
           <div className="flex items-center gap-1.5 text-[#F59E0B] group">
             <MapPin size={10} className="animate-pulse" />
             <span className="text-[9px] font-black uppercase tracking-[0.2em] opacity-70 group-hover:opacity-100 transition-opacity">{location}</span>

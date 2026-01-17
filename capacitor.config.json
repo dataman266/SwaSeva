@@ -1,7 +1,7 @@
 
 {
-  "appId": "com.kisanmandi.app",
-  "appName": "Kisan Mandi Connect",
+  "appId": "com.aplaagrimart.app",
+  "appName": "Apla Agri Mart",
   "webDir": "dist",
   "bundledWebRuntime": false,
   "server": {
