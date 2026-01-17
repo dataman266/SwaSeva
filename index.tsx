@@ -3,9 +3,10 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 
-// Ensure process.env is shimmed for browser environments
-if (typeof window !== 'undefined' && !window.process) {
-  window.process = { env: {} } as any;
+// Global shim for process.env (Required for Gemini SDK in browser/Capacitor)
+if (typeof window !== 'undefined') {
+  (window as any).process = (window as any).process || {};
+  (window as any).process.env = (window as any).process.env || {};
 }
 
 const rootElement = document.getElementById('root');
