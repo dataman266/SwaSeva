@@ -1,0 +1,93 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  FARMER
+  SELLER
+  ADMIN
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PAID
+  COD
+  PENDING
+}
+
+model User {
+  id           String   @id @default(uuid())
+  phone        String   @unique
+  role         Role     @default(FARMER)
+  languagePref String   @default("mr") @map("language_pref")
+  location     Json?    // Storing {lat, lng} as JSON for simplicity in MVP
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  sellerProfile Seller?
+  orders        Order[] @relation("BuyerOrders")
+  sales         Order[] @relation("SellerOrders")
+  
+  @@map("users")
+}
+
+model Seller {
+  id               String  @id @default(uuid())
+  userId           String  @unique @map("user_id")
+  businessName     String  @map("business_name")
+  isVerified       Boolean @default(false) @map("is_verified")
+  rating           Decimal @default(0.0) @db.Decimal(3, 2)
+  verificationDocs Json?   @map("verification_docs")
+  
+  user     User      @relation(fields: [userId], references: [id])
+  products Product[]
+
+  @@map("sellers")
+}
+
+model Product {
+  id            String   @id @default(uuid())
+  sellerId      String   @map("seller_id")
+  nameEn        String   @map("name_en")
+  nameMr        String   @map("name_mr")
+  price         Decimal  @db.Decimal(10, 2)
+  stockQuantity Int      @map("stock_quantity")
+  images        String[]
+  isActive      Boolean  @default(true) @map("is_active")
+  category      String
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  seller Seller @relation(fields: [sellerId], references: [id])
+
+  @@map("products")
+}
+
+model Order {
+  id            String        @id @default(uuid())
+  buyerId       String        @map("buyer_id")
+  sellerId      String        @map("seller_id")
+  status        OrderStatus   @default(PENDING)
+  totalAmount   Decimal       @map("total_amount") @db.Decimal(10, 2)
+  paymentStatus PaymentStatus @default(PENDING) @map("payment_status")
+  items         Json
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt @map("updated_at")
+
+  buyer  User @relation("BuyerOrders", fields: [buyerId], references: [id])
+  seller User @relation("SellerOrders", fields: [sellerId], references: [id])
+
+  @@map("orders")
+}
