@@ -8,12 +8,15 @@ import SellScreen from './components/SellScreen.tsx';
 import OrdersScreen from './components/OrdersScreen.tsx';
 import ProfileScreen from './components/ProfileScreen.tsx';
 import AssistantScreen from './components/AssistantScreen.tsx';
+import OnboardingScreen from './components/OnboardingScreen.tsx';
 import BottomNav from './components/BottomNav.tsx';
 import Header from './components/Header.tsx';
 
+const ONBOARDED_KEY = 'agrimart_onboarded';
+
 const App: React.FC = () => {
   const [state, setState] = useState<AppState>({
-    currentScreen: 'HOME',
+    currentScreen: localStorage.getItem(ONBOARDED_KEY) ? 'HOME' : 'ONBOARDING',
     userLanguage: Language.ENGLISH,
     location: 'Detecting...',
   });
@@ -49,22 +52,42 @@ const App: React.FC = () => {
       case 'ORDERS': return <OrdersScreen lang={state.userLanguage} />;
       case 'PROFILE': return <ProfileScreen lang={state.userLanguage} />;
       case 'ASSISTANT': return <AssistantScreen lang={state.userLanguage} onBack={() => changeScreen('HOME')} />;
+      case 'ONBOARDING': return (
+        <OnboardingScreen
+          lang={state.userLanguage}
+          onComplete={() => {
+            localStorage.setItem(ONBOARDED_KEY, 'true');
+            changeScreen('HOME');
+          }}
+        />
+      );
       default: return <HomeScreen lang={state.userLanguage} onViewDetails={(p) => changeScreen('DETAILS', p)} onOpenAssistant={() => changeScreen('ASSISTANT')} />;
     }
   };
 
+  const isOnboarding = state.currentScreen === 'ONBOARDING';
+  // On HOME, Header is absolutely positioned over the hero image
+  // so we omit the spacer; on other screens add a top spacer
+  const needsHeaderSpacer = !isOnboarding && state.currentScreen !== 'HOME';
+
   return (
-    <div className="flex flex-col min-h-screen bg-[#0E1A0E] text-white">
-      <Header 
-        location={state.location} 
-        language={state.userLanguage} 
-        onLanguageChange={(l) => setState(prev => ({...prev, userLanguage: l}))} 
-        onOpenAssistant={() => changeScreen('ASSISTANT')}
-      />
-      
+    <div className="flex flex-col min-h-screen" style={{ background: '#0A1A0A', color: '#F5F0E8' }}>
+      {!isOnboarding && (
+        <Header
+          location={state.location}
+          language={state.userLanguage}
+          onLanguageChange={l => setState(prev => ({ ...prev, userLanguage: l }))}
+          onOpenAssistant={() => changeScreen('ASSISTANT')}
+        />
+      )}
+
+      {needsHeaderSpacer && <div className="h-14 pt-safe" aria-hidden />}
+
       <main className="flex-grow">{renderScreen()}</main>
 
-      <BottomNav activeScreen={state.currentScreen} onNavigate={changeScreen} lang={state.userLanguage} />
+      {!isOnboarding && (
+        <BottomNav activeScreen={state.currentScreen} onNavigate={changeScreen} lang={state.userLanguage} />
+      )}
     </div>
   );
 };

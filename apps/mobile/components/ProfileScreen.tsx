@@ -1,49 +1,136 @@
-
 import React from 'react';
-import { Language } from '../types';
-import { User, Settings, Bell, HelpCircle, Shield, LogOut, ChevronRight } from 'lucide-react';
+import { Language } from '../types.ts';
+import {
+  Settings, Bell, ShieldCheck, HelpCircle, LogOut,
+  ChevronRight, Sprout,
+} from 'lucide-react';
+import SectionReveal from './atoms/SectionReveal.tsx';
 
-const ProfileScreen: React.FC<{ lang: Language }> = ({ lang }) => (
-  <div className="px-6 py-10 space-y-10 animate-in fade-in slide-in-from-bottom-6 duration-700">
-    <div className="flex items-center gap-6">
-      <div className="w-24 h-24 bg-[#2D5A27] text-white rounded-[32px] flex items-center justify-center text-4xl font-black shadow-2xl border-4 border-white/10 relative">
-        RS
-        <div className="absolute -bottom-1 -right-1 w-8 h-8 bg-[#F59E0B] rounded-full border-4 border-[#1A2E1A] flex items-center justify-center">
-            <Shield size={14} strokeWidth={3} />
-        </div>
-      </div>
-      <div className="space-y-1">
-        <h2 className="text-3xl font-black text-white">Rajesh Shinde</h2>
-        <p className="text-white/40 font-bold tracking-tight">+91 99999 88888</p>
-        <div className="inline-flex mt-2 px-4 py-1.5 bg-green-500/10 text-green-400 text-[10px] font-black rounded-full border border-green-500/20 uppercase tracking-widest">Premium Farmer</div>
-      </div>
-    </div>
+const MENU_ITEMS = [
+  { icon: Settings,    label: 'Account Settings',   labelMr: 'खाते सेटिंग्ज',     color: '#D4C4A0'   },
+  { icon: Bell,        label: 'Notifications',       labelMr: 'सूचना',              color: '#4A8C2A'   },
+  { icon: ShieldCheck, label: 'KYC Verification',    labelMr: 'KYC पडताळणी',       color: '#F5F0E8'   },
+  { icon: HelpCircle,  label: 'Help & Support',      labelMr: 'मदत आणि सहाय्य',     color: '#D4C4A0'   },
+  { icon: LogOut,      label: 'Sign Out',             labelMr: 'बाहेर पडा',          color: '#E57373'   },
+];
 
-    <div className="grid grid-cols-1 gap-4">
-      {[
-        { icon: Settings, label: 'Account Settings', color: 'text-amber-400' },
-        { icon: Bell, label: 'Notification Alerts', color: 'text-green-400' },
-        { icon: Shield, label: 'Kyc Verification', color: 'text-blue-400' },
-        { icon: HelpCircle, label: 'Customer Support', color: 'text-purple-400' },
-        { icon: LogOut, label: 'Logout Session', color: 'text-red-500' },
-      ].map((item, idx) => (
-        <button key={idx} className="spring-btn flex items-center justify-between p-6 glass-card rounded-[32px] border-white/5 active:bg-white/10 transition-all">
-          <div className="flex items-center gap-5">
-            <div className={`p-3 rounded-2xl bg-white/5 ${item.color}`}>
-                <item.icon size={22} strokeWidth={3} />
+export default function ProfileScreen({ lang }: { lang: Language }) {
+  const isMr = lang === Language.MARATHI;
+
+  return (
+    <div className="px-5 pt-8 pb-28 space-y-8" style={{ minHeight: '100vh' }}>
+
+      {/* ── Identity card ─────────────────────────────────────────── */}
+      <SectionReveal>
+        <div
+          className="p-6 rounded-2xl"
+          style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)' }}
+        >
+          <div className="flex items-center gap-4">
+            {/* Avatar */}
+            <div className="relative flex-shrink-0">
+              <div
+                className="w-16 h-16 rounded-2xl flex items-center justify-center font-medium text-lg text-[#F5F0E8]"
+                style={{ background: '#2D5A1B', letterSpacing: '0.02em' }}
+              >
+                RS
+              </div>
+              <div
+                className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center"
+                style={{ background: '#D4C4A0', border: '2px solid #0A1A0A' }}
+              >
+                <ShieldCheck size={10} className="text-[#0A1A0A]" />
+              </div>
             </div>
-            <span className="font-black text-white text-lg tracking-tight">{item.label}</span>
+
+            {/* Info */}
+            <div className="flex-1 min-w-0">
+              <h2 className="font-medium text-[#F5F0E8] truncate" style={{ fontSize: '18px', letterSpacing: '-0.02em' }}>
+                Rajesh Shinde
+              </h2>
+              <p className="font-light text-[rgba(245,240,232,0.45)] mt-0.5" style={{ fontSize: '13px' }}>
+                +91 99999 88888
+              </p>
+              <div
+                className="inline-flex items-center gap-1.5 mt-2 px-3 py-1 rounded-full"
+                style={{ background: 'rgba(74,140,42,0.12)', border: '1px solid rgba(74,140,42,0.2)' }}
+              >
+                <Sprout size={10} className="text-[#4A8C2A]" />
+                <span className="text-[9px] font-medium tracking-[0.12em] uppercase text-[#4A8C2A]">
+                  {isMr ? 'प्रीमियम शेतकरी' : 'Premium Farmer'}
+                </span>
+              </div>
+            </div>
           </div>
-          <ChevronRight size={20} className="text-white/20" />
-        </button>
-      ))}
-    </div>
+        </div>
+      </SectionReveal>
 
-    <div className="bg-[#F59E0B]/5 p-8 rounded-[48px] border border-[#F59E0B]/10 text-center space-y-2">
-      <p className="text-[10px] text-[#F59E0B] font-black uppercase tracking-[0.3em]">System Status</p>
-      <p className="text-white/20 font-black text-sm uppercase tracking-widest">v1.2.4-BETA • PWA CONNECTED</p>
-    </div>
-  </div>
-);
+      {/* ── Stats strip ───────────────────────────────────────────── */}
+      <SectionReveal delay={60}>
+        <div className="grid grid-cols-3 gap-3">
+          {[
+            { value: '12',    label: isMr ? 'लिस्टिंग' : 'Listings'   },
+            { value: '4.8',   label: isMr ? 'रेटिंग'   : 'Rating'     },
+            { value: '₹48k',  label: isMr ? 'विक्री'   : 'Sales'      },
+          ].map(({ value, label }) => (
+            <div
+              key={label}
+              className="p-4 rounded-2xl text-center"
+              style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)' }}
+            >
+              <p className="font-light text-[#F5F0E8] mb-0.5" style={{ fontSize: '20px', letterSpacing: '-0.02em' }}>
+                {value}
+              </p>
+              <p className="text-[10px] font-medium tracking-[0.1em] uppercase text-[rgba(245,240,232,0.35)]">
+                {label}
+              </p>
+            </div>
+          ))}
+        </div>
+      </SectionReveal>
 
-export default ProfileScreen;
+      {/* ── Menu list ──────────────────────────────────────────────── */}
+      <SectionReveal delay={100}>
+        <div
+          className="rounded-2xl overflow-hidden divide-y divide-[rgba(245,240,232,0.05)]"
+          style={{
+            background: '#111C11',
+            border: '1px solid rgba(245,240,232,0.07)',
+          }}
+        >
+          {MENU_ITEMS.map(({ icon: Icon, label, labelMr, color }, i) => (
+            <button
+              key={label}
+              className="w-full flex items-center justify-between px-5 py-4 active:bg-[rgba(245,240,232,0.03)] transition-all"
+              style={{ borderBottom: i < MENU_ITEMS.length - 1 ? '1px solid rgba(245,240,232,0.05)' : 'none' }}
+            >
+              <div className="flex items-center gap-3.5">
+                <Icon size={16} style={{ color }} strokeWidth={1.75} />
+                <span
+                  className="font-light"
+                  style={{
+                    fontSize: '14px',
+                    color: label === 'Sign Out' ? '#E57373' : '#F5F0E8',
+                    letterSpacing: '-0.01em',
+                  }}
+                >
+                  {isMr ? labelMr : label}
+                </span>
+              </div>
+              <ChevronRight size={14} className="text-[rgba(245,240,232,0.2)]" />
+            </button>
+          ))}
+        </div>
+      </SectionReveal>
+
+      {/* ── Version footer ────────────────────────────────────────── */}
+      <SectionReveal delay={160}>
+        <div className="flex items-center justify-center gap-2 pt-2 opacity-20">
+          <span className="text-[9px] font-medium tracking-[0.2em] uppercase">
+            Apla AgriMart · v1.2.4
+          </span>
+        </div>
+      </SectionReveal>
+    </div>
+  );
+}

@@ -5,73 +5,159 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
     <title>Apla Agri Mart</title>
-    
-    <meta name="theme-color" content="#0E1A0E">
+
+    <meta name="theme-color" content="#0A1A0A">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="icon" sizes="192x192" href="https://img.icons8.com/color/192/farm.png">
     <link rel="manifest" href="/manifest.json">
 
+    <!-- Tailwind CDN with FarmMinerals brand config -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                dark:    '#0A1A0A',
+                cream:   '#F5F0E8',
+                green:   '#2D5A1B',
+                gl:      '#4A8C2A',
+                beige:   '#D4C4A0',
+              },
+              surface: {
+                dark:  '#111C11',
+                mid:   '#1A2D1A',
+                light: '#F9F5EE',
+              },
+            },
+            fontFamily: {
+              sans: ['Inter', 'system-ui', 'sans-serif'],
+            },
+            letterSpacing: {
+              display: '-0.03em',
+              wide:    '0.08em',
+              caption: '0.12em',
+            },
+          }
+        }
+      }
+    </script>
+
+    <!-- Inter — lightweight grotesque to match FarmMinerals -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
     <style>
         :root {
-            --safe-top: env(safe-area-inset-top);
+            --safe-top:    env(safe-area-inset-top);
             --safe-bottom: env(safe-area-inset-bottom);
-            --earth-green: #2D5A27;
-            --deep-soil: #0E1A0E;
-            --harvest-gold: #F59E0B;
-            --md-surface: #1A2E1A;
+            --brand-dark:    #0A1A0A;
+            --brand-cream:   #F5F0E8;
+            --brand-green:   #2D5A1B;
+            --brand-beige:   #D4C4A0;
+            --surface-dark:  #111C11;
+            --surface-mid:   #1A2D1A;
         }
+
+        *, *::before, *::after { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
         body {
-            font-family: 'Lexend', 'Roboto', sans-serif;
-            background: var(--deep-soil);
-            color: #E8F0E8;
-            margin: 0;
-            padding: 0;
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--brand-dark);
+            color: var(--brand-cream);
+            margin: 0; padding: 0;
             overflow-x: hidden;
-            -webkit-tap-highlight-color: rgba(245, 158, 11, 0.1);
+            -webkit-tap-highlight-color: transparent;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
             user-select: none;
         }
 
+        /* ── Ambient glow blobs ── */
         .blob {
             position: fixed;
-            width: 100vw;
-            height: 100vw;
+            width: 80vw; height: 80vw;
             border-radius: 50%;
-            filter: blur(140px);
-            z-index: -1;
-            opacity: 0.15;
-            animation: drift 30s infinite alternate ease-in-out;
+            filter: blur(100px);
+            z-index: 0;
             pointer-events: none;
+            animation: drift 40s infinite alternate ease-in-out;
         }
-        .blob-1 { background: var(--earth-green); top: -20%; left: -20%; }
-        .blob-2 { background: var(--harvest-gold); bottom: -20%; right: -20%; }
+        .blob-1 { background: var(--brand-green); top: -15%; left: -10%; opacity: 0.13; }
+        .blob-2 { background: var(--brand-beige);  bottom: -15%; right: -10%; opacity: 0.06; }
+        #root { position: relative; z-index: 1; }
 
         @keyframes drift {
             from { transform: translate(0, 0) scale(1); }
-            to { transform: translate(5%, 10%) scale(1.1); }
+            to   { transform: translate(5%, 8%) scale(1.07); }
         }
 
+        /* ── Glass surface ── */
         .glass-card {
-            background: rgba(255, 255, 255, 0.04);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 28px;
+            background: rgba(245, 240, 232, 0.035);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(245, 240, 232, 0.07);
+            border-radius: 20px;
         }
 
+        /* ── Ticker / Marquee ── */
+        .ticker-track {
+            display: flex;
+            width: max-content;
+            animation: ticker 28s linear infinite;
+        }
+        .ticker-track-r {
+            display: flex;
+            width: max-content;
+            animation: ticker-r 34s linear infinite;
+        }
+        @keyframes ticker   { 0% { transform: translateX(0); }    100% { transform: translateX(-50%); } }
+        @keyframes ticker-r { 0% { transform: translateX(-50%); } 100% { transform: translateX(0); }   }
+
+        /* ── Scroll reveal ── */
+        .reveal-hidden  { opacity: 0; transform: translateY(28px); }
+        .reveal-visible {
+            opacity: 1; transform: translateY(0);
+            transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1),
+                        transform 0.7s cubic-bezier(0.16,1,0.3,1);
+        }
+
+        /* ── Pill dot decorators ── */
+        .pill-dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: inline-block;
+        }
+
+        /* ── Utilities ── */
         .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+        .pb-safe  { padding-bottom: max(1.25rem, env(safe-area-inset-bottom)); }
+        .pt-safe  { padding-top:    max(0px,     env(safe-area-inset-top));    }
+
+        /* ── Nav backdrop ── */
+        .nav-blur {
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+        }
     </style>
+
 <script type="importmap">
 {
   "imports": {
-    "react/": "https://esm.sh/react@^19.2.3/",
-    "react": "https://esm.sh/react@^19.2.3",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
-    "vite": "https://esm.sh/vite@^7.3.1",
-    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
-    "@google/genai": "https://esm.sh/@google/genai@^1.37.0"
+    "react/":              "https://esm.sh/react@^19.2.3/",
+    "react":               "https://esm.sh/react@^19.2.3",
+    "react-dom/":          "https://esm.sh/react-dom@^19.2.3/",
+    "lucide-react":        "https://esm.sh/lucide-react@^0.562.0",
+    "vite":                "https://esm.sh/vite@^7.3.1",
+    "@vitejs/plugin-react":"https://esm.sh/@vitejs/plugin-react@^5.1.2",
+    "@google/genai":       "https://esm.sh/@google/genai@^1.37.0"
   }
 }
 </script>
@@ -80,17 +166,14 @@
     <div class="blob blob-1"></div>
     <div class="blob blob-2"></div>
     <div id="root"></div>
-    
+
     <script type="module" src="/index.tsx"></script>
 
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js').then(reg => {
-                    console.log('SW registered!', reg);
-                }).catch(err => {
-                    console.log('SW registration failed:', err);
-                });
+                navigator.serviceWorker.register('/sw.js')
+                  .catch(() => {/* silent fail in dev */});
             });
         }
     </script>

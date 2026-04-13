@@ -1,8 +1,7 @@
-
 import React from 'react';
 import { Home, PlusSquare, ShoppingBag, User } from 'lucide-react';
-import { AppScreen, Language } from '../types';
-import { TRANSLATIONS } from '../constants';
+import { AppScreen, Language } from '../types.ts';
+import { TRANSLATIONS } from '../constants.tsx';
 
 interface BottomNavProps {
   activeScreen: AppScreen;
@@ -10,39 +9,60 @@ interface BottomNavProps {
   lang: Language;
 }
 
-const BottomNav: React.FC<BottomNavProps> = ({ activeScreen, onNavigate, lang }) => {
+export default function BottomNav({ activeScreen, onNavigate, lang }: BottomNavProps) {
   const t = TRANSLATIONS[lang === Language.ENGLISH ? 'en' : 'mr'];
 
   const navItems = [
-    { id: 'HOME', label: t.home, icon: Home },
-    { id: 'ORDERS', label: t.orders, icon: ShoppingBag },
-    { id: 'SELL', label: t.sell, icon: PlusSquare },
-    { id: 'PROFILE', label: t.profile, icon: User },
+    { id: 'HOME'   as AppScreen, label: t.home,   icon: Home       },
+    { id: 'ORDERS' as AppScreen, label: t.orders, icon: ShoppingBag },
+    { id: 'SELL'   as AppScreen, label: t.sell,   icon: PlusSquare  },
+    { id: 'PROFILE'as AppScreen, label: t.profile,icon: User        },
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-[#0E1A0E]/95 backdrop-blur-xl border-t border-white/5 px-4 pt-3 pb-safe flex justify-around items-center z-50 shadow-[0_-4px_24px_rgba(0,0,0,0.4)]">
-      {navItems.map((item) => {
-        const Icon = item.icon;
-        const isActive = activeScreen === item.id;
-        return (
-          <button
-            key={item.id}
-            onClick={() => onNavigate(item.id as AppScreen)}
-            className={`flex flex-col items-center gap-1 group transition-all duration-300 flex-1 min-w-0 py-2`}
-          >
-            {/* MD3 Active Indicator Pill */}
-            <div className={`relative px-6 py-1 rounded-full transition-all duration-300 ${isActive ? 'bg-[#2D5A27] text-[#F59E0B]' : 'text-white/40 group-hover:bg-white/5'}`}>
-              <Icon size={24} strokeWidth={isActive ? 2.5 : 2} className="transition-transform" />
-            </div>
-            <span className={`text-[10px] font-bold truncate max-w-full transition-colors duration-300 ${isActive ? 'text-white' : 'text-white/40'}`}>
-              {item.label}
-            </span>
-          </button>
-        );
-      })}
+    <nav
+      className="fixed bottom-0 left-0 right-0 z-50 nav-blur pb-safe border-t border-[rgba(245,240,232,0.06)]"
+      style={{ background: 'rgba(10,26,10,0.92)' }}
+    >
+      <div className="flex justify-around items-center px-2 pt-2">
+        {navItems.map(({ id, label, icon: Icon }) => {
+          const active = activeScreen === id;
+          return (
+            <button
+              key={id}
+              onClick={() => onNavigate(id)}
+              className="flex flex-col items-center gap-1 flex-1 py-2 transition-all active:scale-90"
+            >
+              {/* Active indicator pill */}
+              <div
+                className={`flex items-center justify-center w-12 h-7 rounded-full transition-all duration-300 ${
+                  active
+                    ? 'bg-[rgba(212,196,160,0.15)]'
+                    : 'bg-transparent'
+                }`}
+              >
+                <Icon
+                  size={20}
+                  strokeWidth={active ? 1.75 : 1.5}
+                  className={`transition-colors duration-300 ${
+                    active ? 'text-[#D4C4A0]' : 'text-[rgba(245,240,232,0.35)]'
+                  }`}
+                />
+              </div>
+              <span
+                className={`transition-colors duration-300 ${
+                  active
+                    ? 'text-[#D4C4A0]'
+                    : 'text-[rgba(245,240,232,0.35)]'
+                }`}
+                style={{ fontSize: '9px', fontWeight: 500, letterSpacing: '0.08em' }}
+              >
+                {label}
+              </span>
+            </button>
+          );
+        })}
+      </div>
     </nav>
   );
-};
-
-export default BottomNav;
+}

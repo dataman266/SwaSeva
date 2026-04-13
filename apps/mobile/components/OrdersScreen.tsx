@@ -1,53 +1,182 @@
-
 import React from 'react';
-import { Language } from '../types';
-import { ShoppingBag, ArrowRight, Leaf, Sprout } from 'lucide-react';
-import { TRANSLATIONS } from '../constants';
+import { Language } from '../types.ts';
+import { ShoppingBag, Package, Truck, CheckCircle, Clock } from 'lucide-react';
+import { TRANSLATIONS } from '../constants.tsx';
+import PillButton from './atoms/PillButton.tsx';
+import SectionReveal from './atoms/SectionReveal.tsx';
 
-const OrdersScreen: React.FC<{ lang: Language }> = ({ lang }) => {
-  const t = TRANSLATIONS[lang === Language.ENGLISH ? 'en' : 'mr'];
+// ── Mock past orders (shown once real API is wired in Phase 5) ────────────────
+const MOCK_ORDERS = [
+  {
+    id: '#AGM-1042',
+    product: 'Hybrid Tomato Seeds',
+    productMr: 'हायब्रीड टोमॅटो बियाणे',
+    seller: 'Krishi Seva Center',
+    amount: '₹900',
+    status: 'delivered' as const,
+    date: 'Apr 10, 2025',
+  },
+  {
+    id: '#AGM-1038',
+    product: 'NPK 19-19-19 Fertilizer',
+    productMr: 'NPK खत',
+    seller: 'Gajanan Seeds',
+    amount: '₹2,400',
+    status: 'transit' as const,
+    date: 'Apr 12, 2025',
+  },
+  {
+    id: '#AGM-1031',
+    product: 'Sugarcane Saplings',
+    productMr: 'उसाची रोपे',
+    seller: 'Ramachandra Nursery',
+    amount: '₹17,500',
+    status: 'pending' as const,
+    date: 'Apr 13, 2025',
+  },
+];
+
+type OrderStatus = 'pending' | 'transit' | 'delivered';
+
+const STATUS_META: Record<OrderStatus, { label: string; labelMr: string; icon: React.ElementType; color: string; bg: string }> = {
+  pending:   { label: 'Pending',   labelMr: 'प्रतीक्षेत',  icon: Clock,        color: 'text-[#D4C4A0]',  bg: 'bg-[rgba(212,196,160,0.1)]'  },
+  transit:   { label: 'In Transit',labelMr: 'मार्गावर',    icon: Truck,        color: 'text-[#4A8C2A]',  bg: 'bg-[rgba(74,140,42,0.1)]'    },
+  delivered: { label: 'Delivered', labelMr: 'पोहोचले',     icon: CheckCircle,  color: 'text-[#F5F0E8]',  bg: 'bg-[rgba(245,240,232,0.08)]' },
+};
+
+interface OrderCardProps {
+  order: typeof MOCK_ORDERS[0];
+  isMr: boolean;
+  index: number;
+}
+
+function OrderCard({ order, isMr, index }: OrderCardProps) {
+  const meta = STATUS_META[order.status];
+  const StatusIcon = meta.icon;
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[75vh] px-8 text-center space-y-12 animate-in fade-in slide-in-from-bottom-8 duration-1000">
-      
-      <div className="relative w-full max-w-[280px]">
-        <div className="absolute inset-0 bg-amber-500/20 blur-[80px] rounded-full animate-pulse"></div>
-        
-        <div className="absolute -top-4 -left-4 animate-bounce duration-[3000ms] opacity-40">
-          <Leaf className="text-green-400 rotate-45" size={32} />
+    <SectionReveal delay={index * 80}>
+      <div
+        className="p-5 rounded-2xl space-y-4"
+        style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)' }}
+      >
+        {/* Top row */}
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex-1 min-w-0">
+            <p className="font-medium text-[#F5F0E8] truncate" style={{ fontSize: '15px', letterSpacing: '-0.01em' }}>
+              {isMr ? order.productMr : order.product}
+            </p>
+            <p className="text-[11px] font-light text-[rgba(245,240,232,0.4)] mt-0.5">{order.seller}</p>
+          </div>
+          <span className="font-light text-[#F5F0E8] flex-shrink-0" style={{ fontSize: '16px', letterSpacing: '-0.02em' }}>
+            {order.amount}
+          </span>
         </div>
-        <div className="absolute top-10 -right-8 animate-bounce duration-[4000ms] delay-500 opacity-40">
-          <Sprout className="text-amber-400 -rotate-12" size={28} />
-        </div>
-        
-        <div className="relative glass-card p-12 rounded-[64px] border-white/10 shadow-2xl flex flex-col items-center">
-          <div className="w-40 h-40 bg-white/5 rounded-[48px] flex items-center justify-center text-7xl shadow-inner border border-white/10 relative group">
-             <div className="absolute inset-0 bg-[#F59E0B] opacity-0 group-hover:opacity-10 transition-opacity blur-2xl"></div>
-             🚜
+
+        {/* Bottom row */}
+        <div className="flex items-center justify-between">
+          <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full ${meta.bg}`}>
+            <StatusIcon size={11} className={meta.color} />
+            <span className={`text-[10px] font-medium tracking-[0.1em] uppercase ${meta.color}`}>
+              {isMr ? meta.labelMr : meta.label}
+            </span>
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="text-[10px] font-light text-[rgba(245,240,232,0.3)]">{order.date}</span>
+            <span className="text-[10px] font-medium text-[rgba(245,240,232,0.25)]">{order.id}</span>
           </div>
         </div>
       </div>
+    </SectionReveal>
+  );
+}
 
-      <div className="space-y-4 max-w-xs">
-        <h2 className="text-4xl font-black text-white leading-tight tracking-tight">
-          {t.noOrders}
-        </h2>
-        <p className="text-white/40 text-lg font-medium leading-relaxed">
-          {t.noOrdersDesc}
-        </p>
-      </div>
+export default function OrdersScreen({ lang }: { lang: Language }) {
+  const t    = TRANSLATIONS[lang === Language.ENGLISH ? 'en' : 'mr'];
+  const isMr = lang === Language.MARATHI;
 
-      <button className="spring-btn flex items-center gap-4 bg-[#F59E0B] text-[#132413] px-10 py-6 rounded-[32px] font-black text-xl shadow-2xl shadow-amber-900/40 border-b-4 border-amber-700">
-        {t.startShopping}
-        <ArrowRight size={24} strokeWidth={3} />
-      </button>
+  const isEmpty = false; // flip to true to show empty state
 
-      <div className="flex items-center gap-2 opacity-20">
-        <ShoppingBag size={14} />
-        <span className="text-[10px] font-black uppercase tracking-[0.3em]">Apla Agri Mart Logistics</span>
-      </div>
+  return (
+    <div className="px-5 pt-8 pb-28 space-y-8" style={{ minHeight: '100vh' }}>
+
+      {/* Header */}
+      <SectionReveal>
+        <div>
+          <p className="text-[10px] font-medium tracking-[0.2em] uppercase text-[rgba(245,240,232,0.35)] mb-1">
+            {isMr ? 'माझे व्यवहार' : 'My Transactions'}
+          </p>
+          <h1 className="font-light text-[#F5F0E8]" style={{ fontSize: '26px', letterSpacing: '-0.02em' }}>
+            {t.orders}
+          </h1>
+        </div>
+      </SectionReveal>
+
+      {isEmpty ? (
+        /* ── Empty state ──────────────────────────────────────────── */
+        <div className="flex flex-col items-center justify-center py-24 text-center space-y-6">
+          <div
+            className="w-20 h-20 rounded-full flex items-center justify-center"
+            style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)' }}
+          >
+            <ShoppingBag size={28} className="text-[rgba(245,240,232,0.25)]" strokeWidth={1.5} />
+          </div>
+          <div className="space-y-2">
+            <h2 className="font-light text-[#F5F0E8]" style={{ fontSize: '22px', letterSpacing: '-0.02em' }}>
+              {t.noOrders}
+            </h2>
+            <p className="font-light text-[rgba(245,240,232,0.4)] max-w-xs leading-relaxed" style={{ fontSize: '14px' }}>
+              {t.noOrdersDesc}
+            </p>
+          </div>
+          <PillButton variant="light">{t.startShopping}</PillButton>
+        </div>
+      ) : (
+        /* ── Order list ───────────────────────────────────────────── */
+        <div className="space-y-5">
+
+          {/* Summary strip */}
+          <SectionReveal>
+            <div className="grid grid-cols-3 gap-3">
+              {[
+                { label: isMr ? 'एकूण' : 'Total',     value: '3' },
+                { label: isMr ? 'मार्गावर' : 'Active', value: '1' },
+                { label: isMr ? 'खर्च' : 'Spent',      value: '₹20.8k' },
+              ].map(({ label, value }) => (
+                <div
+                  key={label}
+                  className="p-4 rounded-2xl text-center"
+                  style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)' }}
+                >
+                  <p className="font-light text-[#F5F0E8] mb-0.5" style={{ fontSize: '20px', letterSpacing: '-0.02em' }}>
+                    {value}
+                  </p>
+                  <p className="text-[10px] font-medium tracking-[0.1em] uppercase text-[rgba(245,240,232,0.35)]">
+                    {label}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </SectionReveal>
+
+          {/* Order cards */}
+          <div className="space-y-3">
+            {MOCK_ORDERS.map((order, i) => (
+              <OrderCard key={order.id} order={order} isMr={isMr} index={i} />
+            ))}
+          </div>
+
+          {/* Footer note */}
+          <SectionReveal delay={240}>
+            <div className="flex items-center justify-center gap-2 pt-4 opacity-25">
+              <Package size={11} />
+              <span className="text-[9px] font-medium tracking-[0.2em] uppercase">
+                {isMr ? 'Apla AgriMart लॉजिस्टिक्स' : 'Apla AgriMart Logistics'}
+              </span>
+            </div>
+          </SectionReveal>
+        </div>
+      )}
     </div>
   );
-};
-
-export default OrdersScreen;
+}

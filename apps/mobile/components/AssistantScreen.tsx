@@ -1,6 +1,5 @@
-
 import React, { useState, useRef, useEffect } from 'react';
-import { ArrowLeft, Mic, Send, Sparkles, User, Bot, RefreshCw } from 'lucide-react';
+import { ArrowLeft, Mic, Send, Sparkles, RefreshCw, Bot } from 'lucide-react';
 import { Language } from '../types.ts';
 import { PRODUCTS } from '../constants.tsx';
 import { getAiMarketAssistance } from '../services/geminiService.ts';
@@ -10,128 +9,199 @@ interface AssistantScreenProps {
   onBack: () => void;
 }
 
-const AssistantScreen: React.FC<AssistantScreenProps> = ({ lang, onBack }) => {
+interface Message {
+  role: 'ai' | 'user';
+  text: string;
+  time: string;
+}
+
+const now = () => new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+export default function AssistantScreen({ lang, onBack }: AssistantScreenProps) {
   const isMr = lang === Language.MARATHI;
-  const [messages, setMessages] = useState<{ role: 'ai' | 'user'; text: string; time: string }[]>([
-    { 
-      role: 'ai', 
-      text: isMr ? 'नमस्कार! मी तुमचा मंडी सहाय्यक आहे. मी तुम्हाला कशी मदत करू शकतो?' : 'Namaste! I am your Mandi Assistant. How can I help you today?',
-      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-    }
-  ]);
-  const [input, setInput] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+
+  const [messages, setMessages] = useState<Message[]>([{
+    role: 'ai',
+    text: isMr
+      ? 'नमस्कार! मी तुमचा AgriMart सहाय्यक आहे. मी तुम्हाला कशी मदत करू शकतो?'
+      : 'Namaste! I am your AgriMart Assistant. How can I help you today?',
+    time: now(),
+  }]);
+  const [input, setInput]     = useState('');
+  const [loading, setLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTo({
-        top: scrollRef.current.scrollHeight,
-        behavior: 'smooth'
-      });
-    }
-  }, [messages, isLoading]);
+    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
+  }, [messages, loading]);
 
   const handleSend = async () => {
-    if (!input.trim() || isLoading) return;
-    
-    const userText = input;
-    const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    if (!input.trim() || loading) return;
+    const text = input;
     setInput('');
-    setMessages(prev => [...prev, { role: 'user', text: userText, time }]);
-    setIsLoading(true);
-
-    const aiResponse = await getAiMarketAssistance(userText, PRODUCTS, lang);
-    setMessages(prev => [...prev, { role: 'ai', text: aiResponse, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }]);
-    setIsLoading(false);
+    setMessages(prev => [...prev, { role: 'user', text, time: now() }]);
+    setLoading(true);
+    const reply = await getAiMarketAssistance(text, PRODUCTS, lang);
+    setMessages(prev => [...prev, { role: 'ai', text: reply, time: now() }]);
+    setLoading(false);
   };
 
+  const handleReset = () => setMessages([messages[0]]);
+
   return (
-    <div className="fixed inset-0 bg-[#0E1A0E] z-[100] flex flex-col ios-safe-top overflow-hidden">
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-[-15%] right-[-10%] w-[100vw] h-[100vw] bg-[#2D5A27] rounded-full blur-[140px] opacity-20"></div>
-        <div className="absolute bottom-[-10%] left-[-15%] w-[100vw] h-[100vw] bg-[#F59E0B] rounded-full blur-[160px] opacity-10"></div>
+    <div
+      className="fixed inset-0 z-[100] flex flex-col overflow-hidden"
+      style={{ background: '#0A1A0A' }}
+    >
+      {/* Subtle bg glow */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div
+          className="absolute top-[-20%] right-[-15%] w-[90vw] h-[90vw] rounded-full opacity-10"
+          style={{ background: '#2D5A1B', filter: 'blur(100px)' }}
+        />
       </div>
 
-      <div className="relative px-4 py-4 flex items-center gap-4 border-b border-white/5 backdrop-blur-3xl bg-white/5 z-20">
-        <button onClick={onBack} className="p-3 text-white/70 hover:bg-white/5 rounded-full transition-colors active:scale-90">
-          <ArrowLeft size={24} strokeWidth={2.5} />
+      {/* ── Top bar ─────────────────────────────────────────────────── */}
+      <div
+        className="relative flex items-center gap-3 px-5 py-3 border-b z-20 flex-shrink-0 pt-safe nav-blur"
+        style={{ borderColor: 'rgba(245,240,232,0.07)', background: 'rgba(10,26,10,0.85)' }}
+      >
+        <button
+          onClick={onBack}
+          className="w-8 h-8 flex items-center justify-center rounded-full text-[rgba(245,240,232,0.55)] active:scale-90 transition-all"
+        >
+          <ArrowLeft size={18} />
         </button>
-        <div className="flex-1 flex items-center gap-3">
-          <div className="w-12 h-12 bg-[#2D5A27] rounded-2xl flex items-center justify-center shadow-xl border border-white/10 ring-2 ring-[#F59E0B]/20">
-            <Bot size={28} className="text-[#F59E0B]" />
-          </div>
-          <div>
-            <h2 className="text-lg font-black text-white leading-tight">{isMr ? 'शेतकरी सहाय्यक' : 'Kisan Sahayak'}</h2>
-            <div className="flex items-center gap-1.5">
-               <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
-               <span className="text-[10px] font-black text-green-500/80 uppercase tracking-widest">{isMr ? 'ऑनलाइन' : 'ONLINE'}</span>
-            </div>
+
+        {/* Avatar */}
+        <div
+          className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
+          style={{ background: '#2D5A1B', border: '1px solid rgba(212,196,160,0.2)' }}
+        >
+          <Bot size={18} className="text-[#D4C4A0]" strokeWidth={1.5} />
+        </div>
+
+        <div className="flex-1 min-w-0">
+          <p className="font-medium text-[#F5F0E8] leading-none" style={{ fontSize: '14px', letterSpacing: '-0.01em' }}>
+            {isMr ? 'किसान सहाय्यक' : 'Kisan Sahayak'}
+          </p>
+          <div className="flex items-center gap-1.5 mt-0.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#4A8C2A] animate-pulse" />
+            <span className="text-[9px] font-medium tracking-[0.12em] uppercase text-[#4A8C2A]">
+              {isMr ? 'ऑनलाइन' : 'Online'}
+            </span>
           </div>
         </div>
-        <button className="p-3 text-white/40 hover:bg-white/5 rounded-full" onClick={() => setMessages([messages[0]])}>
-          <RefreshCw size={20} />
+
+        <button
+          onClick={handleReset}
+          className="w-8 h-8 flex items-center justify-center rounded-full text-[rgba(245,240,232,0.35)] active:scale-90 transition-all hover:text-[rgba(245,240,232,0.65)]"
+        >
+          <RefreshCw size={15} />
         </button>
       </div>
 
-      <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-8 pb-36 relative z-10 scrollbar-hide">
+      {/* ── Message list ────────────────────────────────────────────── */}
+      <div
+        ref={scrollRef}
+        className="flex-1 overflow-y-auto px-4 py-5 space-y-5 scrollbar-hide relative z-10"
+      >
         {messages.map((m, i) => (
-          <div key={i} className={`flex flex-col ${m.role === 'user' ? 'items-end' : 'items-start'} space-y-2 animate-in fade-in slide-in-from-bottom-2 duration-300`}>
-            <div className={`max-w-[82%] px-6 py-5 rounded-[28px] shadow-xl border ${
-              m.role === 'user' 
-              ? 'bg-[#2D5A27] text-white rounded-tr-none border-white/10 shadow-green-900/20' 
-              : 'bg-[#1A2E1A] text-white/90 rounded-tl-none border-white/5 shadow-black/40'
-            }`}>
-              <p className="text-[15px] font-medium leading-relaxed tracking-tight">{m.text}</p>
+          <div
+            key={i}
+            className={`flex flex-col gap-1 ${m.role === 'user' ? 'items-end' : 'items-start'} animate-[fadeUp_0.35s_cubic-bezier(0.16,1,0.3,1)_both]`}
+          >
+            <div
+              className={`max-w-[82%] px-5 py-3.5 rounded-2xl ${
+                m.role === 'user'
+                  ? 'rounded-tr-sm'
+                  : 'rounded-tl-sm'
+              }`}
+              style={
+                m.role === 'user'
+                  ? { background: '#2D5A1B', border: '1px solid rgba(245,240,232,0.08)' }
+                  : { background: '#111C11', border: '1px solid rgba(245,240,232,0.07)' }
+              }
+            >
+              <p className="font-light text-[#F5F0E8] leading-relaxed" style={{ fontSize: '14px' }}>
+                {m.text}
+              </p>
             </div>
-            <div className="flex items-center gap-2 px-3 opacity-30">
-               <span className="text-[9px] font-black uppercase tracking-widest text-white">{m.role === 'user' ? (isMr ? 'तुम्ही' : 'You') : (isMr ? 'सहाय्यक' : 'AI Assistant')}</span>
-               <span className="text-[9px] font-bold text-white">•</span>
-               <span className="text-[9px] font-bold text-white">{m.time}</span>
-            </div>
+            <p className="text-[9px] font-light text-[rgba(245,240,232,0.3)] px-1">
+              {m.role === 'user' ? (isMr ? 'तुम्ही' : 'You') : (isMr ? 'सहाय्यक' : 'Assistant')} · {m.time}
+            </p>
           </div>
         ))}
-        {isLoading && (
-          <div className="flex flex-col items-start space-y-2 animate-in fade-in duration-300">
-            <div className="bg-[#1A2E1A] border border-white/5 p-6 rounded-[28px] rounded-tl-none w-32 shadow-lg">
-              <div className="flex gap-1.5 justify-center">
-                <div className="w-2 h-2 bg-[#F59E0B] rounded-full animate-bounce"></div>
-                <div className="w-2 h-2 bg-[#F59E0B] rounded-full animate-bounce [animation-delay:0.2s]"></div>
-                <div className="w-2 h-2 bg-[#F59E0B] rounded-full animate-bounce [animation-delay:0.4s]"></div>
+
+        {/* Typing indicator */}
+        {loading && (
+          <div className="flex items-start animate-[fadeUp_0.3s_both]">
+            <div
+              className="px-5 py-3.5 rounded-2xl rounded-tl-sm"
+              style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)' }}
+            >
+              <div className="flex gap-1.5 items-center h-4">
+                {[0, 0.2, 0.4].map(d => (
+                  <span
+                    key={d}
+                    className="w-1.5 h-1.5 rounded-full bg-[#D4C4A0] animate-bounce"
+                    style={{ animationDelay: `${d}s`, animationDuration: '0.9s' }}
+                  />
+                ))}
               </div>
             </div>
           </div>
         )}
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 p-4 pb-8 bg-gradient-to-t from-[#0E1A0E] via-[#0E1A0E] to-transparent z-30">
-        <div className="max-w-3xl mx-auto flex items-center gap-3 bg-[#1A2E1A] p-2.5 rounded-[32px] shadow-2xl border border-white/10 group focus-within:ring-2 ring-[#F59E0B]/20 transition-all">
-          <button className="w-12 h-12 bg-[#2D5A27] text-[#F59E0B] rounded-full flex items-center justify-center shadow-lg active:scale-90 transition-transform">
-            <Mic size={24} strokeWidth={2.5} />
-          </button>
-          <input 
-            type="text" 
-            placeholder={isMr ? 'सल्ला विचारा...' : 'Ask for advice...'} 
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-            className="flex-1 bg-transparent border-none focus:ring-0 text-white font-medium placeholder:text-white/20 px-1"
-          />
-          <button 
-            onClick={handleSend}
-            disabled={!input.trim() || isLoading}
-            className={`w-12 h-12 rounded-full flex items-center justify-center transition-all active:scale-90 ${input.trim() ? 'bg-[#F59E0B] text-[#0E1A0E]' : 'bg-white/5 text-white/20'}`}
+      {/* ── Input bar ───────────────────────────────────────────────── */}
+      <div
+        className="relative z-30 flex-shrink-0 px-4 pb-safe pt-3"
+        style={{ background: 'linear-gradient(to top, #0A1A0A 70%, transparent)' }}
+      >
+        <div
+          className="flex items-center gap-2 p-2 rounded-2xl nav-blur"
+          style={{ background: 'rgba(17,28,17,0.9)', border: '1px solid rgba(245,240,232,0.1)' }}
+        >
+          {/* Mic button */}
+          <button
+            className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 active:scale-90 transition-all"
+            style={{ background: '#2D5A1B', border: '1px solid rgba(212,196,160,0.15)' }}
           >
-            <Send size={22} strokeWidth={3} />
+            <Mic size={16} className="text-[#D4C4A0]" strokeWidth={1.5} />
+          </button>
+
+          <input
+            type="text"
+            placeholder={isMr ? 'सल्ला विचारा...' : 'Ask for advice...'}
+            value={input}
+            onChange={e => setInput(e.target.value)}
+            onKeyDown={e => e.key === 'Enter' && handleSend()}
+            className="flex-1 bg-transparent outline-none border-none font-light text-[#F5F0E8] placeholder:text-[rgba(245,240,232,0.25)]"
+            style={{ fontSize: '14px' }}
+          />
+
+          <button
+            onClick={handleSend}
+            disabled={!input.trim() || loading}
+            className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 transition-all active:scale-90 disabled:opacity-30"
+            style={{
+              background: input.trim() ? '#D4C4A0' : 'rgba(245,240,232,0.06)',
+              border: '1px solid rgba(245,240,232,0.1)',
+            }}
+          >
+            <Send size={14} className={input.trim() ? 'text-[#0A1A0A]' : 'text-[rgba(245,240,232,0.4)]'} />
           </button>
         </div>
-        <div className="flex justify-center items-center gap-2 mt-4 opacity-40">
-            <Sparkles size={12} className="text-[#F59E0B]" />
-            <p className="text-[9px] font-black uppercase tracking-[0.3em] text-white">Smart Agricultural Assistant Powered by Gemini</p>
+
+        {/* Gemini badge */}
+        <div className="flex justify-center items-center gap-1.5 mt-2 mb-1 opacity-25">
+          <Sparkles size={10} className="text-[#D4C4A0]" />
+          <p className="text-[9px] font-medium tracking-[0.18em] uppercase text-[#D4C4A0]">
+            {isMr ? 'Gemini द्वारे संचालित' : 'Powered by Gemini'}
+          </p>
         </div>
       </div>
     </div>
   );
-};
-
-export default AssistantScreen;
+}
