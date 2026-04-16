@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>graphify - graphify-out/graph.html</title>
+<script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0f0f1a; color: #e0e0e0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; display: flex; height: 100vh; overflow: hidden; }
+  #graph { flex: 1; }
+  #sidebar { width: 280px; background: #1a1a2e; border-left: 1px solid #2a2a4e; display: flex; flex-direction: column; overflow: hidden; }
+  #search-wrap { padding: 12px; border-bottom: 1px solid #2a2a4e; }
+  #search { width: 100%; background: #0f0f1a; border: 1px solid #3a3a5e; color: #e0e0e0; padding: 7px 10px; border-radius: 6px; font-size: 13px; outline: none; }
+  #search:focus { border-color: #4E79A7; }
+  #search-results { max-height: 140px; overflow-y: auto; padding: 4px 12px; border-bottom: 1px solid #2a2a4e; display: none; }
+  .search-item { padding: 4px 6px; cursor: pointer; border-radius: 4px; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .search-item:hover { background: #2a2a4e; }
+  #info-panel { padding: 14px; border-bottom: 1px solid #2a2a4e; min-height: 140px; }
+  #info-panel h3 { font-size: 13px; color: #aaa; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+  #info-content { font-size: 13px; color: #ccc; line-height: 1.6; }
+  #info-content .field { margin-bottom: 5px; }
+  #info-content .field b { color: #e0e0e0; }
+  #info-content .empty { color: #555; font-style: italic; }
+  .neighbor-link { display: block; padding: 2px 6px; margin: 2px 0; border-radius: 3px; cursor: pointer; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; border-left: 3px solid #333; }
+  .neighbor-link:hover { background: #2a2a4e; }
+  #neighbors-list { max-height: 160px; overflow-y: auto; margin-top: 4px; }
+  #legend-wrap { flex: 1; overflow-y: auto; padding: 12px; }
+  #legend-wrap h3 { font-size: 13px; color: #aaa; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .legend-item { display: flex; align-items: center; gap: 8px; padding: 4px 0; cursor: pointer; border-radius: 4px; font-size: 12px; }
+  .legend-item:hover { background: #2a2a4e; padding-left: 4px; }
+  .legend-item.dimmed { opacity: 0.35; }
+  .legend-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+  .legend-label { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .legend-count { color: #666; font-size: 11px; }
+  #stats { padding: 10px 14px; border-top: 1px solid #2a2a4e; font-size: 11px; color: #555; }
+</style>
+</head>
+<body>
+<div id="graph"></div>
+<div id="sidebar">
+  <div id="search-wrap">
+    <input id="search" type="text" placeholder="Search nodes..." autocomplete="off">
+    <div id="search-results"></div>
+  </div>
+  <div id="info-panel">
+    <h3>Node Info</h3>
+    <div id="info-content"><span class="empty">Click a node to inspect it</span></div>
+  </div>
+  <div id="legend-wrap">
+    <h3>Communities</h3>
+    <div id="legend"></div>
+  </div>
+  <div id="stats">61 nodes &middot; 49 edges &middot; 21 communities</div>
+</div>
+<script>
+const RAW_NODES = [{"id": "app_tsx", "label": "App.tsx", "color": {"background": "#EDC948", "border": "#EDC948", "highlight": {"background": "#ffffff", "border": "#EDC948"}}, "size": 21.2, "font": {"size": 12, "color": "#ffffff"}, "title": "App.tsx", "community": 5, "community_name": "Screen Navigation", "source_file": "App.tsx", "file_type": "code", "degree": 3}, {"id": "app_changescreen", "label": "changeScreen()", "color": {"background": "#EDC948", "border": "#EDC948", "highlight": {"background": "#ffffff", "border": "#EDC948"}}, "size": 17.5, "font": {"size": 12, "color": "#ffffff"}, "title": "changeScreen()", "community": 5, "community_name": "Screen Navigation", "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\App.tsx", "file_type": "code", "degree": 2}, {"id": "constants_tsx", "label": "constants.tsx", "color": {"background": "#4E79A7", "border": "#4E79A7", "highlight": {"background": "#ffffff", "border": "#4E79A7"}}, "size": 40.0, "font": {"size": 12, "color": "#ffffff"}, "title": "constants.tsx", "community": 0, "community_name": "Screen Components & Data", "source_file": "constants.tsx", "file_type": "code", "degree": 8}, {"id": "index_tsx", "label": "index.tsx", "color": {"background": "#F28E2B", "border": "#F28E2B", "highlight": {"background": "#ffffff", "border": "#F28E2B"}}, "size": 10.0, "font": {"size": 0, "color": "#ffffff"}, "title": "index.tsx", "community": 11, "community_name": "App Entry Point", "source_file": "index.tsx", "file_type": "code", "degree": 0}, {"id": "sw_js", "label": "sw.js", "color": {"background": "#E15759", "border": "#E15759", "highlight": {"background": "#ffffff", "border": "#E15759"}}, "size": 10.0, "font": {"size": 0, "color": "#ffffff"}, "title": "sw.js", "community": 12, "community_name": "Service Worker", "source_file": "sw.js", "file_type": "code", "degree": 0}, {"id": "types_ts", "label": "types.ts", "color": {"background": "#4E79A7", "border": "#4E79A7", "highlight": {"background": "#ffffff", "border": "#4E79A7"}}, "size": 32.5, "font": {"size": 12, "color": "#ffffff"}, "title": "types.ts", "community": 0, "community_name": "Screen Components & Data", "source_file": "types.ts", "file_type": "code", "degree": 6}, {"id": "vite_config_ts", "label": "vite.config.ts", "color": {"background": "#76B7B2", "border": "#76B7B2", "highlight": {"background": "#ffffff", "border": "#76B7B2"}}, "size": 10.0, "font": {"size": 0, "color": "#ffffff"}, "title": "vite.config.ts", "community": 13, "community_name": "Vite Build Config", "source_file": "vite.config.ts", "file_type": "code", "degree": 0}, {"id": "components_assistantscreen_tsx", "label": "AssistantScreen.tsx", "color": {"background": "#4E79A7", "border": "#4E79A7", "highlight": {"background": "#ffffff", "border": "#4E79A7"}}, "size": 17.5, "font": {"size": 12, "color": "#ffffff"}, "title": "AssistantScreen.tsx", "community": 0, "community_name": "Screen Components & Data", "source_file": "components\\AssistantScreen.tsx", "file_type": "code", "degree": 2}, {"id": "components_bottomnav_tsx", "label": "BottomNav.tsx", "color": {"background": "#4E79A7", "border": "#4E79A7", "highlight": {"background": "#ffffff", "border": "#4E79A7"}}, "size": 17.5, "font": {"size": 12, "color": "#ffffff"}, "title": "BottomNav.tsx", "community": 0, "community_name": "Screen Components & Data", "source_file": "components\\BottomNav.tsx", "file_type": "code", "degree": 2}, {"id": "components_detailsscreen_tsx", "label": "DetailsScreen.tsx", "color": {"background": "#B07AA1", "border": "#B07AA1", "highlight": {"background": "#ffffff", "border": "#B07AA1"}}, "size": 13.8, "font": {"size": 0, "color": "#ffffff"}, "title": "DetailsScreen.tsx", "community": 6, "community_name": "Product Detail View", "source_file": "components\\DetailsScreen.tsx", "file_type": "code", "degree": 1}, {"id": "detailsscreen_detailsscreen", "label": "DetailsScreen()", "color": {"background": "#B07AA1", "border": "#B07AA1", "highlight": {"background": "#ffffff", "border": "#B07AA1"}}, "size": 17.5, "font": {"size": 12, "color": "#ffffff"}, "title": "DetailsScreen()", "community": 6, "community_name": "Product Detail View", "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\DetailsScreen.tsx", "file_type": "code", "degree": 2}, {"id": "components_header_tsx", "label": "Header.tsx", "color": {"background": "#4E79A7", "border": "#4E79A7", "highlight": {"background": "#ffffff", "border": "#4E79A7"}}, "size": 17.5, "font": {"size": 12, "color": "#ffffff"}, "title": "Header.tsx", "community": 0, "community_name": "Screen Components & Data", "source_file": "components\\Header.tsx", "file_type": "code", "degree": 2}, {"id": "header_onscroll", "label": "onScroll()", "color": {"background": "#4E79A7", "border": "#4E79A7", "highlight": {"background": "#ffffff", "border": "#4E79A7"}}, "size": 13.8, "font": {"size": 0, "color": "#ffffff"}, "title": "onScroll()", "community": 0, "community_name": "Screen Components & Data", "source_file": "components\\Header.tsx", "file_type": "code", "degree": 1}, {"id": "components_homescreen_tsx", "label": "HomeScreen.tsx", "color": {"background": "#4E79A7", "border": "#4E79A7", "highlight": {"background": "#ffffff", "border": "#4E79A7"}}, "size": 21.2, "font": {"size": 12, "color": "#ffffff"}, "title": "HomeScreen.tsx", "community": 0, "community_name": "Screen Components & Data", "source_file": "components\\HomeScreen.tsx", "file_type": "code", "degree": 3}, {"id": "homescreen_toggleselect", "label": "toggleSelect()", "color": {"background": "#4E79A7", "border": "#4E79A7", "highlight": {"background": "#ffffff", "border": "#4E79A7"}}, "size": 13.8, "font": {"size": 0, "color": "#ffffff"}, "title": "toggleSelect()", "community": 0, "community_name": "Screen Components & Data", "source_file": "components\\HomeScreen.tsx", "file_type": "code", "degree": 1}, {"id": "components_ordersscreen_tsx", "label": "OrdersScreen.tsx", "color": {"background": "#59A14F", "border": "#59A14F", "highlight": {"background": "#ffffff", "border": "#59A14F"}}, "size": 10.0, "font": {"size": 0, "color": "#ffffff"}, "title": "OrdersScreen.tsx", "community": 14, "community_name": "Orders Screen", "source_file": "components\\OrdersScreen.tsx", "file_type": "code", "degree": 0}, {"id": "components_profilescreen_tsx", "label": "ProfileScreen.tsx", "color": {"background": "#EDC948", "border": "#EDC948", "highlight": {"background": "#ffffff", "border": "#EDC948"}}, "size": 10.0, "font": {"size": 0, "color": "#ffffff"}, "title": "ProfileScreen.tsx", "community": 15, "community_name": "Profile Screen A", "source_file": "components\\ProfileScreen.tsx", "file_type": "code", "degree": 0}, {"id": "components_sellscreen_tsx", "label": "SellScreen.tsx", "color": {"background": "#76B7B2", "border": "#76B7B2", "highlight": {"background": "#ffffff", "border": "#76B7B2"}}, "size": 13.8, "font": {"size": 0, "color": "#ffffff"}, "title": "SellScreen.tsx", "community": 3, "community_name": "Sell Listing Flow", "source_file": "components\\SellScreen.tsx", "file_type": "code", "degree": 1}, {"id": "sellscreen_handlepublish", "label": "handlePublish()", "color": {"background": "#76B7B2", "border": "#76B7B2", "highlight": {"background": "#ffffff", "border": "#76B7B2"}}, "size": 17.5, "font": {"size": 12, "color": "#ffffff"}, "title": "handlePublish()", "community": 3, "community_name": "Sell Listing Flow", "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\SellScreen.tsx", "file_type": "code", "degree": 2}, {"id": "components_atoms_pillbutton_tsx", "label": "PillButton.tsx", "color": {"background": "#FF9DA7", "border": "#FF9DA7", "highlight": {"background": "#ffffff", "border": "#FF9DA7"}}, "size": 13.8, "font": {"size": 0, "color": "#ffffff"}, "title": "PillButton.tsx", "community": 7, "community_name": "PillButton Atom", "source_file": "components\\atoms\\PillButton.tsx", "file_type": "code", "degree": 1}, {"id": "pillbutton_pillbutton", "label": "PillButton()", "color": {"background": "#FF9DA7", "border": "#FF9DA7", "highlight": {"background": "#ffffff", "border": "#FF9DA7"}}, "size": 17.5, "font": {"size": 12, "color": "#ffffff"}, "title": "PillButton()", "community": 7, "community_name": "PillButton Atom", "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\atoms\\PillButton.tsx", "file_type": "code", "degree": 2}, {"id": "components_atoms_sectionreveal_tsx", "label": "SectionReveal.tsx", "color": {"background": "#9C755F", "border": "#9C755F", "highlight": {"background": "#ffffff", "border": "#9C755F"}}, "size": 13.8, "font": {"size": 0, "color": "#ffffff"}, "title": "SectionReveal.tsx", "community": 8, "community_name": "SectionReveal Atom", "source_file": "components\\atoms\\SectionReveal.tsx", "file_type": "code", "degree": 1}, {"id": "sectionreveal_sectionreveal", "label": "SectionReveal()", "color": {"background": "#9C755F", "border": "#9C755F", "highlight": {"background": "#ffffff", "border": "#9C755F"}}, "size": 17.5, "font": {"size": 12, "color": "#ffffff"}, "title": "SectionReveal()", "community": 8, "community_name": "SectionReveal Atom", "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\atoms\\SectionReveal.tsx", "file_type": "code", "degree": 2}, {"id": "components_atoms_statcard_tsx", "label": "StatCard.tsx", "color": {"background": "#BAB0AC", "border": "#BAB0AC", "highlight": {"background": "#ffffff", "border": "#BAB0AC"}}, "size": 13.8, "font": {"size": 0, "color": "#ffffff"}, "title": "StatCard.tsx", "community": 9, "community_name": "StatCard Atom", "source_file": "components\\atoms\\StatCard.tsx", "file_type": "code", "degree": 1}, {"id": "statcard_statcard", "label": "StatCard()", "color": {"background": "#BAB0AC", "border": "#BAB0AC", "highlight": {"background": "#ffffff", "border": "#BAB0AC"}}, "size": 13.8, "font": {"size": 0, "color": "#ffffff"}, "title": "StatCard()", "community": 9, "community_name": "StatCard Atom", "source_file": "components\\atoms\\StatCard.tsx", "file_type": "code", "degree": 1}, {"id": "components_molecules_productcard_tsx", "label": "ProductCard.tsx", "color": {"background": "#4E79A7", "border": "#4E79A7", "highlight": {"background": "#ffffff", "border": "#4E79A7"}}, "size": 17.5, "font": {"size": 12, "color": "#ffffff"}, "title": "ProductCard.tsx", "community": 0, "community_name": "Screen Components & Data", "source_file": "components\\molecules\\ProductCard.tsx", "file_type": "code", "degree": 2}, {"id": "productcard_productcard", "label": "ProductCard()", "color": {"background": "#4E79A7", "border": "#4E79A7", "highlight": {"background": "#ffffff", "border": "#4E79A7"}}, "size": 13.8, "font": {"size": 0, "color": "#ffffff"}, "title": "ProductCard()", "community": 0, "community_name": "Screen Components & Data", "source_file": "components\\molecules\\ProductCard.tsx", "file_type": "code", "degree": 1}, {"id": "components_organisms_darkherosection_tsx", "label": "DarkHeroSection.tsx", "color": {"background": "#B07AA1", "border": "#B07AA1", "highlight": {"background": "#ffffff", "border": "#B07AA1"}}, "size": 10.0, "font": {"size": 0, "color": "#ffffff"}, "title": "DarkHeroSection.tsx", "community": 16, "community_name": "Hero Section Organism", "source_file": "components\\organisms\\DarkHeroSection.tsx", "file_type": "code", "degree": 0}, {"id": "components_organisms_scrollingticker_tsx", "label": "ScrollingTicker.tsx", "color": {"background": "#FF9DA7", "border": "#FF9DA7", "highlight": {"background": "#ffffff", "border": "#FF9DA7"}}, "size": 10.0, "font": {"size": 0, "color": "#ffffff"}, "title": "ScrollingTicker.tsx", "community": 17, "community_name": "Scrolling Ticker Organism", "source_file": "components\\organisms\\ScrollingTicker.tsx", "file_type": "code", "degree": 0}, {"id": "services_geminiservice_ts", "label": "geminiService.ts", "color": {"background": "#4E79A7", "border": "#4E79A7", "highlight": {"background": "#ffffff", "border": "#4E79A7"}}, "size": 13.8, "font": {"size": 0, "color": "#ffffff"}, "title": "geminiService.ts", "community": 10, "community_name": "Gemini AI Service", "source_file": "services\\geminiService.ts", "file_type": "code", "degree": 1}, {"id": "geminiservice_getaimarketassistance", "label": "getAiMarketAssistance()", "color": {"background": "#4E79A7", "border": "#4E79A7", "highlight": {"background": "#ffffff", "border": "#4E79A7"}}, "size": 13.8, "font": {"size": 0, "color": "#ffffff"}, "title": "getAiMarketAssistance()", "community": 10, "community_name": "Gemini AI Service", "source_file": "services\\geminiService.ts", "file_type": "code", "degree": 1}, {"id": "theme_index_ts", "label": "index.ts", "color": {"background": "#9C755F", "border": "#9C755F", "highlight": {"background": "#ffffff", "border": "#9C755F"}}, "size": 10.0, "font": {"size": 0, "color": "#ffffff"}, "title": "index.ts", "community": 18, "community_name": "Design Token Theme", "source_file": "theme\\index.ts", "file_type": "code", "degree": 0}, {"id": "e_agri_mart_agrimart_android_apps_mobile_app_tsx", "label": "App.tsx", "color": {"background": "#EDC948", "border": "#EDC948", "highlight": {"background": "#ffffff", "border": "#EDC948"}}, "size": 17.5, "font": {"size": 12, "color": "#ffffff"}, "title": "App.tsx", "community": 5, "community_name": "Screen Navigation", "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\App.tsx", "file_type": "code", "degree": 2}, {"id": "app_getdirection", "label": "getDirection()", "color": {"background": "#EDC948", "border": "#EDC948", "highlight": {"background": "#ffffff", "border": "#EDC948"}}, "size": 13.8, "font": {"size": 0, "color": "#ffffff"}, "title": "getDirection()", "community": 5, "community_name": "Screen Navigation", "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\App.tsx", "file_type": "code", "degree": 1}, {"id": "e_agri_mart_agrimart_android_apps_mobile_types_ts", "label": "types.ts", "color": {"background": "#BAB0AC", "border": "#BAB0AC", "highlight": {"background": "#ffffff", "border": "#BAB0AC"}}, "size": 10.0, "font": {"size": 0, "color": "#ffffff"}, "title": "types.ts", "community": 19, "community_name": "Type Definitions", "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\types.ts", "file_type": "code", "degree": 0}, {"id": "e_agri_mart_agrimart_android_apps_mobile_components_assistantscreen_tsx", "label": "AssistantScreen.tsx", "color": {"background": "#59A14F", "border": "#59A14F", "highlight": {"background": "#ffffff", "border": "#59A14F"}}, "size": 25.0, "font": {"size": 12, "color": "#ffffff"}, "title": "AssistantScreen.tsx", "community": 4, "community_name": "AI Assistant Chat", "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\AssistantScreen.tsx", "file_type": "code", "degree": 4}, {"id": "assistantscreen_now", "label": "now()", "color": {"background": "#59A14F", "border": "#59A14F", "highlight": {"background": "#ffffff", "border": "#59A14F"}}, "size": 13.8, "font": {"size": 0, "color": "#ffffff"}, "title": "now()", "community": 4, "community_name": "AI Assistant Chat", "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\AssistantScreen.tsx", "file_type": "code", "degree": 1}, {"id": "assistantscreen_handlesend", "label": "handleSend()", "color": {"background": "#59A14F", "border": "#59A14F", "highlight": {"background": "#ffffff", "border": "#59A14F"}}, "size": 13.8, "font": {"size": 0, "color": "#ffffff"}, "title": "handleSend()", "community": 4, "community_name": "AI Assistant Chat", "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\AssistantScreen.tsx", "file_type": "code", "degree": 1}, {"id": "assistantscreen_handlereset", "label": "handleReset()", "color": {"background": "#59A14F", "border": "#59A14F", "highlight": {"background": "#ffffff", "border": "#59A14F"}}, "size": 13.8, "font": {"size": 0, "color": "#ffffff"}, "title": "handleReset()", "community": 4, "community_name": "AI Assistant Chat", "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\AssistantScreen.tsx", "file_type": "code", "degree": 1}, {"id": "e_agri_mart_agrimart_android_apps_mobile_components_detailsscreen_tsx", "label": "DetailsScreen.tsx", "color": {"background": "#B07AA1", "border": "#B07AA1", "highlight": {"background": "#ffffff", "border": "#B07AA1"}}, "size": 17.5, "font": {"size": 12, "color": "#ffffff"}, "title": "DetailsScreen.tsx", "community": 6, "community_name": "Product Detail View", "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\DetailsScreen.tsx", "file_type": "code", "degree": 2}, {"id": "e_agri_mart_agrimart_android_apps_mobile_components_onboardingscreen_tsx", "label": "OnboardingScreen.tsx", "color": {"background": "#E15759", "border": "#E15759", "highlight": {"background": "#ffffff", "border": "#E15759"}}, "size": 28.8, "font": {"size": 12, "color": "#ffffff"}, "title": "OnboardingScreen.tsx", "community": 2, "community_name": "Onboarding Flow", "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\OnboardingScreen.tsx", "file_type": "code", "degree": 5}, {"id": "onboardingscreen_next", "label": "next()", "color": {"background": "#E15759", "border": "#E15759", "highlight": {"background": "#ffffff", "border": "#E15759"}}, "size": 17.5, "font": {"size": 12, "color": "#ffffff"}, "title": "next()", "community": 2, "community_name": "Onboarding Flow", "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\OnboardingScreen.tsx", "file_type": "code", "degree": 2}, {"id": "onboardingscreen_prev", "label": "prev()", "color": {"background": "#E15759", "border": "#E15759", "highlight": {"background": "#ffffff", "border": "#E15759"}}, "size": 17.5, "font": {"size": 12, "color": "#ffffff"}, "title": "prev()", "community": 2, "community_name": "Onboarding Flow", "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\OnboardingScreen.tsx", "file_type": "code", "degree": 2}, {"id": "onboardingscreen_goto", "label": "goTo()", "color": {"background": "#E15759", "border": "#E15759", "highlight": {"background": "#ffffff", "border": "#E15759"}}, "size": 13.8, "font": {"size": 0, "color": "#ffffff"}, "title": "goTo()", "community": 2, "community_name": "Onboarding Flow", "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\OnboardingScreen.tsx", "file_type": "code", "degree": 1}, {"id": "onboardingscreen_ontouchstart", "label": "onTouchStart()", "color": {"background": "#E15759", "border": "#E15759", "highlight": {"background": "#ffffff", "border": "#E15759"}}, "size": 13.8, "font": {"size": 0, "color": "#ffffff"}, "title": "onTouchStart()", "community": 2, "community_name": "Onboarding Flow", "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\OnboardingScreen.tsx", "file_type": "code", "degree": 1}, {"id": "onboardingscreen_ontouchend", "label": "onTouchEnd()", "color": {"background": "#E15759", "border": "#E15759", "highlight": {"background": "#ffffff", "border": "#E15759"}}, "size": 21.2, "font": {"size": 12, "color": "#ffffff"}, "title": "onTouchEnd()", "community": 2, "community_name": "Onboarding Flow", "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\OnboardingScreen.tsx", "file_type": "code", "degree": 3}, {"id": "e_agri_mart_agrimart_android_apps_mobile_components_ordersscreen_tsx", "label": "OrdersScreen.tsx", "color": {"background": "#4E79A7", "border": "#4E79A7", "highlight": {"background": "#ffffff", "border": "#4E79A7"}}, "size": 17.5, "font": {"size": 12, "color": "#ffffff"}, "title": "OrdersScreen.tsx", "community": 0, "community_name": "Screen Components & Data", "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\OrdersScreen.tsx", "file_type": "code", "degree": 2}, {"id": "ordersscreen_ordercard", "label": "OrderCard()", "color": {"background": "#4E79A7", "border": "#4E79A7", "highlight": {"background": "#ffffff", "border": "#4E79A7"}}, "size": 13.8, "font": {"size": 0, "color": "#ffffff"}, "title": "OrderCard()", "community": 0, "community_name": "Screen Components & Data", "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\OrdersScreen.tsx", "file_type": "code", "degree": 1}, {"id": "e_agri_mart_agrimart_android_apps_mobile_components_profilescreen_tsx", "label": "ProfileScreen.tsx", "color": {"background": "#4E79A7", "border": "#4E79A7", "highlight": {"background": "#ffffff", "border": "#4E79A7"}}, "size": 10.0, "font": {"size": 0, "color": "#ffffff"}, "title": "ProfileScreen.tsx", "community": 20, "community_name": "Profile Screen B", "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\ProfileScreen.tsx", "file_type": "code", "degree": 0}, {"id": "e_agri_mart_agrimart_android_apps_mobile_components_sellscreen_tsx", "label": "SellScreen.tsx", "color": {"background": "#76B7B2", "border": "#76B7B2", "highlight": {"background": "#ffffff", "border": "#76B7B2"}}, "size": 25.0, "font": {"size": 12, "color": "#ffffff"}, "title": "SellScreen.tsx", "community": 3, "community_name": "Sell Listing Flow", "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\SellScreen.tsx", "file_type": "code", "degree": 4}, {"id": "sellscreen_successview", "label": "SuccessView()", "color": {"background": "#76B7B2", "border": "#76B7B2", "highlight": {"background": "#ffffff", "border": "#76B7B2"}}, "size": 13.8, "font": {"size": 0, "color": "#ffffff"}, "title": "SuccessView()", "community": 3, "community_name": "Sell Listing Flow", "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\SellScreen.tsx", "file_type": "code", "degree": 1}, {"id": "sellscreen_field", "label": "Field()", "color": {"background": "#76B7B2", "border": "#76B7B2", "highlight": {"background": "#ffffff", "border": "#76B7B2"}}, "size": 13.8, "font": {"size": 0, "color": "#ffffff"}, "title": "Field()", "community": 3, "community_name": "Sell Listing Flow", "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\SellScreen.tsx", "file_type": "code", "degree": 1}, {"id": "e_agri_mart_agrimart_android_apps_mobile_components_atoms_pillbutton_tsx", "label": "PillButton.tsx", "color": {"background": "#FF9DA7", "border": "#FF9DA7", "highlight": {"background": "#ffffff", "border": "#FF9DA7"}}, "size": 13.8, "font": {"size": 0, "color": "#ffffff"}, "title": "PillButton.tsx", "community": 7, "community_name": "PillButton Atom", "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\atoms\\PillButton.tsx", "file_type": "code", "degree": 1}, {"id": "e_agri_mart_agrimart_android_apps_mobile_components_atoms_sectionreveal_tsx", "label": "SectionReveal.tsx", "color": {"background": "#9C755F", "border": "#9C755F", "highlight": {"background": "#ffffff", "border": "#9C755F"}}, "size": 13.8, "font": {"size": 0, "color": "#ffffff"}, "title": "SectionReveal.tsx", "community": 8, "community_name": "SectionReveal Atom", "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\atoms\\SectionReveal.tsx", "file_type": "code", "degree": 1}, {"id": "readme_agrimart_mobile_app", "label": "AgriMart Mobile App", "color": {"background": "#F28E2B", "border": "#F28E2B", "highlight": {"background": "#ffffff", "border": "#F28E2B"}}, "size": 28.8, "font": {"size": 12, "color": "#ffffff"}, "title": "AgriMart Mobile App", "community": 1, "community_name": "App Setup & Gemini Config", "source_file": "apps/mobile/README.md", "file_type": "document", "degree": 5}, {"id": "readme_ai_studio", "label": "AI Studio", "color": {"background": "#F28E2B", "border": "#F28E2B", "highlight": {"background": "#ffffff", "border": "#F28E2B"}}, "size": 13.8, "font": {"size": 0, "color": "#ffffff"}, "title": "AI Studio", "community": 1, "community_name": "App Setup & Gemini Config", "source_file": "apps/mobile/README.md", "file_type": "document", "degree": 1}, {"id": "readme_nodejs", "label": "Node.js", "color": {"background": "#F28E2B", "border": "#F28E2B", "highlight": {"background": "#ffffff", "border": "#F28E2B"}}, "size": 13.8, "font": {"size": 0, "color": "#ffffff"}, "title": "Node.js", "community": 1, "community_name": "App Setup & Gemini Config", "source_file": "apps/mobile/README.md", "file_type": "document", "degree": 1}, {"id": "readme_gemini_api_key", "label": "GEMINI_API_KEY", "color": {"background": "#F28E2B", "border": "#F28E2B", "highlight": {"background": "#ffffff", "border": "#F28E2B"}}, "size": 17.5, "font": {"size": 12, "color": "#ffffff"}, "title": "GEMINI_API_KEY", "community": 1, "community_name": "App Setup & Gemini Config", "source_file": "apps/mobile/README.md", "file_type": "document", "degree": 2}, {"id": "readme_env_local", "label": ".env.local", "color": {"background": "#F28E2B", "border": "#F28E2B", "highlight": {"background": "#ffffff", "border": "#F28E2B"}}, "size": 13.8, "font": {"size": 0, "color": "#ffffff"}, "title": ".env.local", "community": 1, "community_name": "App Setup & Gemini Config", "source_file": "apps/mobile/README.md", "file_type": "document", "degree": 1}, {"id": "readme_npm_install", "label": "npm install", "color": {"background": "#F28E2B", "border": "#F28E2B", "highlight": {"background": "#ffffff", "border": "#F28E2B"}}, "size": 13.8, "font": {"size": 0, "color": "#ffffff"}, "title": "npm install", "community": 1, "community_name": "App Setup & Gemini Config", "source_file": "apps/mobile/README.md", "file_type": "document", "degree": 1}, {"id": "readme_npm_run_dev", "label": "npm run dev", "color": {"background": "#F28E2B", "border": "#F28E2B", "highlight": {"background": "#ffffff", "border": "#F28E2B"}}, "size": 13.8, "font": {"size": 0, "color": "#ffffff"}, "title": "npm run dev", "community": 1, "community_name": "App Setup & Gemini Config", "source_file": "apps/mobile/README.md", "file_type": "document", "degree": 1}];
+const RAW_EDGES = [{"from": "app_tsx", "to": "types_ts", "label": "imports_from", "title": "imports_from [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "app_tsx", "to": "constants_tsx", "label": "imports_from", "title": "imports_from [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "app_tsx", "to": "app_changescreen", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "app_changescreen", "to": "e_agri_mart_agrimart_android_apps_mobile_app_tsx", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "constants_tsx", "to": "components_assistantscreen_tsx", "label": "imports_from", "title": "imports_from [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "constants_tsx", "to": "components_bottomnav_tsx", "label": "imports_from", "title": "imports_from [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "constants_tsx", "to": "components_homescreen_tsx", "label": "imports_from", "title": "imports_from [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "constants_tsx", "to": "e_agri_mart_agrimart_android_apps_mobile_components_assistantscreen_tsx", "label": "imports_from", "title": "imports_from [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "constants_tsx", "to": "e_agri_mart_agrimart_android_apps_mobile_components_detailsscreen_tsx", "label": "imports_from", "title": "imports_from [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "constants_tsx", "to": "e_agri_mart_agrimart_android_apps_mobile_components_ordersscreen_tsx", "label": "imports_from", "title": "imports_from [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "constants_tsx", "to": "e_agri_mart_agrimart_android_apps_mobile_components_sellscreen_tsx", "label": "imports_from", "title": "imports_from [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "types_ts", "to": "components_assistantscreen_tsx", "label": "imports_from", "title": "imports_from [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "types_ts", "to": "components_bottomnav_tsx", "label": "imports_from", "title": "imports_from [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "types_ts", "to": "components_header_tsx", "label": "imports_from", "title": "imports_from [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "types_ts", "to": "components_homescreen_tsx", "label": "imports_from", "title": "imports_from [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "types_ts", "to": "components_molecules_productcard_tsx", "label": "imports_from", "title": "imports_from [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "components_detailsscreen_tsx", "to": "detailsscreen_detailsscreen", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "detailsscreen_detailsscreen", "to": "e_agri_mart_agrimart_android_apps_mobile_components_detailsscreen_tsx", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "components_header_tsx", "to": "header_onscroll", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "components_homescreen_tsx", "to": "homescreen_toggleselect", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "components_sellscreen_tsx", "to": "sellscreen_handlepublish", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "sellscreen_handlepublish", "to": "e_agri_mart_agrimart_android_apps_mobile_components_sellscreen_tsx", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "components_atoms_pillbutton_tsx", "to": "pillbutton_pillbutton", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "pillbutton_pillbutton", "to": "e_agri_mart_agrimart_android_apps_mobile_components_atoms_pillbutton_tsx", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "components_atoms_sectionreveal_tsx", "to": "sectionreveal_sectionreveal", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "sectionreveal_sectionreveal", "to": "e_agri_mart_agrimart_android_apps_mobile_components_atoms_sectionreveal_tsx", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "components_atoms_statcard_tsx", "to": "statcard_statcard", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "components_molecules_productcard_tsx", "to": "productcard_productcard", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "services_geminiservice_ts", "to": "geminiservice_getaimarketassistance", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "e_agri_mart_agrimart_android_apps_mobile_app_tsx", "to": "app_getdirection", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "e_agri_mart_agrimart_android_apps_mobile_components_assistantscreen_tsx", "to": "assistantscreen_now", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "e_agri_mart_agrimart_android_apps_mobile_components_assistantscreen_tsx", "to": "assistantscreen_handlesend", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "e_agri_mart_agrimart_android_apps_mobile_components_assistantscreen_tsx", "to": "assistantscreen_handlereset", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "e_agri_mart_agrimart_android_apps_mobile_components_onboardingscreen_tsx", "to": "onboardingscreen_next", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "e_agri_mart_agrimart_android_apps_mobile_components_onboardingscreen_tsx", "to": "onboardingscreen_prev", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "e_agri_mart_agrimart_android_apps_mobile_components_onboardingscreen_tsx", "to": "onboardingscreen_goto", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "e_agri_mart_agrimart_android_apps_mobile_components_onboardingscreen_tsx", "to": "onboardingscreen_ontouchstart", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "e_agri_mart_agrimart_android_apps_mobile_components_onboardingscreen_tsx", "to": "onboardingscreen_ontouchend", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "onboardingscreen_next", "to": "onboardingscreen_ontouchend", "label": "calls", "title": "calls [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "onboardingscreen_prev", "to": "onboardingscreen_ontouchend", "label": "calls", "title": "calls [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "e_agri_mart_agrimart_android_apps_mobile_components_ordersscreen_tsx", "to": "ordersscreen_ordercard", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "e_agri_mart_agrimart_android_apps_mobile_components_sellscreen_tsx", "to": "sellscreen_successview", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "e_agri_mart_agrimart_android_apps_mobile_components_sellscreen_tsx", "to": "sellscreen_field", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "readme_agrimart_mobile_app", "to": "readme_ai_studio", "label": "references", "title": "references [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "readme_agrimart_mobile_app", "to": "readme_nodejs", "label": "references", "title": "references [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "readme_agrimart_mobile_app", "to": "readme_gemini_api_key", "label": "conceptually_related_to", "title": "conceptually_related_to [INFERRED]", "dashes": true, "width": 1, "color": {"opacity": 0.35}, "confidence": "INFERRED"}, {"from": "readme_agrimart_mobile_app", "to": "readme_npm_install", "label": "references", "title": "references [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "readme_agrimart_mobile_app", "to": "readme_npm_run_dev", "label": "references", "title": "references [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "readme_gemini_api_key", "to": "readme_env_local", "label": "references", "title": "references [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}];
+const LEGEND = [{"cid": 0, "color": "#4E79A7", "label": "Screen Components &amp; Data", "count": 12}, {"cid": 1, "color": "#F28E2B", "label": "App Setup &amp; Gemini Config", "count": 7}, {"cid": 2, "color": "#E15759", "label": "Onboarding Flow", "count": 6}, {"cid": 3, "color": "#76B7B2", "label": "Sell Listing Flow", "count": 5}, {"cid": 4, "color": "#59A14F", "label": "AI Assistant Chat", "count": 4}, {"cid": 5, "color": "#EDC948", "label": "Screen Navigation", "count": 4}, {"cid": 6, "color": "#B07AA1", "label": "Product Detail View", "count": 3}, {"cid": 7, "color": "#FF9DA7", "label": "PillButton Atom", "count": 3}, {"cid": 8, "color": "#9C755F", "label": "SectionReveal Atom", "count": 3}, {"cid": 9, "color": "#BAB0AC", "label": "StatCard Atom", "count": 2}, {"cid": 10, "color": "#4E79A7", "label": "Gemini AI Service", "count": 2}, {"cid": 11, "color": "#F28E2B", "label": "App Entry Point", "count": 1}, {"cid": 12, "color": "#E15759", "label": "Service Worker", "count": 1}, {"cid": 13, "color": "#76B7B2", "label": "Vite Build Config", "count": 1}, {"cid": 14, "color": "#59A14F", "label": "Orders Screen", "count": 1}, {"cid": 15, "color": "#EDC948", "label": "Profile Screen A", "count": 1}, {"cid": 16, "color": "#B07AA1", "label": "Hero Section Organism", "count": 1}, {"cid": 17, "color": "#FF9DA7", "label": "Scrolling Ticker Organism", "count": 1}, {"cid": 18, "color": "#9C755F", "label": "Design Token Theme", "count": 1}, {"cid": 19, "color": "#BAB0AC", "label": "Type Definitions", "count": 1}, {"cid": 20, "color": "#4E79A7", "label": "Profile Screen B", "count": 1}];
+
+// HTML-escape helper — prevents XSS when injecting graph data into innerHTML
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+// Build vis datasets
+const nodesDS = new vis.DataSet(RAW_NODES.map(n => ({
+  id: n.id, label: n.label, color: n.color, size: n.size,
+  font: n.font, title: n.title,
+  _community: n.community, _community_name: n.community_name,
+  _source_file: n.source_file, _file_type: n.file_type, _degree: n.degree,
+})));
+
+const edgesDS = new vis.DataSet(RAW_EDGES.map((e, i) => ({
+  id: i, from: e.from, to: e.to,
+  label: '',
+  title: e.title,
+  dashes: e.dashes,
+  width: e.width,
+  color: e.color,
+  arrows: { to: { enabled: true, scaleFactor: 0.5 } },
+})));
+
+const container = document.getElementById('graph');
+const network = new vis.Network(container, { nodes: nodesDS, edges: edgesDS }, {
+  physics: {
+    enabled: true,
+    solver: 'forceAtlas2Based',
+    forceAtlas2Based: {
+      gravitationalConstant: -60,
+      centralGravity: 0.005,
+      springLength: 120,
+      springConstant: 0.08,
+      damping: 0.4,
+      avoidOverlap: 0.8,
+    },
+    stabilization: { iterations: 200, fit: true },
+  },
+  interaction: {
+    hover: true,
+    tooltipDelay: 100,
+    hideEdgesOnDrag: true,
+    navigationButtons: false,
+    keyboard: false,
+  },
+  nodes: { shape: 'dot', borderWidth: 1.5 },
+  edges: { smooth: { type: 'continuous', roundness: 0.2 }, selectionWidth: 3 },
+});
+
+network.once('stabilizationIterationsDone', () => {
+  network.setOptions({ physics: { enabled: false } });
+});
+
+function showInfo(nodeId) {
+  const n = nodesDS.get(nodeId);
+  if (!n) return;
+  const neighborIds = network.getConnectedNodes(nodeId);
+  const neighborItems = neighborIds.map(nid => {
+    const nb = nodesDS.get(nid);
+    const color = nb ? nb.color.background : '#555';
+    return `<span class="neighbor-link" style="border-left-color:${esc(color)}" onclick="focusNode(${JSON.stringify(nid)})">${esc(nb ? nb.label : nid)}</span>`;
+  }).join('');
+  document.getElementById('info-content').innerHTML = `
+    <div class="field"><b>${esc(n.label)}</b></div>
+    <div class="field">Type: ${esc(n._file_type || 'unknown')}</div>
+    <div class="field">Community: ${esc(n._community_name)}</div>
+    <div class="field">Source: ${esc(n._source_file || '-')}</div>
+    <div class="field">Degree: ${n._degree}</div>
+    ${neighborIds.length ? `<div class="field" style="margin-top:8px;color:#aaa;font-size:11px">Neighbors (${neighborIds.length})</div><div id="neighbors-list">${neighborItems}</div>` : ''}
+  `;
+}
+
+function focusNode(nodeId) {
+  network.focus(nodeId, { scale: 1.4, animation: true });
+  network.selectNodes([nodeId]);
+  showInfo(nodeId);
+}
+
+// Track hovered node — hover detection is more reliable than click params
+let hoveredNodeId = null;
+network.on('hoverNode', params => {
+  hoveredNodeId = params.node;
+  container.style.cursor = 'pointer';
+});
+network.on('blurNode', () => {
+  hoveredNodeId = null;
+  container.style.cursor = 'default';
+});
+container.addEventListener('click', () => {
+  if (hoveredNodeId !== null) {
+    showInfo(hoveredNodeId);
+    network.selectNodes([hoveredNodeId]);
+  }
+});
+network.on('click', params => {
+  if (params.nodes.length > 0) {
+    showInfo(params.nodes[0]);
+  } else if (hoveredNodeId === null) {
+    document.getElementById('info-content').innerHTML = '<span class="empty">Click a node to inspect it</span>';
+  }
+});
+
+const searchInput = document.getElementById('search');
+const searchResults = document.getElementById('search-results');
+searchInput.addEventListener('input', () => {
+  const q = searchInput.value.toLowerCase().trim();
+  searchResults.innerHTML = '';
+  if (!q) { searchResults.style.display = 'none'; return; }
+  const matches = RAW_NODES.filter(n => n.label.toLowerCase().includes(q)).slice(0, 20);
+  if (!matches.length) { searchResults.style.display = 'none'; return; }
+  searchResults.style.display = 'block';
+  matches.forEach(n => {
+    const el = document.createElement('div');
+    el.className = 'search-item';
+    el.textContent = n.label;
+    el.style.borderLeft = `3px solid ${n.color.background}`;
+    el.style.paddingLeft = '8px';
+    el.onclick = () => {
+      network.focus(n.id, { scale: 1.5, animation: true });
+      network.selectNodes([n.id]);
+      showInfo(n.id);
+      searchResults.style.display = 'none';
+      searchInput.value = '';
+    };
+    searchResults.appendChild(el);
+  });
+});
+document.addEventListener('click', e => {
+  if (!searchResults.contains(e.target) && e.target !== searchInput)
+    searchResults.style.display = 'none';
+});
+
+const hiddenCommunities = new Set();
+const legendEl = document.getElementById('legend');
+LEGEND.forEach(c => {
+  const item = document.createElement('div');
+  item.className = 'legend-item';
+  item.innerHTML = `<div class="legend-dot" style="background:${c.color}"></div>
+    <span class="legend-label">${c.label}</span>
+    <span class="legend-count">${c.count}</span>`;
+  item.onclick = () => {
+    if (hiddenCommunities.has(c.cid)) {
+      hiddenCommunities.delete(c.cid);
+      item.classList.remove('dimmed');
+    } else {
+      hiddenCommunities.add(c.cid);
+      item.classList.add('dimmed');
+    }
+    const updates = RAW_NODES
+      .filter(n => n.community === c.cid)
+      .map(n => ({ id: n.id, hidden: hiddenCommunities.has(c.cid) }));
+    nodesDS.update(updates);
+  };
+  legendEl.appendChild(item);
+});
+</script>
+<script>
+// Render hyperedges as shaded regions
+const hyperedges = [];
+function drawHyperedges() {
+    const canvas = network.canvas.frame.canvas;
+    const ctx = canvas.getContext('2d');
+    hyperedges.forEach(h => {
+        const positions = h.nodes
+            .map(nid => network.getPositions([nid])[nid])
+            .filter(p => p !== undefined);
+        if (positions.length < 2) return;
+        // Draw convex hull as filled polygon
+        ctx.save();
+        ctx.globalAlpha = 0.12;
+        ctx.fillStyle = '#6366f1';
+        ctx.strokeStyle = '#6366f1';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        const scale = network.getScale();
+        const offset = network.getViewPosition();
+        const toCanvas = (p) => ({
+            x: (p.x - offset.x) * scale + canvas.width / 2,
+            y: (p.y - offset.y) * scale + canvas.height / 2
+        });
+        const pts = positions.map(toCanvas);
+        // Expand hull slightly
+        const cx = pts.reduce((s, p) => s + p.x, 0) / pts.length;
+        const cy = pts.reduce((s, p) => s + p.y, 0) / pts.length;
+        const expanded = pts.map(p => ({
+            x: cx + (p.x - cx) * 1.15,
+            y: cy + (p.y - cy) * 1.15
+        }));
+        ctx.moveTo(expanded[0].x, expanded[0].y);
+        expanded.slice(1).forEach(p => ctx.lineTo(p.x, p.y));
+        ctx.closePath();
+        ctx.fill();
+        ctx.globalAlpha = 0.4;
+        ctx.stroke();
+        // Label
+        ctx.globalAlpha = 0.8;
+        ctx.fillStyle = '#4f46e5';
+        ctx.font = 'bold 11px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(h.label, cx, cy - 5);
+        ctx.restore();
+    });
+}
+network.on('afterDrawing', drawHyperedges);
+</script>
+</body>
+</html>
