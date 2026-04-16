@@ -1,15 +1,16 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
+import { motion } from 'motion/react';
 
 interface SectionRevealProps {
   children: React.ReactNode;
-  delay?: number;        // ms, default 0
+  delay?: number;     // ms, default 0
   className?: string;
-  threshold?: number;    // 0–1, default 0.12
+  threshold?: number; // 0–1, default 0.12
 }
 
 /**
- * Wraps content in an IntersectionObserver fade-up reveal.
- * Matches FarmMinerals scroll-entry animation.
+ * Wraps content in a motion-powered fade-up scroll reveal.
+ * Triggers once when the element enters the viewport.
  */
 export default function SectionReveal({
   children,
@@ -17,34 +18,19 @@ export default function SectionReveal({
   className = '',
   threshold = 0.12,
 }: SectionRevealProps) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-
-    const obs = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          obs.disconnect();
-        }
-      },
-      { threshold }
-    );
-
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [threshold]);
-
   return (
-    <div
-      ref={ref}
-      className={`${visible ? 'reveal-visible' : 'reveal-hidden'} ${className}`}
-      style={delay ? { transitionDelay: `${delay}ms` } : undefined}
+    <motion.div
+      className={className}
+      initial={{ opacity: 0, y: 22 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: threshold }}
+      transition={{
+        duration: 0.6,
+        ease: [0.16, 1, 0.3, 1],
+        delay: delay / 1000,
+      }}
     >
       {children}
-    </div>
+    </motion.div>
   );
 }

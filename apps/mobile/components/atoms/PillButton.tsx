@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'motion/react';
 
 interface PillButtonProps {
   children: React.ReactNode;
@@ -11,7 +12,7 @@ interface PillButtonProps {
 }
 
 /**
- * FarmMinerals-style pill CTA with dot decorators on each side.
+ * FarmMinerals-style pill CTA with dot decorators and motion spring physics.
  *
  * Variants:
  *  dark    — cream text on transparent w/ cream border (on dark backgrounds)
@@ -29,8 +30,7 @@ export default function PillButton({
 }: PillButtonProps) {
   const base = [
     'inline-flex items-center justify-center gap-3 rounded-full font-medium',
-    'transition-all duration-200 select-none',
-    'active:scale-[0.96] hover:brightness-110',
+    'select-none cursor-pointer',
     fullWidth ? 'w-full' : '',
     disabled ? 'opacity-40 pointer-events-none' : '',
   ].join(' ');
@@ -54,14 +54,17 @@ export default function PillButton({
   };
 
   return (
-    <button
+    <motion.button
       onClick={onClick}
       disabled={disabled}
       className={`${base} ${sizes[size]} ${variants[variant]} ${className}`}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.95 }}
+      transition={{ type: 'spring', stiffness: 400, damping: 22 }}
     >
       <span className={`pill-dot ${dotColors[variant]}`} />
       {children}
       <span className={`pill-dot ${dotColors[variant]}`} />
-    </button>
+    </motion.button>
   );
 }
