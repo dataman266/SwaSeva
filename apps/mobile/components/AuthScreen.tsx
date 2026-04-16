@@ -11,7 +11,6 @@ import {
 // ── Types ─────────────────────────────────────────────────────────────────────
 
 type AuthView = 'login' | 'register-step1' | 'register-step2' | 'otp-phone' | 'otp-verify' | 'new-password';
-type UserType = 'buyer' | 'farmer';
 
 interface AuthScreenProps {
   lang: Language;
@@ -265,13 +264,12 @@ interface Step1Data {
   email: string;
   password: string;
   confirmPassword: string;
-  userType: UserType | '';
   photoUri: string;
   photoFile: File | null;
 }
 
 // Shared step1 data store (simple module-level ref to pass between steps without prop drilling)
-let _step1: Step1Data = { fullName:'', mobile:'', email:'', password:'', confirmPassword:'', userType:'', photoUri:'', photoFile:null };
+let _step1: Step1Data = { fullName:'', mobile:'', email:'', password:'', confirmPassword:'', photoUri:'', photoFile:null };
 
 function RegisterStep1({ isMr, onBack, onNext }: { isMr: boolean; onBack: () => void; onNext: () => void }) {
   const [form,   setForm]   = useState<Step1Data>(_step1);
@@ -295,7 +293,6 @@ function RegisterStep1({ isMr, onBack, onNext }: { isMr: boolean; onBack: () => 
     if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = isMr ? 'बरोबर ईमेल द्या' : 'Enter a valid email address';
     if (!form.password || form.password.length < 8) e.password = isMr ? 'पासवर्ड किमान ८ अक्षरांचा असावा' : 'Password must be at least 8 characters';
     if (form.password !== form.confirmPassword) e.confirmPassword = isMr ? 'पासवर्ड जुळत नाही' : 'Passwords do not match';
-    if (!form.userType) e.userType = isMr ? 'खाते प्रकार निवडा' : 'Please select account type';
     if (!form.photoUri) e.photo = isMr ? 'प्रोफाइल फोटो आवश्यक आहे' : 'Profile photo is required';
     return e;
   };
@@ -352,32 +349,6 @@ function RegisterStep1({ isMr, onBack, onNext }: { isMr: boolean; onBack: () => 
       </div>
 
       <div className="flex flex-col gap-4">
-        {/* User type */}
-        <div className="flex flex-col gap-1.5">
-          <label className="text-[11px] font-medium tracking-[0.1em] uppercase" style={{ color: '#D4C4A0' }}>
-            {isMr ? 'खाते प्रकार' : 'Account Type'}<span className="text-red-400 ml-0.5">*</span>
-          </label>
-          <div className="grid grid-cols-2 gap-3">
-            {(['buyer','farmer'] as UserType[]).map(type => (
-              <button key={type} type="button"
-                onClick={() => set('userType', type)}
-                className="flex flex-col items-center gap-1.5 py-4 rounded-2xl border transition-all"
-                style={{
-                  background: form.userType === type ? 'rgba(45,90,27,0.25)' : '#111C11',
-                  borderColor: form.userType === type ? '#2D5A1B' : 'rgba(245,240,232,0.1)',
-                }}
-                aria-pressed={form.userType === type}
-              >
-                <span style={{ fontSize: 24 }}>{type === 'buyer' ? '🛒' : '🌾'}</span>
-                <span style={{ fontSize: 13, color: form.userType === type ? '#D4C4A0' : 'rgba(245,240,232,0.6)', fontWeight: form.userType === type ? 500 : 300 }}>
-                  {type === 'buyer' ? (isMr ? 'खरेदीदार' : 'Buyer') : (isMr ? 'शेतकरी' : 'Farmer')}
-                </span>
-              </button>
-            ))}
-          </div>
-          {errors.userType && err(errors.userType)}
-        </div>
-
         <Field label={isMr ? 'पूर्ण नाव' : 'Full Name'} icon={User} placeholder={isMr ? 'तुमचे पूर्ण नाव' : 'Your full name'} type="text" value={form.fullName} onChange={e => set('fullName', e.target.value)} error={errors.fullName} required autoComplete="name" />
         <Field label={isMr ? 'मोबाइल नंबर' : 'Mobile Number'} icon={Phone} type="tel" inputMode="numeric" maxLength={10} placeholder="9876543210" value={form.mobile} onChange={e => set('mobile', e.target.value.replace(/\D/g,''))} error={errors.mobile} required autoComplete="tel" />
         <Field label={isMr ? 'ईमेल पत्ता' : 'Email Address'} icon={Mail} type="email" inputMode="email" placeholder="name@example.com" value={form.email} onChange={e => set('email', e.target.value)} error={errors.email} required autoComplete="email" />
