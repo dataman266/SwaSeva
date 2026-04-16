@@ -9,10 +9,12 @@ import OrdersScreen from './components/OrdersScreen.tsx';
 import ProfileScreen from './components/ProfileScreen.tsx';
 import AssistantScreen from './components/AssistantScreen.tsx';
 import OnboardingScreen from './components/OnboardingScreen.tsx';
+import AuthScreen from './components/AuthScreen.tsx';
 import BottomNav from './components/BottomNav.tsx';
 import Header from './components/Header.tsx';
 
-const ONBOARDED_KEY = 'agrimart_onboarded';
+const ONBOARDED_KEY  = 'agrimart_onboarded';
+const AUTH_TOKEN_KEY = 'agrimart_auth_token';
 
 // Screens that push forward (slide left) vs pop back (slide right)
 const SCREEN_ORDER: AppScreen[] = ['HOME', 'DETAILS', 'SELL', 'ORDERS', 'PROFILE', 'ASSISTANT'];
@@ -33,6 +35,9 @@ const variants = {
 const transition = { duration: 0.28, ease: [0.32, 0, 0.16, 1] as const };
 
 const App: React.FC = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    !!localStorage.getItem(AUTH_TOKEN_KEY)
+  );
   const [state, setState] = useState<AppState>({
     currentScreen: localStorage.getItem(ONBOARDED_KEY) ? 'HOME' : 'ONBOARDING',
     userLanguage: Language.ENGLISH,
@@ -86,6 +91,19 @@ const App: React.FC = () => {
       default: return <HomeScreen lang={state.userLanguage} location={state.location} onViewDetails={(p) => changeScreen('DETAILS', p)} onOpenAssistant={() => changeScreen('ASSISTANT')} />;
     }
   };
+
+  // Mandatory auth gate — shown after onboarding is complete
+  if (localStorage.getItem(ONBOARDED_KEY) && !isAuthenticated) {
+    return (
+      <AuthScreen
+        lang={state.userLanguage}
+        onAuthSuccess={(token) => {
+          localStorage.setItem(AUTH_TOKEN_KEY, token);
+          setIsAuthenticated(true);
+        }}
+      />
+    );
+  }
 
   const isOnboarding = state.currentScreen === 'ONBOARDING';
   const needsHeaderSpacer = !isOnboarding && state.currentScreen !== 'HOME';
