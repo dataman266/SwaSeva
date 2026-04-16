@@ -8,6 +8,7 @@ import ScrollingTicker, {
   AGRI_TICKER_ITEMS,
   PARTNER_TICKER_ITEMS,
 } from './organisms/ScrollingTicker.tsx';
+import FarmingNewsSection from './organisms/FarmingNewsSection.tsx';
 import ProductCard from './molecules/ProductCard.tsx';
 import StatCard from './atoms/StatCard.tsx';
 import SectionReveal from './atoms/SectionReveal.tsx';
@@ -15,6 +16,7 @@ import PillButton from './atoms/PillButton.tsx';
 
 interface HomeScreenProps {
   lang: Language;
+  location: string;
   onViewDetails: (p: Product) => void;
   onOpenAssistant: () => void;
 }
@@ -27,7 +29,7 @@ const STATS = [
   { value: '5×',   unit: 'Better ROI',description: 'vs traditional mandi prices' },
 ];
 
-export default function HomeScreen({ lang, onViewDetails, onOpenAssistant }: HomeScreenProps) {
+export default function HomeScreen({ lang, location, onViewDetails, onOpenAssistant }: HomeScreenProps) {
   const [search, setSearch]         = useState('');
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [activeCategory, setActiveCategory] = useState('all');
@@ -78,7 +80,10 @@ export default function HomeScreen({ lang, onViewDetails, onOpenAssistant }: Hom
         <ScrollingTicker items={PARTNER_TICKER_ITEMS} reverse />
       </section>
 
-      {/* ── 3. STAT STRIP ───────────────────────────────────────────── */}
+      {/* ── 3. FARMING NEWS ─────────────────────────────────────────── */}
+      <FarmingNewsSection lang={isMr ? 'mr' : 'en'} location={location} />
+
+      {/* ── 4. STAT STRIP ───────────────────────────────────────────── */}
       <section className="px-6 py-14" style={{ background: '#111C11' }}>
         <SectionReveal className="mb-10">
           <p className="text-[10px] font-medium tracking-[0.2em] uppercase text-[rgba(245,240,232,0.35)] mb-2">
@@ -96,7 +101,7 @@ export default function HomeScreen({ lang, onViewDetails, onOpenAssistant }: Hom
         </div>
       </section>
 
-      {/* ── 4. PRODUCT LISTING ──────────────────────────────────────── */}
+      {/* ── 5. PRODUCT LISTING ──────────────────────────────────────── */}
       <section className="px-5 pt-12">
 
         {/* Section header */}
@@ -177,7 +182,7 @@ export default function HomeScreen({ lang, onViewDetails, onOpenAssistant }: Hom
         </div>
       </section>
 
-      {/* ── 5. JOIN CTA SECTION ─────────────────────────────────────── */}
+      {/* ── 6. JOIN CTA SECTION ─────────────────────────────────────── */}
       <SectionReveal>
         <section className="mx-5 mt-14 mb-6 px-6 py-10 rounded-2xl text-center" style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)' }}>
           <p className="text-[10px] font-medium tracking-[0.2em] uppercase text-[rgba(245,240,232,0.35)] mb-3">
