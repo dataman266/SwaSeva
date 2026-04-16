@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
-import { Newspaper, TrendingUp, CloudRain, Landmark, RefreshCw } from 'lucide-react';
+import { Newspaper, TrendingUp, CloudRain, Landmark } from 'lucide-react';
 import SectionReveal from '../atoms/SectionReveal.tsx';
+
+// Backend URL — set VITE_API_URL in .env for production deployment
+const API_BASE = (import.meta as { env?: Record<string, string> }).env?.VITE_API_URL ?? 'http://localhost:3000';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -85,15 +88,15 @@ const CATEGORY_META: Record<NewsCategory, { labelEn: string; labelMr: string; co
   general: { labelEn: 'News',         labelMr: 'बातमी',       color: '#3A1A5A', icon: Newspaper  },
 };
 
-// ── RSS fetch via rss2json (no API key needed for basic) ──────────────────────
+// ── rss2json: second-tier fallback (only when backend unreachable) ────────────
 
-const RSS_URL = 'https://agrowon.com/feed/';
-const RSS2JSON = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(RSS_URL)}&count=5`;
+const RSS_URL  = 'https://agrowon.com/feed/';
+const RSS2JSON = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(RSS_URL)}&count=6`;
 
 function guessCategory(title: string): NewsCategory {
   const t = title.toLowerCase();
-  if (t.includes('पाऊस') || t.includes('हवामान') || t.includes('rain') || t.includes('weather')) return 'weather';
-  if (t.includes('योजना') || t.includes('अनुदान') || t.includes('scheme') || t.includes('subsidy') || t.includes('msp')) return 'scheme';
+  if (t.includes('पाऊस') || t.includes('हवामान') || t.includes('rain') || t.includes('weather') || t.includes('monsoon')) return 'weather';
+  if (t.includes('योजना') || t.includes('अनुदान') || t.includes('scheme') || t.includes('subsidy') || t.includes('msp') || t.includes('kisan')) return 'scheme';
   if (t.includes('भाव') || t.includes('दर') || t.includes('price') || t.includes('apmc') || t.includes('market')) return 'market';
   return 'general';
 }
@@ -101,7 +104,7 @@ function guessCategory(title: string): NewsCategory {
 function relativeDate(dateStr: string): string {
   try {
     const diff = Date.now() - new Date(dateStr).getTime();
-    const hours = Math.floor(diff / 3600000);
+    const hours = Math.floor(diff / 3_600_000);
     if (hours < 3)  return 'आत्ता / Just now';
     if (hours < 24) return `${hours} तास / ${hours}h ago`;
     const days = Math.floor(hours / 24);
@@ -125,33 +128,53 @@ export default function FarmingNewsSection({ lang, location }: FarmingNewsSectio
     let cancelled = false;
     setLoading(true);
 
-    fetch(RSS2JSON)
-      .then(r => r.json())
-      .then(data => {
-        if (cancelled) return;
-        if (data.status === 'ok' && Array.isArray(data.items) && data.items.length > 0) {
-          const fetched: NewsItem[] = data.items.slice(0, 6).map((item: { title: string; pubDate: string; link: string; source?: string }, i: number) => ({
-            id: `live-${i}`,
-            titleEn: item.title,
-            titleMr: item.title, // Agrowon publishes in Marathi natively
-            category: guessCategory(item.title),
-            date: relativeDate(item.pubDate),
-            source: 'Agrowon',
-            url: item.link,
-            isLive: true,
-          }));
+    async function loadNews() {
+      // ── Tier 1: AgriMart backend (cached, no rate limits) ────────────────
+      try {
+        const params = location && !['Detecting...', 'Mandi', 'Rural MH'].includes(location)
+          ? `?location=${encodeURIComponent(location)}`
+          : '';
+        const res  = await fetch(`${API_BASE}/news/farming${params}`, { signal: AbortSignal.timeout(6_000) });
+        const json = await res.json();
+        if (!cancelled && json.ok && Array.isArray(json.items) && json.items.length > 0) {
+          setNews(json.items as NewsItem[]);
+          setIsLive(true);
+          setLoading(false);
+          return;
+        }
+      } catch { /* backend not running — fall through */ }
+
+      // ── Tier 2: rss2json direct (dev / backend down) ──────────────────────
+      try {
+        const res  = await fetch(RSS2JSON, { signal: AbortSignal.timeout(6_000) });
+        const data = await res.json();
+        if (!cancelled && data.status === 'ok' && Array.isArray(data.items) && data.items.length > 0) {
+          const fetched: NewsItem[] = data.items.slice(0, 6).map(
+            (item: { title: string; pubDate: string; link: string }, i: number) => ({
+              id:       `live-${i}`,
+              titleEn:  item.title,
+              titleMr:  item.title,
+              category: guessCategory(item.title),
+              date:     relativeDate(item.pubDate),
+              source:   'Agrowon',
+              url:      item.link,
+              isLive:   true,
+            }),
+          );
           setNews(fetched);
           setIsLive(true);
+          setLoading(false);
+          return;
         }
-      })
-      .catch(() => { /* keep static fallback */ })
-      .finally(() => { if (!cancelled) setLoading(false); });
+      } catch { /* fall through to static */ }
 
-    // 6-second timeout — show static if fetch is slow
-    const timer = setTimeout(() => { if (!cancelled) setLoading(false); }, 6000);
+      // ── Tier 3: static curated fallback ──────────────────────────────────
+      if (!cancelled) setLoading(false);
+    }
 
-    return () => { cancelled = true; clearTimeout(timer); };
-  }, []);
+    loadNews();
+    return () => { cancelled = true; };
+  }, [location]);
 
   // City name sanitised for display
   const city = ['Detecting...', 'Mandi', 'Rural MH'].includes(location) ? 'Maharashtra' : location;
