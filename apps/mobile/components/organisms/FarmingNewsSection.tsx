@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
-import { Newspaper, TrendingUp, CloudRain, Landmark } from 'lucide-react';
+import { Newspaper, TrendingUp, CloudRain, Landmark, ExternalLink } from 'lucide-react';
 import SectionReveal from '../atoms/SectionReveal.tsx';
+
+/** Opens URL in the system browser — works in Capacitor WebView and regular browsers. */
+function openUrl(url: string) {
+  window.open(url, '_system');
+}
 
 // Backend URL — set VITE_API_URL in .env for production deployment
 const API_BASE = (import.meta as { env?: Record<string, string> }).env?.VITE_API_URL ?? 'http://localhost:3000';
@@ -36,6 +41,7 @@ const STATIC_NEWS: NewsItem[] = [
     category: 'market',
     date: 'आज / Today',
     source: 'APMC Nashik',
+    url: 'https://www.apmc.biz/',
   },
   {
     id: 'n2',
@@ -44,6 +50,7 @@ const STATIC_NEWS: NewsItem[] = [
     category: 'weather',
     date: 'काल / Yesterday',
     source: 'IMD Mumbai',
+    url: 'https://mausam.imd.gov.in/pune/',
   },
   {
     id: 'n3',
@@ -52,6 +59,7 @@ const STATIC_NEWS: NewsItem[] = [
     category: 'scheme',
     date: '२ दिवसांपूर्वी / 2d ago',
     source: 'Ministry of Agriculture',
+    url: 'https://pmkisan.gov.in/',
   },
   {
     id: 'n4',
@@ -60,14 +68,16 @@ const STATIC_NEWS: NewsItem[] = [
     category: 'market',
     date: '३ दिवसांपूर्वी / 3d ago',
     source: 'CACP',
+    url: 'https://cacp.dacnet.nic.in/',
   },
   {
     id: 'n5',
-    titleEn: 'Pune district launches drip irrigation subsidy for small landholders (up to 80%)',
-    titleMr: 'पुणे जिल्ह्यात लहान शेतकऱ्यांसाठी ठिबक सिंचन अनुदान — ८०% पर्यंत सहाय्य',
+    titleEn: 'Drip irrigation subsidy for small farmers — up to 80% via MahaDBT portal',
+    titleMr: 'लहान शेतकऱ्यांसाठी ठिबक सिंचन अनुदान — MahaDBT द्वारे ८०% पर्यंत सहाय्य',
     category: 'scheme',
     date: '५ दिवसांपूर्वी / 5d ago',
-    source: 'Pune ZP',
+    source: 'MahaDBT',
+    url: 'https://mahadbt.maharashtra.gov.in/',
   },
   {
     id: 'n6',
@@ -76,6 +86,7 @@ const STATIC_NEWS: NewsItem[] = [
     category: 'market',
     date: '१ आठवड्यापूर्वी / 1w ago',
     source: 'APMC Latur',
+    url: 'https://www.apmc.biz/',
   },
 ];
 
@@ -225,36 +236,45 @@ export default function FarmingNewsSection({ lang, location }: FarmingNewsSectio
 // ── NewsCard ──────────────────────────────────────────────────────────────────
 
 function NewsCard({ item, isMr, index }: { item: NewsItem; isMr: boolean; index: number }) {
-  const meta = CATEGORY_META[item.category];
-  const Icon = meta.icon;
+  const meta  = CATEGORY_META[item.category];
+  const Icon  = meta.icon;
   const title = isMr ? item.titleMr : item.titleEn;
 
+  const badgeColor = item.category === 'weather' ? '#5AC8FA'
+    : item.category === 'scheme' ? '#D4A04A'
+    : '#6FCF4A';
+
   return (
-    <motion.a
-      href={item.url ?? '#'}
-      target={item.url ? '_blank' : undefined}
-      rel="noopener noreferrer"
+    <motion.div
+      role="button"
+      tabIndex={0}
+      aria-label={title}
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.06, duration: 0.4, ease: [0.16, 1, 0.3, 1] as const }}
-      className="flex-shrink-0 flex flex-col justify-between rounded-2xl p-4 cursor-pointer active:scale-[0.97] transition-transform"
+      whileTap={{ scale: 0.97 }}
+      className="flex-shrink-0 flex flex-col justify-between rounded-2xl p-4 cursor-pointer select-none"
       style={{
         width: 220,
         minHeight: 160,
         background: '#111C11',
         border: '1px solid rgba(245,240,232,0.07)',
       }}
-      onClick={e => { if (!item.url) e.preventDefault(); }}
+      onClick={() => item.url && openUrl(item.url)}
+      onKeyDown={e => { if ((e.key === 'Enter' || e.key === ' ') && item.url) openUrl(item.url); }}
     >
       {/* Category badge */}
-      <div className="flex items-center gap-1.5 mb-3">
+      <div className="flex items-center justify-between mb-3">
         <span
           className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-medium tracking-[0.1em] uppercase"
-          style={{ background: `${meta.color}33`, color: item.category === 'weather' ? '#5AC8FA' : item.category === 'scheme' ? '#D4A04A' : '#6FCF4A' }}
+          style={{ background: `${meta.color}33`, color: badgeColor }}
         >
           <Icon size={9} strokeWidth={2} />
           {isMr ? meta.labelMr : meta.labelEn}
         </span>
+        {item.url && (
+          <ExternalLink size={11} strokeWidth={1.5} style={{ color: 'rgba(245,240,232,0.2)' }} />
+        )}
       </div>
 
       {/* Headline */}
@@ -267,7 +287,7 @@ function NewsCard({ item, isMr, index }: { item: NewsItem; isMr: boolean; index:
         <span className="text-[10px] text-[rgba(245,240,232,0.3)]">{item.source}</span>
         <span className="text-[10px] text-[rgba(245,240,232,0.25)]">{item.date}</span>
       </div>
-    </motion.a>
+    </motion.div>
   );
 }
 
