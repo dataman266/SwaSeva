@@ -3,16 +3,11 @@ import { Search, Filter, Scale, MessageCircle } from 'lucide-react';
 import { Language, Product } from '../types.ts';
 import { PRODUCTS, SELLERS, CATEGORIES, TRANSLATIONS } from '../constants.tsx';
 
-import DarkHeroSection from './organisms/DarkHeroSection.tsx';
-import ScrollingTicker, {
-  AGRI_TICKER_ITEMS,
-  PARTNER_TICKER_ITEMS,
-} from './organisms/ScrollingTicker.tsx';
+import LivePriceTicker from './organisms/LivePriceTicker.tsx';
 import FarmingNewsSection from './organisms/FarmingNewsSection.tsx';
 import ProductCard from './molecules/ProductCard.tsx';
 import StatCard from './atoms/StatCard.tsx';
 import SectionReveal from './atoms/SectionReveal.tsx';
-import PillButton from './atoms/PillButton.tsx';
 
 interface HomeScreenProps {
   lang: Language;
@@ -21,16 +16,15 @@ interface HomeScreenProps {
   onOpenAssistant: () => void;
 }
 
-// ── Stat strip data ──────────────────────────────────────────────────────────
 const STATS = [
-  { value: '500+', unit: 'Farmers',  description: 'registered on the platform'  },
-  { value: '50+',  unit: 'Cities',   description: 'across Maharashtra & beyond'  },
-  { value: '0',    unit: 'Middlemen',description: 'direct farm-to-buyer always'  },
-  { value: '5×',   unit: 'Better ROI',description: 'vs traditional mandi prices' },
+  { value: '500+', unit: 'Farmers',   description: 'registered on the platform'  },
+  { value: '50+',  unit: 'Cities',    description: 'across Maharashtra & beyond'  },
+  { value: '0',    unit: 'Middlemen', description: 'direct farm-to-buyer always'  },
+  { value: '5×',   unit: 'Better ROI',description: 'vs traditional mandi prices'  },
 ];
 
 export default function HomeScreen({ lang, location, onViewDetails, onOpenAssistant }: HomeScreenProps) {
-  const [search, setSearch]         = useState('');
+  const [search, setSearch]           = useState('');
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [activeCategory, setActiveCategory] = useState('all');
 
@@ -48,68 +42,26 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
     const name    = (isMr ? p.nameMr    : p.name   ).toLowerCase();
     const variety = (isMr ? p.varietyMr : p.variety).toLowerCase();
     const q       = search.toLowerCase();
-    const matchSearch   = name.includes(q) || variety.includes(q);
-    const matchCategory = activeCategory === 'all' || p.category === activeCategory;
-    return matchSearch && matchCategory;
+    return (name.includes(q) || variety.includes(q)) &&
+      (activeCategory === 'all' || p.category === activeCategory);
   });
 
   return (
     <div className="pb-28">
 
-      {/* ── 1. HERO ─────────────────────────────────────────────────── */}
-      <DarkHeroSection
-        eyebrow={isMr ? 'थेट शेतातून' : 'Direct from Farm'}
-        headline={isMr ? 'शेतकऱ्यांचा बाजार' : 'The Farmers\' Market'}
-        headlineAccent={isMr ? 'थेट' : 'Reimagined'}
-        subtext={
-          isMr
-            ? 'ताजे उत्पादन, विश्वासार्ह शेतकरी आणि उचित किंमत — सरळ तुमच्या दारावर.'
-            : 'Fresh produce, verified farmers, fair prices — direct to your door. No middlemen.'
-        }
-        backgroundImage="https://images.unsplash.com/photo-1500937386664-56d1dfef3854?q=80&w=1600&auto=format&fit=crop"
-        ctas={[
-          { label: isMr ? 'बाजार पाहा' : 'Browse Market', onClick: () => {} },
-        ]}
-      />
+      {/* ── 1. LIVE PRICE TICKER ─────────────────────────────────── */}
+      <LivePriceTicker isMr={isMr} />
 
-      {/* ── 2. TICKER — crop categories ─────────────────────────────── */}
-      <section className="py-8 overflow-hidden border-b border-[rgba(245,240,232,0.06)]">
-        <ScrollingTicker items={AGRI_TICKER_ITEMS} />
-        <div className="mt-3" />
-        <ScrollingTicker items={PARTNER_TICKER_ITEMS} reverse />
-      </section>
-
-      {/* ── 3. FARMING NEWS ─────────────────────────────────────────── */}
-      <FarmingNewsSection lang={isMr ? 'mr' : 'en'} location={location} />
-
-      {/* ── 4. STAT STRIP ───────────────────────────────────────────── */}
-      <section className="px-6 py-14" style={{ background: '#111C11' }}>
-        <SectionReveal className="mb-10">
-          <p className="text-[10px] font-medium tracking-[0.2em] uppercase text-[rgba(245,240,232,0.35)] mb-2">
-            {isMr ? 'आमचा प्रभाव' : 'Our Impact'}
-          </p>
-          <h2 className="font-light text-[#F5F0E8]" style={{ fontSize: 'clamp(24px, 7vw, 36px)', letterSpacing: '-0.02em' }}>
-            {isMr ? 'संख्या बोलतात' : 'Numbers that\nspeak for themselves'}
-          </h2>
-        </SectionReveal>
-
-        <div className="grid grid-cols-2 gap-x-8 gap-y-10">
-          {STATS.map((s, i) => (
-            <StatCard key={i} {...s} delay={i * 80} />
-          ))}
-        </div>
-      </section>
-
-      {/* ── 5. PRODUCT LISTING ──────────────────────────────────────── */}
-      <section className="px-5 pt-12">
+      {/* ── 2. PRODUCT LISTINGS ──────────────────────────────────── */}
+      <section className="px-5 pt-6">
 
         {/* Section header */}
-        <SectionReveal className="flex items-baseline justify-between mb-6">
+        <SectionReveal className="flex items-baseline justify-between mb-5">
           <div>
             <p className="text-[10px] font-medium tracking-[0.2em] uppercase text-[rgba(245,240,232,0.35)] mb-1">
               {isMr ? 'ताजे उत्पादन' : 'Fresh Listings'}
             </p>
-            <h2 className="font-light text-[#F5F0E8]" style={{ fontSize: '24px', letterSpacing: '-0.02em' }}>
+            <h2 className="font-light text-[#F5F0E8]" style={{ fontSize: '22px', letterSpacing: '-0.02em' }}>
               {t.nearYou}
             </h2>
           </div>
@@ -181,8 +133,27 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
         </div>
       </section>
 
+      {/* ── 3. FARMING NEWS ──────────────────────────────────────── */}
+      <FarmingNewsSection lang={isMr ? 'mr' : 'en'} location={location} />
 
-      {/* ── AI Assistant FAB ─────────────────────────────────────────── */}
+      {/* ── 4. OUR IMPACT ────────────────────────────────────────── */}
+      <section className="px-6 py-14" style={{ background: '#111C11' }}>
+        <SectionReveal className="mb-10">
+          <p className="text-[10px] font-medium tracking-[0.2em] uppercase text-[rgba(245,240,232,0.35)] mb-2">
+            {isMr ? 'आमचा प्रभाव' : 'Our Impact'}
+          </p>
+          <h2 className="font-light text-[#F5F0E8]" style={{ fontSize: 'clamp(24px, 7vw, 36px)', letterSpacing: '-0.02em' }}>
+            {isMr ? 'संख्या बोलतात' : 'Numbers that\nspeak for themselves'}
+          </h2>
+        </SectionReveal>
+        <div className="grid grid-cols-2 gap-x-8 gap-y-10">
+          {STATS.map((s, i) => (
+            <StatCard key={i} {...s} delay={i * 80} />
+          ))}
+        </div>
+      </section>
+
+      {/* ── AI Assistant FAB ─────────────────────────────────────── */}
       <button
         onClick={onOpenAssistant}
         className="fixed bottom-24 right-5 z-50 w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-all active:scale-90 border border-[rgba(245,240,232,0.15)]"
@@ -193,11 +164,13 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
         <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-[#D4C4A0] rounded-full border-2 border-[#0A1A0A] animate-pulse" />
       </button>
 
-      {/* ── Compare bar ──────────────────────────────────────────────── */}
+      {/* ── Compare bar ──────────────────────────────────────────── */}
       {selectedIds.length > 1 && (
         <div className="fixed bottom-24 left-5 z-50 animate-[fadeUp_0.4s_cubic-bezier(0.16,1,0.3,1)_both]">
-          <button className="flex items-center gap-2.5 px-5 py-3 rounded-full border border-[rgba(245,240,232,0.2)] text-[#F5F0E8] shadow-2xl active:scale-95 transition-transform font-medium text-sm"
-            style={{ background: '#1A2D1A' }}>
+          <button
+            className="flex items-center gap-2.5 px-5 py-3 rounded-full border border-[rgba(245,240,232,0.2)] text-[#F5F0E8] shadow-2xl active:scale-95 transition-transform font-medium text-sm"
+            style={{ background: '#1A2D1A' }}
+          >
             <Scale size={16} className="text-[#D4C4A0]" />
             <span style={{ letterSpacing: '0.06em', fontSize: '12px' }}>
               {isMr ? `${selectedIds.length} तुलना करा` : `Compare ${selectedIds.length}`}
@@ -209,12 +182,8 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
   );
 }
 
-// ── CategoryChip ─────────────────────────────────────────────────────────────
-interface ChipProps {
-  label: string;
-  active: boolean;
-  onClick: () => void;
-}
+// ── CategoryChip ──────────────────────────────────────────────────────────────
+interface ChipProps { label: string; active: boolean; onClick: () => void; }
 
 function CategoryChip({ label, active, onClick }: ChipProps) {
   return (
