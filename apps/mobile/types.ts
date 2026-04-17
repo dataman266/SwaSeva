@@ -37,7 +37,7 @@ export interface Product {
   descriptionMr: string;
 }
 
-export type AppScreen = 'HOME' | 'DETAILS' | 'SELL' | 'ORDERS' | 'PROFILE' | 'ASSISTANT' | 'ONBOARDING';
+export type AppScreen = 'HOME' | 'DETAILS' | 'SELL' | 'LISTINGS' | 'ORDERS' | 'PROFILE' | 'ASSISTANT' | 'ONBOARDING';
 
 export interface AppState {
   currentScreen: AppScreen;

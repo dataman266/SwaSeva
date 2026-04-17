@@ -7,6 +7,7 @@ import DetailsScreen from './components/DetailsScreen.tsx';
 import SellScreen from './components/SellScreen.tsx';
 import OrdersScreen from './components/OrdersScreen.tsx';
 import ProfileScreen from './components/ProfileScreen.tsx';
+import MyListingsScreen from './components/MyListingsScreen.tsx';
 import AssistantScreen from './components/AssistantScreen.tsx';
 import OnboardingScreen from './components/OnboardingScreen.tsx';
 import AuthScreen from './components/AuthScreen.tsx';
@@ -17,7 +18,7 @@ const ONBOARDED_KEY  = 'agrimart_onboarded';
 const AUTH_TOKEN_KEY = 'agrimart_auth_token';
 
 // Screens that push forward (slide left) vs pop back (slide right)
-const SCREEN_ORDER: AppScreen[] = ['HOME', 'DETAILS', 'SELL', 'ORDERS', 'PROFILE', 'ASSISTANT'];
+const SCREEN_ORDER: AppScreen[] = ['HOME', 'DETAILS', 'SELL', 'LISTINGS', 'ORDERS', 'PROFILE', 'ASSISTANT'];
 
 function getDirection(from: AppScreen, to: AppScreen): number {
   const fi = SCREEN_ORDER.indexOf(from);
@@ -76,6 +77,7 @@ const App: React.FC = () => {
       case 'HOME':      return <HomeScreen lang={state.userLanguage} location={state.location} onViewDetails={(p) => changeScreen('DETAILS', p)} onOpenAssistant={() => changeScreen('ASSISTANT')} />;
       case 'DETAILS':   return <DetailsScreen product={state.selectedProduct!} lang={state.userLanguage} onBack={() => changeScreen('HOME')} />;
       case 'SELL':      return <SellScreen lang={state.userLanguage} onDone={() => changeScreen('HOME')} />;
+      case 'LISTINGS':  return <MyListingsScreen lang={state.userLanguage} onCreateNew={() => changeScreen('SELL')} />;
       case 'ORDERS':    return <OrdersScreen lang={state.userLanguage} />;
       case 'PROFILE':   return <ProfileScreen lang={state.userLanguage} onSignOut={() => {
         localStorage.removeItem(AUTH_TOKEN_KEY);
