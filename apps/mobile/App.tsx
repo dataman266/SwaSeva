@@ -135,7 +135,7 @@ const App: React.FC = () => {
             animate={isOnboarding ? { opacity: 1 } : 'center'}
             exit={isOnboarding ? { opacity: 0 } : 'exit'}
             transition={transition}
-            style={{ willChange: 'transform, opacity' }}
+            style={{ WebkitBackfaceVisibility: 'hidden' }}
           >
             {renderScreen()}
           </motion.div>
