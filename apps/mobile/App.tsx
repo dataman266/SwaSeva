@@ -75,7 +75,7 @@ const App: React.FC = () => {
 
   const renderScreen = () => {
     switch (state.currentScreen) {
-      case 'HOME':      return <HomeScreen lang={state.userLanguage} location={state.location} onViewDetails={(p) => changeScreen('DETAILS', p)} onOpenAssistant={() => changeScreen('ASSISTANT')} />;
+      case 'HOME':      return <HomeScreen lang={state.userLanguage} location={state.location} onViewDetails={(p) => changeScreen('DETAILS', p)} onOpenAssistant={() => changeScreen('ASSISTANT')} onOpenExplore={() => changeScreen('EXPLORE')} />;
       case 'DETAILS':   return <DetailsScreen product={state.selectedProduct!} lang={state.userLanguage} onBack={() => changeScreen('HOME')} />;
       case 'SELL':      return <SellScreen lang={state.userLanguage} onDone={() => changeScreen('HOME')} />;
       case 'LISTINGS':  return <MyListingsScreen lang={state.userLanguage} onCreateNew={() => changeScreen('SELL')} />;
@@ -85,7 +85,7 @@ const App: React.FC = () => {
         setIsAuthenticated(false);
         changeScreen('HOME');
       }} onExplore={() => changeScreen('EXPLORE')} />;
-      case 'EXPLORE':   return <ExploreScreen lang={state.userLanguage} location={state.location} onBack={() => changeScreen('PROFILE')} />;
+      case 'EXPLORE':   return <ExploreScreen lang={state.userLanguage} location={state.location} onBack={() => changeScreen('HOME')} />;
       case 'ASSISTANT': return <AssistantScreen lang={state.userLanguage} onBack={() => changeScreen('HOME')} />;
       case 'ONBOARDING': return (
         <OnboardingScreen
@@ -96,7 +96,7 @@ const App: React.FC = () => {
           }}
         />
       );
-      default: return <HomeScreen lang={state.userLanguage} location={state.location} onViewDetails={(p) => changeScreen('DETAILS', p)} onOpenAssistant={() => changeScreen('ASSISTANT')} />;
+      default: return <HomeScreen lang={state.userLanguage} location={state.location} onViewDetails={(p) => changeScreen('DETAILS', p)} onOpenAssistant={() => changeScreen('ASSISTANT')} onOpenExplore={() => changeScreen('EXPLORE')} />;
     }
   };
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Filter, Scale, MessageCircle } from 'lucide-react';
+import { Search, Filter, Scale, MessageCircle, Newspaper, TrendingUp, ChevronRight } from 'lucide-react';
 import { Language, Product } from '../types.ts';
 import { PRODUCTS, SELLERS, CATEGORIES, TRANSLATIONS } from '../constants.tsx';
 
@@ -12,9 +12,10 @@ interface HomeScreenProps {
   location: string;
   onViewDetails: (p: Product) => void;
   onOpenAssistant: () => void;
+  onOpenExplore: () => void;
 }
 
-export default function HomeScreen({ lang, location, onViewDetails, onOpenAssistant }: HomeScreenProps) {
+export default function HomeScreen({ lang, location, onViewDetails, onOpenAssistant, onOpenExplore }: HomeScreenProps) {
   const [search, setSearch]           = useState('');
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [activeCategory, setActiveCategory] = useState('all');
@@ -43,7 +44,46 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
       {/* ── 1. LIVE PRICE TICKER ─────────────────────────────────── */}
       <LivePriceTicker isMr={isMr} />
 
-      {/* ── 2. PRODUCT LISTINGS ──────────────────────────────────── */}
+      {/* ── 2. NEWS & IMPACT ENTRY CARD ──────────────────────────── */}
+      <button
+        type="button"
+        onClick={onOpenExplore}
+        style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          width: '100%', margin: '0.875rem 0 0',
+          padding: '0.875rem 1.25rem',
+          background: 'linear-gradient(135deg, #111C11 0%, #1A2D1A 100%)',
+          border: 'none',
+          borderTop: '1px solid rgba(245,240,232,0.06)',
+          borderBottom: '1px solid rgba(245,240,232,0.06)',
+          cursor: 'pointer', touchAction: 'manipulation',
+          WebkitTapHighlightColor: 'rgba(45,90,27,0.15)',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.875rem' }}>
+          <div style={{
+            width: 36, height: 36, borderRadius: '0.75rem', flexShrink: 0,
+            background: 'rgba(212,196,160,0.1)', border: '1px solid rgba(212,196,160,0.2)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+            <Newspaper size={16} style={{ color: '#D4C4A0' }} />
+          </div>
+          <div style={{ textAlign: 'left' }}>
+            <p style={{ fontSize: '13px', fontWeight: 400, color: '#F5F0E8', letterSpacing: '-0.01em' }}>
+              {isMr ? 'बातम्या आणि आमचा प्रभाव' : 'News & Our Impact'}
+            </p>
+            <p style={{ fontSize: '11px', color: 'rgba(245,240,232,0.4)', marginTop: 2, fontWeight: 300 }}>
+              {isMr ? 'शेती बातम्या, MSP अपडेट आणि अधिक' : 'Farm news, MSP updates & more'}
+            </p>
+          </div>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
+          <TrendingUp size={12} style={{ color: '#4A8C2A' }} />
+          <ChevronRight size={14} style={{ color: 'rgba(245,240,232,0.25)' }} />
+        </div>
+      </button>
+
+      {/* ── 3. PRODUCT LISTINGS ──────────────────────────────────── */}
       <section className="px-5 pt-6">
 
         {/* Section header */}
