@@ -8,6 +8,7 @@ import SellScreen from './components/SellScreen.tsx';
 import OrdersScreen from './components/OrdersScreen.tsx';
 import ProfileScreen from './components/ProfileScreen.tsx';
 import MyListingsScreen from './components/MyListingsScreen.tsx';
+import ExploreScreen from './components/ExploreScreen.tsx';
 import AssistantScreen from './components/AssistantScreen.tsx';
 import OnboardingScreen from './components/OnboardingScreen.tsx';
 import AuthScreen from './components/AuthScreen.tsx';
@@ -18,7 +19,7 @@ const ONBOARDED_KEY  = 'agrimart_onboarded';
 const AUTH_TOKEN_KEY = 'agrimart_auth_token';
 
 // Screens that push forward (slide left) vs pop back (slide right)
-const SCREEN_ORDER: AppScreen[] = ['HOME', 'DETAILS', 'SELL', 'LISTINGS', 'ORDERS', 'PROFILE', 'ASSISTANT'];
+const SCREEN_ORDER: AppScreen[] = ['HOME', 'DETAILS', 'SELL', 'LISTINGS', 'ORDERS', 'PROFILE', 'EXPLORE', 'ASSISTANT'];
 
 function getDirection(from: AppScreen, to: AppScreen): number {
   const fi = SCREEN_ORDER.indexOf(from);
@@ -83,7 +84,8 @@ const App: React.FC = () => {
         localStorage.removeItem(AUTH_TOKEN_KEY);
         setIsAuthenticated(false);
         changeScreen('HOME');
-      }} />;
+      }} onExplore={() => changeScreen('EXPLORE')} />;
+      case 'EXPLORE':   return <ExploreScreen lang={state.userLanguage} location={state.location} onBack={() => changeScreen('PROFILE')} />;
       case 'ASSISTANT': return <AssistantScreen lang={state.userLanguage} onBack={() => changeScreen('HOME')} />;
       case 'ONBOARDING': return (
         <OnboardingScreen
@@ -112,7 +114,7 @@ const App: React.FC = () => {
   }
 
   const isOnboarding = state.currentScreen === 'ONBOARDING';
-  const needsHeaderSpacer = !isOnboarding && state.currentScreen !== 'HOME';
+  const needsHeaderSpacer = !isOnboarding;
 
   return (
     <div className="flex flex-col min-h-screen" style={{ background: '#0A1A0A', color: '#F5F0E8' }}>

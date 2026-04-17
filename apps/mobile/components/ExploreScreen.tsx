@@ -1,29 +1,55 @@
 import React from 'react';
+import { ArrowLeft } from 'lucide-react';
 import { Language } from '../types.ts';
 import DarkHeroSection from './organisms/DarkHeroSection.tsx';
 import ScrollingTicker, {
   AGRI_TICKER_ITEMS,
   PARTNER_TICKER_ITEMS,
 } from './organisms/ScrollingTicker.tsx';
+import FarmingNewsSection from './organisms/FarmingNewsSection.tsx';
 import SectionReveal from './atoms/SectionReveal.tsx';
 import StatCard from './atoms/StatCard.tsx';
 
 interface ExploreScreenProps {
   lang: Language;
+  location?: string;
+  onBack?: () => void;
 }
 
 const STATS = [
-  { value: '500+', unit: 'Farmers',   description: 'registered on the platform'  },
-  { value: '50+',  unit: 'Cities',    description: 'across Maharashtra & beyond'  },
-  { value: '0',    unit: 'Middlemen', description: 'direct farm-to-buyer always'  },
-  { value: '5×',   unit: 'Better ROI',description: 'vs traditional mandi prices'  },
+  { value: '500+', unit: 'Farmers',    description: 'registered on the platform'  },
+  { value: '50+',  unit: 'Cities',     description: 'across Maharashtra & beyond'  },
+  { value: '0',    unit: 'Middlemen',  description: 'direct farm-to-buyer always'  },
+  { value: '5×',   unit: 'Better ROI', description: 'vs traditional mandi prices'  },
 ];
 
-export default function ExploreScreen({ lang }: ExploreScreenProps) {
+export default function ExploreScreen({ lang, location = 'Maharashtra', onBack }: ExploreScreenProps) {
   const isMr = lang === Language.MARATHI;
 
   return (
-    <div className="pb-28">
+    <div className="pb-28" style={{ minHeight: '100vh', overflowY: 'auto', WebkitOverflowScrolling: 'touch' }}>
+
+      {/* ── Back button (when navigated from Profile) ────────────── */}
+      {onBack && (
+        <div style={{ padding: '1rem 1.25rem 0' }}>
+          <button
+            type="button"
+            onClick={onBack}
+            style={{
+              display: 'flex', alignItems: 'center', gap: '0.5rem',
+              background: 'rgba(245,240,232,0.06)', border: '1px solid rgba(245,240,232,0.1)',
+              borderRadius: '2rem', padding: '0.5rem 1rem',
+              color: '#F5F0E8', fontSize: '13px', fontWeight: 300,
+              cursor: 'pointer', touchAction: 'manipulation',
+              WebkitTapHighlightColor: 'rgba(45,90,27,0.2)',
+            }}
+          >
+            <ArrowLeft size={14} />
+            {isMr ? 'मागे' : 'Back'}
+          </button>
+        </div>
+      )}
+
       {/* ── Hero ──────────────────────────────────────────────────── */}
       <DarkHeroSection
         eyebrow={isMr ? 'थेट शेतातून' : 'Direct from Farm'}
@@ -35,9 +61,7 @@ export default function ExploreScreen({ lang }: ExploreScreenProps) {
             : 'Fresh produce, verified farmers, fair prices — direct to your door. No middlemen.'
         }
         backgroundImage="https://images.unsplash.com/photo-1500937386664-56d1dfef3854?q=80&w=1600&auto=format&fit=crop"
-        ctas={[
-          { label: isMr ? 'बाजार पाहा' : 'Browse Market', onClick: () => {} },
-        ]}
+        ctas={[]}
       />
 
       {/* ── Scrolling tickers ─────────────────────────────────────── */}
@@ -46,6 +70,9 @@ export default function ExploreScreen({ lang }: ExploreScreenProps) {
         <div className="mt-3" />
         <ScrollingTicker items={PARTNER_TICKER_ITEMS} reverse />
       </section>
+
+      {/* ── Farming News ──────────────────────────────────────────── */}
+      <FarmingNewsSection lang={isMr ? 'mr' : 'en'} location={location} />
 
       {/* ── Our Impact ───────────────────────────────────────────── */}
       <section className="px-6 py-14" style={{ background: '#111C11' }}>

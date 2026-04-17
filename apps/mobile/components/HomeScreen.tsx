@@ -4,9 +4,7 @@ import { Language, Product } from '../types.ts';
 import { PRODUCTS, SELLERS, CATEGORIES, TRANSLATIONS } from '../constants.tsx';
 
 import LivePriceTicker from './organisms/LivePriceTicker.tsx';
-import FarmingNewsSection from './organisms/FarmingNewsSection.tsx';
 import ProductCard from './molecules/ProductCard.tsx';
-import StatCard from './atoms/StatCard.tsx';
 import SectionReveal from './atoms/SectionReveal.tsx';
 
 interface HomeScreenProps {
@@ -15,13 +13,6 @@ interface HomeScreenProps {
   onViewDetails: (p: Product) => void;
   onOpenAssistant: () => void;
 }
-
-const STATS = [
-  { value: '500+', unit: 'Farmers',   description: 'registered on the platform'  },
-  { value: '50+',  unit: 'Cities',    description: 'across Maharashtra & beyond'  },
-  { value: '0',    unit: 'Middlemen', description: 'direct farm-to-buyer always'  },
-  { value: '5×',   unit: 'Better ROI',description: 'vs traditional mandi prices'  },
-];
 
 export default function HomeScreen({ lang, location, onViewDetails, onOpenAssistant }: HomeScreenProps) {
   const [search, setSearch]           = useState('');
@@ -130,26 +121,6 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
               );
             })
           )}
-        </div>
-      </section>
-
-      {/* ── 3. FARMING NEWS ──────────────────────────────────────── */}
-      <FarmingNewsSection lang={isMr ? 'mr' : 'en'} location={location} />
-
-      {/* ── 4. OUR IMPACT ────────────────────────────────────────── */}
-      <section className="px-6 py-14" style={{ background: '#111C11' }}>
-        <SectionReveal className="mb-10">
-          <p className="text-[10px] font-medium tracking-[0.2em] uppercase text-[rgba(245,240,232,0.35)] mb-2">
-            {isMr ? 'आमचा प्रभाव' : 'Our Impact'}
-          </p>
-          <h2 className="font-light text-[#F5F0E8]" style={{ fontSize: 'clamp(24px, 7vw, 36px)', letterSpacing: '-0.02em' }}>
-            {isMr ? 'संख्या बोलतात' : 'Numbers that\nspeak for themselves'}
-          </h2>
-        </SectionReveal>
-        <div className="grid grid-cols-2 gap-x-8 gap-y-10">
-          {STATS.map((s, i) => (
-            <StatCard key={i} {...s} delay={i * 80} />
-          ))}
         </div>
       </section>
 

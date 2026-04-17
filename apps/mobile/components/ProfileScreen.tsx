@@ -7,7 +7,7 @@ import {
   Lock, Eye, EyeOff, Globe, Check, X, ChevronDown,
   AlertCircle, Camera, FileText, Building2, Tractor,
   MessageCircle, PhoneCall, Star, Zap, TrendingUp,
-  Volume2, Tag, Megaphone,
+  Volume2, Tag, Megaphone, Newspaper,
 } from 'lucide-react';
 
 type ProfileView = 'main' | 'settings' | 'notifications' | 'kyc' | 'help';
@@ -17,20 +17,22 @@ interface MenuItem {
   label: string;
   labelMr: string;
   color: string;
-  action: 'settings' | 'notifications' | 'kyc' | 'help' | 'signout';
+  action: 'settings' | 'notifications' | 'kyc' | 'help' | 'explore' | 'signout';
 }
 
 const MENU_ITEMS: MenuItem[] = [
-  { icon: Settings,    label: 'Account Settings', labelMr: 'खाते सेटिंग्ज',  color: '#D4C4A0', action: 'settings'      },
-  { icon: Bell,        label: 'Notifications',     labelMr: 'सूचना',           color: '#4A8C2A', action: 'notifications'  },
-  { icon: ShieldCheck, label: 'KYC Verification',  labelMr: 'KYC पडताळणी',    color: '#7EB3FF', action: 'kyc'            },
-  { icon: HelpCircle,  label: 'Help & Support',    labelMr: 'मदत आणि सहाय्य', color: '#D4C4A0', action: 'help'           },
-  { icon: LogOut,      label: 'Sign Out',           labelMr: 'बाहेर पडा',       color: '#E57373', action: 'signout'        },
+  { icon: Settings,    label: 'Account Settings', labelMr: 'खाते सेटिंग्ज',   color: '#D4C4A0', action: 'settings'      },
+  { icon: Bell,        label: 'Notifications',     labelMr: 'सूचना',            color: '#4A8C2A', action: 'notifications'  },
+  { icon: ShieldCheck, label: 'KYC Verification',  labelMr: 'KYC पडताळणी',     color: '#7EB3FF', action: 'kyc'            },
+  { icon: Newspaper,   label: 'News & About',       labelMr: 'बातम्या आणि माहिती', color: '#D4C4A0', action: 'explore'     },
+  { icon: HelpCircle,  label: 'Help & Support',    labelMr: 'मदत आणि सहाय्य',  color: '#D4C4A0', action: 'help'           },
+  { icon: LogOut,      label: 'Sign Out',           labelMr: 'बाहेर पडा',        color: '#E57373', action: 'signout'        },
 ];
 
 interface ProfileScreenProps {
   lang: Language;
   onSignOut: () => void;
+  onExplore: () => void;
 }
 
 const slideVariants = {
@@ -821,7 +823,7 @@ function HelpView({ lang, onBack }: { lang: Language; onBack: () => void }) {
 }
 
 /* ─── MAIN PROFILE SCREEN ─────────────────────────────────── */
-export default function ProfileScreen({ lang, onSignOut }: ProfileScreenProps) {
+export default function ProfileScreen({ lang, onSignOut, onExplore }: ProfileScreenProps) {
   const isMr = lang === Language.MARATHI;
   const [profileView, setProfileView] = useState<ProfileView>('main');
   const [prevView, setPrevView]       = useState<ProfileView>('main');
@@ -844,6 +846,7 @@ export default function ProfileScreen({ lang, onSignOut }: ProfileScreenProps) {
       case 'settings':     navigateTo('settings');          break;
       case 'notifications': navigateTo('notifications');    break;
       case 'kyc':          navigateTo('kyc');               break;
+      case 'explore':      onExplore();                     break;
       case 'help':         navigateTo('help');              break;
     }
   };
