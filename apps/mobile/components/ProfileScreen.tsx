@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'motion/react';
 import { Language } from '../types.ts';
 import {
   Settings, Bell, ShieldCheck, HelpCircle, LogOut,
@@ -6,16 +7,36 @@ import {
 } from 'lucide-react';
 import SectionReveal from './atoms/SectionReveal.tsx';
 
-const MENU_ITEMS = [
-  { icon: Settings,    label: 'Account Settings',   labelMr: 'खाते सेटिंग्ज',     color: '#D4C4A0'   },
-  { icon: Bell,        label: 'Notifications',       labelMr: 'सूचना',              color: '#4A8C2A'   },
-  { icon: ShieldCheck, label: 'KYC Verification',    labelMr: 'KYC पडताळणी',       color: '#F5F0E8'   },
-  { icon: HelpCircle,  label: 'Help & Support',      labelMr: 'मदत आणि सहाय्य',     color: '#D4C4A0'   },
-  { icon: LogOut,      label: 'Sign Out',             labelMr: 'बाहेर पडा',          color: '#E57373'   },
+interface MenuItem {
+  icon: React.ElementType;
+  label: string;
+  labelMr: string;
+  color: string;
+  action: 'settings' | 'notifications' | 'kyc' | 'help' | 'signout';
+}
+
+const MENU_ITEMS: MenuItem[] = [
+  { icon: Settings,    label: 'Account Settings', labelMr: 'खाते सेटिंग्ज',   color: '#D4C4A0', action: 'settings'      },
+  { icon: Bell,        label: 'Notifications',     labelMr: 'सूचना',            color: '#4A8C2A', action: 'notifications'  },
+  { icon: ShieldCheck, label: 'KYC Verification',  labelMr: 'KYC पडताळणी',     color: '#F5F0E8', action: 'kyc'            },
+  { icon: HelpCircle,  label: 'Help & Support',    labelMr: 'मदत आणि सहाय्य',   color: '#D4C4A0', action: 'help'           },
+  { icon: LogOut,      label: 'Sign Out',           labelMr: 'बाहेर पडा',        color: '#E57373', action: 'signout'        },
 ];
 
-export default function ProfileScreen({ lang }: { lang: Language }) {
+interface ProfileScreenProps {
+  lang: Language;
+  onSignOut: () => void;
+}
+
+export default function ProfileScreen({ lang, onSignOut }: ProfileScreenProps) {
   const isMr = lang === Language.MARATHI;
+
+  const handleAction = (action: MenuItem['action']) => {
+    if (action === 'signout') {
+      onSignOut();
+    }
+    // TODO: wire up other actions when screens are built
+  };
 
   return (
     <div className="px-5 pt-8 pb-28 space-y-8" style={{ minHeight: '100vh' }}>
@@ -69,9 +90,9 @@ export default function ProfileScreen({ lang }: { lang: Language }) {
       <SectionReveal delay={60}>
         <div className="grid grid-cols-3 gap-3">
           {[
-            { value: '12',    label: isMr ? 'लिस्टिंग' : 'Listings'   },
-            { value: '4.8',   label: isMr ? 'रेटिंग'   : 'Rating'     },
-            { value: '₹48k',  label: isMr ? 'विक्री'   : 'Sales'      },
+            { value: '12',   label: isMr ? 'लिस्टिंग' : 'Listings' },
+            { value: '4.8',  label: isMr ? 'रेटिंग'   : 'Rating'   },
+            { value: '₹48k', label: isMr ? 'विक्री'   : 'Sales'    },
           ].map(({ value, label }) => (
             <div
               key={label}
@@ -92,17 +113,21 @@ export default function ProfileScreen({ lang }: { lang: Language }) {
       {/* ── Menu list ──────────────────────────────────────────────── */}
       <SectionReveal delay={100}>
         <div
-          className="rounded-2xl overflow-hidden divide-y divide-[rgba(245,240,232,0.05)]"
-          style={{
-            background: '#111C11',
-            border: '1px solid rgba(245,240,232,0.07)',
-          }}
+          className="rounded-2xl overflow-hidden"
+          style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)' }}
         >
-          {MENU_ITEMS.map(({ icon: Icon, label, labelMr, color }, i) => (
-            <button
+          {MENU_ITEMS.map(({ icon: Icon, label, labelMr, color, action }, i) => (
+            <motion.button
               key={label}
-              className="w-full flex items-center justify-between px-5 py-4 active:bg-[rgba(245,240,232,0.03)] transition-all"
-              style={{ borderBottom: i < MENU_ITEMS.length - 1 ? '1px solid rgba(245,240,232,0.05)' : 'none' }}
+              type="button"
+              whileTap={{ scale: 0.98, backgroundColor: 'rgba(245,240,232,0.06)' }}
+              transition={{ duration: 0.1 }}
+              onClick={() => handleAction(action)}
+              className="w-full flex items-center justify-between px-5 py-4"
+              style={{
+                borderBottom: i < MENU_ITEMS.length - 1 ? '1px solid rgba(245,240,232,0.05)' : 'none',
+                cursor: 'pointer',
+              }}
             >
               <div className="flex items-center gap-3.5">
                 <Icon size={16} style={{ color }} strokeWidth={1.75} />
@@ -110,15 +135,15 @@ export default function ProfileScreen({ lang }: { lang: Language }) {
                   className="font-light"
                   style={{
                     fontSize: '14px',
-                    color: label === 'Sign Out' ? '#E57373' : '#F5F0E8',
+                    color: action === 'signout' ? '#E57373' : '#F5F0E8',
                     letterSpacing: '-0.01em',
                   }}
                 >
                   {isMr ? labelMr : label}
                 </span>
               </div>
-              <ChevronRight size={14} className="text-[rgba(245,240,232,0.2)]" />
-            </button>
+              <ChevronRight size={14} style={{ color: 'rgba(245,240,232,0.2)' }} />
+            </motion.button>
           ))}
         </div>
       </SectionReveal>

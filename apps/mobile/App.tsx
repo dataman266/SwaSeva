@@ -77,7 +77,11 @@ const App: React.FC = () => {
       case 'DETAILS':   return <DetailsScreen product={state.selectedProduct!} lang={state.userLanguage} onBack={() => changeScreen('HOME')} />;
       case 'SELL':      return <SellScreen lang={state.userLanguage} onDone={() => changeScreen('HOME')} />;
       case 'ORDERS':    return <OrdersScreen lang={state.userLanguage} />;
-      case 'PROFILE':   return <ProfileScreen lang={state.userLanguage} />;
+      case 'PROFILE':   return <ProfileScreen lang={state.userLanguage} onSignOut={() => {
+        localStorage.removeItem(AUTH_TOKEN_KEY);
+        setIsAuthenticated(false);
+        changeScreen('HOME');
+      }} />;
       case 'ASSISTANT': return <AssistantScreen lang={state.userLanguage} onBack={() => changeScreen('HOME')} />;
       case 'ONBOARDING': return (
         <OnboardingScreen
