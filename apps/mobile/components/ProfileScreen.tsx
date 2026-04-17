@@ -5,7 +5,6 @@ import {
   Settings, Bell, ShieldCheck, HelpCircle, LogOut,
   ChevronRight, Sprout,
 } from 'lucide-react';
-import SectionReveal from './atoms/SectionReveal.tsx';
 
 interface MenuItem {
   icon: React.ElementType;
@@ -23,6 +22,13 @@ const MENU_ITEMS: MenuItem[] = [
   { icon: LogOut,      label: 'Sign Out',           labelMr: 'बाहेर पडा',        color: '#E57373', action: 'signout'        },
 ];
 
+// Simple stagger helper — no whileInView, just animate on mount
+const fadeUp = (i: number) => ({
+  initial: { opacity: 0, y: 16 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] as const, delay: i * 0.07 },
+});
+
 interface ProfileScreenProps {
   lang: Language;
   onSignOut: () => void;
@@ -32,23 +38,22 @@ export default function ProfileScreen({ lang, onSignOut }: ProfileScreenProps) {
   const isMr = lang === Language.MARATHI;
 
   const handleAction = (action: MenuItem['action']) => {
-    if (action === 'signout') {
-      onSignOut();
-    }
-    // TODO: wire up other actions when screens are built
+    if (action === 'signout') onSignOut();
+    // TODO: navigate to sub-screens when built
   };
 
   return (
-    <div className="px-5 pt-8 pb-28 space-y-8" style={{ minHeight: '100vh' }}>
-
+    <div
+      className="px-5 pt-8 pb-28 space-y-6"
+      style={{ minHeight: '100vh', overflowY: 'auto' }}
+    >
       {/* ── Identity card ─────────────────────────────────────────── */}
-      <SectionReveal>
+      <motion.div {...fadeUp(0)}>
         <div
           className="p-6 rounded-2xl"
           style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)' }}
         >
           <div className="flex items-center gap-4">
-            {/* Avatar */}
             <div className="relative flex-shrink-0">
               <div
                 className="w-16 h-16 rounded-2xl flex items-center justify-center font-medium text-lg text-[#F5F0E8]"
@@ -64,7 +69,6 @@ export default function ProfileScreen({ lang, onSignOut }: ProfileScreenProps) {
               </div>
             </div>
 
-            {/* Info */}
             <div className="flex-1 min-w-0">
               <h2 className="font-medium text-[#F5F0E8] truncate" style={{ fontSize: '18px', letterSpacing: '-0.02em' }}>
                 Rajesh Shinde
@@ -84,10 +88,10 @@ export default function ProfileScreen({ lang, onSignOut }: ProfileScreenProps) {
             </div>
           </div>
         </div>
-      </SectionReveal>
+      </motion.div>
 
       {/* ── Stats strip ───────────────────────────────────────────── */}
-      <SectionReveal delay={60}>
+      <motion.div {...fadeUp(1)}>
         <div className="grid grid-cols-3 gap-3">
           {[
             { value: '12',   label: isMr ? 'लिस्टिंग' : 'Listings' },
@@ -108,10 +112,10 @@ export default function ProfileScreen({ lang, onSignOut }: ProfileScreenProps) {
             </div>
           ))}
         </div>
-      </SectionReveal>
+      </motion.div>
 
       {/* ── Menu list ──────────────────────────────────────────────── */}
-      <SectionReveal delay={100}>
+      <motion.div {...fadeUp(2)}>
         <div
           className="rounded-2xl overflow-hidden"
           style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)' }}
@@ -120,13 +124,15 @@ export default function ProfileScreen({ lang, onSignOut }: ProfileScreenProps) {
             <motion.button
               key={label}
               type="button"
-              whileTap={{ scale: 0.98, backgroundColor: 'rgba(245,240,232,0.06)' }}
+              whileTap={{ scale: 0.97 }}
               transition={{ duration: 0.1 }}
               onClick={() => handleAction(action)}
               className="w-full flex items-center justify-between px-5 py-4"
               style={{
                 borderBottom: i < MENU_ITEMS.length - 1 ? '1px solid rgba(245,240,232,0.05)' : 'none',
+                background: 'transparent',
                 cursor: 'pointer',
+                WebkitTapHighlightColor: 'rgba(45,90,27,0.15)',
               }}
             >
               <div className="flex items-center gap-3.5">
@@ -146,16 +152,14 @@ export default function ProfileScreen({ lang, onSignOut }: ProfileScreenProps) {
             </motion.button>
           ))}
         </div>
-      </SectionReveal>
+      </motion.div>
 
       {/* ── Version footer ────────────────────────────────────────── */}
-      <SectionReveal delay={160}>
-        <div className="flex items-center justify-center gap-2 pt-2 opacity-20">
-          <span className="text-[9px] font-medium tracking-[0.2em] uppercase">
-            Apla AgriMart · v1.2.4
-          </span>
-        </div>
-      </SectionReveal>
+      <motion.div {...fadeUp(3)} className="flex items-center justify-center gap-2 pt-2">
+        <span className="text-[9px] font-medium tracking-[0.2em] uppercase" style={{ color: 'rgba(245,240,232,0.2)' }}>
+          Apla AgriMart · v1.2.4
+        </span>
+      </motion.div>
     </div>
   );
 }
