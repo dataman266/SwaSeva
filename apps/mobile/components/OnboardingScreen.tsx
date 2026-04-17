@@ -207,20 +207,9 @@ export default function OnboardingScreen({ lang, onComplete }: OnboardingScreenP
         </div>
 
         {/* CTAs */}
-        {isLast ? (
-          <div className="flex flex-col gap-3">
-            <PillButton variant="light" fullWidth size="lg" onClick={onComplete}>
-              {isMr ? 'खरेदीदार म्हणून सुरू करा' : 'Start as Buyer'}
-            </PillButton>
-            <PillButton variant="dark" fullWidth size="md" onClick={onComplete}>
-              {isMr ? 'शेतकरी म्हणून नोंदणी' : 'Register as Farmer'}
-            </PillButton>
-          </div>
-        ) : (
-          <PillButton variant="light" fullWidth size="lg" onClick={next}>
-            {isMr ? 'पुढे' : 'Continue'}
-          </PillButton>
-        )}
+        <PillButton variant="light" fullWidth size="lg" onClick={isLast ? onComplete : next}>
+          {isLast ? (isMr ? 'सुरू करा' : 'Get Started') : (isMr ? 'पुढे' : 'Continue')}
+        </PillButton>
       </div>
     </div>
   );
