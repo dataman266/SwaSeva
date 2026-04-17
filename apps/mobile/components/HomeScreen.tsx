@@ -69,7 +69,6 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
         backgroundImage="https://images.unsplash.com/photo-1500937386664-56d1dfef3854?q=80&w=1600&auto=format&fit=crop"
         ctas={[
           { label: isMr ? 'बाजार पाहा' : 'Browse Market', onClick: () => {} },
-          { label: isMr ? 'शेतकरी व्हा' : 'Join as Farmer', onClick: () => {}, variant: 'dark' },
         ]}
       />
 
@@ -182,31 +181,6 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
         </div>
       </section>
 
-      {/* ── 6. JOIN CTA SECTION ─────────────────────────────────────── */}
-      <SectionReveal>
-        <section className="mx-5 mt-14 mb-6 px-6 py-10 rounded-2xl text-center" style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)' }}>
-          <p className="text-[10px] font-medium tracking-[0.2em] uppercase text-[rgba(245,240,232,0.35)] mb-3">
-            {isMr ? 'सुरुवात करा' : 'Get Started'}
-          </p>
-          <h3 className="font-light text-[#F5F0E8] mb-2" style={{ fontSize: '24px', letterSpacing: '-0.02em' }}>
-            {isMr ? 'AgriMart ला जॉईन करा' : 'Join AgriMart Today'}
-          </h3>
-          <p className="text-[13px] font-light text-[rgba(245,240,232,0.45)] mb-6 leading-relaxed">
-            {isMr
-              ? 'हजारो शेतकऱ्यांसोबत जुळा आणि थेट विक्री करा.'
-              : 'Connect with thousands of farmers and buy direct from source.'
-            }
-          </p>
-          <div className="flex flex-col gap-3">
-            <PillButton variant="light" fullWidth>
-              {isMr ? 'खरेदीदार म्हणून सुरू करा' : 'Start as Buyer'}
-            </PillButton>
-            <PillButton variant="dark" fullWidth>
-              {isMr ? 'शेतकरी म्हणून नोंदणी' : 'Register as Farmer'}
-            </PillButton>
-          </div>
-        </section>
-      </SectionReveal>
 
       {/* ── AI Assistant FAB ─────────────────────────────────────────── */}
       <button
