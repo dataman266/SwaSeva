@@ -150,7 +150,7 @@ const MOCK_SOLD: OrderEntry[] = [
     id: '#AGM-2008',
     product: 'Pomegranate (Bhagwa)',
     productMr: 'डाळिंब (भगवा)',
-    imageUrl: 'https://images.unsplash.com/photo-Ws4axEMbsvY?w=800&auto=format&fit=crop',
+    imageUrl: 'https://images.pexels.com/photos/7033816/pexels-photo-7033816.jpeg?auto=compress&cs=tinysrgb&w=800',
     amount: 18000,
     qty: 100,
     unit: 'kg',
