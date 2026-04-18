@@ -112,7 +112,7 @@ const MOCK_LISTINGS: Listing[] = [
     views: 31,
     inquiries: 2,
     status: 'pending',
-    imageUrl: 'https://images.pexels.com/photos/4198936/pexels-photo-4198936.jpeg?auto=compress&cs=tinysrgb&w=800',
+    imageUrl: '/images/trumeric.jpg',
     description: 'Waigaon (Wardha) turmeric — Curcumin content 5.2%. Polished fingers, 5–7 cm length. Suitable for direct processing. Listing under review.',
     descriptionMr: 'वायगाव (वर्धा) हळद — करक्यूमिन सामग्री ५.२%. पॉलिश बोटे, ५–७ सेमी लांबी. थेट प्रक्रियेसाठी योग्य.',
     location: 'Wardha District, Maharashtra',
