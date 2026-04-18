@@ -84,7 +84,10 @@ const App: React.FC = () => {
         localStorage.removeItem(AUTH_TOKEN_KEY);
         setIsAuthenticated(false);
         changeScreen('HOME');
-      }} onExplore={() => changeScreen('EXPLORE')} />;
+      }} onExplore={() => changeScreen('EXPLORE')} onResetOnboarding={() => {
+        setIsAuthenticated(false);
+        changeScreen('ONBOARDING');
+      }} />;
       case 'EXPLORE':   return <ExploreScreen lang={state.userLanguage} location={state.location} onBack={() => changeScreen('HOME')} />;
       case 'ASSISTANT': return <AssistantScreen lang={state.userLanguage} onBack={() => changeScreen('HOME')} />;
       case 'ONBOARDING': return (

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ArrowLeft, Mic, Send, Sparkles, RefreshCw, Bot } from 'lucide-react';
+import { ArrowLeft, Mic, Send, Sparkles, RefreshCw, Bot, AlertCircle } from 'lucide-react';
 import { Language } from '../types.ts';
 import { PRODUCTS } from '../constants.tsx';
 import { getAiMarketAssistance } from '../services/geminiService.ts';
@@ -29,24 +29,48 @@ export default function AssistantScreen({ lang, onBack }: AssistantScreenProps) 
   }]);
   const [input, setInput]     = useState('');
   const [loading, setLoading] = useState(false);
+  const [networkError, setNetworkError] = useState(false);
+  const [lastQuery, setLastQuery]       = useState('');
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  const SUGGESTED = isMr
+    ? ['टोमॅटो साठी सर्वोत्तम बियाणे?', 'MSP दर काय आहे?', 'आंबा कलमाची काळजी?']
+    : ['Best seeds for tomatoes?', 'What is today\'s MSP rate?', 'How to care for mango grafts?'];
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
   }, [messages, loading]);
 
-  const handleSend = async () => {
-    if (!input.trim() || loading) return;
-    const text = input;
-    setInput('');
+  const sendQuery = async (text: string) => {
+    setNetworkError(false);
+    setLastQuery(text);
     setMessages(prev => [...prev, { role: 'user', text, time: now() }]);
     setLoading(true);
-    const reply = await getAiMarketAssistance(text, PRODUCTS, lang);
-    setMessages(prev => [...prev, { role: 'ai', text: reply, time: now() }]);
+    try {
+      const reply = await getAiMarketAssistance(text, PRODUCTS, lang);
+      setMessages(prev => [...prev, { role: 'ai', text: reply, time: now() }]);
+    } catch {
+      setNetworkError(true);
+    }
     setLoading(false);
   };
 
-  const handleReset = () => setMessages([messages[0]]);
+  const handleSend = () => {
+    if (!input.trim() || loading) return;
+    const text = input.trim();
+    setInput('');
+    sendQuery(text);
+  };
+
+  const handleRetry = () => {
+    if (lastQuery) sendQuery(lastQuery);
+  };
+
+  const handleReset = () => {
+    setMessages([messages[0]]);
+    setNetworkError(false);
+    setLastQuery('');
+  };
 
   return (
     <div
@@ -111,6 +135,24 @@ export default function AssistantScreen({ lang, onBack }: AssistantScreenProps) 
             key={i}
             className={`flex flex-col gap-1 ${m.role === 'user' ? 'items-end' : 'items-start'} animate-[fadeUp_0.35s_cubic-bezier(0.16,1,0.3,1)_both]`}
           >
+            {/* Suggested prompts — shown only below the first AI greeting */}
+            {i === 0 && messages.length === 1 && (
+              <div className="flex flex-wrap gap-2 mt-3 max-w-[82%]">
+                {SUGGESTED.map(s => (
+                  <button
+                    key={s}
+                    onClick={() => sendQuery(s)}
+                    className="px-3 py-2 rounded-xl border border-[rgba(245,240,232,0.1)] text-[rgba(245,240,232,0.55)] text-left active:scale-95 transition-all"
+                    style={{
+                      background: 'rgba(255,255,255,0.03)', fontSize: '12px', fontWeight: 300,
+                      touchAction: 'manipulation', lineHeight: 1.4,
+                    }}
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+            )}
             <div
               className={`max-w-[82%] px-5 py-3.5 rounded-2xl ${
                 m.role === 'user'
@@ -150,6 +192,26 @@ export default function AssistantScreen({ lang, onBack }: AssistantScreenProps) 
                 ))}
               </div>
             </div>
+          </div>
+        )}
+
+        {/* Network error banner */}
+        {networkError && !loading && (
+          <div
+            className="flex items-center gap-3 px-4 py-3 rounded-2xl animate-[fadeUp_0.3s_both]"
+            style={{ background: 'rgba(229,115,115,0.08)', border: '1px solid rgba(229,115,115,0.2)' }}
+          >
+            <AlertCircle size={15} className="text-[#E57373] flex-shrink-0" />
+            <p className="flex-1 font-light text-[rgba(245,240,232,0.7)]" style={{ fontSize: '13px' }}>
+              {isMr ? 'नेटवर्क समस्या आली.' : 'Network issue. Please try again.'}
+            </p>
+            <button
+              onClick={handleRetry}
+              className="px-3 py-1.5 rounded-full text-[#E57373] border border-[rgba(229,115,115,0.3)] active:scale-95 transition-all"
+              style={{ fontSize: '11px', fontWeight: 500, touchAction: 'manipulation' }}
+            >
+              {isMr ? 'पुन्हा प्रयत्न करा' : 'Retry'}
+            </button>
           </div>
         )}
       </div>

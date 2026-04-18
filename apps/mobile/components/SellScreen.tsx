@@ -4,6 +4,7 @@ import { Language } from '../types.ts';
 import { CATEGORIES, TRANSLATIONS } from '../constants.tsx';
 import PillButton from './atoms/PillButton.tsx';
 import SectionReveal from './atoms/SectionReveal.tsx';
+import { haptic } from '../utils/haptic.ts';
 
 const DRAFT_KEY = 'agrimart_sell_draft';
 
@@ -106,6 +107,7 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
   const clearDraftAndFinish = () => {
     try { localStorage.removeItem(DRAFT_KEY); } catch {}
     if (photoUrl) URL.revokeObjectURL(photoUrl);
+    haptic.success();
     setIsSuccess(true);
     setTimeout(onDone, 2400);
   };

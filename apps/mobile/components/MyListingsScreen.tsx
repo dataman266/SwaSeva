@@ -6,6 +6,7 @@ import {
   Package, CheckCircle, Clock, XCircle, Sprout, RotateCcw,
   AlertTriangle,
 } from 'lucide-react';
+import { haptic } from '../utils/haptic.ts';
 
 type ListingStatus = 'active' | 'pending' | 'sold' | 'expired';
 
@@ -123,7 +124,7 @@ export default function MyListingsScreen({ lang, onCreateNew }: MyListingsScreen
     setDeleteId(null);
     setMenuOpen(null);
     setUndoItem(item);
-    navigator.vibrate?.(20);
+    haptic.medium();
   }, [listings]);
 
   const undoDelete = useCallback(() => {

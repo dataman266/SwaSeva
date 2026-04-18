@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Search, Filter, Scale, MessageCircle, Newspaper, TrendingUp, ChevronRight, RotateCcw, X } from 'lucide-react';
+import { haptic } from '../utils/haptic.ts';
 import { Language, Product } from '../types.ts';
 import { PRODUCTS, SELLERS, CATEGORIES, TRANSLATIONS } from '../constants.tsx';
 
@@ -66,7 +67,7 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
       try { localStorage.setItem(SAVED_KEY, JSON.stringify(next)); } catch {}
       return next;
     });
-    navigator.vibrate?.(8);
+    haptic.light();
   };
 
   const filtersActive = sortBy !== 'newest' || priceMin !== '' || priceMax !== '';

@@ -17,22 +17,24 @@ interface MenuItem {
   label: string;
   labelMr: string;
   color: string;
-  action: 'settings' | 'notifications' | 'kyc' | 'help' | 'explore' | 'signout';
+  action: 'settings' | 'notifications' | 'kyc' | 'help' | 'explore' | 'signout' | 'onboarding';
 }
 
 const MENU_ITEMS: MenuItem[] = [
-  { icon: Settings,    label: 'Account Settings', labelMr: 'खाते सेटिंग्ज',   color: '#D4C4A0', action: 'settings'      },
-  { icon: Bell,        label: 'Notifications',     labelMr: 'सूचना',            color: '#4A8C2A', action: 'notifications'  },
-  { icon: ShieldCheck, label: 'KYC Verification',  labelMr: 'KYC पडताळणी',     color: '#7EB3FF', action: 'kyc'            },
-  { icon: Newspaper,   label: 'News & About',       labelMr: 'बातम्या आणि माहिती', color: '#D4C4A0', action: 'explore'     },
-  { icon: HelpCircle,  label: 'Help & Support',    labelMr: 'मदत आणि सहाय्य',  color: '#D4C4A0', action: 'help'           },
-  { icon: LogOut,      label: 'Sign Out',           labelMr: 'बाहेर पडा',        color: '#E57373', action: 'signout'        },
+  { icon: Settings,    label: 'Account Settings', labelMr: 'खाते सेटिंग्ज',      color: '#D4C4A0', action: 'settings'     },
+  { icon: Bell,        label: 'Notifications',    labelMr: 'सूचना',               color: '#4A8C2A', action: 'notifications' },
+  { icon: ShieldCheck, label: 'KYC Verification', labelMr: 'KYC पडताळणी',        color: '#7EB3FF', action: 'kyc'           },
+  { icon: Newspaper,   label: 'News & About',     labelMr: 'बातम्या आणि माहिती', color: '#D4C4A0', action: 'explore'       },
+  { icon: HelpCircle,  label: 'Help & Support',   labelMr: 'मदत आणि सहाय्य',    color: '#D4C4A0', action: 'help'          },
+  { icon: Zap,         label: 'App Tour',         labelMr: 'अ‍ॅप टूर',           color: '#4A8C2A', action: 'onboarding'    },
+  { icon: LogOut,      label: 'Sign Out',         labelMr: 'बाहेर पडा',           color: '#E57373', action: 'signout'       },
 ];
 
 interface ProfileScreenProps {
   lang: Language;
   onSignOut: () => void;
   onExplore: () => void;
+  onResetOnboarding: () => void;
 }
 
 const slideVariants = {
@@ -823,7 +825,7 @@ function HelpView({ lang, onBack }: { lang: Language; onBack: () => void }) {
 }
 
 /* ─── MAIN PROFILE SCREEN ─────────────────────────────────── */
-export default function ProfileScreen({ lang, onSignOut, onExplore }: ProfileScreenProps) {
+export default function ProfileScreen({ lang, onSignOut, onExplore, onResetOnboarding }: ProfileScreenProps) {
   const isMr = lang === Language.MARATHI;
   const [profileView, setProfileView] = useState<ProfileView>('main');
   const [prevView, setPrevView]       = useState<ProfileView>('main');
@@ -842,12 +844,17 @@ export default function ProfileScreen({ lang, onSignOut, onExplore }: ProfileScr
 
   const handleAction = (action: MenuItem['action']) => {
     switch (action) {
-      case 'signout':      setConfirm(true);               break;
-      case 'settings':     navigateTo('settings');          break;
-      case 'notifications': navigateTo('notifications');    break;
-      case 'kyc':          navigateTo('kyc');               break;
-      case 'explore':      onExplore();                     break;
-      case 'help':         navigateTo('help');              break;
+      case 'signout':       setConfirm(true);               break;
+      case 'settings':      navigateTo('settings');          break;
+      case 'notifications': navigateTo('notifications');     break;
+      case 'kyc':           navigateTo('kyc');               break;
+      case 'explore':       onExplore();                     break;
+      case 'help':          navigateTo('help');              break;
+      case 'onboarding': {
+        try { localStorage.removeItem('agrimart_onboarded'); } catch {}
+        onResetOnboarding();
+        break;
+      }
     }
   };
 
