@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Search, Filter, Scale, MessageCircle, Newspaper, TrendingUp, ChevronRight, RotateCcw } from 'lucide-react';
+import { Search, Filter, Scale, MessageCircle, Newspaper, TrendingUp, ChevronRight, RotateCcw, X } from 'lucide-react';
 import { Language, Product } from '../types.ts';
 import { PRODUCTS, SELLERS, CATEGORIES, TRANSLATIONS } from '../constants.tsx';
 
@@ -30,6 +30,10 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
   const [savedIds, setSavedIds]       = useState<string[]>(getSavedIds);
   const [isLoading, setIsLoading]     = useState(true);
   const [refreshing, setRefreshing]   = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
+  const [sortBy, setSortBy]           = useState<'newest' | 'price_asc' | 'price_desc'>('newest');
+  const [priceMin, setPriceMin]       = useState('');
+  const [priceMax, setPriceMax]       = useState('');
 
   // Simulate initial product load (800ms)
   useEffect(() => {
@@ -65,13 +69,24 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
     navigator.vibrate?.(8);
   };
 
-  const filtered = PRODUCTS.filter(p => {
-    const name    = (isMr ? p.nameMr    : p.name   ).toLowerCase();
-    const variety = (isMr ? p.varietyMr : p.variety).toLowerCase();
-    const q       = search.toLowerCase();
-    return (name.includes(q) || variety.includes(q)) &&
-      (activeCategory === 'all' || p.category === activeCategory);
-  });
+  const filtersActive = sortBy !== 'newest' || priceMin !== '' || priceMax !== '';
+
+  const filtered = PRODUCTS
+    .filter(p => {
+      const name    = (isMr ? p.nameMr    : p.name   ).toLowerCase();
+      const variety = (isMr ? p.varietyMr : p.variety).toLowerCase();
+      const q       = search.toLowerCase();
+      const matchSearch = name.includes(q) || variety.includes(q);
+      const matchCat    = activeCategory === 'all' || p.category === activeCategory;
+      const matchMin    = priceMin === '' || p.price >= Number(priceMin);
+      const matchMax    = priceMax === '' || p.price <= Number(priceMax);
+      return matchSearch && matchCat && matchMin && matchMax;
+    })
+    .sort((a, b) => {
+      if (sortBy === 'price_asc')  return a.price - b.price;
+      if (sortBy === 'price_desc') return b.price - a.price;
+      return 0; // newest: keep insertion order
+    });
 
   return (
     <div className="pb-28">
@@ -178,8 +193,15 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
               className="flex-1 bg-transparent border-none outline-none text-[#F5F0E8] placeholder:text-[rgba(245,240,232,0.25)] font-light"
               style={{ fontSize: '14px' }}
             />
-            <button className="text-[rgba(245,240,232,0.3)] hover:text-[#D4C4A0] transition-colors">
+            <button
+              onClick={() => setShowFilters(true)}
+              className="relative transition-colors"
+              style={{ touchAction: 'manipulation', color: filtersActive ? '#D4C4A0' : 'rgba(245,240,232,0.3)' }}
+            >
               <Filter size={16} />
+              {filtersActive && (
+                <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-[#D4C4A0]" />
+              )}
             </button>
           </div>
         </div>
@@ -257,6 +279,104 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
             </span>
           </button>
         </div>
+      )}
+
+      {/* ── Filter sheet ──────────────────────────────────────────── */}
+      {showFilters && (
+        <>
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 z-40"
+            style={{ background: 'rgba(10,26,10,0.6)', backdropFilter: 'blur(4px)' }}
+            onClick={() => setShowFilters(false)}
+          />
+          {/* Sheet */}
+          <div
+            className="fixed bottom-0 left-0 right-0 z-50 rounded-t-3xl px-6 pt-5 pb-10 animate-[slideUp_0.35s_cubic-bezier(0.16,1,0.3,1)_both]"
+            style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)' }}
+          >
+            {/* Handle + header */}
+            <div className="w-10 h-1 rounded-full bg-[rgba(245,240,232,0.15)] mx-auto mb-5" />
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="font-light text-[#F5F0E8]" style={{ fontSize: '18px', letterSpacing: '-0.01em' }}>
+                {isMr ? 'फिल्टर करा' : 'Filter & Sort'}
+              </h3>
+              <button
+                onClick={() => setShowFilters(false)}
+                className="w-8 h-8 rounded-full flex items-center justify-center border border-[rgba(245,240,232,0.1)] text-[rgba(245,240,232,0.4)]"
+                style={{ touchAction: 'manipulation' }}
+              >
+                <X size={14} />
+              </button>
+            </div>
+
+            {/* Sort */}
+            <p className="text-[10px] font-medium tracking-[0.18em] uppercase text-[rgba(245,240,232,0.35)] mb-3">
+              {isMr ? 'क्रमवारी' : 'Sort By'}
+            </p>
+            <div className="flex gap-2 mb-6 flex-wrap">
+              {([
+                { key: 'newest',     label: isMr ? 'नवीन' : 'Newest' },
+                { key: 'price_asc',  label: isMr ? 'कमी किंमत' : 'Price: Low' },
+                { key: 'price_desc', label: isMr ? 'जास्त किंमत' : 'Price: High' },
+              ] as const).map(opt => (
+                <button
+                  key={opt.key}
+                  onClick={() => setSortBy(opt.key)}
+                  className="px-4 py-2 rounded-full border text-[12px] font-medium transition-all"
+                  style={{
+                    touchAction: 'manipulation',
+                    background: sortBy === opt.key ? '#2D5A1B' : 'transparent',
+                    border: `1px solid ${sortBy === opt.key ? '#2D5A1B' : 'rgba(245,240,232,0.12)'}`,
+                    color: sortBy === opt.key ? '#F5F0E8' : 'rgba(245,240,232,0.5)',
+                  }}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Price range */}
+            <p className="text-[10px] font-medium tracking-[0.18em] uppercase text-[rgba(245,240,232,0.35)] mb-3">
+              {isMr ? 'किंमत मर्यादा (₹)' : 'Price Range (₹)'}
+            </p>
+            <div className="flex items-center gap-3 mb-8">
+              <input
+                type="number"
+                placeholder={isMr ? 'किमान' : 'Min'}
+                value={priceMin}
+                onChange={e => setPriceMin(e.target.value)}
+                className="flex-1 px-4 py-3 rounded-xl font-light text-[#F5F0E8] text-[14px] placeholder:text-[rgba(245,240,232,0.2)] border border-[rgba(245,240,232,0.1)] focus:border-[rgba(212,196,160,0.35)] bg-[rgba(255,255,255,0.03)] outline-none"
+              />
+              <span className="text-[rgba(245,240,232,0.25)] text-sm">—</span>
+              <input
+                type="number"
+                placeholder={isMr ? 'कमाल' : 'Max'}
+                value={priceMax}
+                onChange={e => setPriceMax(e.target.value)}
+                className="flex-1 px-4 py-3 rounded-xl font-light text-[#F5F0E8] text-[14px] placeholder:text-[rgba(245,240,232,0.2)] border border-[rgba(245,240,232,0.1)] focus:border-[rgba(212,196,160,0.35)] bg-[rgba(255,255,255,0.03)] outline-none"
+              />
+            </div>
+
+            {/* Actions */}
+            <div className="flex gap-3">
+              <button
+                onClick={() => { setSortBy('newest'); setPriceMin(''); setPriceMax(''); }}
+                className="flex-1 py-3 rounded-full border border-[rgba(245,240,232,0.12)] text-[rgba(245,240,232,0.5)] text-[13px] font-medium"
+                style={{ touchAction: 'manipulation' }}
+              >
+                {isMr ? 'रीसेट' : 'Reset'}
+              </button>
+              <button
+                onClick={() => setShowFilters(false)}
+                className="flex-1 py-3 rounded-full text-[#F5F0E8] text-[13px] font-medium"
+                style={{ background: '#2D5A1B', touchAction: 'manipulation' }}
+              >
+                {isMr ? 'लागू करा' : 'Apply'}
+              </button>
+            </div>
+          </div>
+        </>
       )}
     </div>
   );

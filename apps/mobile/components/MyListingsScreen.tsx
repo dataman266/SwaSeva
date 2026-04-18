@@ -1,9 +1,10 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Language } from '../types.ts';
 import {
   Plus, MoreVertical, Eye, Edit2, Trash2, TrendingUp,
   Package, CheckCircle, Clock, XCircle, Sprout, RotateCcw,
+  AlertTriangle,
 } from 'lucide-react';
 
 type ListingStatus = 'active' | 'pending' | 'sold' | 'expired';
@@ -97,12 +98,40 @@ export default function MyListingsScreen({ lang, onCreateNew }: MyListingsScreen
   const [filter, setFilter] = useState<ListingStatus | 'all'>('all');
   const [menuOpen, setMenuOpen] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
+  const [listings, setListings] = useState<Listing[]>(MOCK_LISTINGS);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [undoItem, setUndoItem] = useState<Listing | null>(null);
+  const undoTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Auto-dismiss undo toast after 4 s
+  useEffect(() => {
+    if (!undoItem) return;
+    undoTimer.current = setTimeout(() => setUndoItem(null), 4000);
+    return () => { if (undoTimer.current) clearTimeout(undoTimer.current); };
+  }, [undoItem]);
 
   const handleRefresh = useCallback(async () => {
     setRefreshing(true);
     await new Promise(r => setTimeout(r, 600));
     setRefreshing(false);
   }, []);
+
+  const confirmDelete = useCallback((id: string) => {
+    const item = listings.find(l => l.id === id);
+    if (!item) return;
+    setListings(prev => prev.filter(l => l.id !== id));
+    setDeleteId(null);
+    setMenuOpen(null);
+    setUndoItem(item);
+    navigator.vibrate?.(20);
+  }, [listings]);
+
+  const undoDelete = useCallback(() => {
+    if (!undoItem) return;
+    setListings(prev => [...prev, undoItem]);
+    setUndoItem(null);
+    if (undoTimer.current) clearTimeout(undoTimer.current);
+  }, [undoItem]);
 
   const filters: Array<{ key: ListingStatus | 'all'; label: string; labelMr: string }> = [
     { key: 'all',     label: 'All',     labelMr: 'सर्व'      },
@@ -111,11 +140,11 @@ export default function MyListingsScreen({ lang, onCreateNew }: MyListingsScreen
     { key: 'sold',    label: 'Sold',    labelMr: 'विकले'     },
   ];
 
-  const visible = filter === 'all' ? MOCK_LISTINGS : MOCK_LISTINGS.filter(l => l.status === filter);
+  const visible = filter === 'all' ? listings : listings.filter(l => l.status === filter);
 
-  const activeCount  = MOCK_LISTINGS.filter(l => l.status === 'active').length;
-  const totalViews   = MOCK_LISTINGS.reduce((s, l) => s + l.views, 0);
-  const totalInquiries = MOCK_LISTINGS.reduce((s, l) => s + l.inquiries, 0);
+  const activeCount    = listings.filter(l => l.status === 'active').length;
+  const totalViews     = listings.reduce((s, l) => s + l.views, 0);
+  const totalInquiries = listings.reduce((s, l) => s + l.inquiries, 0);
 
   return (
     <div
@@ -354,14 +383,18 @@ export default function MyListingsScreen({ lang, onCreateNew }: MyListingsScreen
                         }}
                       >
                         {[
-                          { icon: Edit2,  label: isMr ? 'संपादित करा' : 'Edit Listing',  color: '#F5F0E8' },
-                          { icon: Eye,    label: isMr ? 'पूर्वावलोकन' : 'Preview',        color: '#F5F0E8' },
-                          { icon: Trash2, label: isMr ? 'हटवा' : 'Delete',               color: '#E57373' },
-                        ].map(({ icon: Icon, label, color }, mi) => (
+                          { icon: Edit2,  label: isMr ? 'संपादित करा' : 'Edit Listing',  color: '#F5F0E8',  action: 'edit'    },
+                          { icon: Eye,    label: isMr ? 'पूर्वावलोकन' : 'Preview',        color: '#F5F0E8',  action: 'preview' },
+                          { icon: Trash2, label: isMr ? 'हटवा' : 'Delete',               color: '#E57373',  action: 'delete'  },
+                        ].map(({ icon: Icon, label, color, action }, mi) => (
                           <button
                             key={label}
                             type="button"
-                            onClick={() => setMenuOpen(null)}
+                            onClick={() => {
+                              if (action === 'edit')   { setMenuOpen(null); onCreateNew(); }
+                              else if (action === 'delete') { setDeleteId(listing.id); setMenuOpen(null); }
+                              else                    { setMenuOpen(null); }
+                            }}
                             style={{
                               display: 'flex', alignItems: 'center', gap: '0.625rem',
                               width: '100%', padding: '0.75rem 1rem',
@@ -384,6 +417,114 @@ export default function MyListingsScreen({ lang, onCreateNew }: MyListingsScreen
           </AnimatePresence>
         </div>
       )}
+      {/* ── Delete confirmation modal ─────────────────────────────── */}
+      <AnimatePresence>
+        {deleteId && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            style={{
+              position: 'fixed', inset: 0, zIndex: 200,
+              display: 'flex', alignItems: 'flex-end', justifyContent: 'center',
+              background: 'rgba(0,0,0,0.72)',
+              padding: '0 1rem 2rem',
+            }}
+            onClick={() => setDeleteId(null)}
+          >
+            <motion.div
+              initial={{ y: 40, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 40, opacity: 0 }}
+              transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] as const }}
+              onClick={e => e.stopPropagation()}
+              style={{
+                width: '100%', maxWidth: 400,
+                background: '#1A2D1A', border: '1px solid rgba(245,240,232,0.1)',
+                borderRadius: '1.25rem', padding: '1.5rem', textAlign: 'center',
+              }}
+            >
+              <div style={{
+                width: 48, height: 48, borderRadius: '50%', margin: '0 auto 1rem',
+                background: 'rgba(229,115,115,0.12)', border: '1px solid rgba(229,115,115,0.25)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                <AlertTriangle size={22} style={{ color: '#E57373' }} />
+              </div>
+              <p style={{ fontSize: '16px', fontWeight: 400, color: '#F5F0E8', marginBottom: '0.5rem', letterSpacing: '-0.01em' }}>
+                {isMr ? 'लिस्टिंग हटवायची का?' : 'Delete this listing?'}
+              </p>
+              <p style={{ fontSize: '13px', fontWeight: 300, color: 'rgba(245,240,232,0.45)', marginBottom: '1.5rem', lineHeight: 1.5 }}>
+                {isMr
+                  ? 'हे पूर्ववत करता येणार नाही. तुम्ही ४ सेकंदात पूर्ववत करू शकता.'
+                  : 'You can undo this within 4 seconds after deletion.'}
+              </p>
+              <div style={{ display: 'flex', gap: '0.75rem' }}>
+                <button
+                  type="button"
+                  onClick={() => setDeleteId(null)}
+                  style={{
+                    flex: 1, padding: '0.75rem', borderRadius: '0.75rem',
+                    background: 'rgba(245,240,232,0.08)', border: '1px solid rgba(245,240,232,0.1)',
+                    color: 'rgba(245,240,232,0.65)', fontSize: '14px', fontWeight: 400, cursor: 'pointer',
+                    touchAction: 'manipulation',
+                  }}
+                >
+                  {isMr ? 'रद्द करा' : 'Cancel'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => confirmDelete(deleteId)}
+                  style={{
+                    flex: 1, padding: '0.75rem', borderRadius: '0.75rem',
+                    background: 'rgba(229,115,115,0.18)', border: '1px solid rgba(229,115,115,0.35)',
+                    color: '#E57373', fontSize: '14px', fontWeight: 500, cursor: 'pointer',
+                    touchAction: 'manipulation',
+                  }}
+                >
+                  {isMr ? 'हटवा' : 'Delete'}
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ── Undo toast ────────────────────────────────────────────── */}
+      <AnimatePresence>
+        {undoItem && (
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 20, opacity: 0 }}
+            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] as const }}
+            style={{
+              position: 'fixed', bottom: 96, left: '50%', transform: 'translateX(-50%)',
+              zIndex: 150, display: 'flex', alignItems: 'center', gap: '0.75rem',
+              padding: '0.625rem 0.75rem 0.625rem 1rem',
+              background: '#1A2D1A', border: '1px solid rgba(245,240,232,0.12)',
+              borderRadius: '2rem', boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            <span style={{ fontSize: '13px', fontWeight: 300, color: 'rgba(245,240,232,0.7)' }}>
+              {isMr ? 'लिस्टिंग हटवली' : 'Listing deleted'}
+            </span>
+            <button
+              type="button"
+              onClick={undoDelete}
+              style={{
+                padding: '0.3rem 0.75rem', borderRadius: '1rem',
+                background: 'rgba(212,196,160,0.15)', border: '1px solid rgba(212,196,160,0.25)',
+                color: '#D4C4A0', fontSize: '12px', fontWeight: 500, cursor: 'pointer',
+                touchAction: 'manipulation',
+              }}
+            >
+              {isMr ? 'पूर्ववत करा' : 'Undo'}
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
