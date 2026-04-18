@@ -175,6 +175,91 @@ export default function DetailsScreen({ product, lang, onBack }: DetailsScreenPr
           </div>
         </SectionReveal>
 
+        {/* Specifications card */}
+        <SectionReveal delay={100}>
+          <div className="p-6 rounded-2xl" style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)' }}>
+            <div className="flex items-center gap-2 mb-4">
+              <span className="w-3 h-px bg-[#D4C4A0]" />
+              <p className="text-[10px] font-medium tracking-[0.18em] uppercase text-[rgba(245,240,232,0.35)]">
+                {isMr ? 'तपशील' : 'Specifications'}
+              </p>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              {[
+                { label: isMr ? 'वाण / जात' : 'Variety',      value: variety || '—' },
+                { label: isMr ? 'श्रेणी' : 'Category',         value: product.category },
+                { label: isMr ? 'हमीभाव' : 'MSP Price',        value: product.mspPrice ? `₹${product.mspPrice}/${unit}` : 'N/A' },
+                { label: isMr ? 'कापणी' : 'Harvest',           value: product.harvestDate
+                    ? new Date(product.harvestDate).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' })
+                    : (isMr ? 'हंगामी' : 'Seasonal') },
+              ].map(({ label, value }) => (
+                <div
+                  key={label}
+                  className="p-4 rounded-xl"
+                  style={{ background: '#0A1A0A', border: '1px solid rgba(245,240,232,0.06)' }}
+                >
+                  <p className="text-[9px] font-medium tracking-[0.15em] uppercase text-[rgba(245,240,232,0.3)] mb-1.5">{label}</p>
+                  <p className="font-light text-[#F5F0E8]" style={{ fontSize: '14px', letterSpacing: '-0.01em' }}>{value}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </SectionReveal>
+
+        {/* Farm location card */}
+        <SectionReveal delay={140}>
+          <div className="p-6 rounded-2xl" style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)' }}>
+            <div className="flex items-center gap-2 mb-4">
+              <MapPin size={14} className="text-[#D4C4A0]" />
+              <p className="text-[10px] font-medium tracking-[0.18em] uppercase text-[rgba(245,240,232,0.35)]">
+                {isMr ? 'शेताचे ठिकाण' : 'Farm Location'}
+              </p>
+            </div>
+            {/* Stylised map block */}
+            <div
+              className="w-full h-28 rounded-xl mb-4 relative overflow-hidden flex items-center justify-center"
+              style={{ background: '#0D1F0D', border: '1px solid rgba(74,140,42,0.2)' }}
+            >
+              {/* Grid lines */}
+              {[...Array(5)].map((_, i) => (
+                <div key={`h${i}`} style={{ position: 'absolute', left: 0, right: 0, top: `${20 * i}%`, height: 1, background: 'rgba(74,140,42,0.08)' }} />
+              ))}
+              {[...Array(7)].map((_, i) => (
+                <div key={`v${i}`} style={{ position: 'absolute', top: 0, bottom: 0, left: `${14.28 * i}%`, width: 1, background: 'rgba(74,140,42,0.08)' }} />
+              ))}
+              {/* Pin */}
+              <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+                <div style={{
+                  width: 36, height: 36, borderRadius: '50%',
+                  background: 'rgba(45,90,27,0.3)', border: '2px solid rgba(74,140,42,0.6)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  boxShadow: '0 0 0 8px rgba(45,90,27,0.12)',
+                }}>
+                  <MapPin size={16} className="text-[#4A8C2A]" fill="rgba(74,140,42,0.3)" />
+                </div>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <div className="flex-1">
+                <p className="font-medium text-[#F5F0E8] mb-1" style={{ fontSize: '14px', letterSpacing: '-0.01em' }}>
+                  {seller?.location || (isMr ? 'महाराष्ट्र, भारत' : 'Maharashtra, India')}
+                </p>
+                <p className="font-light text-[rgba(245,240,232,0.4)]" style={{ fontSize: '12px' }}>
+                  {seller ? `${seller.distance} ${isMr ? 'तुमच्यापासून' : 'from you'}` : (isMr ? 'अंदाजे अंतर' : 'Approx. distance')}
+                </p>
+              </div>
+              <div
+                className="px-3 py-1.5 rounded-full border"
+                style={{ borderColor: 'rgba(74,140,42,0.3)', background: 'rgba(45,90,27,0.12)' }}
+              >
+                <span className="text-[10px] font-medium text-[#4A8C2A] tracking-[0.1em] uppercase">
+                  {isMr ? 'नकाशा पहा' : 'View Map'}
+                </span>
+              </div>
+            </div>
+          </div>
+        </SectionReveal>
+
         {/* Seller card */}
         {seller && (
           <SectionReveal delay={120}>

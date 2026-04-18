@@ -4,11 +4,18 @@ import { Language } from '../types.ts';
 import {
   Plus, MoreVertical, Eye, Edit2, Trash2, TrendingUp,
   Package, CheckCircle, Clock, XCircle, Sprout, RotateCcw,
-  AlertTriangle,
+  AlertTriangle, ArrowLeft, MapPin, FileText, Users,
 } from 'lucide-react';
 import { haptic } from '../utils/haptic.ts';
 
 type ListingStatus = 'active' | 'pending' | 'sold' | 'expired';
+
+interface InquiryLead {
+  name: string;
+  location: string;
+  qty: number;
+  time: string;
+}
 
 interface Listing {
   id: string;
@@ -23,6 +30,11 @@ interface Listing {
   status: ListingStatus;
   daysLeft?: number;
   imageUrl: string;
+  description?: string;
+  descriptionMr?: string;
+  location?: string;
+  locationMr?: string;
+  leads?: InquiryLead[];
 }
 
 const MOCK_LISTINGS: Listing[] = [
@@ -38,7 +50,16 @@ const MOCK_LISTINGS: Listing[] = [
     inquiries: 12,
     status: 'active',
     daysLeft: 8,
-    imageUrl: 'https://images.unsplash.com/photo-1605027990121-cbae9e0642df?w=400&auto=format&fit=crop',
+    imageUrl: 'https://images.unsplash.com/photo-1605027990121-cbae9e0642df?w=800&auto=format&fit=crop',
+    description: 'Premium Ratnagiri Alphonso mangoes. Naturally ripened, no carbide. Available in 10 kg export-grade boxes. Perfect aroma and sweetness.',
+    descriptionMr: 'रत्नागिरी हापूस आंब्याचे उत्कृष्ट दर्जाचे. नैसर्गिकरित्या पिकलेले, कार्बाइड नाही. १० किलो निर्यात-दर्जाच्या बॉक्समध्ये उपलब्ध.',
+    location: 'Ratnagiri, Konkan, Maharashtra',
+    locationMr: 'रत्नागिरी, कोकण, महाराष्ट्र',
+    leads: [
+      { name: 'Suresh Patil', location: 'Pune', qty: 50, time: '2h ago' },
+      { name: 'Fresh Mart Retail', location: 'Mumbai', qty: 200, time: '5h ago' },
+      { name: 'Nilesh Kumar', location: 'Nashik', qty: 20, time: '1d ago' },
+    ],
   },
   {
     id: 'l2',
@@ -52,7 +73,15 @@ const MOCK_LISTINGS: Listing[] = [
     inquiries: 7,
     status: 'active',
     daysLeft: 14,
-    imageUrl: 'https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=400&auto=format&fit=crop',
+    imageUrl: 'https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=800&auto=format&fit=crop',
+    description: 'Bhagwa pomegranate from Solapur. Medium to large size, 500–700g per fruit. Deep red arils, low brix 16–18. Ready for immediate dispatch.',
+    descriptionMr: 'सोलापूरचे भगवा डाळिंब. मध्यम ते मोठा आकार, फळामागे ५०० ते ७०० ग्रॅम. गडद लाल रंग, कमी ब्रिक्स १६–१८.',
+    location: 'Solapur District, Maharashtra',
+    locationMr: 'सोलापूर जिल्हा, महाराष्ट्र',
+    leads: [
+      { name: 'Rajesh Exports', location: 'Solapur', qty: 200, time: '3h ago' },
+      { name: 'Anita Desai', location: 'Kolhapur', qty: 30, time: '8h ago' },
+    ],
   },
   {
     id: 'l3',
@@ -65,7 +94,12 @@ const MOCK_LISTINGS: Listing[] = [
     views: 212,
     inquiries: 19,
     status: 'sold',
-    imageUrl: 'https://images.unsplash.com/photo-1518977956812-cd3dbadaaf31?w=400&auto=format&fit=crop',
+    imageUrl: 'https://images.unsplash.com/photo-1518977956812-cd3dbadaaf31?w=800&auto=format&fit=crop',
+    description: 'Nasik Red onion — bulk lot. Low moisture, suitable for export and long-distance transport. All 1000 kg sold in one lot to APMC trader.',
+    descriptionMr: 'नाशिक लाल कांदा — मोठा माल. कमी आर्द्रता, निर्यातीसाठी आणि दीर्घ अंतराच्या वाहतुकीसाठी योग्य.',
+    location: 'Nashik District, Maharashtra',
+    locationMr: 'नाशिक जिल्हा, महाराष्ट्र',
+    leads: [],
   },
   {
     id: 'l4',
@@ -78,7 +112,14 @@ const MOCK_LISTINGS: Listing[] = [
     views: 31,
     inquiries: 2,
     status: 'pending',
-    imageUrl: 'https://images.unsplash.com/photo-1615485500704-8e990f9900f7?w=400&auto=format&fit=crop',
+    imageUrl: 'https://images.unsplash.com/photo-1615485500704-8e990f9900f7?w=800&auto=format&fit=crop',
+    description: 'Waigaon (Wardha) turmeric — Curcumin content 5.2%. Polished fingers, 5–7 cm length. Suitable for direct processing. Listing under review.',
+    descriptionMr: 'वायगाव (वर्धा) हळद — करक्यूमिन सामग्री ५.२%. पॉलिश बोटे, ५–७ सेमी लांबी. थेट प्रक्रियेसाठी योग्य.',
+    location: 'Wardha District, Maharashtra',
+    locationMr: 'वर्धा जिल्हा, महाराष्ट्र',
+    leads: [
+      { name: 'Spice Hub Pune', location: 'Pune', qty: 100, time: '1d ago' },
+    ],
   },
 ];
 
@@ -102,6 +143,7 @@ export default function MyListingsScreen({ lang, onCreateNew }: MyListingsScreen
   const [listings, setListings] = useState<Listing[]>(MOCK_LISTINGS);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [undoItem, setUndoItem] = useState<Listing | null>(null);
+  const [selectedListing, setSelectedListing] = useState<Listing | null>(null);
   const undoTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Auto-dismiss undo toast after 4 s
@@ -148,6 +190,7 @@ export default function MyListingsScreen({ lang, onCreateNew }: MyListingsScreen
   const totalInquiries = listings.reduce((s, l) => s + l.inquiries, 0);
 
   return (
+    <>
     <div
       style={{
         minHeight: '100vh',
@@ -281,7 +324,10 @@ export default function MyListingsScreen({ lang, onCreateNew }: MyListingsScreen
                     borderRadius: '1.25rem', overflow: 'hidden', position: 'relative',
                   }}
                 >
-                  <div style={{ display: 'flex', gap: '0' }}>
+                  <div
+                    style={{ display: 'flex', gap: '0', cursor: 'pointer' }}
+                    onClick={() => { if (menuOpen) { setMenuOpen(null); return; } setSelectedListing(listing); haptic.light(); }}
+                  >
                     {/* Image */}
                     <div style={{ width: 90, flexShrink: 0, position: 'relative' }}>
                       <img
@@ -527,5 +573,199 @@ export default function MyListingsScreen({ lang, onCreateNew }: MyListingsScreen
         )}
       </AnimatePresence>
     </div>
+
+    {/* ── Listing detail overlay ────────────────────────────────── */}
+    <AnimatePresence>
+      {selectedListing && (
+        <motion.div
+          initial={{ y: '100%' }}
+          animate={{ y: 0 }}
+          exit={{ y: '100%' }}
+          transition={{ duration: 0.32, ease: [0.32, 0, 0.16, 1] as const }}
+          style={{
+            position: 'fixed', inset: 0, zIndex: 300,
+            background: '#0A1A0A', overflowY: 'auto',
+            WebkitOverflowScrolling: 'touch',
+          }}
+        >
+          {/* Hero image */}
+          <div style={{ position: 'relative', height: '45vh', overflow: 'hidden' }}>
+            <img
+              src={selectedListing.imageUrl}
+              alt={selectedListing.name}
+              style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(0.5) saturate(0.85)' }}
+            />
+            <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, #0A1A0A 25%, transparent 70%)' }} />
+            <button
+              onClick={() => setSelectedListing(null)}
+              style={{
+                position: 'absolute', top: 'max(1rem, env(safe-area-inset-top))', left: '1.25rem',
+                width: 40, height: 40, borderRadius: '50%',
+                background: 'rgba(10,26,10,0.6)', border: '1px solid rgba(245,240,232,0.2)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                cursor: 'pointer', touchAction: 'manipulation', backdropFilter: 'blur(8px)',
+                color: '#F5F0E8',
+              }}
+            >
+              <ArrowLeft size={18} />
+            </button>
+            <div style={{ position: 'absolute', bottom: '1.5rem', left: '1.25rem', right: '1.25rem' }}>
+              <p style={{ fontSize: '10px', fontWeight: 500, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#D4C4A0', marginBottom: 4 }}>
+                {selectedListing.category}
+              </p>
+              <h2 style={{ fontSize: 'clamp(22px, 6vw, 30px)', fontWeight: 300, color: '#F5F0E8', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
+                {isMr ? selectedListing.nameMr : selectedListing.name}
+              </h2>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.375rem', marginTop: 6 }}>
+                <span style={{ fontSize: '24px', fontWeight: 300, color: '#F5F0E8', letterSpacing: '-0.03em' }}>
+                  ₹{selectedListing.price}
+                </span>
+                <span style={{ fontSize: '11px', fontWeight: 400, color: 'rgba(245,240,232,0.45)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+                  / {selectedListing.unit}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Content */}
+          <div style={{ padding: '1.25rem 1.25rem 6rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+
+            {/* Stats strip */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.625rem' }}>
+              {[
+                { label: isMr ? 'मात्रा' : 'Available', value: `${selectedListing.quantity} ${selectedListing.unit}` },
+                { label: isMr ? 'व्ह्यूज' : 'Views', value: `${selectedListing.views}` },
+                { label: isMr ? 'चौकशी' : 'Leads', value: `${selectedListing.inquiries}` },
+              ].map(({ label, value }) => (
+                <div key={label} style={{
+                  padding: '0.875rem 0.75rem', borderRadius: '1rem', textAlign: 'center',
+                  background: '#111C11', border: '1px solid rgba(245,240,232,0.07)',
+                }}>
+                  <p style={{ fontSize: '16px', fontWeight: 300, color: '#F5F0E8', letterSpacing: '-0.02em' }}>{value}</p>
+                  <p style={{ fontSize: '9px', fontWeight: 500, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(245,240,232,0.35)', marginTop: 2 }}>
+                    {label}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            {/* Description */}
+            {(selectedListing.description || selectedListing.descriptionMr) && (
+              <div style={{
+                padding: '1.25rem', borderRadius: '1rem',
+                background: '#111C11', border: '1px solid rgba(245,240,232,0.07)',
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
+                  <FileText size={14} style={{ color: '#D4C4A0' }} />
+                  <p style={{ fontSize: '10px', fontWeight: 500, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(245,240,232,0.35)' }}>
+                    {isMr ? 'वर्णन' : 'Description'}
+                  </p>
+                </div>
+                <p style={{ fontSize: '14px', fontWeight: 300, color: 'rgba(245,240,232,0.7)', lineHeight: 1.65 }}>
+                  {isMr ? (selectedListing.descriptionMr || selectedListing.description) : selectedListing.description}
+                </p>
+              </div>
+            )}
+
+            {/* Location */}
+            {selectedListing.location && (
+              <div style={{
+                padding: '1rem 1.25rem', borderRadius: '1rem',
+                background: '#111C11', border: '1px solid rgba(245,240,232,0.07)',
+                display: 'flex', alignItems: 'center', gap: '1rem',
+              }}>
+                <div style={{
+                  width: 36, height: 36, borderRadius: '0.75rem', flexShrink: 0,
+                  background: 'rgba(45,90,27,0.2)', border: '1px solid rgba(74,140,42,0.25)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                  <MapPin size={16} style={{ color: '#4A8C2A' }} />
+                </div>
+                <div>
+                  <p style={{ fontSize: '10px', fontWeight: 500, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(245,240,232,0.35)', marginBottom: 3 }}>
+                    {isMr ? 'ठिकाण' : 'Farm Location'}
+                  </p>
+                  <p style={{ fontSize: '14px', fontWeight: 400, color: '#F5F0E8' }}>
+                    {isMr ? (selectedListing.locationMr || selectedListing.location) : selectedListing.location}
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Inquiry leads */}
+            {selectedListing.leads && selectedListing.leads.length > 0 && (
+              <div style={{
+                padding: '1.25rem', borderRadius: '1rem',
+                background: '#111C11', border: '1px solid rgba(245,240,232,0.07)',
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.875rem' }}>
+                  <Users size={14} style={{ color: '#D4C4A0' }} />
+                  <p style={{ fontSize: '10px', fontWeight: 500, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(245,240,232,0.35)' }}>
+                    {isMr ? 'खरेदीची विचारणा' : 'Buyer Enquiries'}
+                  </p>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                  {selectedListing.leads.map((lead, li) => (
+                    <div key={li} style={{
+                      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                      paddingBottom: li < (selectedListing.leads?.length ?? 0) - 1 ? '0.75rem' : 0,
+                      borderBottom: li < (selectedListing.leads?.length ?? 0) - 1 ? '1px solid rgba(245,240,232,0.06)' : 'none',
+                    }}>
+                      <div>
+                        <p style={{ fontSize: '13px', fontWeight: 400, color: '#F5F0E8' }}>{lead.name}</p>
+                        <p style={{ fontSize: '11px', fontWeight: 300, color: 'rgba(245,240,232,0.4)', marginTop: 1 }}>
+                          {lead.location} · {lead.qty} {selectedListing.unit} · {lead.time}
+                        </p>
+                      </div>
+                      <div style={{
+                        padding: '0.25rem 0.625rem', borderRadius: '2rem',
+                        background: 'rgba(212,196,160,0.1)', border: '1px solid rgba(212,196,160,0.2)',
+                      }}>
+                        <span style={{ fontSize: '10px', fontWeight: 500, color: '#D4C4A0' }}>
+                          {isMr ? 'उत्तर द्या' : 'Reply'}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Actions */}
+            <div style={{ display: 'flex', gap: '0.625rem' }}>
+              <button
+                type="button"
+                onClick={() => { setSelectedListing(null); onCreateNew(); }}
+                style={{
+                  flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                  padding: '0.75rem', borderRadius: '0.875rem',
+                  background: 'rgba(245,240,232,0.06)', border: '1px solid rgba(245,240,232,0.1)',
+                  color: 'rgba(245,240,232,0.75)', fontSize: '14px', fontWeight: 400, cursor: 'pointer',
+                  touchAction: 'manipulation',
+                }}
+              >
+                <Edit2 size={14} />
+                {isMr ? 'संपादित करा' : 'Edit'}
+              </button>
+              <button
+                type="button"
+                onClick={() => { setDeleteId(selectedListing.id); setSelectedListing(null); }}
+                style={{
+                  flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                  padding: '0.75rem', borderRadius: '0.875rem',
+                  background: 'rgba(229,115,115,0.1)', border: '1px solid rgba(229,115,115,0.25)',
+                  color: '#E57373', fontSize: '14px', fontWeight: 400, cursor: 'pointer',
+                  touchAction: 'manipulation',
+                }}
+              >
+                <Trash2 size={14} />
+                {isMr ? 'हटवा' : 'Delete'}
+              </button>
+            </div>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+    </>
   );
 }
