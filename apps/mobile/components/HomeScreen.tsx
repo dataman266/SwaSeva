@@ -15,10 +15,17 @@ interface HomeScreenProps {
   onOpenExplore: () => void;
 }
 
+const SAVED_KEY = 'agrimart_saved';
+
+function getSavedIds(): string[] {
+  try { return JSON.parse(localStorage.getItem(SAVED_KEY) || '[]'); } catch { return []; }
+}
+
 export default function HomeScreen({ lang, location, onViewDetails, onOpenAssistant, onOpenExplore }: HomeScreenProps) {
   const [search, setSearch]           = useState('');
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [activeCategory, setActiveCategory] = useState('all');
+  const [savedIds, setSavedIds]       = useState<string[]>(getSavedIds);
 
   const isMr = lang === Language.MARATHI;
   const t    = TRANSLATIONS[isMr ? 'mr' : 'en'];
@@ -28,6 +35,16 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
     setSelectedIds(prev =>
       prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
     );
+  };
+
+  const toggleSave = (e: React.MouseEvent, id: string) => {
+    e.stopPropagation();
+    setSavedIds(prev => {
+      const next = prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id];
+      try { localStorage.setItem(SAVED_KEY, JSON.stringify(next)); } catch {}
+      return next;
+    });
+    navigator.vibrate?.(8);
   };
 
   const filtered = PRODUCTS.filter(p => {
@@ -157,6 +174,8 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
                   onClick={() => onViewDetails(product)}
                   onSelect={e => toggleSelect(e, product.id)}
                   isSelected={selectedIds.includes(product.id)}
+                  isSaved={savedIds.includes(product.id)}
+                  onSave={e => toggleSave(e, product.id)}
                 />
               );
             })

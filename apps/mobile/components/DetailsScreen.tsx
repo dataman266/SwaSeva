@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import {
   ArrowLeft, Phone, MessageSquare, Truck, Heart,
-  MapPin, Calendar, ShieldCheck, Star,
+  MapPin, Calendar, ShieldCheck, Star, Share2,
 } from 'lucide-react';
+
+const SAVED_KEY = 'agrimart_saved';
 import { Product, Language } from '../types.ts';
 import { SELLERS, TRANSLATIONS } from '../constants.tsx';
-import PillButton from './atoms/PillButton.tsx';
-import StatCard from './atoms/StatCard.tsx';
 import SectionReveal from './atoms/SectionReveal.tsx';
 
 interface DetailsScreenProps {
@@ -16,13 +16,43 @@ interface DetailsScreenProps {
 }
 
 export default function DetailsScreen({ product, lang, onBack }: DetailsScreenProps) {
-  const [saved, setSaved]       = useState(false);
-  const [mounted, setMounted]   = useState(false);
+  const [saved, setSaved] = useState<boolean>(() => {
+    try {
+      const list: string[] = JSON.parse(localStorage.getItem(SAVED_KEY) || '[]');
+      return list.includes(product.id);
+    } catch { return false; }
+  });
+  const [mounted, setMounted] = useState(false);
   const seller = SELLERS.find(s => s.id === product.sellerId);
   const isMr   = lang === Language.MARATHI;
   const t      = TRANSLATIONS[isMr ? 'mr' : 'en'];
 
   useEffect(() => { setMounted(true); }, []);
+
+  const toggleSaved = () => {
+    const next = !saved;
+    setSaved(next);
+    try {
+      const list: string[] = JSON.parse(localStorage.getItem(SAVED_KEY) || '[]');
+      const updated = next
+        ? [...list.filter(id => id !== product.id), product.id]
+        : list.filter(id => id !== product.id);
+      localStorage.setItem(SAVED_KEY, JSON.stringify(updated));
+    } catch {}
+    navigator.vibrate?.(8);
+  };
+
+  const handleShare = () => {
+    const productName = isMr ? product.nameMr : product.name;
+    const productUnit = isMr ? product.unitMr : product.unit;
+    const text = `${productName} — ₹${product.price}/${productUnit} on Apla AgriMart`;
+    const url  = `https://agrimart.app/listing/${product.id}`;
+    if (navigator.share) {
+      navigator.share({ title: productName, text, url }).catch(() => {});
+    } else {
+      window.open(`https://wa.me/?text=${encodeURIComponent(text + '\n' + url)}`, '_blank', 'noopener');
+    }
+  };
 
   const name    = isMr ? product.nameMr    : product.name;
   const desc    = isMr ? product.descriptionMr : product.description;
@@ -53,18 +83,31 @@ export default function DetailsScreen({ product, lang, onBack }: DetailsScreenPr
           <button
             onClick={onBack}
             className="w-10 h-10 rounded-full flex items-center justify-center border border-[rgba(245,240,232,0.2)] bg-[rgba(10,26,10,0.5)] text-[#F5F0E8] active:scale-90 transition-all nav-blur"
+            style={{ touchAction: 'manipulation' }}
           >
             <ArrowLeft size={18} />
           </button>
-          <button
-            onClick={() => setSaved(s => !s)}
-            className="w-10 h-10 rounded-full flex items-center justify-center border border-[rgba(245,240,232,0.2)] bg-[rgba(10,26,10,0.5)] active:scale-90 transition-all nav-blur"
-          >
-            <Heart
-              size={17}
-              className={saved ? 'text-red-400 fill-red-400' : 'text-[rgba(245,240,232,0.55)]'}
-            />
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleShare}
+              className="w-10 h-10 rounded-full flex items-center justify-center border border-[rgba(245,240,232,0.2)] bg-[rgba(10,26,10,0.5)] text-[rgba(245,240,232,0.55)] active:scale-90 transition-all nav-blur"
+              style={{ touchAction: 'manipulation' }}
+              aria-label="Share listing"
+            >
+              <Share2 size={16} />
+            </button>
+            <button
+              onClick={toggleSaved}
+              className="w-10 h-10 rounded-full flex items-center justify-center border border-[rgba(245,240,232,0.2)] bg-[rgba(10,26,10,0.5)] active:scale-90 transition-all nav-blur"
+              style={{ touchAction: 'manipulation' }}
+              aria-label={saved ? 'Remove from saved' : 'Save listing'}
+            >
+              <Heart
+                size={17}
+                className={saved ? 'text-red-400 fill-red-400' : 'text-[rgba(245,240,232,0.55)]'}
+              />
+            </button>
+          </div>
         </div>
 
         {/* Category badge */}
@@ -193,17 +236,30 @@ export default function DetailsScreen({ product, lang, onBack }: DetailsScreenPr
         style={{ background: 'linear-gradient(to top, #0A1A0A 70%, transparent)' }}
       >
         <div className="flex gap-3">
+          {/* Call button — secondary (outline) */}
           <a
             href={`tel:${seller?.phone}`}
-            className="flex items-center justify-center gap-2 px-5 py-3.5 rounded-full border border-[rgba(245,240,232,0.15)] text-[rgba(245,240,232,0.65)] active:scale-95 transition-all font-medium text-[13px] tracking-[0.06em]"
+            className="flex items-center justify-center gap-2 px-5 h-12 rounded-full border border-[rgba(245,240,232,0.15)] text-[rgba(245,240,232,0.75)] active:scale-95 transition-all font-medium text-[13px] tracking-[0.06em]"
+            style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'rgba(45,90,27,0.2)' }}
           >
             <Phone size={16} className="text-[#D4C4A0]" />
-            {t.call}
+            {isMr ? 'कॉल' : 'Call'}
           </a>
-          <PillButton variant="light" className="flex-1" onClick={() => {}}>
-            <MessageSquare size={15} />
-            {t.chat}
-          </PillButton>
+          {/* WhatsApp button — primary (green fill) */}
+          <a
+            href={`https://wa.me/${seller?.phone?.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
+              isMr
+                ? `नमस्कार, मला तुमचे ${name} (₹${product.price}/${unit}) Apla AgriMart वर पाहिले. मला अधिक माहिती हवी आहे.`
+                : `Hi, I'm interested in your ${name} (₹${product.price}/${unit}) listed on Apla AgriMart.`
+            )}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-1 flex items-center justify-center gap-2 h-12 rounded-full text-[#F5F0E8] font-medium text-[13px] tracking-[0.06em] active:scale-95 transition-all"
+            style={{ background: '#2D5A1B', touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent' }}
+          >
+            <MessageSquare size={16} />
+            WhatsApp
+          </a>
         </div>
       </div>
     </div>

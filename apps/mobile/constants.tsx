@@ -98,7 +98,7 @@ export const TRANSLATIONS = {
   en: {
     home: 'Market',
     sell: 'Sell',
-    listings: 'My Listings',
+    listings: 'Listings',
     orders: 'Orders',
     profile: 'Profile',
     searchPlaceholder: 'Search seeds, saplings...',
@@ -128,7 +128,7 @@ export const TRANSLATIONS = {
   mr: {
     home: 'बाजार',
     sell: 'विका',
-    listings: 'माझ्या लिस्टिंग',
+    listings: 'लिस्टिंग',
     orders: 'ऑर्डर्स',
     profile: 'प्रोफाईल',
     searchPlaceholder: 'बियाणे, रोपे शोधा...',

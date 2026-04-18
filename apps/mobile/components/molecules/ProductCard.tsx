@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { MapPin, ArrowRight } from 'lucide-react';
+import { MapPin, ArrowRight, Heart } from 'lucide-react';
 import { Product, Seller } from '../../types.ts';
 
 interface ProductCardProps {
@@ -10,6 +10,8 @@ interface ProductCardProps {
   onClick: () => void;
   onSelect?: (e: React.MouseEvent) => void;
   isSelected?: boolean;
+  isSaved?: boolean;
+  onSave?: (e: React.MouseEvent) => void;
 }
 
 /**
@@ -25,6 +27,8 @@ export default function ProductCard({
   onClick,
   onSelect,
   isSelected = false,
+  isSaved = false,
+  onSave,
 }: ProductCardProps) {
   const [visible, setVisible] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -120,9 +124,25 @@ export default function ProductCard({
             </div>
           </div>
 
-          {/* Arrow CTA */}
-          <div className="w-10 h-10 rounded-full border border-[rgba(245,240,232,0.12)] flex items-center justify-center text-[rgba(245,240,232,0.35)] group-active:border-[#D4C4A0] group-active:text-[#D4C4A0] transition-all">
-            <ArrowRight size={16} />
+          <div className="flex items-center gap-2">
+            {/* Wishlist heart */}
+            {onSave && (
+              <button
+                onClick={onSave}
+                className="w-10 h-10 rounded-full border border-[rgba(245,240,232,0.12)] flex items-center justify-center transition-all active:scale-90"
+                style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'rgba(45,90,27,0.2)' }}
+                aria-label={isSaved ? 'Remove from saved' : 'Save listing'}
+              >
+                <Heart
+                  size={16}
+                  className={isSaved ? 'text-red-400 fill-red-400' : 'text-[rgba(245,240,232,0.35)]'}
+                />
+              </button>
+            )}
+            {/* Arrow CTA */}
+            <div className="w-10 h-10 rounded-full border border-[rgba(245,240,232,0.12)] flex items-center justify-center text-[rgba(245,240,232,0.35)] group-active:border-[#D4C4A0] group-active:text-[#D4C4A0] transition-all">
+              <ArrowRight size={16} />
+            </div>
           </div>
         </div>
       </div>
