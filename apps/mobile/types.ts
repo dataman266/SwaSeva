@@ -38,7 +38,7 @@ export interface Product {
   mspPrice?: number; // Minimum Support Price for comparison badge (optional — not all products have MSP)
 }
 
-export type AppScreen = 'HOME' | 'DETAILS' | 'SELL' | 'LISTINGS' | 'ORDERS' | 'PROFILE' | 'ASSISTANT' | 'ONBOARDING' | 'EXPLORE';
+export type AppScreen = 'HOME' | 'DETAILS' | 'SELL' | 'LISTINGS' | 'ORDERS' | 'PROFILE' | 'ASSISTANT' | 'ONBOARDING' | 'EXPLORE' | 'CALENDAR' | 'CART' | 'CHECKOUT';
 
 export interface AppState {
   currentScreen: AppScreen;

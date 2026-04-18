@@ -12,6 +12,9 @@ import ExploreScreen from './components/ExploreScreen.tsx';
 import AssistantScreen from './components/AssistantScreen.tsx';
 import OnboardingScreen from './components/OnboardingScreen.tsx';
 import AuthScreen from './components/AuthScreen.tsx';
+import CropCalendarScreen from './components/CropCalendarScreen.tsx';
+import CartScreen from './components/CartScreen.tsx';
+import CheckoutScreen from './components/CheckoutScreen.tsx';
 import BottomNav from './components/BottomNav.tsx';
 import Header from './components/Header.tsx';
 
@@ -19,7 +22,7 @@ const ONBOARDED_KEY  = 'agrimart_onboarded';
 const AUTH_TOKEN_KEY = 'agrimart_auth_token';
 
 // Screens that push forward (slide left) vs pop back (slide right)
-const SCREEN_ORDER: AppScreen[] = ['HOME', 'DETAILS', 'SELL', 'LISTINGS', 'ORDERS', 'PROFILE', 'EXPLORE', 'ASSISTANT'];
+const SCREEN_ORDER: AppScreen[] = ['HOME', 'DETAILS', 'SELL', 'LISTINGS', 'ORDERS', 'PROFILE', 'EXPLORE', 'ASSISTANT', 'CALENDAR', 'CART', 'CHECKOUT'];
 
 function getDirection(from: AppScreen, to: AppScreen): number {
   const fi = SCREEN_ORDER.indexOf(from);
@@ -84,12 +87,15 @@ const App: React.FC = () => {
         localStorage.removeItem(AUTH_TOKEN_KEY);
         setIsAuthenticated(false);
         changeScreen('HOME');
-      }} onExplore={() => changeScreen('EXPLORE')} onResetOnboarding={() => {
+      }} onExplore={() => changeScreen('EXPLORE')} onOpenCalendar={() => changeScreen('CALENDAR')} onResetOnboarding={() => {
         setIsAuthenticated(false);
         changeScreen('ONBOARDING');
       }} />;
       case 'EXPLORE':   return <ExploreScreen lang={state.userLanguage} location={state.location} onBack={() => changeScreen('HOME')} />;
       case 'ASSISTANT': return <AssistantScreen lang={state.userLanguage} onBack={() => changeScreen('HOME')} />;
+      case 'CALENDAR':  return <CropCalendarScreen lang={state.userLanguage} onBack={() => changeScreen('HOME')} />;
+      case 'CART':      return <CartScreen lang={state.userLanguage} onBack={() => changeScreen('HOME')} onCheckout={() => changeScreen('CHECKOUT')} />;
+      case 'CHECKOUT':  return <CheckoutScreen lang={state.userLanguage} onBack={() => changeScreen('CART')} onConfirmed={() => changeScreen('ORDERS')} />;
       case 'ONBOARDING': return (
         <OnboardingScreen
           lang={state.userLanguage}
@@ -127,6 +133,7 @@ const App: React.FC = () => {
           language={state.userLanguage}
           onLanguageChange={l => setState(prev => ({ ...prev, userLanguage: l }))}
           onOpenAssistant={() => changeScreen('ASSISTANT')}
+          onOpenCart={() => changeScreen('CART')}
         />
       )}
 

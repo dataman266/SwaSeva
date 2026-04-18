@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Languages, Bell } from 'lucide-react';
 import { Language } from '../types.ts';
 import Logo from './Logo.tsx';
+import CartBadge from './atoms/CartBadge.tsx';
 
 interface HeaderProps {
   location: string;
   language: Language;
   onLanguageChange: (lang: Language) => void;
   onOpenAssistant: () => void;
+  onOpenCart: () => void;
   scrollParent?: React.RefObject<HTMLDivElement>;
 }
 
@@ -15,6 +17,7 @@ export default function Header({
   location,
   language,
   onLanguageChange,
+  onOpenCart,
 }: HeaderProps) {
   const [scrolled, setScrolled] = useState(false);
 
@@ -68,6 +71,9 @@ export default function Header({
               {language === Language.ENGLISH ? 'मराठी' : 'ENG'}
             </span>
           </button>
+
+          {/* Cart badge */}
+          <CartBadge onOpen={onOpenCart} />
 
           {/* Notification bell */}
           <button

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import {
   ArrowLeft, Phone, MessageSquare, Truck, Heart,
-  MapPin, Calendar, ShieldCheck, Star, Share2,
+  MapPin, Calendar, ShieldCheck, Star, Share2, ShoppingCart,
 } from 'lucide-react';
+import { addToCart } from '../utils/cart.ts';
+import { haptic } from '../utils/haptic.ts';
 
 const SAVED_KEY = 'agrimart_saved';
 import { Product, Language } from '../types.ts';
@@ -245,6 +247,15 @@ export default function DetailsScreen({ product, lang, onBack }: DetailsScreenPr
             <Phone size={16} className="text-[#D4C4A0]" />
             {isMr ? 'कॉल' : 'Call'}
           </a>
+          {/* Add to Cart button */}
+          <button
+            onClick={() => { addToCart(product.id); haptic.light(); }}
+            className="flex items-center justify-center gap-2 px-5 h-12 rounded-full border border-[rgba(212,196,160,0.3)] text-[#D4C4A0] active:scale-95 transition-all font-medium text-[13px]"
+            style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'rgba(212,196,160,0.1)' }}
+          >
+            <ShoppingCart size={16} />
+            {isMr ? 'कार्ट' : 'Cart'}
+          </button>
           {/* WhatsApp button — primary (green fill) */}
           <a
             href={`https://wa.me/${seller?.phone?.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
