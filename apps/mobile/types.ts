@@ -35,6 +35,7 @@ export interface Product {
   harvestDate?: string;
   description: string;
   descriptionMr: string;
+  mspPrice?: number; // Minimum Support Price for comparison badge (optional — not all products have MSP)
 }
 
 export type AppScreen = 'HOME' | 'DETAILS' | 'SELL' | 'LISTINGS' | 'ORDERS' | 'PROFILE' | 'ASSISTANT' | 'ONBOARDING' | 'EXPLORE';

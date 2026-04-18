@@ -122,6 +122,24 @@ export default function ProductCard({
                 / {isMr ? product.unitMr : product.unit}
               </span>
             </div>
+            {/* MSP comparison badge */}
+            {product.mspPrice !== undefined && (
+              product.price >= product.mspPrice ? (
+                <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full"
+                  style={{ background: 'rgba(74,140,42,0.12)', border: '1px solid rgba(74,140,42,0.25)' }}>
+                  <span style={{ fontSize: '9px', fontWeight: 600, color: '#4A8C2A', letterSpacing: '0.1em' }}>
+                    ✓ {isMr ? 'MSP पेक्षा जास्त' : 'ABOVE MSP'}
+                  </span>
+                </div>
+              ) : (
+                <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full"
+                  style={{ background: 'rgba(245,197,24,0.1)', border: '1px solid rgba(245,197,24,0.2)' }}>
+                  <span style={{ fontSize: '9px', fontWeight: 600, color: '#F5C518', letterSpacing: '0.1em' }}>
+                    ⚠ {isMr ? 'MSP खाली' : 'BELOW MSP'}
+                  </span>
+                </div>
+              )
+            )}
           </div>
 
           <div className="flex items-center gap-2">

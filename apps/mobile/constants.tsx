@@ -33,6 +33,7 @@ export const PRODUCTS: Product[] = [
     harvestDate: '2024-05-15',
     description: 'High-yield variety, disease resistant, and ready for planting. Grown under controlled environment.',
     descriptionMr: 'जास्त उत्पन्न देणारी जात, रोगप्रतिकारक आणि लागवडीसाठी तयार. नियंत्रित वातावरणात वाढवलेले.',
+    mspPrice: 3.0,
   },
   {
     id: 'p2',
@@ -49,6 +50,7 @@ export const PRODUCTS: Product[] = [
     sellerId: 's2',
     description: 'F1 Hybrid Tomato seeds with excellent shelf life and firm fruit texture.',
     descriptionMr: 'उत्कृष्ट शेल्फ लाइफ आणि टणक फळांचा पोत असलेले F1 हायब्रीड टोमॅटो बियाणे.',
+    mspPrice: 500,
   },
   {
     id: 'p3',
@@ -83,6 +85,7 @@ export const PRODUCTS: Product[] = [
     sellerId: 's1',
     description: 'Healthy 1-year-old Kesar mango grafts. Guaranteed survival rate.',
     descriptionMr: 'निरोगी १ वर्ष जुन्या केसर आंब्याची कलमे. जगण्याची खात्रीशीर टक्केवारी.',
+    mspPrice: 150,
   },
 ];
 

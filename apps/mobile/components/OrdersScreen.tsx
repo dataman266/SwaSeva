@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import { Language } from '../types.ts';
-import { ShoppingBag, Package, Truck, CheckCircle, Clock } from 'lucide-react';
+import { ShoppingBag, Package, Truck, CheckCircle, Clock, RotateCcw } from 'lucide-react';
 import { TRANSLATIONS } from '../constants.tsx';
 import PillButton from './atoms/PillButton.tsx';
 import SectionReveal from './atoms/SectionReveal.tsx';
@@ -94,6 +94,13 @@ function OrderCard({ order, isMr, index }: OrderCardProps) {
 export default function OrdersScreen({ lang }: { lang: Language }) {
   const t    = TRANSLATIONS[lang === Language.ENGLISH ? 'en' : 'mr'];
   const isMr = lang === Language.MARATHI;
+  const [refreshing, setRefreshing] = useState(false);
+
+  const handleRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await new Promise(r => setTimeout(r, 600));
+    setRefreshing(false);
+  }, []);
 
   const isEmpty = false; // flip to true to show empty state
 
@@ -102,13 +109,27 @@ export default function OrdersScreen({ lang }: { lang: Language }) {
 
       {/* Header */}
       <SectionReveal>
-        <div>
-          <p className="text-[10px] font-medium tracking-[0.2em] uppercase text-[rgba(245,240,232,0.35)] mb-1">
-            {isMr ? 'माझे व्यवहार' : 'My Transactions'}
-          </p>
-          <h1 className="font-light text-[#F5F0E8]" style={{ fontSize: '26px', letterSpacing: '-0.02em' }}>
-            {t.orders}
-          </h1>
+        <div className="flex items-end justify-between">
+          <div>
+            <p className="text-[10px] font-medium tracking-[0.2em] uppercase text-[rgba(245,240,232,0.35)] mb-1">
+              {isMr ? 'माझे व्यवहार' : 'My Transactions'}
+            </p>
+            <h1 className="font-light text-[#F5F0E8]" style={{ fontSize: '26px', letterSpacing: '-0.02em' }}>
+              {t.orders}
+            </h1>
+          </div>
+          <button
+            onClick={handleRefresh}
+            disabled={refreshing}
+            className="w-9 h-9 rounded-full flex items-center justify-center border border-[rgba(245,240,232,0.08)] bg-[rgba(245,240,232,0.05)] active:scale-90 transition-all"
+            style={{ touchAction: 'manipulation' }}
+            aria-label="Refresh orders"
+          >
+            <RotateCcw
+              size={14}
+              className={`text-[rgba(245,240,232,0.4)] transition-transform ${refreshing ? 'animate-spin' : ''}`}
+            />
+          </button>
         </div>
       </SectionReveal>
 

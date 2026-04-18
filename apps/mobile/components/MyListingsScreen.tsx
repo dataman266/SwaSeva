@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Language } from '../types.ts';
 import {
   Plus, MoreVertical, Eye, Edit2, Trash2, TrendingUp,
-  Package, CheckCircle, Clock, XCircle, Sprout,
+  Package, CheckCircle, Clock, XCircle, Sprout, RotateCcw,
 } from 'lucide-react';
 
 type ListingStatus = 'active' | 'pending' | 'sold' | 'expired';
@@ -96,6 +96,13 @@ export default function MyListingsScreen({ lang, onCreateNew }: MyListingsScreen
   const isMr = lang === Language.MARATHI;
   const [filter, setFilter] = useState<ListingStatus | 'all'>('all');
   const [menuOpen, setMenuOpen] = useState<string | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const handleRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await new Promise(r => setTimeout(r, 600));
+    setRefreshing(false);
+  }, []);
 
   const filters: Array<{ key: ListingStatus | 'all'; label: string; labelMr: string }> = [
     { key: 'all',     label: 'All',     labelMr: 'सर्व'      },
@@ -130,21 +137,43 @@ export default function MyListingsScreen({ lang, onCreateNew }: MyListingsScreen
             {isMr ? `${activeCount} सक्रिय लिस्टिंग` : `${activeCount} active listing${activeCount !== 1 ? 's' : ''}`}
           </p>
         </div>
-        <button
-          type="button"
-          onClick={onCreateNew}
-          style={{
-            display: 'flex', alignItems: 'center', gap: '0.5rem',
-            padding: '0.625rem 1rem', borderRadius: '2rem',
-            background: '#2D5A1B', border: 'none',
-            color: '#F5F0E8', fontSize: '13px', fontWeight: 500,
-            cursor: 'pointer', touchAction: 'manipulation',
-            WebkitTapHighlightColor: 'rgba(45,90,27,0.2)',
-          }}
-        >
-          <Plus size={14} />
-          {isMr ? 'नवीन' : 'New'}
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <button
+            type="button"
+            onClick={handleRefresh}
+            disabled={refreshing}
+            style={{
+              width: 36, height: 36, borderRadius: '50%',
+              background: 'rgba(245,240,232,0.06)',
+              border: '1px solid rgba(245,240,232,0.08)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              cursor: refreshing ? 'default' : 'pointer',
+              touchAction: 'manipulation',
+            }}
+            aria-label="Refresh listings"
+          >
+            <RotateCcw
+              size={14}
+              className={refreshing ? 'animate-spin' : ''}
+              style={{ color: 'rgba(245,240,232,0.4)' }}
+            />
+          </button>
+          <button
+            type="button"
+            onClick={onCreateNew}
+            style={{
+              display: 'flex', alignItems: 'center', gap: '0.5rem',
+              padding: '0.625rem 1rem', borderRadius: '2rem',
+              background: '#2D5A1B', border: 'none',
+              color: '#F5F0E8', fontSize: '13px', fontWeight: 500,
+              cursor: 'pointer', touchAction: 'manipulation',
+              WebkitTapHighlightColor: 'rgba(45,90,27,0.2)',
+            }}
+          >
+            <Plus size={14} />
+            {isMr ? 'नवीन' : 'New'}
+          </button>
+        </div>
       </div>
 
       {/* ── Stats strip ───────────────────────────────────────────── */}

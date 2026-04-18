@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
-import { Search, Filter, Scale, MessageCircle, Newspaper, TrendingUp, ChevronRight } from 'lucide-react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Search, Filter, Scale, MessageCircle, Newspaper, TrendingUp, ChevronRight, RotateCcw } from 'lucide-react';
 import { Language, Product } from '../types.ts';
 import { PRODUCTS, SELLERS, CATEGORIES, TRANSLATIONS } from '../constants.tsx';
 
 import LivePriceTicker from './organisms/LivePriceTicker.tsx';
 import ProductCard from './molecules/ProductCard.tsx';
 import SectionReveal from './atoms/SectionReveal.tsx';
+import SkeletonCard from './atoms/SkeletonCard.tsx';
+import WeatherWidget from './atoms/WeatherWidget.tsx';
 
 interface HomeScreenProps {
   lang: Language;
@@ -26,6 +28,22 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [activeCategory, setActiveCategory] = useState('all');
   const [savedIds, setSavedIds]       = useState<string[]>(getSavedIds);
+  const [isLoading, setIsLoading]     = useState(true);
+  const [refreshing, setRefreshing]   = useState(false);
+
+  // Simulate initial product load (800ms)
+  useEffect(() => {
+    const t = setTimeout(() => setIsLoading(false), 800);
+    return () => clearTimeout(t);
+  }, []);
+
+  const handleRefresh = useCallback(async () => {
+    setRefreshing(true);
+    setIsLoading(true);
+    await new Promise(r => setTimeout(r, 700));
+    setIsLoading(false);
+    setRefreshing(false);
+  }, []);
 
   const isMr = lang === Language.MARATHI;
   const t    = TRANSLATIONS[isMr ? 'mr' : 'en'];
@@ -61,7 +79,37 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
       {/* ── 1. LIVE PRICE TICKER ─────────────────────────────────── */}
       <LivePriceTicker isMr={isMr} />
 
-      {/* ── 2. NEWS & IMPACT ENTRY CARD ──────────────────────────── */}
+      {/* ── 2. WEATHER + REFRESH ROW ─────────────────────────────── */}
+      <div style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        padding: '0.5rem 1.25rem 0',
+      }}>
+        <WeatherWidget />
+        <button
+          onClick={handleRefresh}
+          disabled={refreshing}
+          style={{
+            display: 'flex', alignItems: 'center', gap: '0.35rem',
+            padding: '0.275rem 0.65rem', borderRadius: '2rem',
+            background: 'rgba(245,240,232,0.06)',
+            border: '1px solid rgba(245,240,232,0.08)',
+            cursor: refreshing ? 'default' : 'pointer',
+            touchAction: 'manipulation',
+            WebkitTapHighlightColor: 'transparent',
+          }}
+        >
+          <RotateCcw
+            size={11}
+            className={refreshing ? 'animate-spin' : ''}
+            style={{ color: 'rgba(245,240,232,0.45)' }}
+          />
+          <span style={{ fontSize: '10px', color: 'rgba(245,240,232,0.4)', letterSpacing: '0.08em', fontWeight: 400 }}>
+            {isMr ? 'ताज्या' : 'Refresh'}
+          </span>
+        </button>
+      </div>
+
+      {/* ── 3. NEWS & IMPACT ENTRY CARD ──────────────────────────── */}
       <button
         type="button"
         onClick={onOpenExplore}
@@ -100,7 +148,7 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
         </div>
       </button>
 
-      {/* ── 3. PRODUCT LISTINGS ──────────────────────────────────── */}
+      {/* ── 4. PRODUCT LISTINGS ──────────────────────────────────── */}
       <section className="px-5 pt-6">
 
         {/* Section header */}
@@ -114,7 +162,7 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
             </h2>
           </div>
           <span className="text-[9px] font-medium tracking-[0.18em] uppercase text-[#D4C4A0] bg-[rgba(212,196,160,0.1)] border border-[rgba(212,196,160,0.2)] px-3 py-1 rounded-full">
-            LIVE
+            {isLoading ? (isMr ? 'लोड...' : 'Loading…') : 'LIVE'}
           </span>
         </SectionReveal>
 
@@ -153,9 +201,11 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
           ))}
         </div>
 
-        {/* Product grid */}
+        {/* Product grid — skeletons while loading, real cards when ready */}
         <div className="flex flex-col gap-5">
-          {filtered.length === 0 ? (
+          {isLoading ? (
+            [0, 1, 2].map(i => <SkeletonCard key={i} />)
+          ) : filtered.length === 0 ? (
             <div className="text-center py-16">
               <p className="text-[rgba(245,240,232,0.3)] font-light text-sm">
                 {isMr ? 'कोणतेही उत्पादन सापडले नाही' : 'No products found'}
