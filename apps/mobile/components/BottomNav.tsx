@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, PlusSquare, ShoppingBag, User, LayoutList } from 'lucide-react';
+import { Home, PlusSquare, ShoppingBag, User, LayoutList, MessageSquare } from 'lucide-react';
 import { AppScreen, Language } from '../types.ts';
 import { TRANSLATIONS } from '../constants.tsx';
 
@@ -14,11 +14,12 @@ export default function BottomNav({ activeScreen, onNavigate, lang, unreadMessag
   const t = TRANSLATIONS[lang === Language.ENGLISH ? 'en' : 'mr'];
 
   const navItems = [
-    { id: 'HOME'     as AppScreen, label: t.home,     icon: Home       },
-    { id: 'SELL'     as AppScreen, label: t.sell,     icon: PlusSquare },
-    { id: 'LISTINGS' as AppScreen, label: t.listings,  icon: LayoutList  },
-    { id: 'ORDERS'   as AppScreen, label: t.orders,   icon: ShoppingBag },
-    { id: 'PROFILE'  as AppScreen, label: t.profile,  icon: User        },
+    { id: 'HOME'     as AppScreen, label: t.home,     icon: Home         },
+    { id: 'SELL'     as AppScreen, label: t.sell,     icon: PlusSquare   },
+    { id: 'LISTINGS' as AppScreen, label: t.listings,  icon: LayoutList   },
+    { id: 'MESSAGES' as AppScreen, label: t.messages, icon: MessageSquare },
+    { id: 'ORDERS'   as AppScreen, label: t.orders,   icon: ShoppingBag  },
+    { id: 'PROFILE'  as AppScreen, label: t.profile,  icon: User          },
   ];
 
   return (

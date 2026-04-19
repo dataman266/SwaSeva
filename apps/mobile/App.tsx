@@ -150,7 +150,6 @@ const App: React.FC = () => {
           onLanguageChange={l => setState(prev => ({ ...prev, userLanguage: l }))}
           onOpenAssistant={() => changeScreen('ASSISTANT')}
           onOpenCart={() => changeScreen('CART')}
-          onOpenMessages={() => changeScreen('MESSAGES')}
         />
       )}
 
