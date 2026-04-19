@@ -9,11 +9,51 @@ export const COLORS = {
 };
 
 export const SELLERS: Seller[] = [
-  { id: 's1', name: 'Ramachandra Nursery', rating: 4.8, isVerified: true, distance: '4.2 km', phone: '+919876543210', location: 'Near Old Toll Gate, Pune' },
-  { id: 's2', name: 'Krishi Seva Center', rating: 4.5, isVerified: true, distance: '8.5 km', phone: '+919876543211', location: 'Main Market, Baramati' },
-  { id: 's3', name: 'Gajanan Seeds', rating: 3.9, isVerified: false, distance: '12.0 km', phone: '+919876543212', location: 'Satara Road' },
-  { id: 's4', name: 'Vitthal Agro Inputs', rating: 4.6, isVerified: true, distance: '6.8 km', phone: '+919876543213', location: 'APMC Yard, Solapur' },
-  { id: 's5', name: 'Sahyadri Farm Fresh', rating: 4.3, isVerified: true, distance: '15.2 km', phone: '+919876543214', location: 'Nashik–Pune Highway, Igatpuri' },
+  {
+    id: 's1', name: 'Ramachandra Nursery', rating: 4.8, isVerified: true,
+    distance: '4.2 km', phone: '+919876543210', location: 'Near Old Toll Gate, Pune',
+    speciality: ['Saplings', 'Grafting', 'Fruit Trees'],
+    daysOnApp: 312, totalSold: 4800,
+    bio: 'Third-generation nursery specialising in grafted saplings and fruit trees. All plants are certified disease-free.',
+    bioMr: 'तीन पिढ्यांचे नर्सरी, कलमे आणि फळझाडांमध्ये विशेष. सर्व रोपे रोगमुक्त प्रमाणित.',
+    avatarColor: '#1A4D1A',
+  },
+  {
+    id: 's2', name: 'Krishi Seva Center', rating: 4.5, isVerified: true,
+    distance: '8.5 km', phone: '+919876543211', location: 'Main Market, Baramati',
+    speciality: ['Seeds', 'Fertilizers', 'Agri Inputs'],
+    daysOnApp: 198, totalSold: 2300,
+    bio: 'Your one-stop agri-input center in Baramati. Government-empanelled distributor for premium seed brands.',
+    bioMr: 'बारामतीमधील तुमचे संपूर्ण कृषी निविष्ठा केंद्र. सरकार मान्यताप्राप्त वितरक.',
+    avatarColor: '#1A3D4D',
+  },
+  {
+    id: 's3', name: 'Gajanan Seeds', rating: 3.9, isVerified: false,
+    distance: '12.0 km', phone: '+919876543212', location: 'Satara Road',
+    speciality: ['Seeds', 'Grains'],
+    daysOnApp: 87, totalSold: 540,
+    bio: 'Local seed trader with 10+ years of experience in Kharif and Rabi crop varieties.',
+    bioMr: 'खरीप आणि रब्बी पिकांच्या जातींमध्ये १०+ वर्षांचा अनुभव असलेला स्थानिक बियाणे व्यापारी.',
+    avatarColor: '#4D3A1A',
+  },
+  {
+    id: 's4', name: 'Vitthal Agro Inputs', rating: 4.6, isVerified: true,
+    distance: '6.8 km', phone: '+919876543213', location: 'APMC Yard, Solapur',
+    speciality: ['Fertilizers', 'Drip Irrigation', 'Tools'],
+    daysOnApp: 445, totalSold: 6200,
+    bio: 'Solapur\'s leading agro input supplier. Authorized dealer for drip irrigation systems. Subsidy processing support available.',
+    bioMr: 'सोलापूरचे अग्रगण्य कृषी निविष्ठा पुरवठादार. ठिबक सिंचन प्रणालीचे अधिकृत डीलर.',
+    avatarColor: '#4D1A1A',
+  },
+  {
+    id: 's5', name: 'Sahyadri Farm Fresh', rating: 4.3, isVerified: true,
+    distance: '15.2 km', phone: '+919876543214', location: 'Nashik–Pune Highway, Igatpuri',
+    speciality: ['Vegetables', 'Onion', 'Export Quality'],
+    daysOnApp: 267, totalSold: 3900,
+    bio: 'Farm-to-market fresh produce from the Sahyadri belt. Export-grade grading and packing available.',
+    bioMr: 'सह्याद्री पट्ट्यातून थेट शेतातून बाजारात. निर्यात दर्जाचे ग्रेडिंग आणि पॅकिंग उपलब्ध.',
+    avatarColor: '#1A4D3A',
+  },
 ];
 
 export const PRODUCTS: Product[] = [
@@ -181,7 +221,25 @@ export const TRANSLATIONS = {
     itemDetails: 'Item Details',
     qualityVerified: 'Quality Verified',
     selfPickup: 'Self-Pickup',
-    requestTransport: 'Request Transport Help'
+    requestTransport: 'Request Transport Help',
+    messages: 'Messages',
+    sendEnquiry: 'Send Enquiry',
+    enquirySent: 'Enquiry Sent!',
+    listingLocation: 'Listing Location',
+    viewMap: 'View Map',
+    comingSoon: 'Coming Soon',
+    comingSoonDesc: 'Transport booking will be available soon. We\'ll notify you!',
+    sellerProfile: 'Seller Profile',
+    daysOnApp: 'Days on App',
+    itemsSold: 'Items Sold',
+    otherListings: 'Other Listings',
+    contactSeller: 'Contact Seller',
+    noMessages: 'No Messages Yet',
+    noMessagesDesc: 'Send an enquiry on any listing to start a conversation.',
+    enquiryAutoMsg: (productName: string, price: number, unit: string) =>
+      `Hi, I'm interested in your ${productName} listed at ₹${price}/${unit} on Apla AgriMart. Please share more details.`,
+    enquiryAutoMsgMr: (productName: string, price: number, unit: string) =>
+      `नमस्कार, मला Apla AgriMart वर तुमचे ${productName} (₹${price}/${unit}) पाहिले. कृपया अधिक माहिती द्या.`,
   },
   mr: {
     home: 'बाजार',
@@ -211,6 +269,24 @@ export const TRANSLATIONS = {
     itemDetails: 'वस्तूचा तपशील',
     qualityVerified: 'गुणवत्ता सत्यापित',
     selfPickup: 'स्वतः उचलणे',
-    requestTransport: 'वाहतुकीसाठी मदत मागा'
+    requestTransport: 'वाहतुकीसाठी मदत मागा',
+    messages: 'संदेश',
+    sendEnquiry: 'चौकशी पाठवा',
+    enquirySent: 'चौकशी पाठवली!',
+    listingLocation: 'लिस्टिंग ठिकाण',
+    viewMap: 'नकाशा पहा',
+    comingSoon: 'लवकरच येत आहे',
+    comingSoonDesc: 'वाहतूक बुकिंग लवकरच उपलब्ध होईल. आम्ही तुम्हाला सूचित करू!',
+    sellerProfile: 'विक्रेता प्रोफाईल',
+    daysOnApp: 'App वर दिवस',
+    itemsSold: 'विकलेल्या वस्तू',
+    otherListings: 'इतर लिस्टिंग',
+    contactSeller: 'विक्रेत्याशी संपर्क',
+    noMessages: 'अद्याप संदेश नाहीत',
+    noMessagesDesc: 'संभाषण सुरू करण्यासाठी कोणत्याही लिस्टिंगवर चौकशी पाठवा.',
+    enquiryAutoMsg: (productName: string, price: number, unit: string) =>
+      `नमस्कार, मला Apla AgriMart वर तुमचे ${productName} (₹${price}/${unit}) पाहिले. कृपया अधिक माहिती द्या.`,
+    enquiryAutoMsgMr: (productName: string, price: number, unit: string) =>
+      `नमस्कार, मला Apla AgriMart वर तुमचे ${productName} (₹${price}/${unit}) पाहिले. कृपया अधिक माहिती द्या.`,
   }
 };

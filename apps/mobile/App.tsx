@@ -8,6 +8,8 @@ import SellScreen from './components/SellScreen.tsx';
 import OrdersScreen from './components/OrdersScreen.tsx';
 import ProfileScreen from './components/ProfileScreen.tsx';
 import MyListingsScreen from './components/MyListingsScreen.tsx';
+import SellerProfileScreen from './components/SellerProfileScreen.tsx';
+import MessagesScreen from './components/MessagesScreen.tsx';
 import ExploreScreen from './components/ExploreScreen.tsx';
 import AssistantScreen from './components/AssistantScreen.tsx';
 import OnboardingScreen from './components/OnboardingScreen.tsx';
@@ -22,7 +24,7 @@ const ONBOARDED_KEY  = 'agrimart_onboarded';
 const AUTH_TOKEN_KEY = 'agrimart_auth_token';
 
 // Screens that push forward (slide left) vs pop back (slide right)
-const SCREEN_ORDER: AppScreen[] = ['HOME', 'DETAILS', 'SELL', 'LISTINGS', 'ORDERS', 'PROFILE', 'EXPLORE', 'ASSISTANT', 'CALENDAR', 'CART', 'CHECKOUT'];
+const SCREEN_ORDER: AppScreen[] = ['HOME', 'DETAILS', 'SELL', 'LISTINGS', 'MESSAGES', 'ORDERS', 'PROFILE', 'EXPLORE', 'ASSISTANT', 'CALENDAR', 'CART', 'CHECKOUT', 'SELLER_PROFILE'];
 
 function getDirection(from: AppScreen, to: AppScreen): number {
   const fi = SCREEN_ORDER.indexOf(from);
@@ -68,9 +70,9 @@ const App: React.FC = () => {
     }
   }, []);
 
-  const changeScreen = (screen: AppScreen, product?: Product) => {
+  const changeScreen = (screen: AppScreen, product?: Product, sellerId?: string) => {
     setPrevScreen(state.currentScreen);
-    setState(prev => ({ ...prev, currentScreen: screen, selectedProduct: product }));
+    setState(prev => ({ ...prev, currentScreen: screen, selectedProduct: product, selectedSellerId: sellerId }));
     window.scrollTo(0, 0);
   };
 
@@ -79,7 +81,13 @@ const App: React.FC = () => {
   const renderScreen = () => {
     switch (state.currentScreen) {
       case 'HOME':      return <HomeScreen lang={state.userLanguage} location={state.location} onViewDetails={(p) => changeScreen('DETAILS', p)} onOpenAssistant={() => changeScreen('ASSISTANT')} onOpenExplore={() => changeScreen('EXPLORE')} />;
-      case 'DETAILS':   return <DetailsScreen product={state.selectedProduct!} lang={state.userLanguage} onBack={() => changeScreen('HOME')} />;
+      case 'DETAILS':   return <DetailsScreen
+        product={state.selectedProduct!}
+        lang={state.userLanguage}
+        onBack={() => changeScreen('HOME')}
+        onViewSeller={(id) => changeScreen('SELLER_PROFILE', undefined, id)}
+        onSendEnquiry={(_sellerId, _productId) => changeScreen('MESSAGES')}
+      />;
       case 'SELL':      return <SellScreen lang={state.userLanguage} onDone={() => changeScreen('HOME')} />;
       case 'LISTINGS':  return <MyListingsScreen lang={state.userLanguage} onCreateNew={() => changeScreen('SELL')} />;
       case 'ORDERS':    return <OrdersScreen lang={state.userLanguage} />;
@@ -91,6 +99,14 @@ const App: React.FC = () => {
         setIsAuthenticated(false);
         changeScreen('ONBOARDING');
       }} />;
+      case 'SELLER_PROFILE': return <SellerProfileScreen
+        sellerId={state.selectedSellerId!}
+        lang={state.userLanguage}
+        onBack={() => changeScreen(prevScreen === 'SELLER_PROFILE' ? 'HOME' : prevScreen)}
+        onViewProduct={(p) => changeScreen('DETAILS', p)}
+        onSendEnquiry={(_sellerId) => changeScreen('MESSAGES')}
+      />;
+      case 'MESSAGES':  return <MessagesScreen lang={state.userLanguage} onViewSeller={(id) => changeScreen('SELLER_PROFILE', undefined, id)} />;
       case 'EXPLORE':   return <ExploreScreen lang={state.userLanguage} location={state.location} onBack={() => changeScreen('HOME')} />;
       case 'ASSISTANT': return <AssistantScreen lang={state.userLanguage} onBack={() => changeScreen('HOME')} />;
       case 'CALENDAR':  return <CropCalendarScreen lang={state.userLanguage} onBack={() => changeScreen('HOME')} />;

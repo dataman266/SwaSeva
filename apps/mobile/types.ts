@@ -14,6 +14,12 @@ export interface Seller {
   distance: string;
   phone: string;
   location: string;
+  speciality: string[];
+  daysOnApp: number;
+  totalSold: number;
+  bio: string;
+  bioMr: string;
+  avatarColor: string;
 }
 
 export interface Product {
@@ -38,11 +44,12 @@ export interface Product {
   mspPrice?: number; // Minimum Support Price for comparison badge (optional — not all products have MSP)
 }
 
-export type AppScreen = 'HOME' | 'DETAILS' | 'SELL' | 'LISTINGS' | 'ORDERS' | 'PROFILE' | 'ASSISTANT' | 'ONBOARDING' | 'EXPLORE' | 'CALENDAR' | 'CART' | 'CHECKOUT';
+export type AppScreen = 'HOME' | 'DETAILS' | 'SELL' | 'LISTINGS' | 'ORDERS' | 'PROFILE' | 'ASSISTANT' | 'ONBOARDING' | 'EXPLORE' | 'CALENDAR' | 'CART' | 'CHECKOUT' | 'SELLER_PROFILE' | 'MESSAGES';
 
 export interface AppState {
   currentScreen: AppScreen;
   selectedProduct?: Product;
+  selectedSellerId?: string;
   userLanguage: Language;
   location: string;
 }

@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import {
   ArrowLeft, Phone, MessageSquare, Truck, Heart,
-  MapPin, Calendar, ShieldCheck, Star, Share2, ShoppingCart,
+  MapPin, Calendar, ShieldCheck, Star, Share2, ShoppingCart, X,
 } from 'lucide-react';
 import { addToCart } from '../utils/cart.ts';
 import { haptic } from '../utils/haptic.ts';
 
 const SAVED_KEY = 'agrimart_saved';
+const CONNECTIONS_KEY = 'agrimart_connections';
 import { Product, Language } from '../types.ts';
 import { SELLERS, TRANSLATIONS } from '../constants.tsx';
 import SectionReveal from './atoms/SectionReveal.tsx';
@@ -15,9 +16,11 @@ interface DetailsScreenProps {
   product: Product;
   lang: Language;
   onBack: () => void;
+  onViewSeller: (sellerId: string) => void;
+  onSendEnquiry: (sellerId: string, productId: string) => void;
 }
 
-export default function DetailsScreen({ product, lang, onBack }: DetailsScreenProps) {
+export default function DetailsScreen({ product, lang, onBack, onViewSeller, onSendEnquiry }: DetailsScreenProps) {
   const [saved, setSaved] = useState<boolean>(() => {
     try {
       const list: string[] = JSON.parse(localStorage.getItem(SAVED_KEY) || '[]');
@@ -25,6 +28,9 @@ export default function DetailsScreen({ product, lang, onBack }: DetailsScreenPr
     } catch { return false; }
   });
   const [mounted, setMounted] = useState(false);
+  const [showTransportModal, setShowTransportModal] = useState(false);
+  const [enquiryToast, setEnquiryToast] = useState(false);
+
   const seller = SELLERS.find(s => s.id === product.sellerId);
   const isMr   = lang === Language.MARATHI;
   const t      = TRANSLATIONS[isMr ? 'mr' : 'en'];
@@ -56,6 +62,43 @@ export default function DetailsScreen({ product, lang, onBack }: DetailsScreenPr
     }
   };
 
+  const handleViewMap = () => {
+    const query = encodeURIComponent(seller?.location || 'Maharashtra, India');
+    window.open(`https://www.google.com/maps/search/?api=1&query=${query}`, '_blank', 'noopener');
+  };
+
+  const handleSendEnquiry = () => {
+    if (!seller) return;
+    const productName = isMr ? product.nameMr : product.name;
+    const productUnit = isMr ? product.unitMr : product.unit;
+    const autoMsg = isMr
+      ? t.enquiryAutoMsgMr(productName, product.price, productUnit)
+      : t.enquiryAutoMsg(productName, product.price, productUnit);
+
+    const connections: object[] = JSON.parse(localStorage.getItem(CONNECTIONS_KEY) || '[]');
+    const existing = connections.find((c: any) => c.sellerId === seller.id && c.productId === product.id);
+    if (!existing) {
+      connections.push({
+        id: `${seller.id}_${product.id}_${Date.now()}`,
+        sellerId: seller.id,
+        sellerName: seller.name,
+        productId: product.id,
+        productName,
+        message: autoMsg,
+        timestamp: Date.now(),
+        unread: false,
+      });
+      localStorage.setItem(CONNECTIONS_KEY, JSON.stringify(connections));
+    }
+
+    setEnquiryToast(true);
+    haptic.light();
+    setTimeout(() => {
+      setEnquiryToast(false);
+      onSendEnquiry(seller.id, product.id);
+    }, 900);
+  };
+
   const name    = isMr ? product.nameMr    : product.name;
   const desc    = isMr ? product.descriptionMr : product.description;
   const unit    = isMr ? product.unitMr    : product.unit;
@@ -76,7 +119,6 @@ export default function DetailsScreen({ product, lang, onBack }: DetailsScreenPr
           style={{ filter: 'brightness(0.55) saturate(0.85)' }}
         />
 
-        {/* Overlays */}
         <div className="absolute inset-0 bg-gradient-to-t from-[#0A1A0A] via-[rgba(10,26,10,0.35)] to-transparent" />
         <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#0A1A0A] to-transparent" />
 
@@ -119,7 +161,7 @@ export default function DetailsScreen({ product, lang, onBack }: DetailsScreenPr
           </span>
         </div>
 
-        {/* Name block at bottom of hero */}
+        {/* Name + price block */}
         <div className={`absolute bottom-0 left-0 right-0 px-6 pb-8 transition-all duration-700 delay-200 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
           <p className="text-[10px] font-medium tracking-[0.22em] uppercase text-[#D4C4A0] mb-1.5">{variety}</p>
           <h1 className="font-light text-[#F5F0E8] mb-3" style={{ fontSize: 'clamp(28px, 8vw, 40px)', letterSpacing: '-0.03em', lineHeight: 1.05 }}>
@@ -139,9 +181,9 @@ export default function DetailsScreen({ product, lang, onBack }: DetailsScreenPr
         <SectionReveal>
           <div className="grid grid-cols-3 gap-3">
             {[
-              { icon: Calendar, label: isMr ? 'वय' : 'Age',      value: age || '—' },
-              { icon: ShieldCheck, label: isMr ? 'मात्रा' : 'Qty', value: `${product.quantity}` },
-              { icon: MapPin,  label: isMr ? 'स्थान' : 'Distance', value: seller?.distance || '—' },
+              { icon: Calendar,    label: isMr ? 'वय' : 'Age',      value: age || '—' },
+              { icon: ShieldCheck, label: isMr ? 'मात्रा' : 'Qty',  value: `${product.quantity}` },
+              { icon: MapPin,      label: isMr ? 'स्थान' : 'Distance', value: seller?.distance || '—' },
             ].map(({ icon: Icon, label, value }) => (
               <div
                 key={label}
@@ -155,6 +197,56 @@ export default function DetailsScreen({ product, lang, onBack }: DetailsScreenPr
             ))}
           </div>
         </SectionReveal>
+
+        {/* Seller card — CLICKABLE */}
+        {seller && (
+          <SectionReveal delay={60}>
+            <button
+              onClick={() => onViewSeller(seller.id)}
+              className="w-full text-left active:scale-[0.98] transition-transform"
+              style={{ touchAction: 'manipulation' }}
+              aria-label={`View ${seller.name} profile`}
+            >
+              <div
+                className="flex items-center gap-4 p-5 rounded-2xl"
+                style={{ background: '#111C11', border: '1px solid rgba(212,196,160,0.12)' }}
+              >
+                {/* Avatar */}
+                <div
+                  className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0"
+                  style={{ background: seller.avatarColor, border: '1px solid rgba(245,240,232,0.1)' }}
+                >
+                  <span className="text-[#F5F0E8] font-medium" style={{ fontSize: '18px' }}>
+                    {seller.name.charAt(0)}
+                  </span>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-0.5">
+                    <span className="font-medium text-[#D4C4A0] truncate" style={{ fontSize: '15px', letterSpacing: '-0.01em' }}>
+                      {seller.name}
+                    </span>
+                    {seller.isVerified && <ShieldCheck size={13} className="text-[#4A8C2A] flex-shrink-0" />}
+                  </div>
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="flex items-center gap-1">
+                      <Star size={11} className="text-[#D4C4A0] fill-[#D4C4A0]" />
+                      <span className="text-[11px] font-medium text-[#D4C4A0]">{seller.rating}</span>
+                    </div>
+                    <span className="text-[10px] font-light text-[rgba(245,240,232,0.35)] uppercase tracking-[0.1em] truncate">
+                      {seller.location}
+                    </span>
+                  </div>
+                  {/* Phone number visible in listing */}
+                  <div className="flex items-center gap-1.5">
+                    <Phone size={10} className="text-[rgba(245,240,232,0.4)]" />
+                    <span className="text-[11px] font-medium text-[rgba(245,240,232,0.55)]">{seller.phone}</span>
+                  </div>
+                </div>
+                <ArrowLeft size={14} className="rotate-180 text-[rgba(245,240,232,0.2)] flex-shrink-0" />
+              </div>
+            </button>
+          </SectionReveal>
+        )}
 
         {/* Description */}
         <SectionReveal delay={80}>
@@ -175,7 +267,7 @@ export default function DetailsScreen({ product, lang, onBack }: DetailsScreenPr
           </div>
         </SectionReveal>
 
-        {/* Specifications card */}
+        {/* Specifications */}
         <SectionReveal delay={100}>
           <div className="p-6 rounded-2xl" style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)' }}>
             <div className="flex items-center gap-2 mb-4">
@@ -186,10 +278,10 @@ export default function DetailsScreen({ product, lang, onBack }: DetailsScreenPr
             </div>
             <div className="grid grid-cols-2 gap-3">
               {[
-                { label: isMr ? 'वाण / जात' : 'Variety',      value: variety || '—' },
-                { label: isMr ? 'श्रेणी' : 'Category',         value: product.category },
-                { label: isMr ? 'हमीभाव' : 'MSP Price',        value: product.mspPrice ? `₹${product.mspPrice}/${unit}` : 'N/A' },
-                { label: isMr ? 'कापणी' : 'Harvest',           value: product.harvestDate
+                { label: isMr ? 'वाण / जात' : 'Variety',  value: variety || '—' },
+                { label: isMr ? 'श्रेणी' : 'Category',     value: product.category },
+                { label: isMr ? 'हमीभाव' : 'MSP Price',    value: product.mspPrice ? `₹${product.mspPrice}/${unit}` : 'N/A' },
+                { label: isMr ? 'कापणी' : 'Harvest',       value: product.harvestDate
                     ? new Date(product.harvestDate).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' })
                     : (isMr ? 'हंगामी' : 'Seasonal') },
               ].map(({ label, value }) => (
@@ -206,28 +298,29 @@ export default function DetailsScreen({ product, lang, onBack }: DetailsScreenPr
           </div>
         </SectionReveal>
 
-        {/* Farm location card */}
+        {/* Listing location — fixed label + working Map link */}
         <SectionReveal delay={140}>
           <div className="p-6 rounded-2xl" style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)' }}>
             <div className="flex items-center gap-2 mb-4">
               <MapPin size={14} className="text-[#D4C4A0]" />
               <p className="text-[10px] font-medium tracking-[0.18em] uppercase text-[rgba(245,240,232,0.35)]">
-                {isMr ? 'शेताचे ठिकाण' : 'Farm Location'}
+                {t.listingLocation}
               </p>
             </div>
             {/* Stylised map block */}
             <div
-              className="w-full h-28 rounded-xl mb-4 relative overflow-hidden flex items-center justify-center"
+              className="w-full h-28 rounded-xl mb-4 relative overflow-hidden flex items-center justify-center cursor-pointer"
               style={{ background: '#0D1F0D', border: '1px solid rgba(74,140,42,0.2)' }}
+              onClick={handleViewMap}
+              role="button"
+              aria-label="Open in Google Maps"
             >
-              {/* Grid lines */}
               {[...Array(5)].map((_, i) => (
                 <div key={`h${i}`} style={{ position: 'absolute', left: 0, right: 0, top: `${20 * i}%`, height: 1, background: 'rgba(74,140,42,0.08)' }} />
               ))}
               {[...Array(7)].map((_, i) => (
                 <div key={`v${i}`} style={{ position: 'absolute', top: 0, bottom: 0, left: `${14.28 * i}%`, width: 1, background: 'rgba(74,140,42,0.08)' }} />
               ))}
-              {/* Pin */}
               <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
                 <div style={{
                   width: 36, height: 36, borderRadius: '50%',
@@ -248,53 +341,20 @@ export default function DetailsScreen({ product, lang, onBack }: DetailsScreenPr
                   {seller ? `${seller.distance} ${isMr ? 'तुमच्यापासून' : 'from you'}` : (isMr ? 'अंदाजे अंतर' : 'Approx. distance')}
                 </p>
               </div>
-              <div
-                className="px-3 py-1.5 rounded-full border"
-                style={{ borderColor: 'rgba(74,140,42,0.3)', background: 'rgba(45,90,27,0.12)' }}
+              <button
+                onClick={handleViewMap}
+                className="px-3 py-1.5 rounded-full border active:scale-95 transition-all"
+                style={{ borderColor: 'rgba(74,140,42,0.5)', background: 'rgba(45,90,27,0.18)', touchAction: 'manipulation' }}
               >
                 <span className="text-[10px] font-medium text-[#4A8C2A] tracking-[0.1em] uppercase">
-                  {isMr ? 'नकाशा पहा' : 'View Map'}
+                  {t.viewMap}
                 </span>
-              </div>
+              </button>
             </div>
           </div>
         </SectionReveal>
 
-        {/* Seller card */}
-        {seller && (
-          <SectionReveal delay={120}>
-            <div
-              className="flex items-center gap-4 p-5 rounded-2xl"
-              style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)' }}
-            >
-              <div
-                className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0"
-                style={{ background: '#1A2D1A', border: '1px solid rgba(245,240,232,0.07)' }}
-              >
-                🏪
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="font-medium text-[#F5F0E8] truncate" style={{ fontSize: '15px', letterSpacing: '-0.01em' }}>
-                    {seller.name}
-                  </span>
-                  {seller.isVerified && <ShieldCheck size={13} className="text-[#D4C4A0] flex-shrink-0" />}
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-1">
-                    <Star size={11} className="text-[#D4C4A0] fill-[#D4C4A0]" />
-                    <span className="text-[11px] font-medium text-[#D4C4A0]">{seller.rating}</span>
-                  </div>
-                  <span className="text-[10px] font-light text-[rgba(245,240,232,0.35)] uppercase tracking-[0.1em]">
-                    {seller.location}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </SectionReveal>
-        )}
-
-        {/* Transport section */}
+        {/* Transport */}
         <SectionReveal delay={160}>
           <div className="p-6 rounded-2xl" style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)' }}>
             <div className="flex items-center gap-3 mb-5">
@@ -308,9 +368,22 @@ export default function DetailsScreen({ product, lang, onBack }: DetailsScreenPr
                 <span className="font-light text-[rgba(245,240,232,0.65)]" style={{ fontSize: '14px' }}>{t.selfPickup}</span>
                 <ArrowLeft size={14} className="rotate-180 text-[rgba(245,240,232,0.3)]" />
               </button>
-              <button className="flex items-center justify-between px-5 py-4 rounded-xl border border-[rgba(212,196,160,0.25)] bg-[rgba(212,196,160,0.06)] text-left active:bg-[rgba(212,196,160,0.1)] transition-all">
-                <span className="font-medium text-[#D4C4A0]" style={{ fontSize: '14px' }}>{t.requestTransport}</span>
-                <ArrowLeft size={14} className="rotate-180 text-[#D4C4A0]" />
+              {/* Coming Soon transport */}
+              <button
+                onClick={() => setShowTransportModal(true)}
+                className="flex items-center justify-between px-5 py-4 rounded-xl border text-left active:opacity-80 transition-all"
+                style={{ borderColor: 'rgba(212,196,160,0.2)', background: 'rgba(212,196,160,0.04)' }}
+              >
+                <div>
+                  <span className="font-medium text-[rgba(212,196,160,0.55)]" style={{ fontSize: '14px' }}>{t.requestTransport}</span>
+                  <span
+                    className="ml-2 text-[9px] font-medium tracking-[0.12em] uppercase px-2 py-0.5 rounded-full"
+                    style={{ background: 'rgba(212,196,160,0.12)', color: '#D4C4A0' }}
+                  >
+                    {t.comingSoon}
+                  </span>
+                </div>
+                <ArrowLeft size={14} className="rotate-180 text-[rgba(212,196,160,0.25)]" />
               </button>
             </div>
           </div>
@@ -323,7 +396,7 @@ export default function DetailsScreen({ product, lang, onBack }: DetailsScreenPr
         style={{ background: 'linear-gradient(to top, #0A1A0A 70%, transparent)' }}
       >
         <div className="flex gap-3">
-          {/* Call button — secondary (outline) */}
+          {/* Call button */}
           <a
             href={`tel:${seller?.phone}`}
             className="flex items-center justify-center gap-2 px-5 h-12 rounded-full border border-[rgba(245,240,232,0.15)] text-[rgba(245,240,232,0.75)] active:scale-95 transition-all font-medium text-[13px] tracking-[0.06em]"
@@ -332,7 +405,7 @@ export default function DetailsScreen({ product, lang, onBack }: DetailsScreenPr
             <Phone size={16} className="text-[#D4C4A0]" />
             {isMr ? 'कॉल' : 'Call'}
           </a>
-          {/* Add to Cart button */}
+          {/* Cart button */}
           <button
             onClick={() => { addToCart(product.id); haptic.light(); }}
             className="flex items-center justify-center gap-2 px-5 h-12 rounded-full border border-[rgba(212,196,160,0.3)] text-[#D4C4A0] active:scale-95 transition-all font-medium text-[13px]"
@@ -341,23 +414,70 @@ export default function DetailsScreen({ product, lang, onBack }: DetailsScreenPr
             <ShoppingCart size={16} />
             {isMr ? 'कार्ट' : 'Cart'}
           </button>
-          {/* WhatsApp button — primary (green fill) */}
-          <a
-            href={`https://wa.me/${seller?.phone?.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
-              isMr
-                ? `नमस्कार, मला तुमचे ${name} (₹${product.price}/${unit}) Apla AgriMart वर पाहिले. मला अधिक माहिती हवी आहे.`
-                : `Hi, I'm interested in your ${name} (₹${product.price}/${unit}) listed on Apla AgriMart.`
-            )}`}
-            target="_blank"
-            rel="noopener noreferrer"
+          {/* Send Enquiry — primary CTA */}
+          <button
+            onClick={handleSendEnquiry}
             className="flex-1 flex items-center justify-center gap-2 h-12 rounded-full text-[#F5F0E8] font-medium text-[13px] tracking-[0.06em] active:scale-95 transition-all"
             style={{ background: '#2D5A1B', touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent' }}
           >
             <MessageSquare size={16} />
-            WhatsApp
-          </a>
+            {t.sendEnquiry}
+          </button>
         </div>
       </div>
+
+      {/* ── Enquiry sent toast ────────────────────────────────────── */}
+      {enquiryToast && (
+        <div
+          className="fixed top-20 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-5 py-3 rounded-full"
+          style={{ background: '#2D5A1B', boxShadow: '0 8px 32px rgba(0,0,0,0.4)' }}
+        >
+          <ShieldCheck size={15} className="text-[#F5F0E8]" />
+          <span className="text-[13px] font-medium text-[#F5F0E8] tracking-[0.05em]">{t.enquirySent}</span>
+        </div>
+      )}
+
+      {/* ── Coming Soon modal ─────────────────────────────────────── */}
+      {showTransportModal && (
+        <div
+          className="fixed inset-0 z-50 flex items-end justify-center"
+          style={{ background: 'rgba(0,0,0,0.6)' }}
+          onClick={() => setShowTransportModal(false)}
+        >
+          <div
+            className="w-full max-w-md mx-auto rounded-t-3xl p-8 pb-12"
+            style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.08)' }}
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-2xl flex items-center justify-center" style={{ background: 'rgba(212,196,160,0.1)' }}>
+                  <Truck size={18} className="text-[#D4C4A0]" />
+                </div>
+                <span className="font-medium text-[#F5F0E8]" style={{ fontSize: '17px', letterSpacing: '-0.01em' }}>
+                  {t.comingSoon}
+                </span>
+              </div>
+              <button
+                onClick={() => setShowTransportModal(false)}
+                className="w-8 h-8 rounded-full flex items-center justify-center"
+                style={{ background: 'rgba(245,240,232,0.07)' }}
+              >
+                <X size={16} className="text-[rgba(245,240,232,0.55)]" />
+              </button>
+            </div>
+            <p className="font-light text-[rgba(245,240,232,0.6)] leading-relaxed" style={{ fontSize: '14px' }}>
+              {t.comingSoonDesc}
+            </p>
+            <button
+              onClick={() => setShowTransportModal(false)}
+              className="mt-6 w-full h-12 rounded-full font-medium text-[13px] text-[rgba(245,240,232,0.7)] border border-[rgba(245,240,232,0.12)] active:scale-95 transition-all"
+            >
+              {isMr ? 'बंद करा' : 'Got it'}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
