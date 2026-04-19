@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, PlusSquare, ShoppingBag, User, MessageSquare } from 'lucide-react';
+import { Home, PlusSquare, ShoppingBag, User, LayoutList } from 'lucide-react';
 import { AppScreen, Language } from '../types.ts';
 import { TRANSLATIONS } from '../constants.tsx';
 
@@ -14,11 +14,11 @@ export default function BottomNav({ activeScreen, onNavigate, lang, unreadMessag
   const t = TRANSLATIONS[lang === Language.ENGLISH ? 'en' : 'mr'];
 
   const navItems = [
-    { id: 'HOME'     as AppScreen, label: t.home,     icon: Home         },
-    { id: 'SELL'     as AppScreen, label: t.sell,     icon: PlusSquare   },
-    { id: 'MESSAGES' as AppScreen, label: t.messages, icon: MessageSquare, badge: unreadMessages },
-    { id: 'ORDERS'   as AppScreen, label: t.orders,   icon: ShoppingBag  },
-    { id: 'PROFILE'  as AppScreen, label: t.profile,  icon: User         },
+    { id: 'HOME'     as AppScreen, label: t.home,     icon: Home       },
+    { id: 'SELL'     as AppScreen, label: t.sell,     icon: PlusSquare },
+    { id: 'LISTINGS' as AppScreen, label: t.listings,  icon: LayoutList  },
+    { id: 'ORDERS'   as AppScreen, label: t.orders,   icon: ShoppingBag },
+    { id: 'PROFILE'  as AppScreen, label: t.profile,  icon: User        },
   ];
 
   return (
@@ -27,7 +27,7 @@ export default function BottomNav({ activeScreen, onNavigate, lang, unreadMessag
       style={{ background: 'rgba(10,26,10,0.92)' }}
     >
       <div className="flex justify-around items-center px-2 pt-2">
-        {navItems.map(({ id, label, icon: Icon, badge }) => {
+        {navItems.map(({ id, label, icon: Icon }) => {
           const active = activeScreen === id;
           return (
             <button
@@ -51,14 +51,6 @@ export default function BottomNav({ activeScreen, onNavigate, lang, unreadMessag
                     }`}
                   />
                 </div>
-                {badge !== undefined && badge > 0 && (
-                  <div
-                    className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full flex items-center justify-center"
-                    style={{ background: '#D4C4A0' }}
-                  >
-                    <span className="text-[#0A1A0A] font-medium" style={{ fontSize: '8px' }}>{badge > 9 ? '9+' : badge}</span>
-                  </div>
-                )}
               </div>
               <span
                 className={`transition-colors duration-300 ${

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Languages, Bell } from 'lucide-react';
+import { Languages, Bell, MessageSquare } from 'lucide-react';
 import { Language } from '../types.ts';
 import Logo from './Logo.tsx';
 import CartBadge from './atoms/CartBadge.tsx';
@@ -10,6 +10,7 @@ interface HeaderProps {
   onLanguageChange: (lang: Language) => void;
   onOpenAssistant: () => void;
   onOpenCart: () => void;
+  onOpenMessages: () => void;
   scrollParent?: React.RefObject<HTMLDivElement>;
 }
 
@@ -18,6 +19,7 @@ export default function Header({
   language,
   onLanguageChange,
   onOpenCart,
+  onOpenMessages,
 }: HeaderProps) {
   const [scrolled, setScrolled] = useState(false);
 
@@ -70,6 +72,15 @@ export default function Header({
             <span style={{ fontSize: '10px', fontWeight: 500, letterSpacing: '0.1em' }}>
               {language === Language.ENGLISH ? 'मराठी' : 'ENG'}
             </span>
+          </button>
+
+          {/* Messages */}
+          <button
+            onClick={onOpenMessages}
+            className="relative w-8 h-8 flex items-center justify-center rounded-full border border-[rgba(245,240,232,0.1)] text-[rgba(245,240,232,0.55)] hover:text-[#F5F0E8] transition-all active:scale-90"
+            style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'rgba(45,90,27,0.2)' }}
+          >
+            <MessageSquare size={15} />
           </button>
 
           {/* Cart badge */}
