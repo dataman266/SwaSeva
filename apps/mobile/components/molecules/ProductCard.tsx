@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { MapPin, ArrowRight, Heart } from 'lucide-react';
+import { MapPin, ArrowRight, Heart, Phone, MessageSquare } from 'lucide-react';
 import { Product, Seller } from '../../types.ts';
 
 interface ProductCardProps {
@@ -12,6 +12,7 @@ interface ProductCardProps {
   isSelected?: boolean;
   isSaved?: boolean;
   onSave?: (e: React.MouseEvent) => void;
+  onEnquiry?: (e: React.MouseEvent) => void;
 }
 
 /**
@@ -29,6 +30,7 @@ export default function ProductCard({
   isSelected = false,
   isSaved = false,
   onSave,
+  onEnquiry,
 }: ProductCardProps) {
   const [visible, setVisible] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -163,6 +165,32 @@ export default function ProductCard({
             </div>
           </div>
         </div>
+
+        {/* Call + Enquiry buttons */}
+        {seller && (onEnquiry) && (
+          <div
+            className="flex gap-2 px-4 pb-4"
+            onClick={e => e.stopPropagation()}
+          >
+            <a
+              href={`tel:${seller.phone}`}
+              onClick={e => e.stopPropagation()}
+              className="flex items-center justify-center gap-1.5 flex-1 h-10 rounded-full border border-[rgba(245,240,232,0.15)] text-[rgba(245,240,232,0.7)] text-[12px] font-medium active:scale-95 transition-all"
+              style={{ touchAction: 'manipulation' }}
+            >
+              <Phone size={13} className="text-[#D4C4A0]" />
+              {isMr ? 'कॉल' : 'Call'}
+            </a>
+            <button
+              onClick={onEnquiry}
+              className="flex items-center justify-center gap-1.5 flex-1 h-10 rounded-full text-[#F5F0E8] text-[12px] font-medium active:scale-95 transition-all"
+              style={{ background: '#2D5A1B', touchAction: 'manipulation' }}
+            >
+              <MessageSquare size={13} />
+              {isMr ? 'चौकशी' : 'Enquiry'}
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

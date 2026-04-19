@@ -72,7 +72,12 @@ const App: React.FC = () => {
 
   const changeScreen = (screen: AppScreen, product?: Product, sellerId?: string) => {
     setPrevScreen(state.currentScreen);
-    setState(prev => ({ ...prev, currentScreen: screen, selectedProduct: product, selectedSellerId: sellerId }));
+    setState(prev => ({
+      ...prev,
+      currentScreen: screen,
+      selectedProduct: product !== undefined ? product : prev.selectedProduct,
+      selectedSellerId: sellerId !== undefined ? sellerId : prev.selectedSellerId,
+    }));
     window.scrollTo(0, 0);
   };
 
@@ -80,7 +85,7 @@ const App: React.FC = () => {
 
   const renderScreen = () => {
     switch (state.currentScreen) {
-      case 'HOME':      return <HomeScreen lang={state.userLanguage} location={state.location} onViewDetails={(p) => changeScreen('DETAILS', p)} onOpenAssistant={() => changeScreen('ASSISTANT')} onOpenExplore={() => changeScreen('EXPLORE')} />;
+      case 'HOME':      return <HomeScreen lang={state.userLanguage} location={state.location} onViewDetails={(p) => changeScreen('DETAILS', p)} onOpenAssistant={() => changeScreen('ASSISTANT')} onOpenExplore={() => changeScreen('EXPLORE')} onOpenMessages={() => changeScreen('MESSAGES')} />;
       case 'DETAILS':   return <DetailsScreen
         product={state.selectedProduct!}
         lang={state.userLanguage}
@@ -121,7 +126,7 @@ const App: React.FC = () => {
           }}
         />
       );
-      default: return <HomeScreen lang={state.userLanguage} location={state.location} onViewDetails={(p) => changeScreen('DETAILS', p)} onOpenAssistant={() => changeScreen('ASSISTANT')} onOpenExplore={() => changeScreen('EXPLORE')} />;
+      default: return <HomeScreen lang={state.userLanguage} location={state.location} onViewDetails={(p) => changeScreen('DETAILS', p)} onOpenAssistant={() => changeScreen('ASSISTANT')} onOpenExplore={() => changeScreen('EXPLORE')} onOpenMessages={() => changeScreen('MESSAGES')} />;
     }
   };
 

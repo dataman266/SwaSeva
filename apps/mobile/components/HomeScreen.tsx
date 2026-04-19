@@ -10,12 +10,15 @@ import SectionReveal from './atoms/SectionReveal.tsx';
 import SkeletonCard from './atoms/SkeletonCard.tsx';
 import WeatherWidget from './atoms/WeatherWidget.tsx';
 
+const CONNECTIONS_KEY = 'agrimart_connections';
+
 interface HomeScreenProps {
   lang: Language;
   location: string;
   onViewDetails: (p: Product) => void;
   onOpenAssistant: () => void;
   onOpenExplore: () => void;
+  onOpenMessages: () => void;
 }
 
 const SAVED_KEY = 'agrimart_saved';
@@ -24,7 +27,7 @@ function getSavedIds(): string[] {
   try { return JSON.parse(localStorage.getItem(SAVED_KEY) || '[]'); } catch { return []; }
 }
 
-export default function HomeScreen({ lang, location, onViewDetails, onOpenAssistant, onOpenExplore }: HomeScreenProps) {
+export default function HomeScreen({ lang, location, onViewDetails, onOpenAssistant, onOpenExplore, onOpenMessages }: HomeScreenProps) {
   const [search, setSearch]           = useState('');
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [activeCategory, setActiveCategory] = useState('all');
@@ -68,6 +71,36 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
       return next;
     });
     haptic.light();
+  };
+
+  const handleEnquiry = (e: React.MouseEvent, product: Product) => {
+    e.stopPropagation();
+    const seller = SELLERS.find(s => s.id === product.sellerId);
+    if (!seller) return;
+    const productName = isMr ? product.nameMr : product.name;
+    const productUnit = isMr ? product.unitMr : product.unit;
+    const autoMsg = isMr
+      ? `नमस्कार ${seller.name}, मला ${productName} (₹${product.price}/${productUnit}) बद्दल अधिक माहिती हवी आहे.`
+      : `Hi ${seller.name}, I'm interested in your ${productName} listed at ₹${product.price}/${productUnit} on Apla AgriMart.`;
+    try {
+      const connections: object[] = JSON.parse(localStorage.getItem(CONNECTIONS_KEY) || '[]');
+      const existing = connections.find((c: any) => c.sellerId === seller.id && c.productId === product.id);
+      if (!existing) {
+        connections.push({
+          id: `${seller.id}_${product.id}_${Date.now()}`,
+          sellerId: seller.id,
+          sellerName: seller.name,
+          productId: product.id,
+          productName,
+          message: autoMsg,
+          timestamp: Date.now(),
+          unread: false,
+        });
+        localStorage.setItem(CONNECTIONS_KEY, JSON.stringify(connections));
+      }
+    } catch {}
+    haptic.light();
+    onOpenMessages();
   };
 
   const filtersActive = sortBy !== 'newest' || priceMin !== '' || priceMax !== '';
@@ -249,6 +282,7 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
                   isSelected={selectedIds.includes(product.id)}
                   isSaved={savedIds.includes(product.id)}
                   onSave={e => toggleSave(e, product.id)}
+                  onEnquiry={e => handleEnquiry(e, product)}
                 />
               );
             })
