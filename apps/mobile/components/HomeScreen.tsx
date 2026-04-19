@@ -129,7 +129,9 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
   const isLocalProduct = (p: Product) => {
     if (!locationActive) return true;
     const seller = SELLERS.find(s => s.id === p.sellerId);
-    return !!seller?.location.toLowerCase().includes(locationFilter.region.toLowerCase());
+    if (!seller) return false;
+    // Prefer string matching on location field (sellers don't have lat/lng in mock data)
+    return seller.location.toLowerCase().includes(locationFilter.region.toLowerCase().split(',')[0].trim());
   };
 
   const localProducts = locationActive ? filtered.filter(p => isLocalProduct(p)) : filtered;
@@ -228,37 +230,35 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
           </span>
         </SectionReveal>
 
-        {/* Location filter pill */}
+        {/* Location filter pill — always visible with current location + radius */}
         <button
           onClick={() => setShowLocationPicker(true)}
-          className="flex items-center gap-2 mb-5 active:scale-95 transition-all"
+          className="flex items-center gap-2 mb-5 active:scale-[0.97] transition-all"
           style={{
-            padding: '0.45rem 1rem',
+            padding: '0.5rem 1rem',
             borderRadius: '2rem',
             background: locationActive ? 'rgba(45,90,27,0.18)' : 'rgba(245,240,232,0.05)',
-            border: locationActive ? '1px solid rgba(74,140,42,0.45)' : '1px solid rgba(245,240,232,0.1)',
+            border: locationActive ? '1px solid rgba(74,140,42,0.5)' : '1px solid rgba(245,240,232,0.1)',
             touchAction: 'manipulation',
+            alignSelf: 'flex-start',
           }}
         >
           <MapPin
             size={13}
-            style={{ color: locationActive ? '#4A8C2A' : 'rgba(245,240,232,0.4)', flexShrink: 0 }}
+            style={{ color: locationActive ? '#4A8C2A' : 'rgba(245,240,232,0.35)', flexShrink: 0 }}
           />
           <span style={{
             fontSize: '12px',
             fontWeight: 500,
             letterSpacing: '0.01em',
-            color: locationActive ? '#D4C4A0' : 'rgba(245,240,232,0.45)',
+            color: locationActive ? '#D4C4A0' : 'rgba(245,240,232,0.4)',
           }}>
             {locationActive
-              ? (isMr ? locationFilter.regionLabelMr : locationFilter.regionLabel) + ` · ${locationFilter.radius} km`
-              : (isMr ? 'स्थान निवडा' : 'Select Location')}
+              ? `${isMr ? locationFilter.regionLabelMr : locationFilter.regionLabel} · ${locationFilter.radius} km`
+              : `${isMr ? 'सर्व भारत' : 'All India'} · ${locationFilter.radius} km`}
           </span>
           {locationActive && (
-            <span
-              className="w-1.5 h-1.5 rounded-full flex-shrink-0"
-              style={{ background: '#4A8C2A' }}
-            />
+            <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: '#4A8C2A' }} />
           )}
         </button>
 
