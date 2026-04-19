@@ -392,8 +392,8 @@ export default function DetailsScreen({ product, lang, onBack, onViewSeller, onS
 
       {/* ── Sticky bottom CTA ─────────────────────────────────────── */}
       <div
-        className={`fixed bottom-0 left-0 right-0 px-5 pb-safe pt-4 transition-all duration-700 delay-500 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}
-        style={{ background: 'linear-gradient(to top, #0A1A0A 70%, transparent)' }}
+        className={`fixed left-0 right-0 px-5 pt-4 pb-4 transition-all duration-700 delay-500 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}
+        style={{ bottom: 'calc(60px + env(safe-area-inset-bottom, 0px))', background: 'linear-gradient(to top, #0A1A0A 80%, transparent)', paddingBottom: '12px' }}
       >
         <div className="flex gap-3">
           {/* Call button */}
