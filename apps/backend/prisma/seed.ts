@@ -1,7 +1,11 @@
 import { PrismaClient, RoleType, ProductStatus, UnitType } from '@prisma/client';
+import { PrismaPg } from '@prisma/adapter-pg';
+import { Pool } from 'pg';
 import { seedCategories } from './seeders/categories.seeder';
 
-const prisma = new PrismaClient();
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+const adapter = new PrismaPg(pool);
+const prisma = new PrismaClient({ adapter } as ConstructorParameters<typeof PrismaClient>[0]);
 
 async function main() {
   console.log('Starting seed...');
@@ -67,7 +71,7 @@ async function main() {
   });
 
   // Buyer
-  const buyer = await prisma.user.upsert({
+  await prisma.user.upsert({
     where: { phone: '+919876543212' },
     update: {},
     create: {
