@@ -323,7 +323,9 @@ export default function LocationPickerModal({ isOpen, current, isMr, onApply, on
               </div>
 
               {/* ── Scrollable middle ─────────────── */}
-              <div className="flex-1 overflow-y-auto" style={{ overscrollBehavior: 'contain' }}>
+              {/* minHeight:0 is required — without it flex-1 items use min-height:auto
+                  and refuse to shrink, pushing the CTA off-screen */}
+              <div className="flex-1 overflow-y-auto" style={{ overscrollBehavior: 'contain', minHeight: 0 }}>
 
                 {/* Selected area */}
                 <div className="px-5 py-4" style={{ borderTop: '1px solid rgba(245,240,232,0.07)', borderBottom: '1px solid rgba(245,240,232,0.07)' }}>
