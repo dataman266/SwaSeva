@@ -1,93 +1,399 @@
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
-enum Role {
+// ─── Enums ───────────────────────────────────────────────────────────────────
+
+enum RoleType {
   FARMER
-  SELLER
+  BUYER
+  SUPPLIER
+  RETAILER
   ADMIN
+}
+
+enum KycStatus {
+  NOT_SUBMITTED
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum ProductStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  SOLD_OUT
+  INACTIVE
+  EXPIRED
+}
+
+enum UnitType {
+  KG
+  QUINTAL
+  TON
+  PIECE
+  DOZEN
+  LITRE
+  BUNDLE
+  BOX
 }
 
 enum OrderStatus {
   PENDING
   CONFIRMED
-  COMPLETED
+  PROCESSING
+  DISPATCHED
+  DELIVERED
   CANCELLED
+  REFUNDED
 }
 
 enum PaymentStatus {
-  PAID
-  COD
   PENDING
+  SUCCESS
+  FAILED
+  REFUNDED
+  COD_PENDING
+  COD_COLLECTED
 }
 
-model User {
-  id           String   @id @default(uuid())
-  phone        String   @unique
-  role         Role     @default(FARMER)
-  languagePref String   @default("mr") @map("language_pref")
-  location     Json?    // Storing {lat, lng} as JSON for simplicity in MVP
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @updatedAt @map("updated_at")
+enum PaymentMethod {
+  UPI
+  COD
+  BANK_TRANSFER
+  WALLET
+}
 
-  sellerProfile Seller?
-  orders        Order[] @relation("BuyerOrders")
-  sales         Order[] @relation("SellerOrders")
-  
+enum DeliveryStatus {
+  PENDING
+  DISPATCHED
+  IN_TRANSIT
+  DELIVERED
+  FAILED
+}
+
+enum NotifType {
+  ORDER_UPDATE
+  PRICE_ALERT
+  NEW_INQUIRY
+  SYSTEM
+  KYC_UPDATE
+  PAYMENT
+}
+
+enum InquiryStatus {
+  OPEN
+  REPLIED
+  CLOSED
+}
+
+// ─── Models ──────────────────────────────────────────────────────────────────
+
+model User {
+  id        String   @id @default(uuid())
+  phone     String   @unique
+  email     String?  @unique
+  name_en   String?
+  name_mr   String?
+  avatarUrl String?  @map("avatar_url")
+  isActive  Boolean  @default(true) @map("is_active")
+  state     String?
+  district  String?
+  taluka    String?
+  village   String?
+  fcmToken  String?  @map("fcm_token")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  roles         UserRole[]
+  kyc           Kyc?
+  products      Product[]
+  buyerOrders   Order[]        @relation("BuyerOrders")
+  reviewsGiven  Review[]       @relation("ReviewsGiven")
+  reviewsReceived Review[]     @relation("ReviewsReceived")
+  notifications Notification[]
+  priceAlerts   PriceAlert[]
+  cart          CartItem[]
+  sellerItems   OrderItem[]    @relation("SellerItems")
+  sellerInquiries Inquiry[]    @relation("SellerInquiries")
+  buyerInquiries  Inquiry[]    @relation("BuyerInquiries")
+
   @@map("users")
 }
 
-model Seller {
-  id               String  @id @default(uuid())
-  userId           String  @unique @map("user_id")
-  businessName     String  @map("business_name")
-  isVerified       Boolean @default(false) @map("is_verified")
-  rating           Decimal @default(0.0) @db.Decimal(3, 2)
-  verificationDocs Json?   @map("verification_docs")
-  
-  user     User      @relation(fields: [userId], references: [id])
-  products Product[]
+model UserRole {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  role      RoleType
+  createdAt DateTime @default(now()) @map("created_at")
 
-  @@map("sellers")
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, role])
+  @@map("user_roles")
+}
+
+model Kyc {
+  id               String    @id @default(uuid())
+  userId           String    @unique @map("user_id")
+  documentType     String    @map("document_type")
+  documentNumber   String    @map("document_number")
+  documentFrontUrl String    @map("document_front_url")
+  documentBackUrl  String?   @map("document_back_url")
+  farmSizeHectares String?   @map("farm_size_hectares")
+  status           KycStatus @default(PENDING)
+  rejectionReason  String?   @map("rejection_reason")
+  reviewedAt       DateTime? @map("reviewed_at")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("kyc_documents")
+}
+
+model Category {
+  id        String   @id @default(uuid())
+  name_en   String   @unique
+  name_mr   String?
+  slug      String   @unique
+  iconUrl   String?  @map("icon_url")
+  parentId  String?  @map("parent_id")
+  sortOrder Int      @default(0) @map("sort_order")
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  parent       Category?    @relation("CategoryTree", fields: [parentId], references: [id])
+  children     Category[]   @relation("CategoryTree")
+  products     Product[]
+  marketPrices MarketPrice[]
+
+  @@map("categories")
 }
 
 model Product {
-  id            String   @id @default(uuid())
-  sellerId      String   @map("seller_id")
-  nameEn        String   @map("name_en")
-  nameMr        String   @map("name_mr")
-  price         Decimal  @db.Decimal(10, 2)
-  stockQuantity Int      @map("stock_quantity")
-  images        String[]
-  isActive      Boolean  @default(true) @map("is_active")
-  category      String
-  createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt @map("updated_at")
+  id              String        @id @default(uuid())
+  sellerId        String        @map("seller_id")
+  categoryId      String        @map("category_id")
+  name_en         String
+  name_mr         String?
+  description_en  String?
+  description_mr  String?
+  pricePerUnit    Decimal       @db.Decimal(10, 2) @map("price_per_unit")
+  unit            UnitType      @default(KG)
+  quantityAvailable Decimal     @db.Decimal(10, 3) @map("quantity_available")
+  variety         String?
+  images          String[]
+  status          ProductStatus @default(DRAFT)
+  district        String?
+  taluka          String?
+  village         String?
+  viewsCount      Int           @default(0) @map("views_count")
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
 
-  seller Seller @relation(fields: [sellerId], references: [id])
+  seller    User        @relation(fields: [sellerId], references: [id])
+  category  Category    @relation(fields: [categoryId], references: [id])
+  orderItems OrderItem[]
+  reviews   Review[]
+  inquiries Inquiry[]
+  cartItems CartItem[]
 
   @@map("products")
 }
 
-model Order {
-  id            String        @id @default(uuid())
-  buyerId       String        @map("buyer_id")
-  sellerId      String        @map("seller_id")
-  status        OrderStatus   @default(PENDING)
-  totalAmount   Decimal       @map("total_amount") @db.Decimal(10, 2)
-  paymentStatus PaymentStatus @default(PENDING) @map("payment_status")
-  items         Json
-  createdAt     DateTime      @default(now()) @map("created_at")
-  updatedAt     DateTime      @updatedAt @map("updated_at")
+model CartItem {
+  id        String   @id @default(uuid())
+  buyerId   String   @map("buyer_id")
+  productId String   @map("product_id")
+  quantity  Decimal  @db.Decimal(10, 3)
+  addedAt   DateTime @default(now()) @map("added_at")
 
-  buyer  User @relation("BuyerOrders", fields: [buyerId], references: [id])
-  seller User @relation("SellerOrders", fields: [sellerId], references: [id])
+  buyer   User    @relation(fields: [buyerId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([buyerId, productId])
+  @@map("cart_items")
+}
+
+model Order {
+  id               String      @id @default(uuid())
+  orderNumber      String      @unique @map("order_number")
+  buyerId          String      @map("buyer_id")
+  status           OrderStatus @default(PENDING)
+  totalAmount      Decimal     @db.Decimal(10, 2) @map("total_amount")
+  deliveryAddress  String?     @map("delivery_address")
+  deliveryDistrict String?     @map("delivery_district")
+  deliveryTaluka   String?     @map("delivery_taluka")
+  deliveryVillage  String?     @map("delivery_village")
+  notes            String?
+  createdAt        DateTime    @default(now()) @map("created_at")
+  updatedAt        DateTime    @updatedAt @map("updated_at")
+
+  buyer    User        @relation("BuyerOrders", fields: [buyerId], references: [id])
+  items    OrderItem[]
+  payment  Payment?
+  delivery Delivery?
 
   @@map("orders")
+}
+
+model OrderItem {
+  id           String  @id @default(uuid())
+  orderId      String  @map("order_id")
+  productId    String  @map("product_id")
+  sellerId     String  @map("seller_id")
+  quantity     Decimal @db.Decimal(10, 3)
+  pricePerUnit Decimal @db.Decimal(10, 2) @map("price_per_unit")
+  totalPrice   Decimal @db.Decimal(10, 2) @map("total_price")
+
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+  seller  User    @relation("SellerItems", fields: [sellerId], references: [id])
+
+  @@map("order_items")
+}
+
+model Payment {
+  id          String        @id @default(uuid())
+  orderId     String        @unique @map("order_id")
+  amount      Decimal       @db.Decimal(10, 2)
+  method      PaymentMethod
+  status      PaymentStatus @default(PENDING)
+  gatewayRef  String?       @map("gateway_ref")
+  paidAt      DateTime?     @map("paid_at")
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("payments")
+}
+
+model Delivery {
+  id                String         @id @default(uuid())
+  orderId           String         @unique @map("order_id")
+  status            DeliveryStatus @default(PENDING)
+  trackingNumber    String?        @map("tracking_number")
+  carrier           String?
+  estimatedDelivery DateTime?      @map("estimated_delivery")
+  deliveredAt       DateTime?      @map("delivered_at")
+  createdAt         DateTime       @default(now()) @map("created_at")
+  updatedAt         DateTime       @updatedAt @map("updated_at")
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("deliveries")
+}
+
+model Inquiry {
+  id         String        @id @default(uuid())
+  productId  String        @map("product_id")
+  buyerId    String        @map("buyer_id")
+  sellerId   String        @map("seller_id")
+  message_en String?
+  message_mr String?
+  quantity   Decimal?      @db.Decimal(10, 3)
+  status     InquiryStatus @default(OPEN)
+  reply_en   String?
+  reply_mr   String?
+  repliedAt  DateTime?     @map("replied_at")
+  createdAt  DateTime      @default(now()) @map("created_at")
+  updatedAt  DateTime      @updatedAt @map("updated_at")
+
+  product Product @relation(fields: [productId], references: [id])
+  buyer   User    @relation("BuyerInquiries", fields: [buyerId], references: [id])
+  seller  User    @relation("SellerInquiries", fields: [sellerId], references: [id])
+
+  @@map("inquiries")
+}
+
+model Review {
+  id          String   @id @default(uuid())
+  reviewerId  String   @map("reviewer_id")
+  revieweeId  String   @map("reviewee_id")
+  productId   String?  @map("product_id")
+  orderId     String?  @map("order_id")
+  rating      Int
+  comment_en  String?
+  comment_mr  String?
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  reviewer User     @relation("ReviewsGiven", fields: [reviewerId], references: [id])
+  reviewee User     @relation("ReviewsReceived", fields: [revieweeId], references: [id])
+  product  Product? @relation(fields: [productId], references: [id])
+
+  @@map("reviews")
+}
+
+model Notification {
+  id        String    @id @default(uuid())
+  userId    String    @map("user_id")
+  type      NotifType
+  title_en  String
+  title_mr  String?
+  body_en   String
+  body_mr   String?
+  data      Json?
+  readAt    DateTime? @map("read_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+}
+
+model MarketPrice {
+  id           String   @id @default(uuid())
+  categoryId   String   @map("category_id")
+  commodity_en String
+  commodity_mr String?
+  market       String
+  district     String
+  minPrice     Decimal  @db.Decimal(10, 2) @map("min_price")
+  maxPrice     Decimal  @db.Decimal(10, 2) @map("max_price")
+  modalPrice   Decimal  @db.Decimal(10, 2) @map("modal_price")
+  unit         String   @default("quintal")
+  recordedAt   DateTime @map("recorded_at")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  category Category @relation(fields: [categoryId], references: [id])
+
+  @@index([district, commodity_en])
+  @@map("market_prices")
+}
+
+model PriceAlert {
+  id           String    @id @default(uuid())
+  userId       String    @map("user_id")
+  commodity_en String
+  district     String?
+  targetPrice  Decimal   @db.Decimal(10, 2) @map("target_price")
+  direction    String    @default("BELOW")
+  isActive     Boolean   @default(true) @map("is_active")
+  triggeredAt  DateTime? @map("triggered_at")
+  createdAt    DateTime  @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("price_alerts")
+}
+
+model OtpSession {
+  id        String    @id @default(uuid())
+  phone     String
+  otpHash   String    @map("otp_hash")
+  expiresAt DateTime  @map("expires_at")
+  usedAt    DateTime? @map("used_at")
+  attempts  Int       @default(0)
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  @@index([phone])
+  @@map("otp_sessions")
 }

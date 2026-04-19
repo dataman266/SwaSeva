@@ -1,0 +1,10 @@
+import { PartialType } from '@nestjs/mapped-types';
+import { IsOptional, IsEnum } from 'class-validator';
+import { ProductStatus } from '@prisma/client';
+import { CreateProductDto } from './create-product.dto';
+
+export class UpdateProductDto extends PartialType(CreateProductDto) {
+  @IsOptional()
+  @IsEnum(ProductStatus)
+  status?: ProductStatus;
+}
