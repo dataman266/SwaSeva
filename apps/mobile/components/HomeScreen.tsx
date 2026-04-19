@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Search, Filter, Scale, MessageCircle, Newspaper, TrendingUp, ChevronRight, RotateCcw, X } from 'lucide-react';
+import { Search, Filter, Scale, MessageCircle, Newspaper, TrendingUp, ChevronRight, RotateCcw, X, MapPin } from 'lucide-react';
 import { haptic } from '../utils/haptic.ts';
 import { Language, Product } from '../types.ts';
 import { PRODUCTS, SELLERS, CATEGORIES, TRANSLATIONS } from '../constants.tsx';
@@ -9,6 +9,7 @@ import ProductCard from './molecules/ProductCard.tsx';
 import SectionReveal from './atoms/SectionReveal.tsx';
 import SkeletonCard from './atoms/SkeletonCard.tsx';
 import WeatherWidget from './atoms/WeatherWidget.tsx';
+import LocationPickerModal, { LocationFilter, DEFAULT_LOCATION_FILTER } from './LocationPickerModal.tsx';
 
 const CONNECTIONS_KEY = 'agrimart_connections';
 
@@ -34,7 +35,9 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
   const [savedIds, setSavedIds]       = useState<string[]>(getSavedIds);
   const [isLoading, setIsLoading]     = useState(true);
   const [refreshing, setRefreshing]   = useState(false);
-  const [showFilters, setShowFilters] = useState(false);
+  const [showFilters, setShowFilters]             = useState(false);
+  const [showLocationPicker, setShowLocationPicker] = useState(false);
+  const [locationFilter, setLocationFilter]         = useState<LocationFilter>(DEFAULT_LOCATION_FILTER);
   const [sortBy, setSortBy]           = useState<'newest' | 'price_asc' | 'price_desc'>('newest');
   const [priceMin, setPriceMin]       = useState('');
   const [priceMax, setPriceMax]       = useState('');
@@ -104,6 +107,7 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
   };
 
   const filtersActive = sortBy !== 'newest' || priceMin !== '' || priceMax !== '';
+  const locationActive = locationFilter.region !== 'all';
 
   const filtered = PRODUCTS
     .filter(p => {
@@ -121,6 +125,15 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
       if (sortBy === 'price_desc') return b.price - a.price;
       return 0; // newest: keep insertion order
     });
+
+  const isLocalProduct = (p: Product) => {
+    if (!locationActive) return true;
+    const seller = SELLERS.find(s => s.id === p.sellerId);
+    return !!seller?.location.toLowerCase().includes(locationFilter.region.toLowerCase());
+  };
+
+  const localProducts = locationActive ? filtered.filter(p => isLocalProduct(p)) : filtered;
+  const otherProducts = locationActive ? filtered.filter(p => !isLocalProduct(p)) : [];
 
   return (
     <div className="pb-28">
@@ -201,7 +214,7 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
       <section className="px-5 pt-6">
 
         {/* Section header */}
-        <SectionReveal className="flex items-baseline justify-between mb-5">
+        <SectionReveal className="flex items-baseline justify-between mb-4">
           <div>
             <p className="text-[10px] font-medium tracking-[0.2em] uppercase text-[rgba(245,240,232,0.35)] mb-1">
               {isMr ? 'ताजे उत्पादन' : 'Fresh Listings'}
@@ -214,6 +227,40 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
             {isLoading ? (isMr ? 'लोड...' : 'Loading…') : 'LIVE'}
           </span>
         </SectionReveal>
+
+        {/* Location filter pill */}
+        <button
+          onClick={() => setShowLocationPicker(true)}
+          className="flex items-center gap-2 mb-5 active:scale-95 transition-all"
+          style={{
+            padding: '0.45rem 1rem',
+            borderRadius: '2rem',
+            background: locationActive ? 'rgba(45,90,27,0.18)' : 'rgba(245,240,232,0.05)',
+            border: locationActive ? '1px solid rgba(74,140,42,0.45)' : '1px solid rgba(245,240,232,0.1)',
+            touchAction: 'manipulation',
+          }}
+        >
+          <MapPin
+            size={13}
+            style={{ color: locationActive ? '#4A8C2A' : 'rgba(245,240,232,0.4)', flexShrink: 0 }}
+          />
+          <span style={{
+            fontSize: '12px',
+            fontWeight: 500,
+            letterSpacing: '0.01em',
+            color: locationActive ? '#D4C4A0' : 'rgba(245,240,232,0.45)',
+          }}>
+            {locationActive
+              ? (isMr ? locationFilter.regionLabelMr : locationFilter.regionLabel) + ` · ${locationFilter.radius} km`
+              : (isMr ? 'स्थान निवडा' : 'Select Location')}
+          </span>
+          {locationActive && (
+            <span
+              className="w-1.5 h-1.5 rounded-full flex-shrink-0"
+              style={{ background: '#4A8C2A' }}
+            />
+          )}
+        </button>
 
         {/* Sticky search bar */}
         <div className="sticky top-14 z-30 pb-4">
@@ -268,24 +315,73 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
               </p>
             </div>
           ) : (
-            filtered.map((product, idx) => {
-              const seller = SELLERS.find(s => s.id === product.sellerId);
-              return (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  seller={seller}
-                  index={idx}
-                  lang={isMr ? 'mr' : 'en'}
-                  onClick={() => onViewDetails(product)}
-                  onSelect={e => toggleSelect(e, product.id)}
-                  isSelected={selectedIds.includes(product.id)}
-                  isSaved={savedIds.includes(product.id)}
-                  onSave={e => toggleSave(e, product.id)}
-                  onEnquiry={e => handleEnquiry(e, product)}
-                />
-              );
-            })
+            <>
+              {/* Local products (or all when no location filter) */}
+              {localProducts.map((product, idx) => {
+                const seller = SELLERS.find(s => s.id === product.sellerId);
+                return (
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    seller={seller}
+                    index={idx}
+                    lang={isMr ? 'mr' : 'en'}
+                    onClick={() => onViewDetails(product)}
+                    onSelect={e => toggleSelect(e, product.id)}
+                    isSelected={selectedIds.includes(product.id)}
+                    isSaved={savedIds.includes(product.id)}
+                    onSave={e => toggleSave(e, product.id)}
+                    onEnquiry={e => handleEnquiry(e, product)}
+                  />
+                );
+              })}
+
+              {/* Divider + other listings when a location is active */}
+              {locationActive && otherProducts.length > 0 && (
+                <>
+                  <div className="flex items-center gap-3 py-2">
+                    <div className="flex-1 h-px" style={{ background: 'rgba(245,240,232,0.06)' }} />
+                    <span style={{
+                      fontSize: '9px', fontWeight: 500, letterSpacing: '0.2em',
+                      textTransform: 'uppercase', color: 'rgba(245,240,232,0.22)',
+                    }}>
+                      {isMr ? 'इतर ठिकाणांहून' : 'From other areas'}
+                    </span>
+                    <div className="flex-1 h-px" style={{ background: 'rgba(245,240,232,0.06)' }} />
+                  </div>
+                  {otherProducts.map((product, idx) => {
+                    const seller = SELLERS.find(s => s.id === product.sellerId);
+                    return (
+                      <ProductCard
+                        key={product.id}
+                        product={product}
+                        seller={seller}
+                        index={localProducts.length + idx}
+                        lang={isMr ? 'mr' : 'en'}
+                        onClick={() => onViewDetails(product)}
+                        onSelect={e => toggleSelect(e, product.id)}
+                        isSelected={selectedIds.includes(product.id)}
+                        isSaved={savedIds.includes(product.id)}
+                        onSave={e => toggleSave(e, product.id)}
+                        onEnquiry={e => handleEnquiry(e, product)}
+                      />
+                    );
+                  })}
+                </>
+              )}
+
+              {/* Empty local state when filter active but no local matches */}
+              {locationActive && localProducts.length === 0 && (
+                <div className="text-center py-8">
+                  <MapPin size={28} style={{ color: 'rgba(245,240,232,0.15)', margin: '0 auto 12px' }} />
+                  <p style={{ fontSize: '13px', color: 'rgba(245,240,232,0.3)', fontWeight: 300 }}>
+                    {isMr
+                      ? `${locationFilter.regionLabelMr} मध्ये कोणतेही लिस्टिंग नाही`
+                      : `No listings near ${locationFilter.regionLabel}`}
+                  </p>
+                </div>
+              )}
+            </>
           )}
         </div>
       </section>
@@ -315,6 +411,15 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
           </button>
         </div>
       )}
+
+      {/* ── Location Picker Modal ────────────────────────────────── */}
+      <LocationPickerModal
+        isOpen={showLocationPicker}
+        current={locationFilter}
+        isMr={isMr}
+        onApply={f => { setLocationFilter(f); haptic.light(); }}
+        onClose={() => setShowLocationPicker(false)}
+      />
 
       {/* ── Filter sheet ──────────────────────────────────────────── */}
       {showFilters && (
