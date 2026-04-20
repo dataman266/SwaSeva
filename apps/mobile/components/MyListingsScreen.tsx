@@ -37,6 +37,20 @@ interface Listing {
   leads?: InquiryLead[];
 }
 
+const USER_LISTINGS_KEY = 'agrimart_user_listings';
+
+function loadUserListings(): Listing[] {
+  try {
+    const raw = JSON.parse(localStorage.getItem(USER_LISTINGS_KEY) || '[]');
+    return raw.map((l: any) => ({
+      ...l,
+      status: (l.status ?? 'active') as ListingStatus,
+      views: l.views ?? 0,
+      inquiries: l.inquiries ?? 0,
+    }));
+  } catch { return []; }
+}
+
 const MOCK_LISTINGS: Listing[] = [
   {
     id: 'l1',
@@ -140,7 +154,7 @@ export default function MyListingsScreen({ lang, onCreateNew }: MyListingsScreen
   const [filter, setFilter] = useState<ListingStatus | 'all'>('all');
   const [menuOpen, setMenuOpen] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
-  const [listings, setListings] = useState<Listing[]>(MOCK_LISTINGS);
+  const [listings, setListings] = useState<Listing[]>(() => [...loadUserListings(), ...MOCK_LISTINGS]);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [undoItem, setUndoItem] = useState<Listing | null>(null);
   const [selectedListing, setSelectedListing] = useState<Listing | null>(null);

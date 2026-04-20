@@ -1,12 +1,39 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Camera, Plus, CheckCircle, ChevronLeft, X } from 'lucide-react';
+import { Camera, Video, Plus, CheckCircle, ChevronLeft, X, ShieldCheck, ImageIcon } from 'lucide-react';
 import { Language } from '../types.ts';
 import { CATEGORIES, TRANSLATIONS } from '../constants.tsx';
 import PillButton from './atoms/PillButton.tsx';
 import SectionReveal from './atoms/SectionReveal.tsx';
 import { haptic } from '../utils/haptic.ts';
 
-const DRAFT_KEY = 'agrimart_sell_draft';
+const DRAFT_KEY         = 'agrimart_sell_draft';
+const USER_LISTINGS_KEY = 'agrimart_user_listings';
+
+const PRICE_UNITS = [
+  { value: 'kg',      label: 'per kg',      labelMr: 'प्रति किलो'    },
+  { value: 'gram',    label: 'per 100g',    labelMr: 'प्रति १०० ग्रॅम' },
+  { value: 'quintal', label: 'per quintal', labelMr: 'प्रति क्विंटल'  },
+  { value: 'tonne',   label: 'per tonne',   labelMr: 'प्रति टन'       },
+  { value: 'dozen',   label: 'per dozen',   labelMr: 'प्रति डझन'      },
+  { value: 'piece',   label: 'per piece',   labelMr: 'प्रति नग'       },
+  { value: 'litre',   label: 'per litre',   labelMr: 'प्रति लिटर'     },
+  { value: 'bundle',  label: 'per bundle',  labelMr: 'प्रति जुडी'     },
+  { value: 'bag',     label: 'per bag',     labelMr: 'प्रति बोरे'     },
+  { value: 'box',     label: 'per box',     labelMr: 'प्रति पेटी'     },
+];
+
+const QTY_UNITS = [
+  { value: 'kg',      label: 'kg',      labelMr: 'किलो'    },
+  { value: 'quintal', label: 'quintal', labelMr: 'क्विंटल'  },
+  { value: 'tonne',   label: 'tonne',   labelMr: 'टन'       },
+  { value: 'gram',    label: 'gram',    labelMr: 'ग्रॅम'     },
+  { value: 'pieces',  label: 'pieces',  labelMr: 'नग'       },
+  { value: 'dozen',   label: 'dozen',   labelMr: 'डझन'      },
+  { value: 'litre',   label: 'litre',   labelMr: 'लिटर'     },
+  { value: 'bundle',  label: 'bundle',  labelMr: 'जुडी'     },
+  { value: 'bag',     label: 'bag',     labelMr: 'बोरे'     },
+  { value: 'box',     label: 'box',     labelMr: 'पेटी'     },
+];
 
 interface DraftState {
   step: number;
@@ -14,6 +41,7 @@ interface DraftState {
   variety: string;
   price: string;
   unit: string;
+  qtyUnit: string;
   quantity: string;
   description: string;
 }
@@ -27,7 +55,6 @@ interface SellScreenProps {
   onDone: () => void;
 }
 
-// ── Success state ─────────────────────────────────────────────────────────────
 function SuccessView({ isMr }: { isMr: boolean }) {
   return (
     <div className="flex flex-col items-center justify-center min-h-[80vh] px-8 text-center space-y-8 animate-[fadeUp_0.6s_cubic-bezier(0.16,1,0.3,1)_both]">
@@ -51,7 +78,6 @@ function SuccessView({ isMr }: { isMr: boolean }) {
   );
 }
 
-// ── Form field ─────────────────────────────────────────────────────────────────
 interface FieldProps {
   label: string;
   children: React.ReactNode;
@@ -75,27 +101,33 @@ const inputCls = [
   'outline-none transition-all',
 ].join(' ');
 
+const selectCls = inputCls + ' appearance-none cursor-pointer';
+
 export default function SellScreen({ lang, onDone }: SellScreenProps) {
   const draft = loadDraft();
-  const [step, setStep]           = useState(draft.step ?? 1);
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [categoryId, setCategoryId] = useState(draft.categoryId ?? '');
-  const [variety, setVariety]     = useState(draft.variety ?? '');
-  const [price, setPrice]         = useState(draft.price ?? '');
-  const [unit, setUnit]           = useState(draft.unit ?? 'plant');
-  const [quantity, setQuantity]   = useState(draft.quantity ?? '');
+  const [step, setStep]               = useState(draft.step ?? 1);
+  const [isSuccess, setIsSuccess]     = useState(false);
+  const [categoryId, setCategoryId]   = useState(draft.categoryId ?? '');
+  const [variety, setVariety]         = useState(draft.variety ?? '');
+  const [price, setPrice]             = useState(draft.price ?? '');
+  const [unit, setUnit]               = useState(draft.unit ?? 'kg');
+  const [qtyUnit, setQtyUnit]         = useState(draft.qtyUnit ?? 'kg');
+  const [quantity, setQuantity]       = useState(draft.quantity ?? '');
   const [description, setDescription] = useState(draft.description ?? '');
-  const [photoUrl, setPhotoUrl]   = useState<string | null>(null);
-  const fileInputRef              = useRef<HTMLInputElement>(null);
+  const [photoUrl, setPhotoUrl]       = useState<string | null>(null);
+  const [identityUploaded, setIdentityUploaded] = useState(false);
+
+  const fileInputRef     = useRef<HTMLInputElement>(null);
+  const identityInputRef = useRef<HTMLInputElement>(null);
+
   const isMr = lang === Language.MARATHI;
   const t    = TRANSLATIONS[isMr ? 'mr' : 'en'];
 
-  // Auto-save draft on every field change
   useEffect(() => {
     try {
-      localStorage.setItem(DRAFT_KEY, JSON.stringify({ step, categoryId, variety, price, unit, quantity, description }));
+      localStorage.setItem(DRAFT_KEY, JSON.stringify({ step, categoryId, variety, price, unit, qtyUnit, quantity, description }));
     } catch {}
-  }, [step, categoryId, variety, price, unit, quantity, description]);
+  }, [step, categoryId, variety, price, unit, qtyUnit, quantity, description]);
 
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -104,15 +136,45 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
     setPhotoUrl(prev => { if (prev) URL.revokeObjectURL(prev); return url; });
   };
 
-  const clearDraftAndFinish = () => {
-    try { localStorage.removeItem(DRAFT_KEY); } catch {}
+  const handleIdentityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files?.[0]) setIdentityUploaded(true);
+  };
+
+  const handlePublish = () => {
+    const cat = CATEGORIES.find(c => c.id === categoryId);
+    const listingName = `${isMr ? cat?.nameMr ?? cat?.name : cat?.name ?? categoryId}${variety ? ` – ${variety}` : ''}`;
+    const priceUnitLabel = PRICE_UNITS.find(u => u.value === unit)?.label ?? unit;
+
+    const newListing = {
+      id:          `ul_${Date.now()}`,
+      name:        listingName,
+      nameMr:      listingName,
+      category:    cat?.name ?? categoryId,
+      price:       Number(price) || 0,
+      unit:        priceUnitLabel.replace('per ', ''),
+      quantity:    Number(quantity) || 0,
+      quantityUnit: qtyUnit,
+      views:       0,
+      inquiries:   0,
+      status:      'active',
+      daysLeft:    30,
+      imageUrl:    photoUrl ?? 'https://images.unsplash.com/photo-1500651230702-0e2d8a49d4ad?w=800&auto=format&fit=crop',
+      description,
+      descriptionMr: description,
+      isUserListing: true,
+    };
+
+    try {
+      const existing = JSON.parse(localStorage.getItem(USER_LISTINGS_KEY) || '[]');
+      localStorage.setItem(USER_LISTINGS_KEY, JSON.stringify([newListing, ...existing]));
+      localStorage.removeItem(DRAFT_KEY);
+    } catch {}
+
     if (photoUrl) URL.revokeObjectURL(photoUrl);
     haptic.success();
     setIsSuccess(true);
     setTimeout(onDone, 2400);
   };
-
-  const handlePublish = clearDraftAndFinish;
 
   if (isSuccess) return <SuccessView isMr={isMr} />;
 
@@ -139,8 +201,6 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
             </button>
           )}
         </div>
-
-        {/* Progress bar */}
         <div className="flex gap-2">
           {[1, 2, 3].map(s => (
             <div
@@ -181,24 +241,23 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
         </SectionReveal>
       )}
 
-      {/* ── Step 2 — Photo + Pricing ──────────────────────────────── */}
+      {/* ── Step 2 — Photos/Videos + Pricing ─────────────────────── */}
       {step === 2 && (
         <SectionReveal className="space-y-7">
 
-          {/* Photo upload */}
-          <Field label={isMr ? 'फोटो' : 'Photos'}>
-            {/* Hidden file input */}
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              capture="environment"
-              className="hidden"
-              onChange={handlePhotoChange}
-            />
+          {/* Hidden inputs */}
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*,video/*"
+            className="hidden"
+            onChange={handlePhotoChange}
+          />
+
+          {/* Photos / Videos upload */}
+          <Field label={isMr ? 'फोटो / व्हिडिओ' : 'Photos / Videos'}>
             <div className="flex gap-3">
               {photoUrl ? (
-                /* Preview thumbnail */
                 <div className="relative w-24 h-24 rounded-2xl overflow-hidden flex-shrink-0">
                   <img src={photoUrl} alt="listing" className="w-full h-full object-cover" />
                   <button
@@ -215,16 +274,30 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
                   className="w-24 h-24 rounded-2xl flex flex-col items-center justify-center gap-2 border-2 border-dashed border-[rgba(245,240,232,0.12)] text-[rgba(245,240,232,0.3)] active:border-[rgba(212,196,160,0.3)] transition-all"
                   style={{ touchAction: 'manipulation' }}
                 >
-                  <Camera size={20} />
-                  <span className="text-[9px] font-medium tracking-[0.12em] uppercase">
-                    {isMr ? 'फोटो' : 'Photo'}
+                  <div className="flex items-center gap-1">
+                    <Camera size={14} />
+                    <Video size={14} />
+                  </div>
+                  <span className="text-[9px] font-medium tracking-[0.1em] uppercase text-center leading-tight">
+                    {isMr ? 'फोटो / व्हिडिओ' : 'Photo / Video'}
                   </span>
                 </button>
               )}
+              {/* Gallery / add more */}
               <button
                 onClick={() => fileInputRef.current?.click()}
-                className="w-24 h-24 rounded-2xl flex items-center justify-center border border-[rgba(245,240,232,0.06)] active:border-[rgba(212,196,160,0.2)] transition-all"
+                className="w-24 h-24 rounded-2xl flex flex-col items-center justify-center gap-2 border border-[rgba(245,240,232,0.06)] active:border-[rgba(212,196,160,0.2)] transition-all"
                 style={{ background: '#111C11', touchAction: 'manipulation' }}
+              >
+                <ImageIcon size={16} className="text-[rgba(245,240,232,0.2)]" />
+                <span className="text-[9px] font-medium tracking-[0.1em] uppercase text-[rgba(245,240,232,0.2)]">
+                  {isMr ? 'गॅलरी' : 'Gallery'}
+                </span>
+              </button>
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                className="w-24 h-24 rounded-2xl flex items-center justify-center border border-dashed border-[rgba(245,240,232,0.06)] active:border-[rgba(212,196,160,0.2)] transition-all"
+                style={{ background: 'transparent', touchAction: 'manipulation' }}
               >
                 <Plus size={18} className="text-[rgba(245,240,232,0.15)]" />
               </button>
@@ -241,6 +314,7 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
             />
           </Field>
 
+          {/* Price + unit */}
           <div className="grid grid-cols-2 gap-4">
             <Field label={t.price}>
               <input
@@ -252,17 +326,18 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
                 style={{ color: '#D4C4A0' }}
               />
             </Field>
-            <Field label="Unit">
+            <Field label={isMr ? 'एकक' : 'Unit'}>
               <select
                 value={unit}
                 onChange={e => setUnit(e.target.value)}
-                className={inputCls + ' appearance-none cursor-pointer'}
+                className={selectCls}
                 style={{ background: '#111C11' }}
               >
-                <option value="plant">per Plant</option>
-                <option value="kg">per kg</option>
-                <option value="bundle">per Bundle</option>
-                <option value="pack">per Pack</option>
+                {PRICE_UNITS.map(u => (
+                  <option key={u.value} value={u.value}>
+                    {isMr ? u.labelMr : u.label}
+                  </option>
+                ))}
               </select>
             </Field>
           </div>
@@ -277,7 +352,16 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
       {step === 3 && (
         <SectionReveal className="space-y-7">
 
-          {/* Trust badge prompt */}
+          {/* Hidden identity input */}
+          <input
+            ref={identityInputRef}
+            type="file"
+            accept="image/*,application/pdf"
+            className="hidden"
+            onChange={handleIdentityChange}
+          />
+
+          {/* Trust badge */}
           <div
             className="p-6 rounded-2xl space-y-4"
             style={{ background: '#111C11', border: '1px solid rgba(212,196,160,0.12)' }}
@@ -288,24 +372,60 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
                 {isMr ? 'विश्वास बॅज' : 'Trust Badge'}
               </p>
             </div>
-            <p className="font-light text-[rgba(245,240,232,0.65)] leading-relaxed" style={{ fontSize: '14px' }}>
-              {isMr
-                ? 'ओळखपत्राचा फोटो अपलोड करा आणि <span>Verified Seller</span> बॅज मिळवा.'
-                : 'Upload your ID photo to earn the Verified Seller badge and build buyer trust.'}
-            </p>
-            <PillButton variant="outline" size="sm">
-              {isMr ? 'ओळखपत्र अपलोड करा' : 'Upload Identity'}
-            </PillButton>
+            {identityUploaded ? (
+              <div className="flex items-center gap-3 py-1">
+                <div
+                  className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
+                  style={{ background: 'rgba(74,140,42,0.15)', border: '1px solid rgba(74,140,42,0.3)' }}
+                >
+                  <ShieldCheck size={14} className="text-[#4A8C2A]" />
+                </div>
+                <div>
+                  <p className="font-medium text-[#4A8C2A]" style={{ fontSize: '13px' }}>
+                    {isMr ? 'ओळखपत्र अपलोड झाले' : 'Identity uploaded'}
+                  </p>
+                  <p className="font-light text-[rgba(245,240,232,0.35)]" style={{ fontSize: '11px' }}>
+                    {isMr ? 'तुम्हाला Verified Seller बॅज मिळेल' : 'You will receive the Verified Seller badge'}
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <>
+                <p className="font-light text-[rgba(245,240,232,0.65)] leading-relaxed" style={{ fontSize: '14px' }}>
+                  {isMr
+                    ? 'ओळखपत्राचा फोटो अपलोड करा आणि Verified Seller बॅज मिळवा.'
+                    : 'Upload your ID photo to earn the Verified Seller badge and build buyer trust.'}
+                </p>
+                <PillButton variant="outline" size="sm" onClick={() => identityInputRef.current?.click()}>
+                  {isMr ? 'ओळखपत्र अपलोड करा' : 'Upload Identity'}
+                </PillButton>
+              </>
+            )}
           </div>
 
+          {/* Quantity + unit */}
           <Field label={isMr ? 'उपलब्ध प्रमाण' : 'Quantity Available'}>
-            <input
-              type="number"
-              placeholder={isMr ? 'साठा...' : 'Stock count...'}
-              value={quantity}
-              onChange={e => setQuantity(e.target.value)}
-              className={inputCls}
-            />
+            <div className="grid grid-cols-2 gap-3">
+              <input
+                type="number"
+                placeholder={isMr ? 'साठा...' : 'Stock count...'}
+                value={quantity}
+                onChange={e => setQuantity(e.target.value)}
+                className={inputCls}
+              />
+              <select
+                value={qtyUnit}
+                onChange={e => setQtyUnit(e.target.value)}
+                className={selectCls}
+                style={{ background: '#111C11' }}
+              >
+                {QTY_UNITS.map(u => (
+                  <option key={u.value} value={u.value}>
+                    {isMr ? u.labelMr : u.label}
+                  </option>
+                ))}
+              </select>
+            </div>
           </Field>
 
           <Field label={isMr ? 'वर्णन' : 'Description'}>
