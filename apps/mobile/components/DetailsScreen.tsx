@@ -397,18 +397,13 @@ export default function DetailsScreen({ product, lang, onBack, onViewSeller, onS
         style={{
           bottom: 'calc(60px + env(safe-area-inset-bottom, 0px))',
           padding: '14px 20px 16px',
-          /* solid surface so it's clearly visible over dark page */
-          background: '#111C11',
-          /* glossy top-shine overlay */
-          backgroundImage: 'linear-gradient(to bottom, rgba(74,140,42,0.18) 0%, rgba(74,140,42,0.04) 35%, transparent 100%)',
+          background: 'rgba(245,240,232,0.07)',
+          backdropFilter: 'blur(32px) saturate(200%)',
+          WebkitBackdropFilter: 'blur(32px) saturate(200%)',
           borderRadius: '20px 20px 0 0',
-          borderTop: '1px solid rgba(74,140,42,0.55)',
-          borderLeft: '1px solid rgba(74,140,42,0.15)',
-          borderRight: '1px solid rgba(74,140,42,0.15)',
-          /* inner highlight on the very top edge = glass surface effect */
-          boxShadow: 'inset 0 1px 0 rgba(245,240,232,0.08), 0 -12px 40px rgba(0,0,0,0.7)',
-          backdropFilter: 'blur(16px)',
-          WebkitBackdropFilter: 'blur(16px)',
+          border: '1px solid rgba(245,240,232,0.13)',
+          borderBottom: 'none',
+          boxShadow: '0 -24px 64px rgba(0,0,0,0.85), inset 0 1px 0 rgba(255,255,255,0.1)',
           zIndex: 30,
         }}
       >
