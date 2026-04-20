@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Camera, Video, Plus, CheckCircle, ChevronLeft, X, ShieldCheck, ImageIcon } from 'lucide-react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { Camera, Video, Plus, CheckCircle, ChevronLeft, X, ShieldCheck, ImageIcon, MapPin } from 'lucide-react';
+import L from 'leaflet';
 import { Language } from '../types.ts';
 import { CATEGORIES, TRANSLATIONS } from '../constants.tsx';
 import PillButton from './atoms/PillButton.tsx';
@@ -10,16 +11,16 @@ const DRAFT_KEY         = 'agrimart_sell_draft';
 const USER_LISTINGS_KEY = 'agrimart_user_listings';
 
 const PRICE_UNITS = [
-  { value: 'kg',      label: 'per kg',      labelMr: 'प्रति किलो'    },
-  { value: 'gram',    label: 'per 100g',    labelMr: 'प्रति १०० ग्रॅम' },
-  { value: 'quintal', label: 'per quintal', labelMr: 'प्रति क्विंटल'  },
-  { value: 'tonne',   label: 'per tonne',   labelMr: 'प्रति टन'       },
-  { value: 'dozen',   label: 'per dozen',   labelMr: 'प्रति डझन'      },
-  { value: 'piece',   label: 'per piece',   labelMr: 'प्रति नग'       },
-  { value: 'litre',   label: 'per litre',   labelMr: 'प्रति लिटर'     },
-  { value: 'bundle',  label: 'per bundle',  labelMr: 'प्रति जुडी'     },
-  { value: 'bag',     label: 'per bag',     labelMr: 'प्रति बोरे'     },
-  { value: 'box',     label: 'per box',     labelMr: 'प्रति पेटी'     },
+  { value: 'kg',      label: 'per kg',      labelMr: 'प्रति किलो'      },
+  { value: 'gram',    label: 'per 100g',    labelMr: 'प्रति १०० ग्रॅम'  },
+  { value: 'quintal', label: 'per quintal', labelMr: 'प्रति क्विंटल'    },
+  { value: 'tonne',   label: 'per tonne',   labelMr: 'प्रति टन'         },
+  { value: 'dozen',   label: 'per dozen',   labelMr: 'प्रति डझन'        },
+  { value: 'piece',   label: 'per piece',   labelMr: 'प्रति नग'         },
+  { value: 'litre',   label: 'per litre',   labelMr: 'प्रति लिटर'       },
+  { value: 'bundle',  label: 'per bundle',  labelMr: 'प्रति जुडी'       },
+  { value: 'bag',     label: 'per bag',     labelMr: 'प्रति बोरे'       },
+  { value: 'box',     label: 'per box',     labelMr: 'प्रति पेटी'       },
 ];
 
 const QTY_UNITS = [
@@ -44,17 +45,151 @@ interface DraftState {
   qtyUnit: string;
   quantity: string;
   description: string;
+  location: string;
 }
 
 function loadDraft(): Partial<DraftState> {
   try { return JSON.parse(localStorage.getItem(DRAFT_KEY) || '{}'); } catch { return {}; }
 }
 
-interface SellScreenProps {
-  lang: Language;
-  onDone: () => void;
+// ── Farm location marker icon ──────────────────────────────────────────────
+function farmMarkerIcon() {
+  return L.divIcon({
+    className: '',
+    html: `<div style="width:36px;height:36px;display:flex;align-items:center;justify-content:center">
+      <div style="width:16px;height:16px;background:#2D5A1B;border:3px solid #D4C4A0;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,.5)"></div>
+    </div>`,
+    iconSize: [36, 36], iconAnchor: [18, 18],
+  });
 }
 
+// ── Farm location map modal ────────────────────────────────────────────────
+function FarmLocationModal({
+  onConfirm,
+  onClose,
+  isMr,
+}: {
+  onConfirm: (label: string, lat: number, lng: number) => void;
+  onClose: () => void;
+  isMr: boolean;
+}) {
+  const mapDivRef  = useRef<HTMLDivElement>(null);
+  const mapRef     = useRef<L.Map | null>(null);
+  const markerRef  = useRef<L.Marker | null>(null);
+  const [label, setLabel]       = useState('');
+  const [lat, setLat]           = useState(19.7515);
+  const [lng, setLng]           = useState(75.7139);
+  const [geocoding, setGeocoding] = useState(false);
+
+  const geocode = useCallback(async (la: number, lo: number) => {
+    setGeocoding(true);
+    try {
+      const res  = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${la}&lon=${lo}&format=json&accept-language=en`);
+      const data = await res.json();
+      const parts = [
+        data.address?.village || data.address?.town || data.address?.city || data.address?.suburb,
+        data.address?.district || data.address?.county,
+        data.address?.state,
+      ].filter(Boolean);
+      setLabel(parts.join(', ') || `${la.toFixed(4)}, ${lo.toFixed(4)}`);
+    } catch {
+      setLabel(`${la.toFixed(4)}, ${lo.toFixed(4)}`);
+    } finally {
+      setGeocoding(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!mapDivRef.current || mapRef.current) return;
+
+    const map = L.map(mapDivRef.current, { zoomControl: true }).setView([19.7515, 75.7139], 11);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap',
+      maxZoom: 19,
+    }).addTo(map);
+
+    const marker = L.marker([19.7515, 75.7139], { draggable: true, icon: farmMarkerIcon() }).addTo(map);
+
+    const updatePin = (la: number, lo: number) => {
+      marker.setLatLng([la, lo]);
+      setLat(la); setLng(lo);
+      geocode(la, lo);
+    };
+
+    marker.on('dragend', () => {
+      const p = marker.getLatLng();
+      setLat(p.lat); setLng(p.lng);
+      geocode(p.lat, p.lng);
+    });
+    map.on('click', (e) => updatePin(e.latlng.lat, e.latlng.lng));
+
+    mapRef.current = map;
+    markerRef.current = marker;
+
+    navigator.geolocation?.getCurrentPosition(
+      pos => { updatePin(pos.coords.latitude, pos.coords.longitude); map.setView([pos.coords.latitude, pos.coords.longitude], 14); },
+      undefined,
+      { timeout: 5000 },
+    );
+    geocode(19.7515, 75.7139);
+
+    return () => { map.remove(); mapRef.current = null; };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return (
+    <div style={{ position: 'fixed', inset: 0, zIndex: 300, background: 'rgba(0,0,0,0.75)', display: 'flex', alignItems: 'flex-end' }}>
+      <div style={{ width: '100%', height: '82vh', background: '#0F1F0F', borderRadius: '20px 20px 0 0', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+        {/* Header */}
+        <div style={{ flexShrink: 0, padding: '14px 16px 12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(245,240,232,0.08)' }}>
+          <div>
+            <p style={{ fontSize: '14px', fontWeight: 500, color: '#F5F0E8', letterSpacing: '-0.01em' }}>
+              {isMr ? 'शेताचे ठिकाण' : 'Farm Location'}
+            </p>
+            <p style={{ fontSize: '11px', fontWeight: 300, color: 'rgba(245,240,232,0.4)', marginTop: 1 }}>
+              {isMr ? 'नकाशावर टॅप करा किंवा मार्कर ड्रॅग करा' : 'Tap on map or drag the pin'}
+            </p>
+          </div>
+          <button
+            onClick={onClose}
+            style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(245,240,232,0.08)', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
+          >
+            <X size={15} style={{ color: 'rgba(245,240,232,0.55)' }} />
+          </button>
+        </div>
+
+        {/* Map */}
+        <div ref={mapDivRef} style={{ flex: 1 }} />
+
+        {/* Location label + CTA */}
+        <div style={{ flexShrink: 0, padding: '12px 16px', borderTop: '1px solid rgba(245,240,232,0.08)', background: '#0F1F0F' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10 }}>
+            <MapPin size={13} style={{ color: geocoding ? 'rgba(245,240,232,0.3)' : '#D4C4A0', flexShrink: 0 }} />
+            <span style={{ fontSize: '12px', color: geocoding ? 'rgba(245,240,232,0.35)' : '#F5F0E8', fontWeight: 300 }}>
+              {geocoding ? (isMr ? 'ठिकाण शोधत आहे...' : 'Getting address…') : (label || (isMr ? 'नकाशावर टॅप करा' : 'Tap map to select'))}
+            </span>
+          </div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button
+              onClick={onClose}
+              style={{ flex: 1, height: 42, borderRadius: 12, background: 'rgba(245,240,232,0.06)', border: '1px solid rgba(245,240,232,0.1)', color: 'rgba(245,240,232,0.65)', fontSize: '13px', cursor: 'pointer' }}
+            >
+              {isMr ? 'रद्द' : 'Cancel'}
+            </button>
+            <button
+              onClick={() => label && onConfirm(label, lat, lng)}
+              style={{ flex: 2, height: 42, borderRadius: 12, background: label ? '#2D5A1B' : 'rgba(45,90,27,0.35)', border: 'none', color: '#F5F0E8', fontSize: '13px', fontWeight: 500, cursor: label ? 'pointer' : 'default', opacity: geocoding ? 0.7 : 1 }}
+            >
+              {isMr ? 'ठीक आहे' : 'Confirm Location'}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Success screen ─────────────────────────────────────────────────────────
 function SuccessView({ isMr }: { isMr: boolean }) {
   return (
     <div className="flex flex-col items-center justify-center min-h-[80vh] px-8 text-center space-y-8 animate-[fadeUp_0.6s_cubic-bezier(0.16,1,0.3,1)_both]">
@@ -71,17 +206,15 @@ function SuccessView({ isMr }: { isMr: boolean }) {
         <p className="font-light text-[rgba(245,240,232,0.45)] leading-relaxed max-w-xs" style={{ fontSize: '14px' }}>
           {isMr
             ? 'तुमचा माल आता जवळच्या खरेदीदारांना दिसेल.'
-            : 'Buyers near you will now see your listing on the live market.'}
+            : 'Your listing is now live. Redirecting to My Listings…'}
         </p>
       </div>
     </div>
   );
 }
 
-interface FieldProps {
-  label: string;
-  children: React.ReactNode;
-}
+// ── Form helpers ───────────────────────────────────────────────────────────
+interface FieldProps { label: string; children: React.ReactNode; }
 function Field({ label, children }: FieldProps) {
   return (
     <div className="space-y-2">
@@ -100,8 +233,13 @@ const inputCls = [
   'bg-[rgba(255,255,255,0.03)] focus:bg-[rgba(255,255,255,0.05)]',
   'outline-none transition-all',
 ].join(' ');
-
 const selectCls = inputCls + ' appearance-none cursor-pointer';
+
+// ── Main component ─────────────────────────────────────────────────────────
+interface SellScreenProps {
+  lang: Language;
+  onDone: () => void;
+}
 
 export default function SellScreen({ lang, onDone }: SellScreenProps) {
   const draft = loadDraft();
@@ -114,8 +252,12 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
   const [qtyUnit, setQtyUnit]         = useState(draft.qtyUnit ?? 'kg');
   const [quantity, setQuantity]       = useState(draft.quantity ?? '');
   const [description, setDescription] = useState(draft.description ?? '');
-  const [photoUrl, setPhotoUrl]       = useState<string | null>(null);
+  const [location, setLocation]       = useState(draft.location ?? '');
+  const [locationLat, setLocationLat] = useState<number | null>(null);
+  const [locationLng, setLocationLng] = useState<number | null>(null);
+  const [showLocationMap, setShowLocationMap] = useState(false);
   const [identityUploaded, setIdentityUploaded] = useState(false);
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
 
   const fileInputRef     = useRef<HTMLInputElement>(null);
   const identityInputRef = useRef<HTMLInputElement>(null);
@@ -125,42 +267,55 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
 
   useEffect(() => {
     try {
-      localStorage.setItem(DRAFT_KEY, JSON.stringify({ step, categoryId, variety, price, unit, qtyUnit, quantity, description }));
+      localStorage.setItem(DRAFT_KEY, JSON.stringify({ step, categoryId, variety, price, unit, qtyUnit, quantity, description, location }));
     } catch {}
-  }, [step, categoryId, variety, price, unit, qtyUnit, quantity, description]);
+  }, [step, categoryId, variety, price, unit, qtyUnit, quantity, description, location]);
 
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const url = URL.createObjectURL(file);
-    setPhotoUrl(prev => { if (prev) URL.revokeObjectURL(prev); return url; });
+    // Read as data URL so it persists beyond the blob lifecycle
+    const reader = new FileReader();
+    reader.onload = ev => {
+      setPhotoPreview(prev => prev ? prev : (ev.target?.result as string));
+    };
+    reader.readAsDataURL(file);
+    e.target.value = '';
   };
 
   const handleIdentityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files?.[0]) setIdentityUploaded(true);
+    if (e.target.files?.[0]) { setIdentityUploaded(true); haptic.light(); }
   };
 
   const handlePublish = () => {
     const cat = CATEGORIES.find(c => c.id === categoryId);
-    const listingName = `${isMr ? cat?.nameMr ?? cat?.name : cat?.name ?? categoryId}${variety ? ` – ${variety}` : ''}`;
-    const priceUnitLabel = PRICE_UNITS.find(u => u.value === unit)?.label ?? unit;
+    const catLabel = isMr ? cat?.nameMr ?? cat?.name : cat?.name ?? categoryId;
+    const listingName = `${catLabel}${variety ? ` – ${variety}` : ''}`;
+    const priceUnitLbl = PRICE_UNITS.find(u => u.value === unit)?.label.replace('per ', '') ?? unit;
+    const qtyUnitLbl   = QTY_UNITS.find(u => u.value === qtyUnit)?.label ?? qtyUnit;
 
     const newListing = {
-      id:          `ul_${Date.now()}`,
-      name:        listingName,
-      nameMr:      listingName,
-      category:    cat?.name ?? categoryId,
-      price:       Number(price) || 0,
-      unit:        priceUnitLabel.replace('per ', ''),
-      quantity:    Number(quantity) || 0,
-      quantityUnit: qtyUnit,
-      views:       0,
-      inquiries:   0,
-      status:      'active',
-      daysLeft:    30,
-      imageUrl:    photoUrl ?? 'https://images.unsplash.com/photo-1500651230702-0e2d8a49d4ad?w=800&auto=format&fit=crop',
+      id:           `ul_${Date.now()}`,
+      name:         listingName,
+      nameMr:       listingName,
+      category:     cat?.name ?? categoryId,
+      price:        Number(price) || 0,
+      unit:         priceUnitLbl,
+      quantity:     Number(quantity) || 0,
+      quantityUnit: qtyUnitLbl,
+      views:        0,
+      inquiries:    0,
+      status:       'active',
+      daysLeft:     30,
+      // Use data URL if available (persists), fallback to generic image
+      imageUrl:     photoPreview ?? 'https://images.unsplash.com/photo-1500651230702-0e2d8a49d4ad?w=800&auto=format&fit=crop',
       description,
       descriptionMr: description,
+      location:     location || (isMr ? 'महाराष्ट्र, भारत' : 'Maharashtra, India'),
+      locationMr:   location || 'महाराष्ट्र, भारत',
+      lat:          locationLat,
+      lng:          locationLng,
+      leads:        [] as { name: string; location: string; qty: number; time: string }[],
       isUserListing: true,
     };
 
@@ -170,15 +325,28 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
       localStorage.removeItem(DRAFT_KEY);
     } catch {}
 
-    if (photoUrl) URL.revokeObjectURL(photoUrl);
     haptic.success();
     setIsSuccess(true);
-    setTimeout(onDone, 2400);
+    setTimeout(onDone, 2000);
   };
 
   if (isSuccess) return <SuccessView isMr={isMr} />;
 
   return (
+    <>
+    {showLocationMap && (
+      <FarmLocationModal
+        isMr={isMr}
+        onConfirm={(lbl, la, lo) => {
+          setLocation(lbl);
+          setLocationLat(la);
+          setLocationLng(lo);
+          setShowLocationMap(false);
+        }}
+        onClose={() => setShowLocationMap(false)}
+      />
+    )}
+
     <div className="px-5 pt-6 pb-32 space-y-8" style={{ background: '#0A1A0A', minHeight: '100vh' }}>
 
       {/* Header + stepper */}
@@ -203,9 +371,7 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
         </div>
         <div className="flex gap-2">
           {[1, 2, 3].map(s => (
-            <div
-              key={s}
-              className="h-0.5 flex-1 rounded-full transition-all duration-500"
+            <div key={s} className="h-0.5 flex-1 rounded-full transition-all duration-500"
               style={{ background: s <= step ? '#D4C4A0' : 'rgba(245,240,232,0.1)' }}
             />
           ))}
@@ -215,7 +381,7 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
         </p>
       </div>
 
-      {/* ── Step 1 — Category ──────────────────────────────────────── */}
+      {/* ── Step 1 — Category ─────────────────────────────────────────── */}
       {step === 1 && (
         <SectionReveal className="space-y-5">
           <Field label={isMr ? 'श्रेणी निवडा' : 'Choose a Category'}>
@@ -241,27 +407,22 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
         </SectionReveal>
       )}
 
-      {/* ── Step 2 — Photos/Videos + Pricing ─────────────────────── */}
+      {/* ── Step 2 — Photo + Pricing + Qty + Location ─────────────────── */}
       {step === 2 && (
         <SectionReveal className="space-y-7">
 
-          {/* Hidden inputs */}
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*,video/*"
-            className="hidden"
-            onChange={handlePhotoChange}
-          />
+          {/* Hidden file inputs */}
+          <input ref={fileInputRef} type="file" accept="image/*,video/*" className="hidden" onChange={handlePhotoChange} />
+          <input ref={identityInputRef} type="file" accept="image/*,application/pdf" className="hidden" onChange={handleIdentityChange} />
 
-          {/* Photos / Videos upload */}
+          {/* Photos / Videos */}
           <Field label={isMr ? 'फोटो / व्हिडिओ' : 'Photos / Videos'}>
             <div className="flex gap-3">
-              {photoUrl ? (
+              {photoPreview ? (
                 <div className="relative w-24 h-24 rounded-2xl overflow-hidden flex-shrink-0">
-                  <img src={photoUrl} alt="listing" className="w-full h-full object-cover" />
+                  <img src={photoPreview} alt="listing" className="w-full h-full object-cover" />
                   <button
-                    onClick={() => { URL.revokeObjectURL(photoUrl); setPhotoUrl(null); }}
+                    onClick={() => setPhotoPreview(null)}
                     className="absolute top-1 right-1 w-6 h-6 rounded-full flex items-center justify-center"
                     style={{ background: 'rgba(10,26,10,0.75)' }}
                   >
@@ -274,7 +435,7 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
                   className="w-24 h-24 rounded-2xl flex flex-col items-center justify-center gap-2 border-2 border-dashed border-[rgba(245,240,232,0.12)] text-[rgba(245,240,232,0.3)] active:border-[rgba(212,196,160,0.3)] transition-all"
                   style={{ touchAction: 'manipulation' }}
                 >
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-center gap-1.5">
                     <Camera size={14} />
                     <Video size={14} />
                   </div>
@@ -283,7 +444,6 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
                   </span>
                 </button>
               )}
-              {/* Gallery / add more */}
               <button
                 onClick={() => fileInputRef.current?.click()}
                 className="w-24 h-24 rounded-2xl flex flex-col items-center justify-center gap-2 border border-[rgba(245,240,232,0.06)] active:border-[rgba(212,196,160,0.2)] transition-all"
@@ -296,25 +456,26 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
               </button>
               <button
                 onClick={() => fileInputRef.current?.click()}
-                className="w-24 h-24 rounded-2xl flex items-center justify-center border border-dashed border-[rgba(245,240,232,0.06)] active:border-[rgba(212,196,160,0.2)] transition-all"
-                style={{ background: 'transparent', touchAction: 'manipulation' }}
+                className="w-24 h-24 rounded-2xl flex items-center justify-center border border-dashed border-[rgba(245,240,232,0.06)] transition-all"
+                style={{ touchAction: 'manipulation' }}
               >
                 <Plus size={18} className="text-[rgba(245,240,232,0.15)]" />
               </button>
             </div>
           </Field>
 
+          {/* Variety */}
           <Field label={t.variety}>
             <input
               type="text"
-              placeholder="e.g. CO 86032"
+              placeholder={isMr ? 'उदा. CO 86032' : 'e.g. CO 86032'}
               value={variety}
               onChange={e => setVariety(e.target.value)}
               className={inputCls}
             />
           </Field>
 
-          {/* Price + unit */}
+          {/* Price + Price Unit */}
           <div className="grid grid-cols-2 gap-4">
             <Field label={t.price}>
               <input
@@ -326,21 +487,56 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
                 style={{ color: '#D4C4A0' }}
               />
             </Field>
-            <Field label={isMr ? 'एकक' : 'Unit'}>
-              <select
-                value={unit}
-                onChange={e => setUnit(e.target.value)}
-                className={selectCls}
-                style={{ background: '#111C11' }}
-              >
+            <Field label={isMr ? 'किंमत एकक' : 'Price Unit'}>
+              <select value={unit} onChange={e => setUnit(e.target.value)} className={selectCls} style={{ background: '#111C11' }}>
                 {PRICE_UNITS.map(u => (
-                  <option key={u.value} value={u.value}>
-                    {isMr ? u.labelMr : u.label}
-                  </option>
+                  <option key={u.value} value={u.value}>{isMr ? u.labelMr : u.label}</option>
                 ))}
               </select>
             </Field>
           </div>
+
+          {/* Quantity + Quantity Unit */}
+          <div className="grid grid-cols-2 gap-4">
+            <Field label={isMr ? 'साठा किती?' : 'Stock Qty'}>
+              <input
+                type="number"
+                placeholder={isMr ? 'उदा. 500' : 'e.g. 500'}
+                value={quantity}
+                onChange={e => setQuantity(e.target.value)}
+                className={inputCls}
+              />
+            </Field>
+            <Field label={isMr ? 'साठा एकक' : 'Stock Unit'}>
+              <select value={qtyUnit} onChange={e => setQtyUnit(e.target.value)} className={selectCls} style={{ background: '#111C11' }}>
+                {QTY_UNITS.map(u => (
+                  <option key={u.value} value={u.value}>{isMr ? u.labelMr : u.label}</option>
+                ))}
+              </select>
+            </Field>
+          </div>
+
+          {/* Farm Location picker */}
+          <Field label={isMr ? 'शेताचे ठिकाण' : 'Farm Location'}>
+            <button
+              onClick={() => setShowLocationMap(true)}
+              className="w-full flex items-center gap-3 px-5 py-4 rounded-xl border border-[rgba(245,240,232,0.1)] active:border-[rgba(212,196,160,0.35)] transition-all text-left"
+              style={{ background: 'rgba(255,255,255,0.03)', touchAction: 'manipulation' }}
+            >
+              <MapPin size={16} className={location ? 'text-[#4A8C2A]' : 'text-[rgba(245,240,232,0.25)]'} />
+              <span className={`flex-1 font-light text-[14px] ${location ? 'text-[#F5F0E8]' : 'text-[rgba(245,240,232,0.25)]'}`}>
+                {location || (isMr ? 'नकाशावर टॅप करा' : 'Pick location on map')}
+              </span>
+              {location && (
+                <button
+                  onClick={e => { e.stopPropagation(); setLocation(''); setLocationLat(null); setLocationLng(null); }}
+                  className="w-5 h-5 flex items-center justify-center"
+                >
+                  <X size={12} className="text-[rgba(245,240,232,0.35)]" />
+                </button>
+              )}
+            </button>
+          </Field>
 
           <PillButton variant="light" fullWidth onClick={() => setStep(3)}>
             {isMr ? 'पुढे' : 'Next Step'}
@@ -348,24 +544,12 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
         </SectionReveal>
       )}
 
-      {/* ── Step 3 — Trust + Publish ──────────────────────────────── */}
+      {/* ── Step 3 — Trust + Description + Publish ─────────────────────── */}
       {step === 3 && (
         <SectionReveal className="space-y-7">
 
-          {/* Hidden identity input */}
-          <input
-            ref={identityInputRef}
-            type="file"
-            accept="image/*,application/pdf"
-            className="hidden"
-            onChange={handleIdentityChange}
-          />
-
           {/* Trust badge */}
-          <div
-            className="p-6 rounded-2xl space-y-4"
-            style={{ background: '#111C11', border: '1px solid rgba(212,196,160,0.12)' }}
-          >
+          <div className="p-6 rounded-2xl space-y-4" style={{ background: '#111C11', border: '1px solid rgba(212,196,160,0.12)' }}>
             <div className="flex items-center gap-2 mb-1">
               <span className="w-3 h-px bg-[#D4C4A0]" />
               <p className="text-[10px] font-medium tracking-[0.18em] uppercase text-[rgba(245,240,232,0.35)]">
@@ -374,10 +558,8 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
             </div>
             {identityUploaded ? (
               <div className="flex items-center gap-3 py-1">
-                <div
-                  className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
-                  style={{ background: 'rgba(74,140,42,0.15)', border: '1px solid rgba(74,140,42,0.3)' }}
-                >
+                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
+                  style={{ background: 'rgba(74,140,42,0.15)', border: '1px solid rgba(74,140,42,0.3)' }}>
                   <ShieldCheck size={14} className="text-[#4A8C2A]" />
                 </div>
                 <div>
@@ -385,7 +567,7 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
                     {isMr ? 'ओळखपत्र अपलोड झाले' : 'Identity uploaded'}
                   </p>
                   <p className="font-light text-[rgba(245,240,232,0.35)]" style={{ fontSize: '11px' }}>
-                    {isMr ? 'तुम्हाला Verified Seller बॅज मिळेल' : 'You will receive the Verified Seller badge'}
+                    {isMr ? 'तुम्हाला Verified Seller बॅज मिळेल' : 'Verified Seller badge will be applied'}
                   </p>
                 </div>
               </div>
@@ -403,31 +585,7 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
             )}
           </div>
 
-          {/* Quantity + unit */}
-          <Field label={isMr ? 'उपलब्ध प्रमाण' : 'Quantity Available'}>
-            <div className="grid grid-cols-2 gap-3">
-              <input
-                type="number"
-                placeholder={isMr ? 'साठा...' : 'Stock count...'}
-                value={quantity}
-                onChange={e => setQuantity(e.target.value)}
-                className={inputCls}
-              />
-              <select
-                value={qtyUnit}
-                onChange={e => setQtyUnit(e.target.value)}
-                className={selectCls}
-                style={{ background: '#111C11' }}
-              >
-                {QTY_UNITS.map(u => (
-                  <option key={u.value} value={u.value}>
-                    {isMr ? u.labelMr : u.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </Field>
-
+          {/* Description */}
           <Field label={isMr ? 'वर्णन' : 'Description'}>
             <textarea
               rows={3}
@@ -444,5 +602,6 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
         </SectionReveal>
       )}
     </div>
+    </>
   );
 }

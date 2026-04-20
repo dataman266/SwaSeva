@@ -93,7 +93,7 @@ const App: React.FC = () => {
         onViewSeller={(id) => changeScreen('SELLER_PROFILE', undefined, id)}
         onSendEnquiry={(_sellerId, _productId) => changeScreen('MESSAGES')}
       />;
-      case 'SELL':      return <SellScreen lang={state.userLanguage} onDone={() => changeScreen('HOME')} />;
+      case 'SELL':      return <SellScreen lang={state.userLanguage} onDone={() => changeScreen('LISTINGS')} />;
       case 'LISTINGS':  return <MyListingsScreen lang={state.userLanguage} onCreateNew={() => changeScreen('SELL')} />;
       case 'ORDERS':    return <OrdersScreen lang={state.userLanguage} />;
       case 'PROFILE':   return <ProfileScreen lang={state.userLanguage} onSignOut={() => {
