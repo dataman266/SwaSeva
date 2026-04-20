@@ -1,11 +1,12 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { AppScreen, AppState, Language, Product } from './types.ts';
 import HomeScreen from './components/HomeScreen.tsx';
 import DetailsScreen from './components/DetailsScreen.tsx';
-import SellScreen from './components/SellScreen.tsx';
 import OrdersScreen from './components/OrdersScreen.tsx';
+
+const SellScreen = lazy(() => import('./components/SellScreen.tsx'));
 import ProfileScreen from './components/ProfileScreen.tsx';
 import MyListingsScreen from './components/MyListingsScreen.tsx';
 import SellerProfileScreen from './components/SellerProfileScreen.tsx';
@@ -93,7 +94,7 @@ const App: React.FC = () => {
         onViewSeller={(id) => changeScreen('SELLER_PROFILE', undefined, id)}
         onSendEnquiry={(_sellerId, _productId) => changeScreen('MESSAGES')}
       />;
-      case 'SELL':      return <SellScreen lang={state.userLanguage} onDone={() => changeScreen('LISTINGS')} />;
+      case 'SELL':      return <Suspense fallback={<div className="flex items-center justify-center h-screen" style={{color:'rgba(245,240,232,0.3)',fontSize:13}}>Loading…</div>}><SellScreen lang={state.userLanguage} onDone={() => changeScreen('LISTINGS')} /></Suspense>;
       case 'LISTINGS':  return <MyListingsScreen lang={state.userLanguage} onCreateNew={() => changeScreen('SELL')} />;
       case 'ORDERS':    return <OrdersScreen lang={state.userLanguage} />;
       case 'PROFILE':   return <ProfileScreen lang={state.userLanguage} onSignOut={() => {

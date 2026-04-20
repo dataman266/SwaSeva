@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, lazy, Suspense } from 'react';
 import { Search, Filter, Scale, MessageCircle, Newspaper, TrendingUp, ChevronRight, RotateCcw, X, MapPin } from 'lucide-react';
 import { haptic } from '../utils/haptic.ts';
 import { Language, Product } from '../types.ts';
@@ -9,7 +9,8 @@ import ProductCard from './molecules/ProductCard.tsx';
 import SectionReveal from './atoms/SectionReveal.tsx';
 import SkeletonCard from './atoms/SkeletonCard.tsx';
 import WeatherWidget from './atoms/WeatherWidget.tsx';
-import LocationPickerModal, { LocationFilter, DEFAULT_LOCATION_FILTER } from './LocationPickerModal.tsx';
+import { LocationFilter, DEFAULT_LOCATION_FILTER } from './locationTypes.ts';
+const LocationPickerModal = lazy(() => import('./LocationPickerModal.tsx'));
 
 const CONNECTIONS_KEY = 'agrimart_connections';
 
@@ -448,13 +449,17 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
       )}
 
       {/* ── Location Picker Modal ────────────────────────────────── */}
-      <LocationPickerModal
-        isOpen={showLocationPicker}
-        current={locationFilter}
-        isMr={isMr}
-        onApply={f => { setLocationFilter(f); haptic.light(); }}
-        onClose={() => setShowLocationPicker(false)}
-      />
+      {showLocationPicker && (
+        <Suspense fallback={null}>
+          <LocationPickerModal
+            isOpen={showLocationPicker}
+            current={locationFilter}
+            isMr={isMr}
+            onApply={f => { setLocationFilter(f); haptic.light(); }}
+            onClose={() => setShowLocationPicker(false)}
+          />
+        </Suspense>
+      )}
 
       {/* ── Filter sheet ──────────────────────────────────────────── */}
       {showFilters && (

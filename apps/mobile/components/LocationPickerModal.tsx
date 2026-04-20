@@ -2,22 +2,10 @@ import { useState, useEffect, useRef } from 'react';
 import { X, MapPin, Locate } from 'lucide-react';
 import { motion, AnimatePresence, useDragControls } from 'motion/react';
 import L from 'leaflet';
+import { type LocationFilter, DEFAULT_LOCATION_FILTER } from './locationTypes.ts';
 
-export interface LocationFilter {
-  region: string;
-  regionLabel: string;
-  regionLabelMr: string;
-  radius: number;
-  lat?: number;
-  lng?: number;
-}
-
-export const DEFAULT_LOCATION_FILTER: LocationFilter = {
-  region: 'all',
-  regionLabel: 'All India',
-  regionLabelMr: 'सर्व भारत',
-  radius: 50,
-};
+export type { LocationFilter } from './locationTypes.ts';
+export { DEFAULT_LOCATION_FILTER } from './locationTypes.ts';
 
 const DEFAULT_LAT = 19.7515;
 const DEFAULT_LNG = 75.7139;
