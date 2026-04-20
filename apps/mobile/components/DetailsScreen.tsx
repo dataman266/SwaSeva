@@ -393,8 +393,24 @@ export default function DetailsScreen({ product, lang, onBack, onViewSeller, onS
 
       {/* ── Sticky bottom CTA ─────────────────────────────────────── */}
       <div
-        className={`fixed left-0 right-0 px-5 pt-4 pb-4 transition-all duration-700 delay-500 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}
-        style={{ bottom: 'calc(60px + env(safe-area-inset-bottom, 0px))', background: 'linear-gradient(to bottom, rgba(35,65,28,0.78) 0%, rgba(14,26,12,0.95) 100%)', backdropFilter: 'blur(24px) brightness(1.18) saturate(160%)', WebkitBackdropFilter: 'blur(24px) brightness(1.18) saturate(160%)', borderTop: '1px solid rgba(74,140,42,0.5)', boxShadow: 'inset 0 1px 0 rgba(245,240,232,0.07), 0 -20px 48px rgba(0,0,0,0.55)', paddingBottom: '12px', zIndex: 30 }}
+        className={`fixed left-0 right-0 transition-all duration-700 delay-500 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}
+        style={{
+          bottom: 'calc(60px + env(safe-area-inset-bottom, 0px))',
+          padding: '14px 20px 16px',
+          /* solid surface so it's clearly visible over dark page */
+          background: '#111C11',
+          /* glossy top-shine overlay */
+          backgroundImage: 'linear-gradient(to bottom, rgba(74,140,42,0.18) 0%, rgba(74,140,42,0.04) 35%, transparent 100%)',
+          borderRadius: '20px 20px 0 0',
+          borderTop: '1px solid rgba(74,140,42,0.55)',
+          borderLeft: '1px solid rgba(74,140,42,0.15)',
+          borderRight: '1px solid rgba(74,140,42,0.15)',
+          /* inner highlight on the very top edge = glass surface effect */
+          boxShadow: 'inset 0 1px 0 rgba(245,240,232,0.08), 0 -12px 40px rgba(0,0,0,0.7)',
+          backdropFilter: 'blur(16px)',
+          WebkitBackdropFilter: 'blur(16px)',
+          zIndex: 30,
+        }}
       >
         <div className="flex gap-3">
           {/* Call button */}
