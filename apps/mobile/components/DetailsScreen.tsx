@@ -397,14 +397,14 @@ export default function DetailsScreen({ product, lang, onBack, onViewSeller, onS
         style={{
           bottom: 'calc(60px + env(safe-area-inset-bottom, 0px))',
           padding: '14px 20px 16px',
-          background: 'rgba(245,240,232,0.07)',
-          backdropFilter: 'blur(32px) saturate(200%)',
-          WebkitBackdropFilter: 'blur(32px) saturate(200%)',
+          background: 'rgba(14, 26, 14, 0.92)',
+          backdropFilter: 'blur(24px) saturate(180%)',
+          WebkitBackdropFilter: 'blur(24px) saturate(180%)',
           borderRadius: '20px 20px 0 0',
-          border: '1px solid rgba(245,240,232,0.13)',
+          border: '1px solid rgba(255,255,255,0.09)',
           borderBottom: 'none',
-          boxShadow: '0 -24px 64px rgba(0,0,0,0.85), inset 0 1px 0 rgba(255,255,255,0.1)',
-          zIndex: 30,
+          boxShadow: '0 -16px 48px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.12)',
+          zIndex: 60,
         }}
       >
         <div className="flex gap-3">
