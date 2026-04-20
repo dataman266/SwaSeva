@@ -44,6 +44,7 @@ interface DraftState {
   unit: string;
   qtyUnit: string;
   quantity: string;
+  mobileNumber: string;
   description: string;
   location: string;
 }
@@ -251,6 +252,7 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
   const [unit, setUnit]               = useState(draft.unit ?? 'kg');
   const [qtyUnit, setQtyUnit]         = useState(draft.qtyUnit ?? 'kg');
   const [quantity, setQuantity]       = useState(draft.quantity ?? '');
+  const [mobileNumber, setMobileNumber] = useState(draft.mobileNumber ?? '');
   const [description, setDescription] = useState(draft.description ?? '');
   const [location, setLocation]       = useState(draft.location ?? '');
   const [locationLat, setLocationLat] = useState<number | null>(null);
@@ -267,9 +269,9 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
 
   useEffect(() => {
     try {
-      localStorage.setItem(DRAFT_KEY, JSON.stringify({ step, categoryId, variety, price, unit, qtyUnit, quantity, description, location }));
+      localStorage.setItem(DRAFT_KEY, JSON.stringify({ step, categoryId, variety, price, unit, qtyUnit, quantity, mobileNumber, description, location }));
     } catch {}
-  }, [step, categoryId, variety, price, unit, qtyUnit, quantity, description, location]);
+  }, [step, categoryId, variety, price, unit, qtyUnit, quantity, mobileNumber, description, location]);
 
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -309,6 +311,7 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
       daysLeft:     30,
       // Use data URL if available (persists), fallback to generic image
       imageUrl:     photoPreview ?? 'https://images.unsplash.com/photo-1500651230702-0e2d8a49d4ad?w=800&auto=format&fit=crop',
+      mobileNumber,
       description,
       descriptionMr: description,
       location:     location || (isMr ? 'महाराष्ट्र, भारत' : 'Maharashtra, India'),
@@ -498,7 +501,7 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
 
           {/* Quantity + Quantity Unit */}
           <div className="grid grid-cols-2 gap-4">
-            <Field label={isMr ? 'साठा किती?' : 'Stock Qty'}>
+            <Field label={isMr ? 'उपलब्ध साठा प्रमाण' : 'Available Stock Quantity'}>
               <input
                 type="number"
                 placeholder={isMr ? 'उदा. 500' : 'e.g. 500'}
@@ -516,8 +519,8 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
             </Field>
           </div>
 
-          {/* Farm Location picker */}
-          <Field label={isMr ? 'शेताचे ठिकाण' : 'Farm Location'}>
+          {/* Product Location picker */}
+          <Field label={isMr ? 'उत्पादन ठिकाण' : 'Product Location'}>
             <button
               onClick={() => setShowLocationMap(true)}
               className="w-full flex items-center gap-3 px-5 py-4 rounded-xl border border-[rgba(245,240,232,0.1)] active:border-[rgba(212,196,160,0.35)] transition-all text-left"
@@ -536,6 +539,17 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
                 </button>
               )}
             </button>
+          </Field>
+
+          {/* Mobile Number */}
+          <Field label={isMr ? 'मोबाईल नंबर' : 'Mobile Number'}>
+            <input
+              type="tel"
+              placeholder={isMr ? 'उदा. 9876543210' : 'e.g. 9876543210'}
+              value={mobileNumber}
+              onChange={e => setMobileNumber(e.target.value.replace(/[^0-9]/g, '').slice(0, 10))}
+              className={inputCls}
+            />
           </Field>
 
           <PillButton variant="light" fullWidth onClick={() => setStep(3)}>

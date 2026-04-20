@@ -7,6 +7,7 @@ interface ProductCardProps {
   seller?: Seller;
   index?: number;
   lang?: 'en' | 'mr';
+  isSelfListing?: boolean;
   onClick: () => void;
   onSelect?: (e: React.MouseEvent) => void;
   isSelected?: boolean;
@@ -25,6 +26,7 @@ export default function ProductCard({
   seller,
   index = 0,
   lang = 'en',
+  isSelfListing = false,
   onClick,
   onSelect,
   isSelected = false,
@@ -72,10 +74,16 @@ export default function ProductCard({
           <div className="absolute inset-0 bg-gradient-to-t from-[#0A1A0A] via-[rgba(10,26,10,0.3)] to-transparent" />
 
           {/* Category badge */}
-          <div className="absolute top-4 left-4">
+          <div className="absolute top-4 left-4 flex flex-col gap-1.5">
             <span className="inline-block text-[9px] font-medium tracking-[0.14em] uppercase text-[#D4C4A0] bg-[rgba(10,26,10,0.6)] backdrop-blur px-3 py-1 rounded-full border border-[rgba(212,196,160,0.2)]">
               {product.category}
             </span>
+            {isSelfListing && (
+              <span className="inline-block text-[8px] font-semibold tracking-[0.12em] uppercase px-2.5 py-0.5 rounded-full"
+                style={{ background: 'rgba(45,90,27,0.85)', border: '1px solid rgba(74,140,42,0.5)', color: '#7EC95A', backdropFilter: 'blur(8px)' }}>
+                {lang === 'mr' ? '✦ स्वतःची लिस्टिंग' : '✦ Self Listing'}
+              </span>
+            )}
           </div>
 
           {/* Select toggle */}

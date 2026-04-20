@@ -23,9 +23,33 @@ interface HomeScreenProps {
 }
 
 const SAVED_KEY = 'agrimart_saved';
+const USER_LISTINGS_KEY = 'agrimart_user_listings';
 
 function getSavedIds(): string[] {
   try { return JSON.parse(localStorage.getItem(SAVED_KEY) || '[]'); } catch { return []; }
+}
+
+function getUserListings(): Product[] {
+  try {
+    const raw = JSON.parse(localStorage.getItem(USER_LISTINGS_KEY) || '[]');
+    return raw.map((l: Record<string, unknown>) => ({
+      id:          l.id,
+      name:        l.name,
+      nameMr:      l.nameMr ?? l.name,
+      category:    l.category ?? 'Other',
+      variety:     '',
+      varietyMr:   '',
+      price:       l.price ?? 0,
+      unit:        l.unit ?? 'kg',
+      unitMr:      l.unit ?? 'kg',
+      imageUrl:    l.imageUrl,
+      sellerId:    'self',
+      quantity:    l.quantity ?? 0,
+      description: (l.description as string) ?? '',
+      descriptionMr: (l.description as string) ?? '',
+      isUserListing: true,
+    } as unknown as Product));
+  } catch { return []; }
 }
 
 export default function HomeScreen({ lang, location, onViewDetails, onOpenAssistant, onOpenExplore, onOpenMessages }: HomeScreenProps) {
@@ -109,7 +133,12 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
   const filtersActive = sortBy !== 'newest' || priceMin !== '' || priceMax !== '';
   const locationActive = locationFilter.region !== 'all';
 
-  const filtered = PRODUCTS
+  const userListings = getUserListings();
+  const userListingIds = new Set(userListings.map(l => l.id));
+
+  const allProducts = [...userListings, ...PRODUCTS];
+
+  const filtered = allProducts
     .filter(p => {
       const name    = (isMr ? p.nameMr    : p.name   ).toLowerCase();
       const variety = (isMr ? p.varietyMr : p.variety).toLowerCase();
@@ -121,9 +150,13 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
       return matchSearch && matchCat && matchMin && matchMax;
     })
     .sort((a, b) => {
+      // User's own listings always float to top
+      const aOwn = userListingIds.has(a.id) ? 1 : 0;
+      const bOwn = userListingIds.has(b.id) ? 1 : 0;
+      if (aOwn !== bOwn) return bOwn - aOwn;
       if (sortBy === 'price_asc')  return a.price - b.price;
       if (sortBy === 'price_desc') return b.price - a.price;
-      return 0; // newest: keep insertion order
+      return 0;
     });
 
   const isLocalProduct = (p: Product) => {
@@ -326,6 +359,7 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
                     seller={seller}
                     index={idx}
                     lang={isMr ? 'mr' : 'en'}
+                    isSelfListing={userListingIds.has(product.id)}
                     onClick={() => onViewDetails(product)}
                     onSelect={e => toggleSelect(e, product.id)}
                     isSelected={selectedIds.includes(product.id)}
@@ -358,6 +392,7 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
                         seller={seller}
                         index={localProducts.length + idx}
                         lang={isMr ? 'mr' : 'en'}
+                        isSelfListing={userListingIds.has(product.id)}
                         onClick={() => onViewDetails(product)}
                         onSelect={e => toggleSelect(e, product.id)}
                         isSelected={selectedIds.includes(product.id)}
