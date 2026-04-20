@@ -203,8 +203,8 @@ export default function LocationPickerModal({ isOpen, current, isMr, onApply, on
             .leaflet-control-attribution a{color:#D4C4A0!important}
           `}</style>
 
-          {/* Backdrop */}
-          <motion.div className="fixed inset-0 z-50"
+          {/* Backdrop — z-[200] beats BottomNav's z-50 */}
+          <motion.div className="fixed inset-0 z-[200]"
             style={{ background: 'rgba(0,0,0,0.72)', backdropFilter: 'blur(5px)' }}
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }} onClick={onClose}
@@ -215,7 +215,7 @@ export default function LocationPickerModal({ isOpen, current, isMr, onApply, on
             drag="y" dragControls={dragControls} dragListener={false}
             dragConstraints={{ top: 0 }} dragElastic={{ top: 0, bottom: 0.45 }}
             onDragEnd={(_, i) => { if (i.offset.y > 120 || i.velocity.y > 600) onClose(); }}
-            className="fixed bottom-0 left-0 right-0 z-50"
+            className="fixed bottom-0 left-0 right-0 z-[201]"
             style={{ height: '88vh' }}
             initial={{ y: '100%' }} animate={{ y: 0 }} exit={{ y: '100%' }}
             transition={{ type: 'spring', stiffness: 330, damping: 34 }}
