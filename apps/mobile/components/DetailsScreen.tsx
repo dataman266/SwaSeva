@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   ArrowLeft, Phone, MessageSquare, Truck, Heart,
   MapPin, Calendar, ShieldCheck, Star, Share2, ShoppingCart, X,
@@ -28,14 +28,27 @@ export default function DetailsScreen({ product, lang, onBack, onViewSeller, onS
     } catch { return false; }
   });
   const [mounted, setMounted] = useState(false);
+  const [ctaVisible, setCtaVisible] = useState(false);
   const [showTransportModal, setShowTransportModal] = useState(false);
   const [enquiryToast, setEnquiryToast] = useState(false);
+  const sentinelRef = useRef<HTMLDivElement>(null);
 
   const seller = SELLERS.find(s => s.id === product.sellerId);
   const isMr   = lang === Language.MARATHI;
   const t      = TRANSLATIONS[isMr ? 'mr' : 'en'];
 
   useEffect(() => { setMounted(true); }, []);
+
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setCtaVisible(true); },
+      { threshold: 0.1 }
+    );
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, []);
 
   const toggleSaved = () => {
     const next = !saved;
@@ -388,11 +401,14 @@ export default function DetailsScreen({ product, lang, onBack, onViewSeller, onS
             </div>
           </div>
         </SectionReveal>
+
+        {/* Sentinel — CTA appears once this becomes visible (user scrolled to bottom) */}
+        <div ref={sentinelRef} style={{ height: 1 }} aria-hidden="true" />
       </div>
 
       {/* ── Sticky bottom CTA ─────────────────────────────────────── */}
       <div
-        className={`fixed left-0 right-0 px-5 pt-4 pb-4 transition-all duration-700 delay-500 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}
+        className={`fixed left-0 right-0 px-5 pt-4 pb-4 transition-all duration-500 ${ctaVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8 pointer-events-none'}`}
         style={{ bottom: 'calc(60px + env(safe-area-inset-bottom, 0px))', background: 'linear-gradient(to top, #0A1A0A 80%, transparent)', paddingBottom: '12px' }}
       >
         <div className="flex gap-3">

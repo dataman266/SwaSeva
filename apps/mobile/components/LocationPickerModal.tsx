@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { X, MapPin, Locate } from 'lucide-react';
 import { motion, AnimatePresence, useDragControls } from 'motion/react';
 import L from 'leaflet';
@@ -22,6 +22,7 @@ export const DEFAULT_LOCATION_FILTER: LocationFilter = {
 const DEFAULT_LAT = 19.7515;
 const DEFAULT_LNG = 75.7139;
 const MAP_H       = 210; // px — fixed map height
+const CTA_H       = 92; // px — CTA row height (button 52 + padding 40)
 
 interface Props {
   isOpen: boolean;
@@ -209,7 +210,7 @@ export default function LocationPickerModal({ isOpen, current, isMr, onApply, on
             transition={{ duration: 0.2 }} onClick={onClose}
           />
 
-          {/* Outer motion layer — spring + drag only, no overflow */}
+          {/* Outer motion layer — spring + drag */}
           <motion.div
             drag="y" dragControls={dragControls} dragListener={false}
             dragConstraints={{ top: 0 }} dragElastic={{ top: 0, bottom: 0.45 }}
@@ -220,141 +221,170 @@ export default function LocationPickerModal({ isOpen, current, isMr, onApply, on
             transition={{ type: 'spring', stiffness: 330, damping: 34 }}
           >
             {/*
-              Inner card uses CSS GRID — 5 rows:
-                [handle][header][map][1fr scrollable][CTA]
-              Grid guarantees the 1fr middle takes exactly the leftover space.
-              overflow:hidden on the grid container clips any stray overflow.
+              Inner card: position:relative + overflow:hidden.
+              CTA is position:absolute bottom:0 — CANNOT be pushed off screen.
+              Content area is position:absolute top:0 bottom:CTA_H — flex column.
             */}
             <div
-              className="rounded-t-[28px] h-full"
+              className="rounded-t-[28px]"
               style={{
+                position: 'relative',
+                height: '100%',
                 background: '#0F1F0F',
                 border: '1px solid rgba(245,240,232,0.09)',
                 overflow: 'hidden',
-                display: 'grid',
-                gridTemplateRows: `36px auto ${MAP_H}px 1fr auto`,
               }}
             >
 
-              {/* Row 1 — Drag handle (36px) */}
-              <div
-                className="flex justify-center items-center select-none cursor-grab active:cursor-grabbing"
-                onPointerDown={e => dragControls.start(e)}
-                style={{ touchAction: 'none' }}
-              >
-                <div className="w-10 h-1.5 rounded-full" style={{ background: 'rgba(245,240,232,0.22)' }} />
-              </div>
+              {/* ── Content area (everything above CTA) ── */}
+              <div style={{
+                position: 'absolute',
+                top: 0, left: 0, right: 0,
+                bottom: CTA_H,
+                display: 'flex',
+                flexDirection: 'column',
+                overflow: 'hidden',
+              }}>
 
-              {/* Row 2 — Header (auto) */}
-              <div className="flex items-start justify-between px-5 pb-3">
-                <div>
-                  <h2 className="font-light text-[#F5F0E8]" style={{ fontSize: '20px', letterSpacing: '-0.03em' }}>
-                    {isMr ? 'स्थान निवडा' : 'Select Location'}
-                  </h2>
-                  <p style={{ fontSize: '11px', fontWeight: 300, color: 'rgba(245,240,232,0.38)', marginTop: 2 }}>
-                    {isMr ? 'नकाशावर टाचणी ड्रॅग करा किंवा टॅप करा' : 'Drag the pin or tap anywhere on the map'}
-                  </p>
+                {/* Drag handle */}
+                <div
+                  style={{ height: 36, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', touchAction: 'none', cursor: 'grab' }}
+                  onPointerDown={e => dragControls.start(e)}
+                >
+                  <div style={{ width: 40, height: 6, borderRadius: 99, background: 'rgba(245,240,232,0.22)' }} />
                 </div>
-                <button onClick={onClose}
-                  className="w-9 h-9 rounded-full flex items-center justify-center active:scale-90 transition-all"
-                  style={{ background: 'rgba(245,240,232,0.07)', touchAction: 'manipulation' }}
-                  aria-label="Close"
-                >
-                  <X size={16} style={{ color: 'rgba(245,240,232,0.55)' }} />
-                </button>
-              </div>
 
-              {/* Row 3 — Map (MAP_H px) */}
-              <div className="relative" style={{ height: MAP_H }}>
-                <div ref={mapDivRef} style={{ width: '100%', height: '100%' }} />
-                <button onClick={handleGPS}
-                  className="absolute bottom-3 right-3 z-[9999] flex items-center gap-2 px-3.5 py-2.5 rounded-xl active:scale-95 transition-all"
-                  style={{ background: '#0F1F0F', border: '1px solid rgba(74,140,42,0.6)', boxShadow: '0 4px 18px rgba(0,0,0,.5)', touchAction: 'manipulation' }}
-                >
-                  {locating
-                    ? <div className="w-4 h-4 rounded-full border-2 border-t-transparent animate-spin" style={{ borderColor: '#4A8C2A', borderTopColor: 'transparent' }} />
-                    : <Locate size={14} style={{ color: '#4A8C2A' }} />}
-                  <span style={{ fontSize: '12px', fontWeight: 500, color: '#D4C4A0' }}>
-                    {locating ? (isMr ? 'शोधत…' : 'Locating…') : (isMr ? 'माझे स्थान' : 'My Location')}
-                  </span>
-                </button>
-              </div>
+                {/* Header */}
+                <div style={{ flexShrink: 0, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', padding: '0 20px 12px' }}>
+                  <div>
+                    <h2 style={{ fontSize: 20, fontWeight: 300, color: '#F5F0E8', letterSpacing: '-0.03em', margin: 0 }}>
+                      {isMr ? 'स्थान निवडा' : 'Select Location'}
+                    </h2>
+                    <p style={{ fontSize: 11, fontWeight: 300, color: 'rgba(245,240,232,0.38)', marginTop: 2 }}>
+                      {isMr ? 'नकाशावर टाचणी ड्रॅग करा किंवा टॅप करा' : 'Drag the pin or tap anywhere on the map'}
+                    </p>
+                  </div>
+                  <button onClick={onClose}
+                    style={{ width: 36, height: 36, borderRadius: '50%', background: 'rgba(245,240,232,0.07)', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', touchAction: 'manipulation', flexShrink: 0 }}
+                    aria-label="Close"
+                  >
+                    <X size={16} style={{ color: 'rgba(245,240,232,0.55)' }} />
+                  </button>
+                </div>
 
-              {/* Row 4 — Scrollable middle (1fr = remaining space) */}
-              <div style={{ overflowY: 'auto', overscrollBehavior: 'contain' }}>
+                {/* Map */}
+                <div style={{ height: MAP_H, flexShrink: 0, position: 'relative' }}>
+                  <div ref={mapDivRef} style={{ width: '100%', height: '100%' }} />
+                  <button onClick={handleGPS}
+                    style={{ position: 'absolute', bottom: 12, right: 12, zIndex: 9999, display: 'flex', alignItems: 'center', gap: 8, padding: '10px 14px', borderRadius: 12, background: '#0F1F0F', border: '1px solid rgba(74,140,42,0.6)', boxShadow: '0 4px 18px rgba(0,0,0,.5)', cursor: 'pointer', touchAction: 'manipulation' }}
+                  >
+                    {locating
+                      ? <div style={{ width: 14, height: 14, borderRadius: '50%', border: '2px solid #4A8C2A', borderTopColor: 'transparent', animation: 'spin .7s linear infinite' }} />
+                      : <Locate size={14} style={{ color: '#4A8C2A' }} />}
+                    <span style={{ fontSize: 12, fontWeight: 500, color: '#D4C4A0' }}>
+                      {locating ? (isMr ? 'शोधत…' : 'Locating…') : (isMr ? 'माझे स्थान' : 'My Location')}
+                    </span>
+                  </button>
+                </div>
 
-                {/* Selected area */}
-                <div className="px-5 py-4" style={{ borderTop: '1px solid rgba(245,240,232,0.07)', borderBottom: '1px solid rgba(245,240,232,0.07)' }}>
-                  <p style={{ fontSize: '9px', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(245,240,232,0.3)', marginBottom: 6 }}>
-                    {isMr ? 'निवडलेला प्रदेश / क्षेत्र' : 'Selected Region / Area'}
-                  </p>
-                  <div className="flex items-start gap-2.5">
-                    <MapPin size={15} style={{ color: '#4A8C2A', flexShrink: 0, marginTop: 1 }} />
-                    {geocoding ? (
-                      <div className="flex items-center gap-2">
-                        <div className="w-3.5 h-3.5 rounded-full border-2 border-t-transparent animate-spin"
-                          style={{ borderColor: '#4A8C2A', borderTopColor: 'transparent' }} />
-                        <span style={{ fontSize: '13px', color: 'rgba(245,240,232,0.4)', fontWeight: 300 }}>
-                          {isMr ? 'पत्ता शोधत आहे…' : 'Finding address…'}
-                        </span>
+                {/* Scrollable middle */}
+                <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', overscrollBehavior: 'contain' }}>
+
+                  {/* Selected area */}
+                  <div style={{ padding: '16px 20px', borderTop: '1px solid rgba(245,240,232,0.07)', borderBottom: '1px solid rgba(245,240,232,0.07)' }}>
+                    <p style={{ fontSize: 9, fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(245,240,232,0.3)', marginBottom: 6 }}>
+                      {isMr ? 'निवडलेला प्रदेश / क्षेत्र' : 'Selected Region / Area'}
+                    </p>
+                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+                      <MapPin size={15} style={{ color: '#4A8C2A', flexShrink: 0, marginTop: 1 }} />
+                      {geocoding ? (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                          <div style={{ width: 14, height: 14, borderRadius: '50%', border: '2px solid #4A8C2A', borderTopColor: 'transparent', animation: 'spin .7s linear infinite' }} />
+                          <span style={{ fontSize: 13, color: 'rgba(245,240,232,0.4)', fontWeight: 300 }}>
+                            {isMr ? 'पत्ता शोधत आहे…' : 'Finding address…'}
+                          </span>
+                        </div>
+                      ) : (
+                        <p style={{ fontSize: 14, fontWeight: pinLabel ? 400 : 300, color: pinLabel ? '#F5F0E8' : 'rgba(245,240,232,0.3)', lineHeight: 1.4, margin: 0 }}>
+                          {pinLabel
+                            ? (isMr ? pinLabelMr ?? pinLabel : pinLabel)
+                            : (isMr ? 'नकाशावर टॅप करा किंवा माझे स्थान दाबा' : 'Tap on map or press My Location')}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Radius slider */}
+                  <div style={{ padding: '20px 20px 16px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+                      <div>
+                        <p style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(245,240,232,0.35)', margin: 0 }}>
+                          {isMr ? 'शोध क्षेत्र (त्रिज्या)' : 'Search Radius'}
+                        </p>
+                        <p style={{ fontSize: 11, fontWeight: 300, color: 'rgba(245,240,232,0.3)', marginTop: 4 }}>{hint}</p>
                       </div>
-                    ) : (
-                      <p style={{ fontSize: '14px', fontWeight: pinLabel ? 400 : 300, color: pinLabel ? '#F5F0E8' : 'rgba(245,240,232,0.3)', lineHeight: 1.4 }}>
-                        {pinLabel
-                          ? (isMr ? pinLabelMr ?? pinLabel : pinLabel)
-                          : (isMr ? 'नकाशावर टॅप करा किंवा माझे स्थान दाबा' : 'Tap on map or press My Location')}
-                      </p>
-                    )}
-                  </div>
-                </div>
-
-                {/* Radius slider */}
-                <div className="px-5 pt-5 pb-4">
-                  <div className="flex items-center justify-between mb-4">
-                    <div>
-                      <p style={{ fontSize: '10px', fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(245,240,232,0.35)' }}>
-                        {isMr ? 'शोध क्षेत्र (त्रिज्या)' : 'Search Radius'}
-                      </p>
-                      <p style={{ fontSize: '11px', fontWeight: 300, color: 'rgba(245,240,232,0.3)', marginTop: 4 }}>{hint}</p>
+                      <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
+                        <span style={{ fontSize: 32, fontWeight: 300, letterSpacing: '-0.04em', lineHeight: 1, color: '#D4C4A0' }}>{radius}</span>
+                        <span style={{ fontSize: 11, fontWeight: 500, textTransform: 'uppercase', color: 'rgba(245,240,232,0.4)' }}>km</span>
+                      </div>
                     </div>
-                    <div className="flex items-baseline gap-1">
-                      <span style={{ fontSize: '32px', fontWeight: 300, letterSpacing: '-0.04em', lineHeight: 1, color: '#D4C4A0' }}>{radius}</span>
-                      <span style={{ fontSize: '11px', fontWeight: 500, textTransform: 'uppercase', color: 'rgba(245,240,232,0.4)' }}>km</span>
+                    <input type="range" className="agsl" min={10} max={500} step={5} value={radius}
+                      onChange={e => setRadius(Number(e.target.value))} />
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8 }}>
+                      <span style={{ fontSize: 9, color: 'rgba(245,240,232,0.22)', fontWeight: 500 }}>10 km</span>
+                      <span style={{ fontSize: 9, color: 'rgba(245,240,232,0.22)', fontWeight: 500 }}>500 km</span>
                     </div>
                   </div>
-                  <input type="range" className="agsl" min={10} max={500} step={5} value={radius}
-                    onChange={e => setRadius(Number(e.target.value))} />
-                  <div className="flex justify-between mt-2">
-                    <span style={{ fontSize: '9px', color: 'rgba(245,240,232,0.22)', fontWeight: 500 }}>10 km</span>
-                    <span style={{ fontSize: '9px', color: 'rgba(245,240,232,0.22)', fontWeight: 500 }}>500 km</span>
-                  </div>
-                </div>
 
-              </div>{/* end scrollable */}
+                </div>{/* end scrollable */}
 
-              {/* Row 5 — CTA (auto height, always visible) */}
-              <div
-                style={{
-                  display: 'flex', gap: 12, padding: '16px 20px',
-                  paddingBottom: 'max(20px, env(safe-area-inset-bottom,0px) + 16px)',
-                  borderTop: '1px solid rgba(245,240,232,0.09)',
-                  background: '#0A1A0A',
-                }}
-              >
-                <button onClick={onClose}
-                  style={{ flex: 1, height: 52, borderRadius: 99, border: '1px solid rgba(245,240,232,0.2)', color: 'rgba(245,240,232,0.7)', fontSize: 15, fontWeight: 500, background: 'transparent', cursor: 'pointer', touchAction: 'manipulation' }}
+              </div>{/* end content area */}
+
+              {/* ── CTA: absolutely at bottom — always visible ── */}
+              <div style={{
+                position: 'absolute',
+                bottom: 0, left: 0, right: 0,
+                display: 'flex',
+                gap: 12,
+                padding: '16px 20px',
+                paddingBottom: 'max(20px, env(safe-area-inset-bottom, 0px) + 16px)',
+                borderTop: '1px solid rgba(245,240,232,0.09)',
+                background: '#0A1A0A',
+                zIndex: 10,
+              }}>
+                <button
+                  onClick={onClose}
+                  style={{
+                    flex: 1, height: 52, borderRadius: 99,
+                    border: '1px solid rgba(245,240,232,0.2)',
+                    color: 'rgba(245,240,232,0.7)',
+                    fontSize: 15, fontWeight: 500,
+                    background: 'transparent',
+                    cursor: 'pointer',
+                    touchAction: 'manipulation',
+                  }}
                 >
                   {isMr ? 'रद्द करा' : 'Cancel'}
                 </button>
-                <button onClick={handleOk}
-                  style={{ flex: 1, height: 52, borderRadius: 99, background: '#2D5A1B', color: '#F5F0E8', fontSize: 15, fontWeight: 500, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, touchAction: 'manipulation' }}
+                <button
+                  onClick={handleOk}
+                  style={{
+                    flex: 1, height: 52, borderRadius: 99,
+                    background: '#2D5A1B',
+                    color: '#F5F0E8',
+                    fontSize: 15, fontWeight: 500,
+                    border: 'none',
+                    cursor: 'pointer',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                    touchAction: 'manipulation',
+                  }}
                 >
                   <MapPin size={16} />
                   {isMr ? 'ठीक आहे' : 'OK'}
                 </button>
               </div>
 
-            </div>{/* end grid */}
+            </div>{/* end inner card */}
           </motion.div>
         </>
       )}
