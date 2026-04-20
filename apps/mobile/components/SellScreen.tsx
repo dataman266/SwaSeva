@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Camera, Video, Plus, CheckCircle, ChevronLeft, X, ShieldCheck, ImageIcon, MapPin } from 'lucide-react';
+import { Camera, Video, CheckCircle, ChevronLeft, X, ShieldCheck, MapPin } from 'lucide-react';
 import L from 'leaflet';
 import { Language } from '../types.ts';
 import { CATEGORIES, TRANSLATIONS } from '../constants.tsx';
@@ -259,7 +259,7 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
   const [locationLng, setLocationLng] = useState<number | null>(null);
   const [showLocationMap, setShowLocationMap] = useState(false);
   const [identityUploaded, setIdentityUploaded] = useState(false);
-  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+  const [photos, setPhotos] = useState<string[]>([]);
 
   const fileInputRef     = useRef<HTMLInputElement>(null);
   const identityInputRef = useRef<HTMLInputElement>(null);
@@ -276,10 +276,10 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    // Read as data URL so it persists beyond the blob lifecycle
     const reader = new FileReader();
     reader.onload = ev => {
-      setPhotoPreview(prev => prev ? prev : (ev.target?.result as string));
+      const dataUrl = ev.target?.result as string;
+      setPhotos(prev => prev.length < 4 ? [...prev, dataUrl] : prev);
     };
     reader.readAsDataURL(file);
     e.target.value = '';
@@ -310,7 +310,7 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
       status:       'active',
       daysLeft:     30,
       // Use data URL if available (persists), fallback to generic image
-      imageUrl:     photoPreview ?? 'https://images.unsplash.com/photo-1500651230702-0e2d8a49d4ad?w=800&auto=format&fit=crop',
+      imageUrl:     photos[0] ?? 'https://images.unsplash.com/photo-1500651230702-0e2d8a49d4ad?w=800&auto=format&fit=crop',
       mobileNumber,
       description,
       descriptionMr: description,
@@ -420,19 +420,20 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
 
           {/* Photos / Videos */}
           <Field label={isMr ? 'फोटो / व्हिडिओ' : 'Photos / Videos'}>
-            <div className="flex gap-3">
-              {photoPreview ? (
-                <div className="relative w-24 h-24 rounded-2xl overflow-hidden flex-shrink-0">
-                  <img src={photoPreview} alt="listing" className="w-full h-full object-cover" />
+            <div className="flex gap-3 flex-wrap">
+              {photos.map((src, i) => (
+                <div key={i} className="relative w-24 h-24 rounded-2xl overflow-hidden flex-shrink-0">
+                  <img src={src} alt={`photo ${i + 1}`} className="w-full h-full object-cover" />
                   <button
-                    onClick={() => setPhotoPreview(null)}
+                    onClick={() => setPhotos(prev => prev.filter((_, idx) => idx !== i))}
                     className="absolute top-1 right-1 w-6 h-6 rounded-full flex items-center justify-center"
                     style={{ background: 'rgba(10,26,10,0.75)' }}
                   >
                     <X size={12} className="text-[#F5F0E8]" />
                   </button>
                 </div>
-              ) : (
+              ))}
+              {photos.length < 4 && (
                 <button
                   onClick={() => fileInputRef.current?.click()}
                   className="w-24 h-24 rounded-2xl flex flex-col items-center justify-center gap-2 border-2 border-dashed border-[rgba(245,240,232,0.12)] text-[rgba(245,240,232,0.3)] active:border-[rgba(212,196,160,0.3)] transition-all"
@@ -443,27 +444,12 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
                     <Video size={14} />
                   </div>
                   <span className="text-[9px] font-medium tracking-[0.1em] uppercase text-center leading-tight">
-                    {isMr ? 'फोटो / व्हिडिओ' : 'Photo / Video'}
+                    {photos.length === 0
+                      ? (isMr ? 'फोटो / व्हिडिओ' : 'Photo / Video')
+                      : (isMr ? 'आणखी जोडा' : 'Add More')}
                   </span>
                 </button>
               )}
-              <button
-                onClick={() => fileInputRef.current?.click()}
-                className="w-24 h-24 rounded-2xl flex flex-col items-center justify-center gap-2 border border-[rgba(245,240,232,0.06)] active:border-[rgba(212,196,160,0.2)] transition-all"
-                style={{ background: '#111C11', touchAction: 'manipulation' }}
-              >
-                <ImageIcon size={16} className="text-[rgba(245,240,232,0.2)]" />
-                <span className="text-[9px] font-medium tracking-[0.1em] uppercase text-[rgba(245,240,232,0.2)]">
-                  {isMr ? 'गॅलरी' : 'Gallery'}
-                </span>
-              </button>
-              <button
-                onClick={() => fileInputRef.current?.click()}
-                className="w-24 h-24 rounded-2xl flex items-center justify-center border border-dashed border-[rgba(245,240,232,0.06)] transition-all"
-                style={{ touchAction: 'manipulation' }}
-              >
-                <Plus size={18} className="text-[rgba(245,240,232,0.15)]" />
-              </button>
             </div>
           </Field>
 
