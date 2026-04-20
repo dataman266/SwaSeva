@@ -52,14 +52,23 @@ export default function LocationPickerModal({ isOpen, current, isMr, onApply, on
   const [locating, setLocating]     = useState(false);
   const [geocoding, setGeocoding]   = useState(false);
 
-  const mapDivRef    = useRef<HTMLDivElement>(null);
-  const mapRef       = useRef<L.Map    | null>(null);
-  const markerRef    = useRef<L.Marker | null>(null);
-  const circleRef    = useRef<L.Circle | null>(null);
-  const radiusRef    = useRef(radius);
-  const dragControls = useDragControls();
+  const mapDivRef       = useRef<HTMLDivElement>(null);
+  const mapRef          = useRef<L.Map    | null>(null);
+  const markerRef       = useRef<L.Marker | null>(null);
+  const circleRef       = useRef<L.Circle | null>(null);
+  const radiusRef       = useRef(radius);
+  const sliderTrackRef  = useRef<HTMLDivElement>(null); // for live CSS-var gradient
+  const radiusNumRef    = useRef<HTMLSpanElement>(null); // for live number display
+  const dragControls    = useDragControls();
 
   useEffect(() => { radiusRef.current = radius; }, [radius]);
+
+  // Update slider gradient and number directly on DOM (no re-render = smooth)
+  const applySliderUI = (val: number) => {
+    const pct = ((val - 10) / 490) * 100;
+    sliderTrackRef.current?.style.setProperty('--sp', `${pct.toFixed(2)}%`);
+    if (radiusNumRef.current) radiusNumRef.current.textContent = String(val);
+  };
 
   useEffect(() => {
     if (!isOpen) return;
@@ -179,7 +188,6 @@ export default function LocationPickerModal({ isOpen, current, isMr, onApply, on
     onClose();
   };
 
-  const pct  = ((radius - 10) / 490) * 100;
   const hint =
     radius <= 25  ? (isMr ? 'अगदी जवळचे'  : 'Hyper-local')   :
     radius <= 75  ? (isMr ? 'शहर स्तर'    : 'City level')     :
@@ -193,7 +201,7 @@ export default function LocationPickerModal({ isOpen, current, isMr, onApply, on
           <style>{`
             @keyframes locPulse{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.8);opacity:.07}}
             .agsl{-webkit-appearance:none;appearance:none;width:100%;height:24px;background:transparent;outline:none;cursor:pointer}
-            .agsl::-webkit-slider-runnable-track{height:6px;border-radius:99px;background:linear-gradient(to right,#2D5A1B ${pct}%,rgba(245,240,232,.14) ${pct}%)}
+            .agsl::-webkit-slider-runnable-track{height:6px;border-radius:99px;background:linear-gradient(to right,#2D5A1B var(--sp,8.16%),rgba(245,240,232,.14) var(--sp,8.16%))}
             .agsl::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;border-radius:50%;background:#D4C4A0;border:3px solid #0A1A0A;box-shadow:0 0 0 2.5px #2D5A1B,0 4px 16px rgba(0,0,0,.5);margin-top:-11px;cursor:pointer;transition:transform .12s}
             .agsl:active::-webkit-slider-thumb{transform:scale(1.22)}
             .agsl::-moz-range-track{height:6px;border-radius:99px;background:rgba(245,240,232,.14)}
@@ -314,8 +322,8 @@ export default function LocationPickerModal({ isOpen, current, isMr, onApply, on
                     </div>
                   </div>
 
-                  {/* Radius slider */}
-                  <div style={{ padding: '20px 20px 16px' }}>
+                  {/* Radius slider — CSS-var approach: no re-render on drag, only on release */}
+                  <div ref={sliderTrackRef} style={{ padding: '20px 20px 16px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
                       <div>
                         <p style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(245,240,232,0.35)', margin: 0 }}>
@@ -324,12 +332,22 @@ export default function LocationPickerModal({ isOpen, current, isMr, onApply, on
                         <p style={{ fontSize: 11, fontWeight: 300, color: 'rgba(245,240,232,0.3)', marginTop: 4 }}>{hint}</p>
                       </div>
                       <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
-                        <span style={{ fontSize: 32, fontWeight: 300, letterSpacing: '-0.04em', lineHeight: 1, color: '#D4C4A0' }}>{radius}</span>
+                        <span ref={radiusNumRef} style={{ fontSize: 32, fontWeight: 300, letterSpacing: '-0.04em', lineHeight: 1, color: '#D4C4A0' }}>{radius}</span>
                         <span style={{ fontSize: 11, fontWeight: 500, textTransform: 'uppercase', color: 'rgba(245,240,232,0.4)' }}>km</span>
                       </div>
                     </div>
-                    <input type="range" className="agsl" min={10} max={500} step={5} value={radius}
-                      onChange={e => setRadius(Number(e.target.value))} />
+                    <input
+                      type="range" className="agsl" min={10} max={500} step={1}
+                      defaultValue={radius}
+                      onInput={e => {
+                        const val = Number((e.target as HTMLInputElement).value);
+                        radiusRef.current = val;
+                        circleRef.current?.setRadius(val * 1000);
+                        applySliderUI(val);
+                      }}
+                      onMouseUp={e => setRadius(Number((e.target as HTMLInputElement).value))}
+                      onTouchEnd={e => setRadius(Number((e.target as HTMLInputElement).value))}
+                    />
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8 }}>
                       <span style={{ fontSize: 9, color: 'rgba(245,240,232,0.22)', fontWeight: 500 }}>10 km</span>
                       <span style={{ fontSize: 9, color: 'rgba(245,240,232,0.22)', fontWeight: 500 }}>500 km</span>
