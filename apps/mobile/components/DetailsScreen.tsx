@@ -21,6 +21,7 @@ interface DetailsScreenProps {
 }
 
 export default function DetailsScreen({ product, lang, onBack, onViewSeller, onSendEnquiry }: DetailsScreenProps) {
+  const [activeSlide, setActiveSlide] = useState(0);
   const [saved, setSaved] = useState<boolean>(() => {
     try {
       const list: string[] = JSON.parse(localStorage.getItem(SAVED_KEY) || '[]');
@@ -110,69 +111,113 @@ export default function DetailsScreen({ product, lang, onBack, onViewSeller, onS
       className={`min-h-screen pb-36 transition-all duration-700 ${mounted ? 'opacity-100' : 'opacity-0 translate-y-4'}`}
       style={{ background: '#0A1A0A' }}
     >
-      {/* ── Hero image ─────────────────────────────────────────────── */}
-      <div className="relative h-[58vh] overflow-hidden">
-        <img
-          src={product.imageUrl}
-          alt={name}
-          className={`w-full h-full object-cover transition-transform duration-[1800ms] ease-out ${mounted ? 'scale-100' : 'scale-110'}`}
-          style={{ filter: 'brightness(0.55) saturate(0.85)' }}
-        />
-
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0A1A0A] via-[rgba(10,26,10,0.35)] to-transparent" />
-        <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#0A1A0A] to-transparent" />
-
-        {/* Top bar */}
-        <div className="absolute top-0 left-0 right-0 flex items-center justify-between px-5 pt-safe pt-4">
-          <button
-            onClick={onBack}
-            className="w-10 h-10 rounded-full flex items-center justify-center border border-[rgba(245,240,232,0.2)] bg-[rgba(10,26,10,0.5)] text-[#F5F0E8] active:scale-90 transition-all nav-blur"
-            style={{ touchAction: 'manipulation' }}
-          >
-            <ArrowLeft size={18} />
-          </button>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={handleShare}
-              className="w-10 h-10 rounded-full flex items-center justify-center border border-[rgba(245,240,232,0.2)] bg-[rgba(10,26,10,0.5)] text-[rgba(245,240,232,0.55)] active:scale-90 transition-all nav-blur"
-              style={{ touchAction: 'manipulation' }}
-              aria-label="Share listing"
+      {/* ── Hero carousel ──────────────────────────────────────────── */}
+      {(() => {
+        const slides = product.photos && product.photos.length > 0
+          ? product.photos
+          : [product.imageUrl];
+        return (
+          <div className="relative h-[58vh] overflow-hidden">
+            {/* Swipeable slide track */}
+            <div
+              className="flex h-full transition-transform duration-300 ease-out"
+              style={{ width: `${slides.length * 100}%`, transform: `translateX(-${(activeSlide / slides.length) * 100}%)` }}
+              onTouchStart={e => {
+                const x = e.touches[0].clientX;
+                (e.currentTarget as HTMLDivElement).dataset.tx = String(x);
+              }}
+              onTouchEnd={e => {
+                const startX = Number((e.currentTarget as HTMLDivElement).dataset.tx || 0);
+                const dx = e.changedTouches[0].clientX - startX;
+                if (dx < -40 && activeSlide < slides.length - 1) setActiveSlide(s => s + 1);
+                if (dx > 40  && activeSlide > 0)                  setActiveSlide(s => s - 1);
+              }}
             >
-              <Share2 size={16} />
-            </button>
-            <button
-              onClick={toggleSaved}
-              className="w-10 h-10 rounded-full flex items-center justify-center border border-[rgba(245,240,232,0.2)] bg-[rgba(10,26,10,0.5)] active:scale-90 transition-all nav-blur"
-              style={{ touchAction: 'manipulation' }}
-              aria-label={saved ? 'Remove from saved' : 'Save listing'}
-            >
-              <Heart
-                size={17}
-                className={saved ? 'text-red-400 fill-red-400' : 'text-[rgba(245,240,232,0.55)]'}
-              />
-            </button>
-          </div>
-        </div>
+              {slides.map((src, i) => (
+                <div key={i} className="h-full flex-shrink-0" style={{ width: `${100 / slides.length}%` }}>
+                  <img
+                    src={src}
+                    alt={`${name} ${i + 1}`}
+                    className={`w-full h-full object-cover transition-transform duration-[1800ms] ease-out ${mounted ? 'scale-100' : 'scale-110'}`}
+                    style={{ filter: 'brightness(0.55) saturate(0.85)' }}
+                  />
+                </div>
+              ))}
+            </div>
 
-        {/* Category badge */}
-        <div className="absolute top-16 left-5">
-          <span className="text-[9px] font-medium tracking-[0.18em] uppercase text-[#D4C4A0] bg-[rgba(10,26,10,0.55)] px-3 py-1 rounded-full border border-[rgba(212,196,160,0.25)] nav-blur">
-            {product.category}
-          </span>
-        </div>
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0A1A0A] via-[rgba(10,26,10,0.35)] to-transparent pointer-events-none" />
+            <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#0A1A0A] to-transparent pointer-events-none" />
 
-        {/* Name + price block */}
-        <div className={`absolute bottom-0 left-0 right-0 px-6 pb-8 transition-all duration-700 delay-200 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
-          <p className="text-[10px] font-medium tracking-[0.22em] uppercase text-[#D4C4A0] mb-1.5">{variety}</p>
-          <h1 className="font-light text-[#F5F0E8] mb-3" style={{ fontSize: 'clamp(28px, 8vw, 40px)', letterSpacing: '-0.03em', lineHeight: 1.05 }}>
-            {name}
-          </h1>
-          <div className="flex items-baseline gap-2">
-            <span className="font-light text-[#F5F0E8]" style={{ fontSize: '32px', letterSpacing: '-0.03em' }}>₹{product.price}</span>
-            <span className="text-[11px] font-medium tracking-[0.1em] uppercase text-[rgba(245,240,232,0.4)]">/ {unit}</span>
+            {/* Dot indicators — only shown when multiple slides */}
+            {slides.length > 1 && (
+              <div className="absolute bottom-16 left-0 right-0 flex justify-center gap-1.5 pointer-events-none">
+                {slides.map((_, i) => (
+                  <div
+                    key={i}
+                    className="rounded-full transition-all duration-300"
+                    style={{
+                      width:   i === activeSlide ? 18 : 6,
+                      height:  6,
+                      background: i === activeSlide ? '#D4C4A0' : 'rgba(245,240,232,0.3)',
+                    }}
+                  />
+                ))}
+              </div>
+            )}
+
+            {/* Top bar */}
+            <div className="absolute top-0 left-0 right-0 flex items-center justify-between px-5 pt-safe pt-4">
+              <button
+                onClick={onBack}
+                className="w-10 h-10 rounded-full flex items-center justify-center border border-[rgba(245,240,232,0.2)] bg-[rgba(10,26,10,0.5)] text-[#F5F0E8] active:scale-90 transition-all nav-blur"
+                style={{ touchAction: 'manipulation' }}
+              >
+                <ArrowLeft size={18} />
+              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleShare}
+                  className="w-10 h-10 rounded-full flex items-center justify-center border border-[rgba(245,240,232,0.2)] bg-[rgba(10,26,10,0.5)] text-[rgba(245,240,232,0.55)] active:scale-90 transition-all nav-blur"
+                  style={{ touchAction: 'manipulation' }}
+                  aria-label="Share listing"
+                >
+                  <Share2 size={16} />
+                </button>
+                <button
+                  onClick={toggleSaved}
+                  className="w-10 h-10 rounded-full flex items-center justify-center border border-[rgba(245,240,232,0.2)] bg-[rgba(10,26,10,0.5)] active:scale-90 transition-all nav-blur"
+                  style={{ touchAction: 'manipulation' }}
+                  aria-label={saved ? 'Remove from saved' : 'Save listing'}
+                >
+                  <Heart
+                    size={17}
+                    className={saved ? 'text-red-400 fill-red-400' : 'text-[rgba(245,240,232,0.55)]'}
+                  />
+                </button>
+              </div>
+            </div>
+
+            {/* Category badge */}
+            <div className="absolute top-16 left-5">
+              <span className="text-[9px] font-medium tracking-[0.18em] uppercase text-[#D4C4A0] bg-[rgba(10,26,10,0.55)] px-3 py-1 rounded-full border border-[rgba(212,196,160,0.25)] nav-blur">
+                {product.category}
+              </span>
+            </div>
+
+            {/* Name + price block */}
+            <div className={`absolute bottom-0 left-0 right-0 px-6 pb-8 transition-all duration-700 delay-200 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
+              <p className="text-[10px] font-medium tracking-[0.22em] uppercase text-[#D4C4A0] mb-1.5">{variety}</p>
+              <h1 className="font-light text-[#F5F0E8] mb-3" style={{ fontSize: 'clamp(28px, 8vw, 40px)', letterSpacing: '-0.03em', lineHeight: 1.05 }}>
+                {name}
+              </h1>
+              <div className="flex items-baseline gap-2">
+                <span className="font-light text-[#F5F0E8]" style={{ fontSize: '32px', letterSpacing: '-0.03em' }}>₹{product.price}</span>
+                <span className="text-[11px] font-medium tracking-[0.1em] uppercase text-[rgba(245,240,232,0.4)]">/ {unit}</span>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        );
+      })()}
 
       {/* ── Content ───────────────────────────────────────────────── */}
       <div className="px-5 -mt-2 space-y-8 relative z-10">

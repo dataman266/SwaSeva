@@ -36,6 +36,7 @@ export interface Product {
   age?: string;
   ageMr?: string;
   imageUrl: string;
+  photos?: string[];
   sellerId: string;
   certificates?: string[];
   harvestDate?: string;

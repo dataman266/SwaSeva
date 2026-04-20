@@ -311,6 +311,7 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
       daysLeft:     30,
       // Use data URL if available (persists), fallback to generic image
       imageUrl:     photos[0] ?? 'https://images.unsplash.com/photo-1500651230702-0e2d8a49d4ad?w=800&auto=format&fit=crop',
+      photos:       photos.length > 0 ? photos : undefined,
       mobileNumber,
       description,
       descriptionMr: description,
