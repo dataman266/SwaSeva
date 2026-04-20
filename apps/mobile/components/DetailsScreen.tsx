@@ -395,12 +395,12 @@ export default function DetailsScreen({ product, lang, onBack, onViewSeller, onS
       <div
         className={`fixed left-0 right-0 transition-all duration-700 delay-500 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}
         style={{
-          bottom: 'calc(68px + env(safe-area-inset-bottom, 0px))',
-          padding: '14px 20px 16px',
+          bottom: 'calc(76px + env(safe-area-inset-bottom, 0px))',
+          padding: '10px 16px 12px',
           background: 'linear-gradient(180deg, rgba(40,68,32,0.72) 0%, rgba(18,32,18,0.88) 100%)',
           backdropFilter: 'blur(20px) saturate(220%)',
           WebkitBackdropFilter: 'blur(20px) saturate(220%)',
-          borderRadius: '18px 18px 0 0',
+          borderRadius: '16px 16px 0 0',
           borderTop: '1px solid rgba(255,255,255,0.16)',
           borderLeft: '1px solid rgba(255,255,255,0.07)',
           borderRight: '1px solid rgba(255,255,255,0.07)',
@@ -412,28 +412,28 @@ export default function DetailsScreen({ product, lang, onBack, onViewSeller, onS
           {/* Call button */}
           <a
             href={`tel:${seller?.phone}`}
-            className="flex items-center justify-center gap-2 px-5 h-12 rounded-full border border-[rgba(245,240,232,0.15)] text-[rgba(245,240,232,0.75)] active:scale-95 transition-all font-medium text-[13px] tracking-[0.06em]"
+            className="flex items-center justify-center gap-1.5 px-4 h-9 rounded-full border border-[rgba(245,240,232,0.15)] text-[rgba(245,240,232,0.75)] active:scale-95 transition-all font-medium text-[12px] tracking-[0.05em]"
             style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'rgba(45,90,27,0.2)' }}
           >
-            <Phone size={16} className="text-[#D4C4A0]" />
+            <Phone size={14} className="text-[#D4C4A0]" />
             {isMr ? 'कॉल' : 'Call'}
           </a>
           {/* Cart button */}
           <button
             onClick={() => { addToCart(product.id); haptic.light(); }}
-            className="flex items-center justify-center gap-2 px-5 h-12 rounded-full border border-[rgba(212,196,160,0.3)] text-[#D4C4A0] active:scale-95 transition-all font-medium text-[13px]"
+            className="flex items-center justify-center gap-1.5 px-4 h-9 rounded-full border border-[rgba(212,196,160,0.3)] text-[#D4C4A0] active:scale-95 transition-all font-medium text-[12px]"
             style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'rgba(212,196,160,0.1)' }}
           >
-            <ShoppingCart size={16} />
+            <ShoppingCart size={14} />
             {isMr ? 'कार्ट' : 'Cart'}
           </button>
           {/* Send Enquiry — primary CTA */}
           <button
             onClick={handleSendEnquiry}
-            className="flex-1 flex items-center justify-center gap-2 h-12 rounded-full text-[#F5F0E8] font-medium text-[13px] tracking-[0.06em] active:scale-95 transition-all"
+            className="flex-1 flex items-center justify-center gap-1.5 h-9 rounded-full text-[#F5F0E8] font-medium text-[12px] tracking-[0.05em] active:scale-95 transition-all"
             style={{ background: '#2D5A1B', touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent' }}
           >
-            <MessageSquare size={16} />
+            <MessageSquare size={14} />
             {t.sendEnquiry}
           </button>
         </div>
