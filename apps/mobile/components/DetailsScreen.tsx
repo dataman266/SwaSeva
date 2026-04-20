@@ -395,15 +395,16 @@ export default function DetailsScreen({ product, lang, onBack, onViewSeller, onS
       <div
         className={`fixed left-0 right-0 transition-all duration-700 delay-500 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}
         style={{
-          bottom: 'calc(60px + env(safe-area-inset-bottom, 0px))',
+          bottom: 'calc(68px + env(safe-area-inset-bottom, 0px))',
           padding: '14px 20px 16px',
-          background: 'rgba(14, 26, 14, 0.92)',
-          backdropFilter: 'blur(24px) saturate(180%)',
-          WebkitBackdropFilter: 'blur(24px) saturate(180%)',
-          borderRadius: '20px 20px 0 0',
-          border: '1px solid rgba(255,255,255,0.09)',
-          borderBottom: 'none',
-          boxShadow: '0 -16px 48px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.12)',
+          background: 'linear-gradient(180deg, rgba(40,68,32,0.72) 0%, rgba(18,32,18,0.88) 100%)',
+          backdropFilter: 'blur(20px) saturate(220%)',
+          WebkitBackdropFilter: 'blur(20px) saturate(220%)',
+          borderRadius: '18px 18px 0 0',
+          borderTop: '1px solid rgba(255,255,255,0.16)',
+          borderLeft: '1px solid rgba(255,255,255,0.07)',
+          borderRight: '1px solid rgba(255,255,255,0.07)',
+          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.18), 0 -8px 32px rgba(0,0,0,0.5)',
           zIndex: 60,
         }}
       >
