@@ -425,7 +425,7 @@ export default function DetailsScreen({ product, lang, onBack, onViewSeller, onS
             style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'rgba(212,196,160,0.1)' }}
           >
             <ShoppingCart size={14} />
-            {isMr ? 'कार्ट' : 'Cart'}
+            {isMr ? 'कार्टमध्ये जोडा' : 'Add to Cart'}
           </button>
           {/* Send Enquiry — primary CTA */}
           <button
