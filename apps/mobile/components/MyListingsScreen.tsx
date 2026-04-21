@@ -160,6 +160,12 @@ export default function MyListingsScreen({ lang, onCreateNew }: MyListingsScreen
   const [selectedListing, setSelectedListing] = useState<Listing | null>(null);
   const undoTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // Re-read localStorage every time this screen becomes visible
+  // so newly published listings always appear immediately
+  useEffect(() => {
+    setListings([...loadUserListings(), ...MOCK_LISTINGS]);
+  }, []);
+
   // Auto-dismiss undo toast after 4 s
   useEffect(() => {
     if (!undoItem) return;

@@ -67,11 +67,17 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
   const [sortBy, setSortBy]           = useState<'newest' | 'price_asc' | 'price_desc'>('newest');
   const [priceMin, setPriceMin]       = useState('');
   const [priceMax, setPriceMax]       = useState('');
+  const [userListings, setUserListings] = useState<ReturnType<typeof getUserListings>>(() => getUserListings());
 
   // Simulate initial product load (800ms)
   useEffect(() => {
     const t = setTimeout(() => setIsLoading(false), 800);
     return () => clearTimeout(t);
+  }, []);
+
+  // Refresh user listings whenever HomeScreen mounts (e.g. after returning from Sell)
+  useEffect(() => {
+    setUserListings(getUserListings());
   }, []);
 
   const handleRefresh = useCallback(async () => {
@@ -135,7 +141,6 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
   const filtersActive = sortBy !== 'newest' || priceMin !== '' || priceMax !== '';
   const locationActive = locationFilter.region !== 'all';
 
-  const userListings = getUserListings();
   const userListingIds = new Set(userListings.map(l => l.id));
 
   const allProducts = [...userListings, ...PRODUCTS];

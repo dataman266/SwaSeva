@@ -323,11 +323,29 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
       isUserListing: true,
     };
 
-    try {
+    const saveToStorage = (listing: typeof newListing) => {
       const existing = JSON.parse(localStorage.getItem(USER_LISTINGS_KEY) || '[]');
-      localStorage.setItem(USER_LISTINGS_KEY, JSON.stringify([newListing, ...existing]));
-      localStorage.removeItem(DRAFT_KEY);
-    } catch {}
+      localStorage.setItem(USER_LISTINGS_KEY, JSON.stringify([listing, ...existing]));
+    };
+
+    try {
+      saveToStorage(newListing);
+    } catch {
+      // Quota exceeded — retry without photos array (keep only first image URL)
+      try {
+        saveToStorage({ ...newListing, photos: undefined });
+      } catch {
+        // Still failing — strip even the data URL imageUrl, use fallback
+        try {
+          saveToStorage({
+            ...newListing,
+            photos: undefined,
+            imageUrl: 'https://images.unsplash.com/photo-1500651230702-0e2d8a49d4ad?w=800&auto=format&fit=crop',
+          });
+        } catch { return; }
+      }
+    }
+    localStorage.removeItem(DRAFT_KEY);
 
     haptic.success();
     setIsSuccess(true);
