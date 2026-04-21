@@ -118,10 +118,12 @@ export default function DetailsScreen({ product, lang, onBack, onViewSeller, onS
           ? product.photos
           : [product.imageUrl];
         return (
-          <div className="relative h-[58vh] overflow-hidden">
-            {/* Native scroll-snap track — works reliably on all mobile browsers */}
+          <div className="relative h-[58vh]" style={{ overflow: 'clip' }}>
+            {/* Native scroll-snap — touch-action pan-x lets vertical page keep its scroll
+                while routing horizontal gestures into this element */}
             <div
               ref={trackRef}
+              className="scrollbar-hide"
               onScroll={e => {
                 const el = e.currentTarget;
                 const idx = Math.round(el.scrollLeft / el.clientWidth);
@@ -129,11 +131,14 @@ export default function DetailsScreen({ product, lang, onBack, onViewSeller, onS
               }}
               style={{
                 display: 'flex',
+                width: '100%',
                 height: '100%',
-                overflowX: 'auto',
+                overflowX: 'scroll',
                 overflowY: 'hidden',
                 scrollSnapType: 'x mandatory',
+                scrollBehavior: 'smooth',
                 scrollbarWidth: 'none',
+                touchAction: 'pan-x pinch-zoom',
                 WebkitOverflowScrolling: 'touch' as React.CSSProperties['WebkitOverflowScrolling'],
               }}
             >

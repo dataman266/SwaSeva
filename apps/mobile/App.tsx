@@ -161,7 +161,7 @@ const App: React.FC = () => {
 
       {needsHeaderSpacer && <div className="h-14 pt-safe" aria-hidden />}
 
-      <main className="flex-grow overflow-hidden">
+      <main className="flex-grow" style={{ overflowX: 'clip', overflowY: 'visible' }}>
         <AnimatePresence mode="wait" custom={dir}>
           <motion.div
             key={state.currentScreen}
