@@ -44,6 +44,7 @@ function getUserListings(): Product[] {
       unit:        l.unit ?? 'kg',
       unitMr:      l.unit ?? 'kg',
       imageUrl:    l.imageUrl,
+      photos:      Array.isArray(l.photos) ? l.photos as string[] : undefined,
       sellerId:    'self',
       quantity:    l.quantity ?? 0,
       description: (l.description as string) ?? '',

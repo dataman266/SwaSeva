@@ -22,6 +22,7 @@ interface DetailsScreenProps {
 
 export default function DetailsScreen({ product, lang, onBack, onViewSeller, onSendEnquiry }: DetailsScreenProps) {
   const [activeSlide, setActiveSlide] = useState(0);
+  const trackRef = React.useRef<HTMLDivElement>(null);
   const [saved, setSaved] = useState<boolean>(() => {
     try {
       const list: string[] = JSON.parse(localStorage.getItem(SAVED_KEY) || '[]');
@@ -118,34 +119,40 @@ export default function DetailsScreen({ product, lang, onBack, onViewSeller, onS
           : [product.imageUrl];
         return (
           <div className="relative h-[58vh] overflow-hidden">
-            {/* Swipeable slide track */}
+            {/* Native scroll-snap track — works reliably on all mobile browsers */}
             <div
-              className="flex h-full transition-transform duration-300 ease-out"
-              style={{ width: `${slides.length * 100}%`, transform: `translateX(-${(activeSlide / slides.length) * 100}%)` }}
-              onTouchStart={e => {
-                const x = e.touches[0].clientX;
-                (e.currentTarget as HTMLDivElement).dataset.tx = String(x);
+              ref={trackRef}
+              onScroll={e => {
+                const el = e.currentTarget;
+                const idx = Math.round(el.scrollLeft / el.clientWidth);
+                setActiveSlide(idx);
               }}
-              onTouchEnd={e => {
-                const startX = Number((e.currentTarget as HTMLDivElement).dataset.tx || 0);
-                const dx = e.changedTouches[0].clientX - startX;
-                if (dx < -40 && activeSlide < slides.length - 1) setActiveSlide(s => s + 1);
-                if (dx > 40  && activeSlide > 0)                  setActiveSlide(s => s - 1);
+              style={{
+                display: 'flex',
+                height: '100%',
+                overflowX: 'auto',
+                overflowY: 'hidden',
+                scrollSnapType: 'x mandatory',
+                scrollbarWidth: 'none',
+                WebkitOverflowScrolling: 'touch' as React.CSSProperties['WebkitOverflowScrolling'],
               }}
             >
               {slides.map((src, i) => (
-                <div key={i} className="h-full flex-shrink-0" style={{ width: `${100 / slides.length}%` }}>
+                <div
+                  key={i}
+                  style={{ flexShrink: 0, width: '100%', height: '100%', scrollSnapAlign: 'start' }}
+                >
                   <img
                     src={src}
                     alt={`${name} ${i + 1}`}
-                    className={`w-full h-full object-cover transition-transform duration-[1800ms] ease-out ${mounted ? 'scale-100' : 'scale-110'}`}
-                    style={{ filter: 'brightness(0.55) saturate(0.85)' }}
+                    className={`w-full h-full object-cover transition-transform duration-[1800ms] ease-out ${mounted ? 'scale-100' : 'scale-105'}`}
+                    style={{ filter: 'brightness(0.82) saturate(0.9)' }}
                   />
                 </div>
               ))}
             </div>
 
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0A1A0A] via-[rgba(10,26,10,0.35)] to-transparent pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0A1A0A] via-[rgba(10,26,10,0.25)] to-transparent pointer-events-none" />
             <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#0A1A0A] to-transparent pointer-events-none" />
 
             {/* Dot indicators — only shown when multiple slides */}
@@ -156,9 +163,9 @@ export default function DetailsScreen({ product, lang, onBack, onViewSeller, onS
                     key={i}
                     className="rounded-full transition-all duration-300"
                     style={{
-                      width:   i === activeSlide ? 18 : 6,
-                      height:  6,
-                      background: i === activeSlide ? '#D4C4A0' : 'rgba(245,240,232,0.3)',
+                      width:      i === activeSlide ? 18 : 6,
+                      height:     6,
+                      background: i === activeSlide ? '#D4C4A0' : 'rgba(245,240,232,0.35)',
                     }}
                   />
                 ))}
