@@ -268,10 +268,14 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
   const t    = TRANSLATIONS[isMr ? 'mr' : 'en'];
 
   useEffect(() => {
+    if (isSuccess) {
+      localStorage.removeItem(DRAFT_KEY);
+      return;
+    }
     try {
       localStorage.setItem(DRAFT_KEY, JSON.stringify({ step, categoryId, variety, price, unit, qtyUnit, quantity, mobileNumber, description, location }));
     } catch {}
-  }, [step, categoryId, variety, price, unit, qtyUnit, quantity, mobileNumber, description, location]);
+  }, [isSuccess, step, categoryId, variety, price, unit, qtyUnit, quantity, mobileNumber, description, location]);
 
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
