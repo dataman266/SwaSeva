@@ -22,6 +22,9 @@ interface DetailsScreenProps {
 
 export default function DetailsScreen({ product, lang, onBack, onViewSeller, onSendEnquiry }: DetailsScreenProps) {
   const [activeSlide, setActiveSlide] = useState(0);
+  const [touchStartX, setTouchStartX] = useState(0);
+  const [dragOffset, setDragOffset] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
   const trackRef = React.useRef<HTMLDivElement>(null);
   const [saved, setSaved] = useState<boolean>(() => {
     try {
@@ -118,40 +121,39 @@ export default function DetailsScreen({ product, lang, onBack, onViewSeller, onS
           ? product.photos
           : [product.imageUrl];
         return (
-          <div className="relative h-[58vh]" style={{ overflow: 'clip' }}>
-            {/* Native scroll-snap — touch-action pan-x lets vertical page keep its scroll
-                while routing horizontal gestures into this element */}
+          <div className="relative h-[58vh]" style={{ overflow: 'hidden' }}>
             <div
               ref={trackRef}
-              className="scrollbar-hide"
-              onScroll={e => {
-                const el = e.currentTarget;
-                const idx = Math.round(el.scrollLeft / el.clientWidth);
-                setActiveSlide(idx);
+              onTouchStart={e => { setTouchStartX(e.touches[0].clientX); setIsDragging(true); setDragOffset(0); }}
+              onTouchMove={e => { if (isDragging) setDragOffset(e.touches[0].clientX - touchStartX); }}
+              onTouchEnd={() => {
+                setIsDragging(false);
+                const w = trackRef.current?.clientWidth || window.innerWidth;
+                if (dragOffset < -(w * 0.25) && activeSlide < slides.length - 1) setActiveSlide(s => s + 1);
+                else if (dragOffset > w * 0.25 && activeSlide > 0) setActiveSlide(s => s - 1);
+                setDragOffset(0);
               }}
               style={{
                 display: 'flex',
                 width: '100%',
                 height: '100%',
-                overflowX: 'scroll',
-                overflowY: 'hidden',
-                scrollSnapType: 'x mandatory',
-                scrollBehavior: 'smooth',
-                scrollbarWidth: 'none',
-                touchAction: 'pan-x pinch-zoom',
-                WebkitOverflowScrolling: 'touch' as React.CSSProperties['WebkitOverflowScrolling'],
+                transform: `translateX(calc(${-activeSlide * 100}% + ${dragOffset}px))`,
+                transition: isDragging ? 'none' : 'transform 0.32s cubic-bezier(0.32,0,0.16,1)',
+                willChange: 'transform',
+                touchAction: 'pan-y',
+                userSelect: 'none',
               }}
             >
               {slides.map((src, i) => (
                 <div
                   key={i}
-                  style={{ flexShrink: 0, width: '100%', height: '100%', scrollSnapAlign: 'start' }}
+                  style={{ flexShrink: 0, width: '100%', height: '100%' }}
                 >
                   <img
                     src={src}
                     alt={`${name} ${i + 1}`}
                     className={`w-full h-full object-cover transition-transform duration-[1800ms] ease-out ${mounted ? 'scale-100' : 'scale-105'}`}
-                    style={{ filter: 'brightness(0.82) saturate(0.9)' }}
+                    style={{ filter: 'brightness(0.82) saturate(0.9)', pointerEvents: 'none' }}
                   />
                 </div>
               ))}

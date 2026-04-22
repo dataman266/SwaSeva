@@ -37,7 +37,6 @@ const QTY_UNITS = [
 ];
 
 interface DraftState {
-  step: number;
   categoryId: string;
   variety: string;
   price: string;
@@ -47,6 +46,46 @@ interface DraftState {
   mobileNumber: string;
   description: string;
   location: string;
+}
+
+async function processMedia(file: File): Promise<string> {
+  if (file.type.startsWith('video/')) {
+    return new Promise((resolve) => {
+      const video = document.createElement('video');
+      const canvas = document.createElement('canvas');
+      video.onloadeddata = () => {
+        const MAX = 900;
+        const w = Math.min(video.videoWidth, MAX);
+        const h = Math.round(w * video.videoHeight / video.videoWidth);
+        canvas.width = w;
+        canvas.height = h;
+        canvas.getContext('2d')!.drawImage(video, 0, 0, w, h);
+        URL.revokeObjectURL(video.src);
+        resolve(canvas.toDataURL('image/jpeg', 0.72));
+      };
+      video.onerror = () => { URL.revokeObjectURL(video.src); resolve(''); };
+      video.src = URL.createObjectURL(file);
+      video.currentTime = 0.1;
+    });
+  }
+  return new Promise((resolve) => {
+    const img = new Image();
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      img.onload = () => {
+        const MAX = 900;
+        let w = img.width;
+        let h = img.height;
+        if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d')!.drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL('image/jpeg', 0.72));
+      };
+      img.src = ev.target?.result as string;
+    };
+    reader.readAsDataURL(file);
+  });
 }
 
 function loadDraft(): Partial<DraftState> {
@@ -218,8 +257,8 @@ function SuccessView({ isMr }: { isMr: boolean }) {
 interface FieldProps { label: string; children: React.ReactNode; }
 function Field({ label, children }: FieldProps) {
   return (
-    <div className="space-y-2">
-      <label className="block text-[10px] font-medium tracking-[0.18em] uppercase text-[rgba(245,240,232,0.35)] px-1">
+    <div className="space-y-2.5">
+      <label className="block text-[13px] font-semibold tracking-[0.08em] uppercase text-[rgba(245,240,232,0.75)] px-1">
         {label}
       </label>
       {children}
@@ -228,11 +267,12 @@ function Field({ label, children }: FieldProps) {
 }
 
 const inputCls = [
-  'w-full px-5 py-4 rounded-xl font-light text-[#F5F0E8] text-[15px]',
-  'placeholder:text-[rgba(245,240,232,0.2)]',
-  'border border-[rgba(245,240,232,0.1)] focus:border-[rgba(212,196,160,0.35)]',
-  'bg-[rgba(255,255,255,0.03)] focus:bg-[rgba(255,255,255,0.05)]',
-  'outline-none transition-all',
+  'w-full px-5 py-[14px] rounded-xl font-light text-[#F5F0E8] text-[17px]',
+  'placeholder:text-[rgba(245,240,232,0.38)]',
+  'border-2 border-[rgba(245,240,232,0.28)] focus:border-[#4A8C2A]',
+  'bg-[rgba(255,255,255,0.06)] focus:bg-[rgba(255,255,255,0.09)]',
+  'outline-none transition-all duration-200',
+  'focus:shadow-[0_0_0_3px_rgba(74,140,42,0.2)]',
 ].join(' ');
 const selectCls = inputCls + ' appearance-none cursor-pointer';
 
@@ -244,7 +284,7 @@ interface SellScreenProps {
 
 export default function SellScreen({ lang, onDone }: SellScreenProps) {
   const draft = loadDraft();
-  const [step, setStep]               = useState(draft.step ?? 1);
+  const [step, setStep]               = useState(1);
   const [isSuccess, setIsSuccess]     = useState(false);
   const [categoryId, setCategoryId]   = useState(draft.categoryId ?? '');
   const [variety, setVariety]         = useState(draft.variety ?? '');
@@ -273,20 +313,16 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
       return;
     }
     try {
-      localStorage.setItem(DRAFT_KEY, JSON.stringify({ step, categoryId, variety, price, unit, qtyUnit, quantity, mobileNumber, description, location }));
+      localStorage.setItem(DRAFT_KEY, JSON.stringify({ categoryId, variety, price, unit, qtyUnit, quantity, mobileNumber, description, location }));
     } catch {}
-  }, [isSuccess, step, categoryId, variety, price, unit, qtyUnit, quantity, mobileNumber, description, location]);
+  }, [isSuccess, categoryId, variety, price, unit, qtyUnit, quantity, mobileNumber, description, location]);
 
-  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = ev => {
-      const dataUrl = ev.target?.result as string;
-      setPhotos(prev => prev.length < 4 ? [...prev, dataUrl] : prev);
-    };
-    reader.readAsDataURL(file);
     e.target.value = '';
+    const compressed = await processMedia(file);
+    if (compressed) setPhotos(prev => prev.length < 4 ? [...prev, compressed] : prev);
   };
 
   const handleIdentityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -388,7 +424,7 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
           </div>
           {step > 1 && (
             <button
-              onClick={() => setStep(s => s - 1)}
+              onClick={() => setStep((s: number) => s - 1)}
               className="w-9 h-9 rounded-full flex items-center justify-center border border-[rgba(245,240,232,0.12)] text-[rgba(245,240,232,0.45)] active:scale-90 transition-all"
             >
               <ChevronLeft size={16} />

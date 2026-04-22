@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Apla Agri Mart</title>
 
     <meta name="theme-color" content="#0A1A0A">
@@ -157,6 +157,30 @@
         @keyframes slideUp {
             from { transform: translateY(100%); }
             to   { transform: translateY(0);    }
+        }
+
+        /* ── Senior-friendly focus rings ── */
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #4A8C2A !important;
+            box-shadow: 0 0 0 3px rgba(74, 140, 42, 0.22) !important;
+        }
+
+        /* ── Minimum touch target ── */
+        button, a, [role="button"] {
+            min-height: 44px;
+            min-width: 44px;
+        }
+
+        /* ── Readable base font size ── */
+        input, textarea, select {
+            font-size: 17px;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        /* ── Active press feedback ── */
+        button:active, a:active {
+            opacity: 0.82;
         }
     </style>
 

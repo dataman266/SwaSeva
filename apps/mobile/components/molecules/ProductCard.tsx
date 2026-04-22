@@ -59,7 +59,7 @@ export default function ProductCard({
       <div
         onClick={onClick}
         className="relative overflow-hidden rounded-2xl cursor-pointer group"
-        style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)' }}
+        style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.14)' }}
       >
         {/* Hero image */}
         <div className="relative h-60 overflow-hidden">
@@ -75,7 +75,7 @@ export default function ProductCard({
 
           {/* Category badge */}
           <div className="absolute top-4 left-4 flex flex-col gap-1.5">
-            <span className="inline-block text-[9px] font-medium tracking-[0.14em] uppercase text-[#D4C4A0] bg-[rgba(10,26,10,0.6)] backdrop-blur px-3 py-1 rounded-full border border-[rgba(212,196,160,0.2)]">
+            <span className="inline-block text-[11px] font-semibold tracking-[0.1em] uppercase text-[#D4C4A0] bg-[rgba(10,26,10,0.75)] backdrop-blur px-3 py-1.5 rounded-full border border-[rgba(212,196,160,0.35)]">
               {product.category}
             </span>
             {isSelfListing && (
@@ -119,7 +119,7 @@ export default function ProductCard({
             {seller && (
               <div className="flex items-center gap-1.5">
                 <MapPin size={11} className="text-[#D4C4A0]" />
-                <span className="text-[11px] font-light text-[rgba(245,240,232,0.45)]">
+                <span className="text-[13px] font-light text-[rgba(245,240,232,0.7)]">
                   {seller.location}
                 </span>
               </div>
@@ -128,7 +128,7 @@ export default function ProductCard({
               <span className="text-2xl font-light text-[#F5F0E8]" style={{ letterSpacing: '-0.02em' }}>
                 ₹{product.price}
               </span>
-              <span className="text-[10px] font-medium tracking-[0.1em] uppercase text-[rgba(245,240,232,0.35)]">
+              <span className="text-[12px] font-medium tracking-[0.08em] uppercase text-[rgba(245,240,232,0.65)]">
                 / {isMr ? product.unitMr : product.unit}
               </span>
             </div>
@@ -183,18 +183,18 @@ export default function ProductCard({
             <a
               href={`tel:${seller.phone}`}
               onClick={e => e.stopPropagation()}
-              className="flex items-center justify-center gap-1.5 flex-1 h-10 rounded-full border border-[rgba(245,240,232,0.15)] text-[rgba(245,240,232,0.7)] text-[12px] font-medium active:scale-95 transition-all"
+              className="flex items-center justify-center gap-2 flex-1 h-12 rounded-2xl border-2 border-[rgba(245,240,232,0.25)] text-[rgba(245,240,232,0.85)] text-[14px] font-semibold active:scale-95 transition-all"
               style={{ touchAction: 'manipulation' }}
             >
-              <Phone size={13} className="text-[#D4C4A0]" />
+              <Phone size={15} className="text-[#D4C4A0]" />
               {isMr ? 'कॉल' : 'Call'}
             </a>
             <button
               onClick={onEnquiry}
-              className="flex items-center justify-center gap-1.5 flex-1 h-10 rounded-full text-[#F5F0E8] text-[12px] font-medium active:scale-95 transition-all"
-              style={{ background: '#2D5A1B', touchAction: 'manipulation' }}
+              className="flex items-center justify-center gap-2 flex-1 h-12 rounded-2xl text-[#F5F0E8] text-[14px] font-semibold active:scale-95 transition-all"
+              style={{ background: '#3A7522', touchAction: 'manipulation' }}
             >
-              <MessageSquare size={13} />
+              <MessageSquare size={15} />
               {isMr ? 'चौकशी' : 'Enquiry'}
             </button>
           </div>
