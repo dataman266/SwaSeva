@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useMemo } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react'; // useState kept for tappedIdx
 import { TrendingUp, TrendingDown, Minus, ExternalLink } from 'lucide-react';
 
 interface PriceItem {
@@ -104,11 +104,11 @@ interface LivePriceTickerProps {
 }
 
 export default function LivePriceTicker({ isMr, location = '' }: LivePriceTickerProps) {
-  const trackRef = useRef<HTMLDivElement>(null);
-  const [paused, setPaused]   = useState(false);
+  const trackRef   = useRef<HTMLDivElement>(null);
+  const pausedRef  = useRef(false);   // ref — no re-renders, no effect restarts
+  const posRef     = useRef(0);
+  const rafRef     = useRef<number>(0);
   const [tappedIdx, setTappedIdx] = useState<number | null>(null);
-  const posRef  = useRef(0);
-  const rafRef  = useRef<number>(0);
 
   // Sort PRICE_DATA by distance to user's location (nearest first)
   const sorted = useMemo<PriceItem[]>(() => {
@@ -128,34 +128,41 @@ export default function LivePriceTicker({ isMr, location = '' }: LivePriceTicker
     return sorted[0].market;
   }, [location, sorted]);
 
+  // Single RAF loop — empty deps so it never restarts on re-render.
+  // Reads pausedRef.current directly; lastTime resets to null when paused
+  // so the first resumed frame uses dt=16 instead of a huge accumulated gap.
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
     const speed = 0.5;
-    let lastTime = 0;
+    let lastTime: number | null = null;
+    let raf: number;
+
     const step = (ts: number) => {
-      if (!paused) {
-        const dt = ts - lastTime || 16;
+      if (!pausedRef.current) {
+        if (lastTime === null) lastTime = ts;
+        const dt = Math.min(ts - lastTime, 50); // clamp — prevents giant jumps after tab switch
         lastTime = ts;
         posRef.current += speed * (dt / 16);
         const half = track.scrollWidth / 2;
         if (posRef.current >= half) posRef.current -= half;
         track.style.transform = `translateX(-${posRef.current}px)`;
       } else {
-        lastTime = ts;
+        lastTime = null; // reset so resume starts from a clean dt
       }
-      rafRef.current = requestAnimationFrame(step);
+      raf = requestAnimationFrame(step);
     };
-    rafRef.current = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(rafRef.current);
-  }, [paused]);
 
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Open URL directly in the click handler — window.open in setTimeout is
+  // blocked by mobile browsers as a pop-up.
   const handleTap = (item: PriceItem, idx: number) => {
     setTappedIdx(idx);
-    setTimeout(() => {
-      setTappedIdx(null);
-      window.open(item.sourceUrl, '_blank', 'noopener,noreferrer');
-    }, 180);
+    setTimeout(() => setTappedIdx(null), 250);
+    window.open(item.sourceUrl, '_blank', 'noopener,noreferrer');
   };
 
   // Duplicate for seamless loop
@@ -170,9 +177,9 @@ export default function LivePriceTicker({ isMr, location = '' }: LivePriceTicker
         padding: '0.5rem 0',
         overflow: 'hidden',
       }}
-      onPointerDown={() => setPaused(true)}
-      onPointerUp={() => setPaused(false)}
-      onPointerLeave={() => setPaused(false)}
+      onPointerDown={() => { pausedRef.current = true; }}
+      onPointerUp={() => { pausedRef.current = false; }}
+      onPointerLeave={() => { pausedRef.current = false; }}
     >
       {/* Label row */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0 1rem 0.4rem' }}>
@@ -216,6 +223,7 @@ export default function LivePriceTicker({ isMr, location = '' }: LivePriceTicker
             return (
               <button
                 key={i}
+                onPointerDown={(e) => e.stopPropagation()}
                 onClick={() => handleTap(item, i)}
                 style={{
                   flexShrink: 0,
