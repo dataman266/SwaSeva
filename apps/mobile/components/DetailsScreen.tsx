@@ -112,7 +112,7 @@ export default function DetailsScreen({ product, lang, onBack, onViewSeller, onS
 
   return (
     <div
-      className={`min-h-screen pb-36 transition-all duration-700 ${mounted ? 'opacity-100' : 'opacity-0 translate-y-4'}`}
+      className={`min-h-screen pb-48 transition-all duration-700 ${mounted ? 'opacity-100' : 'opacity-0 translate-y-4'}`}
       style={{ background: '#0A1A0A' }}
     >
       {/* ── Hero carousel ──────────────────────────────────────────── */}
@@ -454,7 +454,7 @@ export default function DetailsScreen({ product, lang, onBack, onViewSeller, onS
       <div
         className={`fixed left-0 right-0 transition-all duration-700 delay-500 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}
         style={{
-          bottom: 'calc(76px + env(safe-area-inset-bottom, 0px))',
+          bottom: 'calc(88px + env(safe-area-inset-bottom, 0px))',
           padding: '10px 16px 12px',
           background: 'linear-gradient(180deg, rgba(40,68,32,0.72) 0%, rgba(18,32,18,0.88) 100%)',
           backdropFilter: 'blur(20px) saturate(220%)',
