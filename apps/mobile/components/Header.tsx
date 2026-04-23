@@ -43,10 +43,10 @@ export default function Header({
           {location && location !== 'Detecting...' && (
             <span
               style={{
-                fontSize: '8px',
-                fontWeight: 500,
-                letterSpacing: '0.22em',
-                color: 'rgba(212,196,160,0.6)',
+                fontSize: '11px',
+                fontWeight: 600,
+                letterSpacing: '0.1em',
+                color: 'rgba(212,196,160,0.9)',
                 textTransform: 'uppercase',
                 paddingLeft: '2px',
               }}
@@ -63,11 +63,11 @@ export default function Header({
             onClick={() => onLanguageChange(
               language === Language.ENGLISH ? Language.MARATHI : Language.ENGLISH
             )}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[rgba(245,240,232,0.15)] text-[rgba(245,240,232,0.65)] hover:text-[#F5F0E8] transition-all active:scale-95"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-full border-2 border-[rgba(245,240,232,0.4)] text-[rgba(245,240,232,0.9)] hover:text-[#F5F0E8] transition-all active:scale-95"
             style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'rgba(45,90,27,0.2)' }}
           >
             <Languages size={14} />
-            <span style={{ fontSize: '10px', fontWeight: 500, letterSpacing: '0.1em' }}>
+            <span style={{ fontSize: '13px', fontWeight: 600, letterSpacing: '0.05em' }}>
               {language === Language.ENGLISH ? 'मराठी' : 'ENG'}
             </span>
           </button>

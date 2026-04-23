@@ -274,7 +274,7 @@ const inputCls = [
   'outline-none transition-all duration-200',
   'focus:shadow-[0_0_0_3px_rgba(74,140,42,0.2)]',
 ].join(' ');
-const selectCls = inputCls + ' appearance-none cursor-pointer';
+const selectCls = inputCls + ' appearance-none cursor-pointer text-[#F5F0E8]';
 
 // ── Main component ─────────────────────────────────────────────────────────
 interface SellScreenProps {
@@ -536,7 +536,7 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
               />
             </Field>
             <Field label={isMr ? 'किंमत एकक' : 'Price Unit'}>
-              <select value={unit} onChange={e => setUnit(e.target.value)} className={selectCls} style={{ background: '#111C11' }}>
+              <select value={unit} onChange={e => setUnit(e.target.value)} className={selectCls} style={{ background: '#1A2D1A' }}>
                 {PRICE_UNITS.map(u => (
                   <option key={u.value} value={u.value}>{isMr ? u.labelMr : u.label}</option>
                 ))}
@@ -556,7 +556,7 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
               />
             </Field>
             <Field label={isMr ? 'साठा एकक' : 'Stock Unit'}>
-              <select value={qtyUnit} onChange={e => setQtyUnit(e.target.value)} className={selectCls} style={{ background: '#111C11' }}>
+              <select value={qtyUnit} onChange={e => setQtyUnit(e.target.value)} className={selectCls} style={{ background: '#1A2D1A' }}>
                 {QTY_UNITS.map(u => (
                   <option key={u.value} value={u.value}>{isMr ? u.labelMr : u.label}</option>
                 ))}

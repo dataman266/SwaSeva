@@ -45,10 +45,10 @@ export default function BottomNav({ activeScreen, onNavigate, lang, unreadMessag
                   }`}
                 >
                   <Icon
-                    size={22}
-                    strokeWidth={active ? 2 : 1.5}
+                    size={26}
+                    strokeWidth={active ? 2 : 1.75}
                     className={`transition-colors duration-300 ${
-                      active ? 'text-[#D4C4A0]' : 'text-[rgba(245,240,232,0.55)]'
+                      active ? 'text-[#D4C4A0]' : 'text-[rgba(245,240,232,0.7)]'
                     }`}
                   />
                 </div>
@@ -57,7 +57,7 @@ export default function BottomNav({ activeScreen, onNavigate, lang, unreadMessag
                 className={`transition-colors duration-300 ${
                   active ? 'text-[#D4C4A0] font-semibold' : 'text-[rgba(245,240,232,0.55)]'
                 }`}
-                style={{ fontSize: '11px', fontWeight: active ? 600 : 500, letterSpacing: '0.04em' }}
+                style={{ fontSize: '13px', fontWeight: active ? 700 : 500, letterSpacing: '0.02em' }}
               >
                 {label}
               </span>

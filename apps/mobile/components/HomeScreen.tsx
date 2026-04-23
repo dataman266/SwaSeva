@@ -238,10 +238,10 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
             <Newspaper size={16} style={{ color: '#D4C4A0' }} />
           </div>
           <div style={{ textAlign: 'left' }}>
-            <p style={{ fontSize: '13px', fontWeight: 400, color: '#F5F0E8', letterSpacing: '-0.01em' }}>
+            <p style={{ fontSize: '15px', fontWeight: 600, color: '#F5F0E8', letterSpacing: '-0.01em' }}>
               {isMr ? 'बातम्या आणि आमचा प्रभाव' : 'News & Our Impact'}
             </p>
-            <p style={{ fontSize: '11px', color: 'rgba(245,240,232,0.4)', marginTop: 2, fontWeight: 300 }}>
+            <p style={{ fontSize: '13px', color: 'rgba(245,240,232,0.75)', marginTop: 2, fontWeight: 400 }}>
               {isMr ? 'शेती बातम्या, MSP अपडेट आणि अधिक' : 'Farm news, MSP updates & more'}
             </p>
           </div>
@@ -258,10 +258,10 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
         {/* Section header */}
         <SectionReveal className="flex items-baseline justify-between mb-4">
           <div>
-            <p className="text-[10px] font-medium tracking-[0.2em] uppercase text-[rgba(245,240,232,0.35)] mb-1">
+            <p className="text-[13px] font-semibold tracking-[0.1em] uppercase text-[rgba(245,240,232,0.75)] mb-1">
               {isMr ? 'ताजे उत्पादन' : 'Fresh Listings'}
             </p>
-            <h2 className="font-light text-[#F5F0E8]" style={{ fontSize: '22px', letterSpacing: '-0.02em' }}>
+            <h2 className="font-semibold text-[#F5F0E8]" style={{ fontSize: '24px', letterSpacing: '-0.02em' }}>
               {t.nearYou}
             </h2>
           </div>
@@ -304,15 +304,15 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
 
         {/* Sticky search bar */}
         <div className="sticky top-14 z-30 pb-4">
-          <div className="flex items-center gap-3 px-4 py-3 rounded-2xl border border-[rgba(245,240,232,0.08)] bg-[rgba(17,28,17,0.92)] nav-blur">
-            <Search size={18} className="text-[rgba(245,240,232,0.3)] flex-shrink-0" />
+          <div className="flex items-center gap-3 px-4 py-3.5 rounded-2xl border-2 border-[rgba(245,240,232,0.35)] bg-[rgba(17,28,17,0.96)] nav-blur">
+            <Search size={20} className="text-[rgba(245,240,232,0.75)] flex-shrink-0" />
             <input
               type="text"
               placeholder={t.searchPlaceholder}
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="flex-1 bg-transparent border-none outline-none text-[#F5F0E8] placeholder:text-[rgba(245,240,232,0.25)] font-light"
-              style={{ fontSize: '14px' }}
+              className="flex-1 bg-transparent border-none outline-none text-[#F5F0E8] placeholder:text-[rgba(245,240,232,0.5)] font-light"
+              style={{ fontSize: '16px' }}
             />
             <button
               onClick={() => setShowFilters(true)}
@@ -575,10 +575,10 @@ function CategoryChip({ label, active, onClick }: ChipProps) {
   return (
     <button
       onClick={onClick}
-      className={`flex-shrink-0 px-4 py-2 rounded-full border text-[11px] font-medium tracking-[0.06em] transition-all active:scale-95 ${
+      className={`flex-shrink-0 px-5 py-2.5 rounded-full border-2 text-[13px] font-semibold tracking-[0.04em] transition-all active:scale-95 ${
         active
-          ? 'bg-[#2D5A1B] border-[#2D5A1B] text-[#F5F0E8]'
-          : 'bg-transparent border-[rgba(245,240,232,0.12)] text-[rgba(245,240,232,0.5)] hover:border-[rgba(245,240,232,0.25)]'
+          ? 'bg-[#3A7522] border-[#3A7522] text-[#F5F0E8]'
+          : 'bg-transparent border-[rgba(245,240,232,0.35)] text-[rgba(245,240,232,0.85)]'
       }`}
     >
       {label}
