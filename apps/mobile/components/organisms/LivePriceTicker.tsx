@@ -14,19 +14,25 @@ interface PriceItem {
   sourceUrl: string;
 }
 
+// Agmarknet search pages require a form POST — direct query URLs return 404.
+// Each item links to the most specific working page for that commodity/source.
+const AGMARKNET = 'https://agmarknet.gov.in/';
+const ENAM      = 'https://enam.gov.in/web/';
+const MH_APMC   = 'https://agrimarket.mahaonline.gov.in/';
+
 const PRICE_DATA: PriceItem[] = [
-  { name: 'Onion',       nameMr: 'कांदा',      price: 2240, prevPrice: 2100, unit: 'qtl', unitMr: 'क्विंटल', market: 'Lasalgaon', lat: 20.12, lng: 74.38, sourceUrl: 'https://agmarknet.gov.in/SearchCmmMkt.aspx?Tx_Commodity=Onion&Tx_State=MH&Tx_Market=Lasalgaon' },
-  { name: 'Tomato',      nameMr: 'टोमॅटो',     price:  860, prevPrice:  920, unit: 'qtl', unitMr: 'क्विंटल', market: 'Pune',      lat: 18.52, lng: 73.86, sourceUrl: 'https://agmarknet.gov.in/SearchCmmMkt.aspx?Tx_Commodity=Tomato&Tx_State=MH&Tx_Market=Pune' },
-  { name: 'Potato',      nameMr: 'बटाटा',      price: 1580, prevPrice: 1580, unit: 'qtl', unitMr: 'क्विंटल', market: 'Nashik',    lat: 20.01, lng: 73.79, sourceUrl: 'https://agmarknet.gov.in/SearchCmmMkt.aspx?Tx_Commodity=Potato&Tx_State=MH&Tx_Market=Nashik' },
-  { name: 'Soybean',     nameMr: 'सोयाबीन',    price: 4620, prevPrice: 4400, unit: 'qtl', unitMr: 'क्विंटल', market: 'Latur',     lat: 18.40, lng: 76.56, sourceUrl: 'https://agmarknet.gov.in/SearchCmmMkt.aspx?Tx_Commodity=Soyabean&Tx_State=MH&Tx_Market=Latur' },
-  { name: 'Wheat',       nameMr: 'गहू',         price: 2275, prevPrice: 2250, unit: 'qtl', unitMr: 'क्विंटल', market: 'Solapur',   lat: 17.68, lng: 75.91, sourceUrl: 'https://agmarknet.gov.in/SearchCmmMkt.aspx?Tx_Commodity=Wheat&Tx_State=MH&Tx_Market=Solapur' },
-  { name: 'Cotton',      nameMr: 'कापूस',       price: 7200, prevPrice: 7350, unit: 'qtl', unitMr: 'क्विंटल', market: 'Akola',     lat: 20.71, lng: 77.00, sourceUrl: 'https://agmarknet.gov.in/SearchCmmMkt.aspx?Tx_Commodity=Cotton&Tx_State=MH&Tx_Market=Akola' },
-  { name: 'Pomegranate', nameMr: 'डाळिंब',     price: 8500, prevPrice: 8200, unit: 'qtl', unitMr: 'क्विंटल', market: 'Solapur',   lat: 17.68, lng: 75.91, sourceUrl: 'https://agmarknet.gov.in/SearchCmmMkt.aspx?Tx_Commodity=Pomegranate&Tx_State=MH&Tx_Market=Solapur' },
-  { name: 'Grapes',      nameMr: 'द्राक्षे',    price: 4800, prevPrice: 5100, unit: 'qtl', unitMr: 'क्विंटल', market: 'Nashik',    lat: 20.01, lng: 73.79, sourceUrl: 'https://agmarknet.gov.in/SearchCmmMkt.aspx?Tx_Commodity=Grapes&Tx_State=MH&Tx_Market=Nashik' },
-  { name: 'Sugarcane',   nameMr: 'ऊस',          price:  350, prevPrice:  345, unit: 'ton', unitMr: 'टन',      market: 'Kolhapur',  lat: 16.70, lng: 74.24, sourceUrl: 'https://agmarknet.gov.in/SearchCmmMkt.aspx?Tx_Commodity=Sugarcane&Tx_State=MH&Tx_Market=Kolhapur' },
-  { name: 'Turmeric',    nameMr: 'हळद',         price: 8800, prevPrice: 8600, unit: 'qtl', unitMr: 'क्विंटल', market: 'Sangli',    lat: 16.86, lng: 74.57, sourceUrl: 'https://agmarknet.gov.in/SearchCmmMkt.aspx?Tx_Commodity=Turmeric&Tx_State=MH&Tx_Market=Sangli' },
-  { name: 'Chilli',      nameMr: 'मिरची',       price: 9200, prevPrice: 9200, unit: 'qtl', unitMr: 'क्विंटल', market: 'Nagpur',    lat: 21.15, lng: 79.09, sourceUrl: 'https://agmarknet.gov.in/SearchCmmMkt.aspx?Tx_Commodity=Chilli&Tx_State=MH&Tx_Market=Nagpur' },
-  { name: 'Rice',        nameMr: 'तांदूळ',      price: 3100, prevPrice: 3050, unit: 'qtl', unitMr: 'क्विंटल', market: 'Ratnagiri', lat: 16.99, lng: 73.30, sourceUrl: 'https://agmarknet.gov.in/SearchCmmMkt.aspx?Tx_Commodity=Rice&Tx_State=MH&Tx_Market=Ratnagiri' },
+  { name: 'Onion',       nameMr: 'कांदा',      price: 2240, prevPrice: 2100, unit: 'qtl', unitMr: 'क्विंटल', market: 'Lasalgaon', lat: 20.12, lng: 74.38, sourceUrl: MH_APMC   },
+  { name: 'Tomato',      nameMr: 'टोमॅटो',     price:  860, prevPrice:  920, unit: 'qtl', unitMr: 'क्विंटल', market: 'Pune',      lat: 18.52, lng: 73.86, sourceUrl: MH_APMC   },
+  { name: 'Potato',      nameMr: 'बटाटा',      price: 1580, prevPrice: 1580, unit: 'qtl', unitMr: 'क्विंटल', market: 'Nashik',    lat: 20.01, lng: 73.79, sourceUrl: MH_APMC   },
+  { name: 'Soybean',     nameMr: 'सोयाबीन',    price: 4620, prevPrice: 4400, unit: 'qtl', unitMr: 'क्विंटल', market: 'Latur',     lat: 18.40, lng: 76.56, sourceUrl: AGMARKNET },
+  { name: 'Wheat',       nameMr: 'गहू',         price: 2275, prevPrice: 2250, unit: 'qtl', unitMr: 'क्विंटल', market: 'Solapur',   lat: 17.68, lng: 75.91, sourceUrl: ENAM      },
+  { name: 'Cotton',      nameMr: 'कापूस',       price: 7200, prevPrice: 7350, unit: 'qtl', unitMr: 'क्विंटल', market: 'Akola',     lat: 20.71, lng: 77.00, sourceUrl: AGMARKNET },
+  { name: 'Pomegranate', nameMr: 'डाळिंब',     price: 8500, prevPrice: 8200, unit: 'qtl', unitMr: 'क्विंटल', market: 'Solapur',   lat: 17.68, lng: 75.91, sourceUrl: MH_APMC   },
+  { name: 'Grapes',      nameMr: 'द्राक्षे',    price: 4800, prevPrice: 5100, unit: 'qtl', unitMr: 'क्विंटल', market: 'Nashik',    lat: 20.01, lng: 73.79, sourceUrl: MH_APMC   },
+  { name: 'Sugarcane',   nameMr: 'ऊस',          price:  350, prevPrice:  345, unit: 'ton', unitMr: 'टन',      market: 'Kolhapur',  lat: 16.70, lng: 74.24, sourceUrl: MH_APMC   },
+  { name: 'Turmeric',    nameMr: 'हळद',         price: 8800, prevPrice: 8600, unit: 'qtl', unitMr: 'क्विंटल', market: 'Sangli',    lat: 16.86, lng: 74.57, sourceUrl: ENAM      },
+  { name: 'Chilli',      nameMr: 'मिरची',       price: 9200, prevPrice: 9200, unit: 'qtl', unitMr: 'क्विंटल', market: 'Nagpur',    lat: 21.15, lng: 79.09, sourceUrl: AGMARKNET },
+  { name: 'Rice',        nameMr: 'तांदूळ',      price: 3100, prevPrice: 3050, unit: 'qtl', unitMr: 'क्विंटल', market: 'Ratnagiri', lat: 16.99, lng: 73.30, sourceUrl: MH_APMC   },
 ];
 
 // Lat/lng for common Indian cities — used to compute proximity to mandi markets
