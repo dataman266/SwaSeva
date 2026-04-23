@@ -181,7 +181,7 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
     <div className="pb-28">
 
       {/* ── 1. LIVE PRICE TICKER ─────────────────────────────────── */}
-      <LivePriceTicker isMr={isMr} />
+      <LivePriceTicker isMr={isMr} location={location} />
 
       {/* ── 2. WEATHER + REFRESH ROW ─────────────────────────────── */}
       <div style={{
