@@ -5,11 +5,11 @@ export const Colors = {
   // Core palette
   brandDark:       '#0A1A0A',
   brandCream:      '#F5F0E8',
-  brandGreen:      '#2D5A1B',
-  brandGreenLight: '#4A8C2A',
-  brandBeige:      '#D4C4A0',
-  surfaceDark:     '#111C11',
-  surfaceMid:      '#1A2D1A',
+  brandGreen:      '#2E7D32',
+  brandGreenLight: '#4CAF50',
+  brandBeige:      '#E8C84A',
+  surfaceDark:     '#162B16',
+  surfaceMid:      '#1E3A1E',
   surfaceLight:    '#F9F5EE',
   white:           '#FFFFFF',
 

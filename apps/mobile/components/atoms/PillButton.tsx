@@ -44,13 +44,13 @@ export default function PillButton({
   const variants = {
     dark:    'bg-transparent border border-[rgba(245,240,232,0.35)] text-[#F5F0E8] hover:border-[rgba(245,240,232,0.65)] hover:bg-[rgba(245,240,232,0.05)]',
     light:   'bg-[#F5F0E8] border border-[#F5F0E8] text-[#0A1A0A] hover:bg-white',
-    outline: 'bg-transparent border border-[#2D5A1B] text-[#2D5A1B] hover:bg-[#2D5A1B]/10',
+    outline: 'bg-transparent border border-[#2E7D32] text-[#2E7D32] hover:bg-[#2E7D32]/10',
   };
 
   const dotColors = {
-    dark:    'bg-[#D4C4A0]',
-    light:   'bg-[#2D5A1B]',
-    outline: 'bg-[#2D5A1B]',
+    dark:    'bg-[#E8C84A]',
+    light:   'bg-[#2E7D32]',
+    outline: 'bg-[#2E7D32]',
   };
 
   return (

@@ -172,7 +172,7 @@ export default function DetailsScreen({ product, lang, onBack, onViewSeller, onS
                     style={{
                       width:      i === activeSlide ? 18 : 6,
                       height:     6,
-                      background: i === activeSlide ? '#D4C4A0' : 'rgba(245,240,232,0.35)',
+                      background: i === activeSlide ? '#E8C84A' : 'rgba(245,240,232,0.35)',
                     }}
                   />
                 ))}
@@ -213,14 +213,14 @@ export default function DetailsScreen({ product, lang, onBack, onViewSeller, onS
 
             {/* Category badge */}
             <div className="absolute top-16 left-5">
-              <span className="text-[9px] font-medium tracking-[0.18em] uppercase text-[#D4C4A0] bg-[rgba(10,26,10,0.55)] px-3 py-1 rounded-full border border-[rgba(212,196,160,0.25)] nav-blur">
+              <span className="text-[9px] font-medium tracking-[0.18em] uppercase text-[#E8C84A] bg-[rgba(10,26,10,0.55)] px-3 py-1 rounded-full border border-[rgba(212,196,160,0.25)] nav-blur">
                 {product.category}
               </span>
             </div>
 
             {/* Name + price block */}
             <div className={`absolute bottom-0 left-0 right-0 px-6 pb-8 transition-all duration-700 delay-200 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
-              <p className="text-[10px] font-medium tracking-[0.22em] uppercase text-[#D4C4A0] mb-1.5">{variety}</p>
+              <p className="text-[10px] font-medium tracking-[0.22em] uppercase text-[#E8C84A] mb-1.5">{variety}</p>
               <h1 className="font-light text-[#F5F0E8] mb-3" style={{ fontSize: 'clamp(28px, 8vw, 40px)', letterSpacing: '-0.03em', lineHeight: 1.05 }}>
                 {name}
               </h1>
@@ -247,9 +247,9 @@ export default function DetailsScreen({ product, lang, onBack, onViewSeller, onS
               <div
                 key={label}
                 className="flex flex-col gap-1.5 p-4 rounded-2xl"
-                style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)' }}
+                style={{ background: '#162B16', border: '1px solid rgba(245,240,232,0.07)' }}
               >
-                <Icon size={14} className="text-[#D4C4A0]" />
+                <Icon size={14} className="text-[#E8C84A]" />
                 <span className="text-[9px] font-medium tracking-[0.15em] uppercase text-[rgba(245,240,232,0.35)]">{label}</span>
                 <span className="font-light text-[#F5F0E8]" style={{ fontSize: '16px', letterSpacing: '-0.01em' }}>{value}</span>
               </div>
@@ -268,7 +268,7 @@ export default function DetailsScreen({ product, lang, onBack, onViewSeller, onS
             >
               <div
                 className="flex items-center gap-4 p-5 rounded-2xl"
-                style={{ background: '#111C11', border: '1px solid rgba(212,196,160,0.12)' }}
+                style={{ background: '#162B16', border: '1px solid rgba(212,196,160,0.12)' }}
               >
                 {/* Avatar */}
                 <div
@@ -281,15 +281,15 @@ export default function DetailsScreen({ product, lang, onBack, onViewSeller, onS
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-0.5">
-                    <span className="font-medium text-[#D4C4A0] truncate" style={{ fontSize: '15px', letterSpacing: '-0.01em' }}>
+                    <span className="font-medium text-[#E8C84A] truncate" style={{ fontSize: '15px', letterSpacing: '-0.01em' }}>
                       {seller.name}
                     </span>
-                    {seller.isVerified && <ShieldCheck size={13} className="text-[#4A8C2A] flex-shrink-0" />}
+                    {seller.isVerified && <ShieldCheck size={13} className="text-[#4CAF50] flex-shrink-0" />}
                   </div>
                   <div className="flex items-center gap-3 mb-2">
                     <div className="flex items-center gap-1">
-                      <Star size={11} className="text-[#D4C4A0] fill-[#D4C4A0]" />
-                      <span className="text-[11px] font-medium text-[#D4C4A0]">{seller.rating}</span>
+                      <Star size={11} className="text-[#E8C84A] fill-[#E8C84A]" />
+                      <span className="text-[11px] font-medium text-[#E8C84A]">{seller.rating}</span>
                     </div>
                     <span className="text-[10px] font-light text-[rgba(245,240,232,0.35)] uppercase tracking-[0.1em] truncate">
                       {seller.location}
@@ -309,9 +309,9 @@ export default function DetailsScreen({ product, lang, onBack, onViewSeller, onS
 
         {/* Description */}
         <SectionReveal delay={80}>
-          <div className="p-6 rounded-2xl" style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)' }}>
+          <div className="p-6 rounded-2xl" style={{ background: '#162B16', border: '1px solid rgba(245,240,232,0.07)' }}>
             <div className="flex items-center gap-2 mb-4">
-              <span className="w-3 h-px bg-[#D4C4A0]" />
+              <span className="w-3 h-px bg-[#E8C84A]" />
               <p className="text-[10px] font-medium tracking-[0.18em] uppercase text-[rgba(245,240,232,0.35)]">
                 {t.itemDetails}
               </p>
@@ -320,17 +320,17 @@ export default function DetailsScreen({ product, lang, onBack, onViewSeller, onS
               {desc}
             </p>
             <div className="mt-5 inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[rgba(45,90,27,0.4)] bg-[rgba(45,90,27,0.1)]">
-              <ShieldCheck size={13} className="text-[#4A8C2A]" />
-              <span className="text-[10px] font-medium tracking-[0.12em] uppercase text-[#4A8C2A]">{t.qualityVerified}</span>
+              <ShieldCheck size={13} className="text-[#4CAF50]" />
+              <span className="text-[10px] font-medium tracking-[0.12em] uppercase text-[#4CAF50]">{t.qualityVerified}</span>
             </div>
           </div>
         </SectionReveal>
 
         {/* Specifications */}
         <SectionReveal delay={100}>
-          <div className="p-6 rounded-2xl" style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)' }}>
+          <div className="p-6 rounded-2xl" style={{ background: '#162B16', border: '1px solid rgba(245,240,232,0.07)' }}>
             <div className="flex items-center gap-2 mb-4">
-              <span className="w-3 h-px bg-[#D4C4A0]" />
+              <span className="w-3 h-px bg-[#E8C84A]" />
               <p className="text-[10px] font-medium tracking-[0.18em] uppercase text-[rgba(245,240,232,0.35)]">
                 {isMr ? 'तपशील' : 'Specifications'}
               </p>
@@ -359,9 +359,9 @@ export default function DetailsScreen({ product, lang, onBack, onViewSeller, onS
 
         {/* Listing location — fixed label + working Map link */}
         <SectionReveal delay={140}>
-          <div className="p-6 rounded-2xl" style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)' }}>
+          <div className="p-6 rounded-2xl" style={{ background: '#162B16', border: '1px solid rgba(245,240,232,0.07)' }}>
             <div className="flex items-center gap-2 mb-4">
-              <MapPin size={14} className="text-[#D4C4A0]" />
+              <MapPin size={14} className="text-[#E8C84A]" />
               <p className="text-[10px] font-medium tracking-[0.18em] uppercase text-[rgba(245,240,232,0.35)]">
                 {t.listingLocation}
               </p>
@@ -387,7 +387,7 @@ export default function DetailsScreen({ product, lang, onBack, onViewSeller, onS
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   boxShadow: '0 0 0 8px rgba(45,90,27,0.12)',
                 }}>
-                  <MapPin size={16} className="text-[#4A8C2A]" fill="rgba(74,140,42,0.3)" />
+                  <MapPin size={16} className="text-[#4CAF50]" fill="rgba(74,140,42,0.3)" />
                 </div>
               </div>
             </div>
@@ -405,7 +405,7 @@ export default function DetailsScreen({ product, lang, onBack, onViewSeller, onS
                 className="px-3 py-1.5 rounded-full border active:scale-95 transition-all"
                 style={{ borderColor: 'rgba(74,140,42,0.5)', background: 'rgba(45,90,27,0.18)', touchAction: 'manipulation' }}
               >
-                <span className="text-[10px] font-medium text-[#4A8C2A] tracking-[0.1em] uppercase">
+                <span className="text-[10px] font-medium text-[#4CAF50] tracking-[0.1em] uppercase">
                   {t.viewMap}
                 </span>
               </button>
@@ -415,9 +415,9 @@ export default function DetailsScreen({ product, lang, onBack, onViewSeller, onS
 
         {/* Transport */}
         <SectionReveal delay={160}>
-          <div className="p-6 rounded-2xl" style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)' }}>
+          <div className="p-6 rounded-2xl" style={{ background: '#162B16', border: '1px solid rgba(245,240,232,0.07)' }}>
             <div className="flex items-center gap-3 mb-5">
-              <Truck size={16} className="text-[#D4C4A0]" />
+              <Truck size={16} className="text-[#E8C84A]" />
               <p className="font-medium text-[#F5F0E8]" style={{ fontSize: '15px', letterSpacing: '-0.01em' }}>
                 {t.transport}
               </p>
@@ -437,7 +437,7 @@ export default function DetailsScreen({ product, lang, onBack, onViewSeller, onS
                   <span className="font-medium text-[rgba(212,196,160,0.55)]" style={{ fontSize: '14px' }}>{t.requestTransport}</span>
                   <span
                     className="ml-2 text-[9px] font-medium tracking-[0.12em] uppercase px-2 py-0.5 rounded-full"
-                    style={{ background: 'rgba(212,196,160,0.12)', color: '#D4C4A0' }}
+                    style={{ background: 'rgba(212,196,160,0.12)', color: '#E8C84A' }}
                   >
                     {t.comingSoon}
                   </span>
@@ -474,13 +474,13 @@ export default function DetailsScreen({ product, lang, onBack, onViewSeller, onS
             className="flex items-center justify-center gap-1.5 px-4 h-9 rounded-full border border-[rgba(245,240,232,0.15)] text-[rgba(245,240,232,0.75)] active:scale-95 transition-all font-medium text-[12px] tracking-[0.05em]"
             style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'rgba(45,90,27,0.2)' }}
           >
-            <Phone size={14} className="text-[#D4C4A0]" />
+            <Phone size={14} className="text-[#E8C84A]" />
             {isMr ? 'कॉल' : 'Call'}
           </a>
           {/* Cart button */}
           <button
             onClick={() => { addToCart(product.id); haptic.light(); }}
-            className="flex items-center justify-center gap-1.5 px-4 h-9 rounded-full border border-[rgba(212,196,160,0.3)] text-[#D4C4A0] active:scale-95 transition-all font-medium text-[12px]"
+            className="flex items-center justify-center gap-1.5 px-4 h-9 rounded-full border border-[rgba(212,196,160,0.3)] text-[#E8C84A] active:scale-95 transition-all font-medium text-[12px]"
             style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'rgba(212,196,160,0.1)' }}
           >
             <ShoppingCart size={14} />
@@ -490,7 +490,7 @@ export default function DetailsScreen({ product, lang, onBack, onViewSeller, onS
           <button
             onClick={handleSendEnquiry}
             className="flex-1 flex items-center justify-center gap-1.5 h-9 rounded-full text-[#F5F0E8] font-medium text-[12px] tracking-[0.05em] active:scale-95 transition-all"
-            style={{ background: '#2D5A1B', touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent' }}
+            style={{ background: '#2E7D32', touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent' }}
           >
             <MessageSquare size={14} />
             {t.sendEnquiry}
@@ -502,7 +502,7 @@ export default function DetailsScreen({ product, lang, onBack, onViewSeller, onS
       {enquiryToast && (
         <div
           className="fixed top-20 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-5 py-3 rounded-full"
-          style={{ background: '#2D5A1B', boxShadow: '0 8px 32px rgba(0,0,0,0.4)' }}
+          style={{ background: '#2E7D32', boxShadow: '0 8px 32px rgba(0,0,0,0.4)' }}
         >
           <ShieldCheck size={15} className="text-[#F5F0E8]" />
           <span className="text-[13px] font-medium text-[#F5F0E8] tracking-[0.05em]">{t.enquirySent}</span>
@@ -518,13 +518,13 @@ export default function DetailsScreen({ product, lang, onBack, onViewSeller, onS
         >
           <div
             className="w-full max-w-md mx-auto rounded-t-3xl p-8 pb-12"
-            style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.08)' }}
+            style={{ background: '#162B16', border: '1px solid rgba(245,240,232,0.08)' }}
             onClick={e => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-2xl flex items-center justify-center" style={{ background: 'rgba(212,196,160,0.1)' }}>
-                  <Truck size={18} className="text-[#D4C4A0]" />
+                  <Truck size={18} className="text-[#E8C84A]" />
                 </div>
                 <span className="font-medium text-[#F5F0E8]" style={{ fontSize: '17px', letterSpacing: '-0.01em' }}>
                   {t.comingSoon}

@@ -33,7 +33,7 @@ export default function StatCard({
         </span>
         {unit && (
           <span
-            className={`text-sm font-medium tracking-[0.08em] uppercase ${isDark ? 'text-[#D4C4A0]' : 'text-[#2D5A1B]'}`}
+            className={`text-sm font-medium tracking-[0.08em] uppercase ${isDark ? 'text-[#E8C84A]' : 'text-[#2E7D32]'}`}
           >
             {unit}
           </span>

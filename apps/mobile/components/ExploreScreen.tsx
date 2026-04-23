@@ -75,7 +75,7 @@ export default function ExploreScreen({ lang, location = 'Maharashtra', onBack }
       <FarmingNewsSection lang={isMr ? 'mr' : 'en'} location={location} />
 
       {/* ── Our Impact ───────────────────────────────────────────── */}
-      <section className="px-6 py-14" style={{ background: '#111C11' }}>
+      <section className="px-6 py-14" style={{ background: '#162B16' }}>
         <SectionReveal className="mb-10">
           <p className="text-[10px] font-medium tracking-[0.2em] uppercase text-[rgba(245,240,232,0.35)] mb-2">
             {isMr ? 'आमचा प्रभाव' : 'Our Impact'}

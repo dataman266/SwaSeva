@@ -26,7 +26,7 @@ export default function CartBadge({ onOpen }: CartBadgeProps) {
       {count > 0 && (
         <span
           className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full flex items-center justify-center text-[#0A1A0A] font-medium"
-          style={{ background: '#D4C4A0', fontSize: '8px', lineHeight: 1 }}
+          style={{ background: '#E8C84A', fontSize: '8px', lineHeight: 1 }}
         >
           {count > 9 ? '9+' : count}
         </span>

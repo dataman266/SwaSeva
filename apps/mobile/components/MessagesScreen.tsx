@@ -88,7 +88,7 @@ export default function MessagesScreen({ lang, onViewSeller }: MessagesScreenPro
               className="w-9 h-9 rounded-full flex items-center justify-center border border-[rgba(245,240,232,0.15)] active:scale-90 transition-all"
               style={{ touchAction: 'manipulation' }}
             >
-              <Phone size={15} className="text-[#D4C4A0]" />
+              <Phone size={15} className="text-[#E8C84A]" />
             </a>
           )}
         </div>
@@ -111,7 +111,7 @@ export default function MessagesScreen({ lang, onViewSeller }: MessagesScreenPro
           <div className="flex justify-end">
             <div
               className="max-w-[78%] px-4 py-3 rounded-2xl rounded-br-md"
-              style={{ background: '#2D5A1B', border: '1px solid rgba(74,140,42,0.3)' }}
+              style={{ background: '#2E7D32', border: '1px solid rgba(74,140,42,0.3)' }}
             >
               <p className="font-light text-[#F5F0E8] leading-relaxed" style={{ fontSize: '14px' }}>
                 {activeChat.message}
@@ -126,7 +126,7 @@ export default function MessagesScreen({ lang, onViewSeller }: MessagesScreenPro
           <div className="flex justify-start">
             <div
               className="max-w-[78%] px-4 py-3 rounded-2xl rounded-bl-md"
-              style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.08)' }}
+              style={{ background: '#162B16', border: '1px solid rgba(245,240,232,0.08)' }}
             >
               <p className="font-light text-[rgba(245,240,232,0.75)] leading-relaxed" style={{ fontSize: '14px' }}>
                 {isMr
@@ -193,7 +193,7 @@ export default function MessagesScreen({ lang, onViewSeller }: MessagesScreenPro
         <div className="flex flex-col items-center justify-center px-8 pt-20 text-center">
           <div
             className="w-20 h-20 rounded-3xl flex items-center justify-center mb-6"
-            style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)' }}
+            style={{ background: '#162B16', border: '1px solid rgba(245,240,232,0.07)' }}
           >
             <MessageSquare size={32} className="text-[rgba(212,196,160,0.4)]" />
           </div>
@@ -213,12 +213,12 @@ export default function MessagesScreen({ lang, onViewSeller }: MessagesScreenPro
                 key={conn.id}
                 onClick={() => setActiveChat(conn)}
                 className="w-full flex items-center gap-4 p-4 rounded-2xl text-left active:scale-[0.98] transition-transform"
-                style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)', touchAction: 'manipulation' }}
+                style={{ background: '#162B16', border: '1px solid rgba(245,240,232,0.07)', touchAction: 'manipulation' }}
               >
                 {/* Avatar */}
                 <div
                   className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
-                  style={{ background: sellerData?.avatarColor || '#1A2D1A', border: '1px solid rgba(245,240,232,0.08)' }}
+                  style={{ background: sellerData?.avatarColor || '#1E3A1E', border: '1px solid rgba(245,240,232,0.08)' }}
                 >
                   <span className="text-[#F5F0E8] font-medium" style={{ fontSize: '18px' }}>
                     {conn.sellerName.charAt(0)}
@@ -234,7 +234,7 @@ export default function MessagesScreen({ lang, onViewSeller }: MessagesScreenPro
                     </span>
                   </div>
                   {conn.productName && (
-                    <p className="text-[10px] text-[#D4C4A0] mb-1 truncate">{conn.productName}</p>
+                    <p className="text-[10px] text-[#E8C84A] mb-1 truncate">{conn.productName}</p>
                   )}
                   <p className="text-[12px] font-light text-[rgba(245,240,232,0.4)] truncate">{conn.message}</p>
                 </div>

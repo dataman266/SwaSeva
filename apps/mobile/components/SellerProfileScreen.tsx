@@ -27,7 +27,7 @@ export default function SellerProfileScreen({ sellerId, lang, onBack, onViewProd
   if (!seller) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ background: '#0A1A0A' }}>
-        <button onClick={onBack} className="text-[#D4C4A0]">← Back</button>
+        <button onClick={onBack} className="text-[#E8C84A]">← Back</button>
       </div>
     );
   }
@@ -110,7 +110,7 @@ export default function SellerProfileScreen({ sellerId, lang, onBack, onViewProd
               <h1 className="font-medium text-[#F5F0E8]" style={{ fontSize: '20px', letterSpacing: '-0.02em' }}>
                 {seller.name}
               </h1>
-              {seller.isVerified && <ShieldCheck size={15} className="text-[#4A8C2A]" />}
+              {seller.isVerified && <ShieldCheck size={15} className="text-[#4CAF50]" />}
             </div>
             <p className="text-[11px] font-light text-[rgba(245,240,232,0.45)]">{seller.location}</p>
           </div>
@@ -127,9 +127,9 @@ export default function SellerProfileScreen({ sellerId, lang, onBack, onViewProd
               <div
                 key={label}
                 className="flex flex-col items-center gap-1.5 py-4 rounded-2xl"
-                style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)' }}
+                style={{ background: '#162B16', border: '1px solid rgba(245,240,232,0.07)' }}
               >
-                <Icon size={14} className="text-[#D4C4A0]" />
+                <Icon size={14} className="text-[#E8C84A]" />
                 <span className="font-light text-[#F5F0E8]" style={{ fontSize: '18px', letterSpacing: '-0.02em' }}>{value}</span>
                 <span className="text-[8px] font-medium tracking-[0.12em] uppercase text-[rgba(245,240,232,0.3)] text-center leading-tight">{label}</span>
               </div>
@@ -144,7 +144,7 @@ export default function SellerProfileScreen({ sellerId, lang, onBack, onViewProd
               <span
                 key={tag}
                 className="text-[10px] font-medium tracking-[0.12em] uppercase px-3 py-1.5 rounded-full"
-                style={{ background: 'rgba(212,196,160,0.08)', border: '1px solid rgba(212,196,160,0.2)', color: '#D4C4A0' }}
+                style={{ background: 'rgba(212,196,160,0.08)', border: '1px solid rgba(212,196,160,0.2)', color: '#E8C84A' }}
               >
                 {tag}
               </span>
@@ -154,7 +154,7 @@ export default function SellerProfileScreen({ sellerId, lang, onBack, onViewProd
 
         {/* Bio */}
         <SectionReveal delay={80}>
-          <div className="p-5 rounded-2xl" style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)' }}>
+          <div className="p-5 rounded-2xl" style={{ background: '#162B16', border: '1px solid rgba(245,240,232,0.07)' }}>
             <p className="text-[10px] font-medium tracking-[0.18em] uppercase text-[rgba(245,240,232,0.3)] mb-3">
               {isMr ? 'आमच्याबद्दल' : 'About'}
             </p>
@@ -166,13 +166,13 @@ export default function SellerProfileScreen({ sellerId, lang, onBack, onViewProd
 
         {/* Contact details */}
         <SectionReveal delay={100}>
-          <div className="p-5 rounded-2xl" style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)' }}>
+          <div className="p-5 rounded-2xl" style={{ background: '#162B16', border: '1px solid rgba(245,240,232,0.07)' }}>
             <p className="text-[10px] font-medium tracking-[0.18em] uppercase text-[rgba(245,240,232,0.3)] mb-4">
               {t.contactSeller}
             </p>
             <div className="flex items-center gap-3 mb-4">
               <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: 'rgba(212,196,160,0.08)' }}>
-                <Phone size={15} className="text-[#D4C4A0]" />
+                <Phone size={15} className="text-[#E8C84A]" />
               </div>
               <div className="flex-1">
                 <p className="text-[10px] text-[rgba(245,240,232,0.35)] uppercase tracking-[0.1em] mb-0.5">{isMr ? 'फोन' : 'Phone'}</p>
@@ -181,7 +181,7 @@ export default function SellerProfileScreen({ sellerId, lang, onBack, onViewProd
             </div>
             <div className="flex items-center gap-3 mb-4">
               <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: 'rgba(212,196,160,0.08)' }}>
-                <MapPin size={15} className="text-[#D4C4A0]" />
+                <MapPin size={15} className="text-[#E8C84A]" />
               </div>
               <div className="flex-1">
                 <p className="text-[10px] text-[rgba(245,240,232,0.35)] uppercase tracking-[0.1em] mb-0.5">{isMr ? 'पत्ता' : 'Address'}</p>
@@ -195,13 +195,13 @@ export default function SellerProfileScreen({ sellerId, lang, onBack, onViewProd
                 className="flex-1 flex items-center justify-center gap-2 h-11 rounded-full border border-[rgba(245,240,232,0.15)] active:scale-95 transition-all"
                 style={{ touchAction: 'manipulation' }}
               >
-                <Phone size={15} className="text-[#D4C4A0]" />
+                <Phone size={15} className="text-[#E8C84A]" />
                 <span className="text-[13px] font-medium text-[rgba(245,240,232,0.75)]">{isMr ? 'कॉल' : 'Call'}</span>
               </a>
               <button
                 onClick={handleEnquiry}
                 className="flex-1 flex items-center justify-center gap-2 h-11 rounded-full active:scale-95 transition-all"
-                style={{ background: '#2D5A1B', touchAction: 'manipulation' }}
+                style={{ background: '#2E7D32', touchAction: 'manipulation' }}
               >
                 <MessageSquare size={15} className="text-[#F5F0E8]" />
                 <span className="text-[13px] font-medium text-[#F5F0E8]">{t.sendEnquiry}</span>
@@ -215,7 +215,7 @@ export default function SellerProfileScreen({ sellerId, lang, onBack, onViewProd
           <SectionReveal delay={120}>
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <span className="w-3 h-px bg-[#D4C4A0]" />
+                <span className="w-3 h-px bg-[#E8C84A]" />
                 <p className="text-[10px] font-medium tracking-[0.18em] uppercase text-[rgba(245,240,232,0.35)]">
                   {t.otherListings}
                 </p>
@@ -229,7 +229,7 @@ export default function SellerProfileScreen({ sellerId, lang, onBack, onViewProd
                       key={p.id}
                       onClick={() => onViewProduct(p)}
                       className="w-full flex items-center gap-4 p-4 rounded-2xl text-left active:scale-[0.98] transition-transform"
-                      style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)', touchAction: 'manipulation' }}
+                      style={{ background: '#162B16', border: '1px solid rgba(245,240,232,0.07)', touchAction: 'manipulation' }}
                     >
                       <div className="w-14 h-14 rounded-xl overflow-hidden flex-shrink-0">
                         <img
@@ -243,7 +243,7 @@ export default function SellerProfileScreen({ sellerId, lang, onBack, onViewProd
                         <p className="font-medium text-[#F5F0E8] truncate mb-1" style={{ fontSize: '14px', letterSpacing: '-0.01em' }}>{pName}</p>
                         <p className="text-[11px] font-light text-[rgba(245,240,232,0.4)] mb-1.5">{p.category} · {isMr ? p.varietyMr : p.variety}</p>
                         <div className="flex items-baseline gap-1">
-                          <span className="font-medium text-[#D4C4A0]" style={{ fontSize: '15px' }}>₹{p.price}</span>
+                          <span className="font-medium text-[#E8C84A]" style={{ fontSize: '15px' }}>₹{p.price}</span>
                           <span className="text-[10px] text-[rgba(245,240,232,0.35)]">/ {pUnit}</span>
                         </div>
                       </div>
@@ -261,7 +261,7 @@ export default function SellerProfileScreen({ sellerId, lang, onBack, onViewProd
       {enquiryToast && (
         <div
           className="fixed top-20 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-5 py-3 rounded-full"
-          style={{ background: '#2D5A1B', boxShadow: '0 8px 32px rgba(0,0,0,0.4)' }}
+          style={{ background: '#2E7D32', boxShadow: '0 8px 32px rgba(0,0,0,0.4)' }}
         >
           <ShieldCheck size={15} className="text-[#F5F0E8]" />
           <span className="text-[13px] font-medium text-[#F5F0E8] tracking-[0.05em]">{t.enquirySent}</span>

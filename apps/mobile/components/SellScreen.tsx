@@ -97,7 +97,7 @@ function farmMarkerIcon() {
   return L.divIcon({
     className: '',
     html: `<div style="width:36px;height:36px;display:flex;align-items:center;justify-content:center">
-      <div style="width:16px;height:16px;background:#2D5A1B;border:3px solid #D4C4A0;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,.5)"></div>
+      <div style="width:16px;height:16px;background:#2E7D32;border:3px solid #E8C84A;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,.5)"></div>
     </div>`,
     iconSize: [36, 36], iconAnchor: [18, 18],
   });
@@ -204,7 +204,7 @@ function FarmLocationModal({
         {/* Location label + CTA */}
         <div style={{ flexShrink: 0, padding: '12px 16px', borderTop: '1px solid rgba(245,240,232,0.08)', background: '#0F1F0F' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10 }}>
-            <MapPin size={13} style={{ color: geocoding ? 'rgba(245,240,232,0.3)' : '#D4C4A0', flexShrink: 0 }} />
+            <MapPin size={13} style={{ color: geocoding ? 'rgba(245,240,232,0.3)' : '#E8C84A', flexShrink: 0 }} />
             <span style={{ fontSize: '12px', color: geocoding ? 'rgba(245,240,232,0.35)' : '#F5F0E8', fontWeight: 300 }}>
               {geocoding ? (isMr ? 'ठिकाण शोधत आहे...' : 'Getting address…') : (label || (isMr ? 'नकाशावर टॅप करा' : 'Tap map to select'))}
             </span>
@@ -218,7 +218,7 @@ function FarmLocationModal({
             </button>
             <button
               onClick={() => label && onConfirm(label, lat, lng)}
-              style={{ flex: 2, height: 42, borderRadius: 12, background: label ? '#2D5A1B' : 'rgba(45,90,27,0.35)', border: 'none', color: '#F5F0E8', fontSize: '13px', fontWeight: 500, cursor: label ? 'pointer' : 'default', opacity: geocoding ? 0.7 : 1 }}
+              style={{ flex: 2, height: 42, borderRadius: 12, background: label ? '#2E7D32' : 'rgba(45,90,27,0.35)', border: 'none', color: '#F5F0E8', fontSize: '13px', fontWeight: 500, cursor: label ? 'pointer' : 'default', opacity: geocoding ? 0.7 : 1 }}
             >
               {isMr ? 'ठीक आहे' : 'Confirm Location'}
             </button>
@@ -237,7 +237,7 @@ function SuccessView({ isMr }: { isMr: boolean }) {
         className="w-24 h-24 rounded-full flex items-center justify-center"
         style={{ background: 'rgba(74,140,42,0.12)', border: '1px solid rgba(74,140,42,0.25)' }}
       >
-        <CheckCircle size={40} className="text-[#4A8C2A]" strokeWidth={1.5} />
+        <CheckCircle size={40} className="text-[#4CAF50]" strokeWidth={1.5} />
       </div>
       <div className="space-y-3">
         <h2 className="font-light text-[#F5F0E8]" style={{ fontSize: '28px', letterSpacing: '-0.02em' }}>
@@ -269,7 +269,7 @@ function Field({ label, children }: FieldProps) {
 const inputCls = [
   'w-full px-5 py-[14px] rounded-xl font-light text-[#F5F0E8] text-[17px]',
   'placeholder:text-[rgba(245,240,232,0.38)]',
-  'border-2 border-[rgba(245,240,232,0.28)] focus:border-[#4A8C2A]',
+  'border-2 border-[rgba(245,240,232,0.28)] focus:border-[#4CAF50]',
   'bg-[rgba(255,255,255,0.06)] focus:bg-[rgba(255,255,255,0.09)]',
   'outline-none transition-all duration-200',
   'focus:shadow-[0_0_0_3px_rgba(74,140,42,0.2)]',
@@ -434,7 +434,7 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
         <div className="flex gap-2">
           {[1, 2, 3].map(s => (
             <div key={s} className="h-0.5 flex-1 rounded-full transition-all duration-500"
-              style={{ background: s <= step ? '#D4C4A0' : 'rgba(245,240,232,0.1)' }}
+              style={{ background: s <= step ? '#E8C84A' : 'rgba(245,240,232,0.1)' }}
             />
           ))}
         </div>
@@ -454,7 +454,7 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
                   onClick={() => { setCategoryId(cat.id); setStep(2); }}
                   className="flex flex-col items-start gap-3 p-5 rounded-2xl border transition-all text-left"
                   style={{
-                    background: categoryId === cat.id ? 'rgba(74,140,42,0.12)' : '#111C11',
+                    background: categoryId === cat.id ? 'rgba(74,140,42,0.12)' : '#162B16',
                     border: categoryId === cat.id ? '1px solid rgba(74,140,42,0.35)' : '1px solid rgba(245,240,232,0.08)',
                   }}
                 >
@@ -532,11 +532,11 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
                 value={price}
                 onChange={e => setPrice(e.target.value)}
                 className={inputCls}
-                style={{ color: '#D4C4A0' }}
+                style={{ color: '#E8C84A' }}
               />
             </Field>
             <Field label={isMr ? 'किंमत एकक' : 'Price Unit'}>
-              <select value={unit} onChange={e => setUnit(e.target.value)} className={selectCls} style={{ background: '#1A2D1A' }}>
+              <select value={unit} onChange={e => setUnit(e.target.value)} className={selectCls} style={{ background: '#1E3A1E' }}>
                 {PRICE_UNITS.map(u => (
                   <option key={u.value} value={u.value}>{isMr ? u.labelMr : u.label}</option>
                 ))}
@@ -556,7 +556,7 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
               />
             </Field>
             <Field label={isMr ? 'साठा एकक' : 'Stock Unit'}>
-              <select value={qtyUnit} onChange={e => setQtyUnit(e.target.value)} className={selectCls} style={{ background: '#1A2D1A' }}>
+              <select value={qtyUnit} onChange={e => setQtyUnit(e.target.value)} className={selectCls} style={{ background: '#1E3A1E' }}>
                 {QTY_UNITS.map(u => (
                   <option key={u.value} value={u.value}>{isMr ? u.labelMr : u.label}</option>
                 ))}
@@ -571,7 +571,7 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
               className="w-full flex items-center gap-3 px-5 py-4 rounded-xl border border-[rgba(245,240,232,0.1)] active:border-[rgba(212,196,160,0.35)] transition-all text-left"
               style={{ background: 'rgba(255,255,255,0.03)', touchAction: 'manipulation' }}
             >
-              <MapPin size={16} className={location ? 'text-[#4A8C2A]' : 'text-[rgba(245,240,232,0.25)]'} />
+              <MapPin size={16} className={location ? 'text-[#4CAF50]' : 'text-[rgba(245,240,232,0.25)]'} />
               <span className={`flex-1 font-light text-[14px] ${location ? 'text-[#F5F0E8]' : 'text-[rgba(245,240,232,0.25)]'}`}>
                 {location || (isMr ? 'नकाशावर टॅप करा' : 'Pick location on map')}
               </span>
@@ -608,9 +608,9 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
         <SectionReveal className="space-y-7">
 
           {/* Trust badge */}
-          <div className="p-6 rounded-2xl space-y-4" style={{ background: '#111C11', border: '1px solid rgba(212,196,160,0.12)' }}>
+          <div className="p-6 rounded-2xl space-y-4" style={{ background: '#162B16', border: '1px solid rgba(212,196,160,0.12)' }}>
             <div className="flex items-center gap-2 mb-1">
-              <span className="w-3 h-px bg-[#D4C4A0]" />
+              <span className="w-3 h-px bg-[#E8C84A]" />
               <p className="text-[10px] font-medium tracking-[0.18em] uppercase text-[rgba(245,240,232,0.35)]">
                 {isMr ? 'विश्वास बॅज' : 'Trust Badge'}
               </p>
@@ -619,10 +619,10 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
               <div className="flex items-center gap-3 py-1">
                 <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
                   style={{ background: 'rgba(74,140,42,0.15)', border: '1px solid rgba(74,140,42,0.3)' }}>
-                  <ShieldCheck size={14} className="text-[#4A8C2A]" />
+                  <ShieldCheck size={14} className="text-[#4CAF50]" />
                 </div>
                 <div>
-                  <p className="font-medium text-[#4A8C2A]" style={{ fontSize: '13px' }}>
+                  <p className="font-medium text-[#4CAF50]" style={{ fontSize: '13px' }}>
                     {isMr ? 'ओळखपत्र अपलोड झाले' : 'Identity uploaded'}
                   </p>
                   <p className="font-light text-[rgba(245,240,232,0.35)]" style={{ fontSize: '11px' }}>

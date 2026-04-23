@@ -48,14 +48,14 @@ export default function BottomNav({ activeScreen, onNavigate, lang, unreadMessag
                     size={26}
                     strokeWidth={active ? 2 : 1.75}
                     className={`transition-colors duration-300 ${
-                      active ? 'text-[#D4C4A0]' : 'text-[rgba(245,240,232,0.7)]'
+                      active ? 'text-[#E8C84A]' : 'text-[rgba(245,240,232,0.7)]'
                     }`}
                   />
                 </div>
               </div>
               <span
                 className={`transition-colors duration-300 ${
-                  active ? 'text-[#D4C4A0] font-semibold' : 'text-[rgba(245,240,232,0.55)]'
+                  active ? 'text-[#E8C84A] font-semibold' : 'text-[rgba(245,240,232,0.55)]'
                 }`}
                 style={{ fontSize: '13px', fontWeight: active ? 700 : 500, letterSpacing: '0.02em' }}
               >

@@ -59,7 +59,7 @@ export default function CheckoutScreen({ lang, onBack, onConfirmed }: CheckoutSc
           className="w-24 h-24 rounded-full flex items-center justify-center"
           style={{ background: 'rgba(74,140,42,0.12)', border: '1px solid rgba(74,140,42,0.25)' }}
         >
-          <CheckCircle size={40} className="text-[#4A8C2A]" strokeWidth={1.5} />
+          <CheckCircle size={40} className="text-[#4CAF50]" strokeWidth={1.5} />
         </div>
         <div className="space-y-3">
           <h2 className="font-light text-[#F5F0E8]" style={{ fontSize: '28px', letterSpacing: '-0.02em' }}>
@@ -111,7 +111,7 @@ export default function CheckoutScreen({ lang, onBack, onConfirmed }: CheckoutSc
                 <div
                   className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0"
                   style={{
-                    background: step >= s ? '#2D5A1B' : 'rgba(245,240,232,0.06)',
+                    background: step >= s ? '#2E7D32' : 'rgba(245,240,232,0.06)',
                     border: `1px solid ${step >= s ? 'rgba(74,140,42,0.4)' : 'rgba(245,240,232,0.1)'}`,
                   }}
                 >
@@ -137,7 +137,7 @@ export default function CheckoutScreen({ lang, onBack, onConfirmed }: CheckoutSc
       <SectionReveal delay={60}>
         <div
           className="p-4 rounded-2xl flex items-center justify-between"
-          style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)' }}
+          style={{ background: '#162B16', border: '1px solid rgba(245,240,232,0.07)' }}
         >
           <div>
             <p className="text-[10px] font-medium tracking-[0.15em] uppercase text-[rgba(245,240,232,0.3)] mb-0.5">
@@ -162,7 +162,7 @@ export default function CheckoutScreen({ lang, onBack, onConfirmed }: CheckoutSc
 
           <div
             className="p-5 rounded-2xl space-y-4"
-            style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)' }}
+            style={{ background: '#162B16', border: '1px solid rgba(245,240,232,0.07)' }}
           >
             {/* Name */}
             <div className="flex items-center gap-3 rounded-xl px-4 py-3.5 border border-[rgba(245,240,232,0.1)] focus-within:border-[rgba(74,140,42,0.4)] bg-[rgba(255,255,255,0.03)] transition-all">
@@ -226,7 +226,7 @@ export default function CheckoutScreen({ lang, onBack, onConfirmed }: CheckoutSc
                   touchAction: 'manipulation',
                   background: payMethod === opt.key ? 'rgba(74,140,42,0.12)' : 'transparent',
                   border: `1px solid ${payMethod === opt.key ? 'rgba(74,140,42,0.4)' : 'rgba(245,240,232,0.1)'}`,
-                  color: payMethod === opt.key ? '#4A8C2A' : 'rgba(245,240,232,0.45)',
+                  color: payMethod === opt.key ? '#4CAF50' : 'rgba(245,240,232,0.45)',
                 }}
               >
                 {isMr ? opt.labelMr : opt.label}
@@ -237,7 +237,7 @@ export default function CheckoutScreen({ lang, onBack, onConfirmed }: CheckoutSc
           {payMethod === 'upi' && (
             <div
               className="p-5 rounded-2xl"
-              style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)' }}
+              style={{ background: '#162B16', border: '1px solid rgba(245,240,232,0.07)' }}
             >
               <input
                 type="text"
@@ -269,7 +269,7 @@ export default function CheckoutScreen({ lang, onBack, onConfirmed }: CheckoutSc
           {/* Delivery summary */}
           <div
             className="p-4 rounded-2xl space-y-2"
-            style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)' }}
+            style={{ background: '#162B16', border: '1px solid rgba(245,240,232,0.07)' }}
           >
             <p className="text-[10px] font-medium tracking-[0.15em] uppercase text-[rgba(245,240,232,0.3)] mb-3">
               {isMr ? 'डिलिव्हरी सारांश' : 'Delivery Summary'}
@@ -299,7 +299,7 @@ export default function CheckoutScreen({ lang, onBack, onConfirmed }: CheckoutSc
             disabled={!canProceed}
             className="w-full py-4 rounded-2xl font-medium text-[#F5F0E8] transition-all active:scale-[0.98]"
             style={{
-              background: canProceed ? '#2D5A1B' : 'rgba(245,240,232,0.06)',
+              background: canProceed ? '#2E7D32' : 'rgba(245,240,232,0.06)',
               fontSize: '15px', letterSpacing: '-0.01em',
               color: canProceed ? '#F5F0E8' : 'rgba(245,240,232,0.3)',
               touchAction: 'manipulation',
@@ -311,7 +311,7 @@ export default function CheckoutScreen({ lang, onBack, onConfirmed }: CheckoutSc
           <button
             onClick={handleConfirm}
             className="w-full py-4 rounded-2xl font-medium text-[#F5F0E8] active:scale-[0.98] transition-all"
-            style={{ background: '#2D5A1B', fontSize: '15px', letterSpacing: '-0.01em', touchAction: 'manipulation' }}
+            style={{ background: '#2E7D32', fontSize: '15px', letterSpacing: '-0.01em', touchAction: 'manipulation' }}
           >
             {isMr ? `ऑर्डर द्या — ₹${total.toLocaleString('en-IN')}` : `Confirm Order — ₹${total.toLocaleString('en-IN')}`}
           </button>

@@ -25,7 +25,7 @@ function markerIcon() {
     className: '',
     html: `<div style="position:relative;width:44px;height:44px;display:flex;align-items:center;justify-content:center">
       <div style="position:absolute;inset:0;background:rgba(45,90,27,.22);border-radius:50%;animation:locPulse 2s ease-in-out infinite"></div>
-      <div style="position:relative;width:20px;height:20px;background:#2D5A1B;border:3px solid #D4C4A0;border-radius:50%;box-shadow:0 2px 10px rgba(0,0,0,.5)"></div>
+      <div style="position:relative;width:20px;height:20px;background:#2E7D32;border:3px solid #E8C84A;border-radius:50%;box-shadow:0 2px 10px rgba(0,0,0,.5)"></div>
     </div>`,
     iconSize: [44, 44], iconAnchor: [22, 22],
   });
@@ -88,7 +88,7 @@ export default function LocationPickerModal({ isOpen, current, isMr, onApply, on
     } else {
       circleRef.current = L.circle([lat, lng], {
         radius: radiusRef.current * 1000,
-        color: '#4A8C2A', fillColor: '#2D5A1B',
+        color: '#4CAF50', fillColor: '#2E7D32',
         fillOpacity: 0.12, weight: 2, opacity: 0.7,
       }).addTo(map);
     }
@@ -138,7 +138,7 @@ export default function LocationPickerModal({ isOpen, current, isMr, onApply, on
       // Draw circle immediately
       circleRef.current = L.circle([lat0, lng0], {
         radius: radiusRef.current * 1000,
-        color: '#4A8C2A', fillColor: '#2D5A1B',
+        color: '#4CAF50', fillColor: '#2E7D32',
         fillOpacity: 0.12, weight: 2, opacity: 0.7,
       }).addTo(map);
 
@@ -189,14 +189,14 @@ export default function LocationPickerModal({ isOpen, current, isMr, onApply, on
           <style>{`
             @keyframes locPulse{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.8);opacity:.07}}
             .agsl{-webkit-appearance:none;appearance:none;width:100%;height:24px;background:transparent;outline:none;cursor:pointer}
-            .agsl::-webkit-slider-runnable-track{height:6px;border-radius:99px;background:linear-gradient(to right,#2D5A1B var(--sp,8.16%),rgba(245,240,232,.14) var(--sp,8.16%))}
-            .agsl::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;border-radius:50%;background:#D4C4A0;border:3px solid #0A1A0A;box-shadow:0 0 0 2.5px #2D5A1B,0 4px 16px rgba(0,0,0,.5);margin-top:-11px;cursor:pointer;transition:transform .12s}
+            .agsl::-webkit-slider-runnable-track{height:6px;border-radius:99px;background:linear-gradient(to right,#2E7D32 var(--sp,8.16%),rgba(245,240,232,.14) var(--sp,8.16%))}
+            .agsl::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;border-radius:50%;background:#E8C84A;border:3px solid #0A1A0A;box-shadow:0 0 0 2.5px #2E7D32,0 4px 16px rgba(0,0,0,.5);margin-top:-11px;cursor:pointer;transition:transform .12s}
             .agsl:active::-webkit-slider-thumb{transform:scale(1.22)}
             .agsl::-moz-range-track{height:6px;border-radius:99px;background:rgba(245,240,232,.14)}
-            .agsl::-moz-range-progress{height:6px;border-radius:99px;background:#2D5A1B}
-            .agsl::-moz-range-thumb{width:28px;height:28px;border-radius:50%;background:#D4C4A0;border:3px solid #0A1A0A;box-shadow:0 0 0 2.5px #2D5A1B;cursor:pointer}
+            .agsl::-moz-range-progress{height:6px;border-radius:99px;background:#2E7D32}
+            .agsl::-moz-range-thumb{width:28px;height:28px;border-radius:50%;background:#E8C84A;border:3px solid #0A1A0A;box-shadow:0 0 0 2.5px #2E7D32;cursor:pointer}
             .leaflet-control-attribution{font-size:8px!important;opacity:.3;background:rgba(10,26,10,.6)!important;color:#F5F0E8!important}
-            .leaflet-control-attribution a{color:#D4C4A0!important}
+            .leaflet-control-attribution a{color:#E8C84A!important}
           `}</style>
 
           {/* Backdrop — z-[200] beats BottomNav's z-50 */}
@@ -275,9 +275,9 @@ export default function LocationPickerModal({ isOpen, current, isMr, onApply, on
                     style={{ position: 'absolute', bottom: 12, right: 12, zIndex: 9999, display: 'flex', alignItems: 'center', gap: 8, padding: '10px 14px', borderRadius: 12, background: '#0F1F0F', border: '1px solid rgba(74,140,42,0.6)', boxShadow: '0 4px 18px rgba(0,0,0,.5)', cursor: 'pointer', touchAction: 'manipulation' }}
                   >
                     {locating
-                      ? <div style={{ width: 14, height: 14, borderRadius: '50%', border: '2px solid #4A8C2A', borderTopColor: 'transparent', animation: 'spin .7s linear infinite' }} />
-                      : <Locate size={14} style={{ color: '#4A8C2A' }} />}
-                    <span style={{ fontSize: 12, fontWeight: 500, color: '#D4C4A0' }}>
+                      ? <div style={{ width: 14, height: 14, borderRadius: '50%', border: '2px solid #4CAF50', borderTopColor: 'transparent', animation: 'spin .7s linear infinite' }} />
+                      : <Locate size={14} style={{ color: '#4CAF50' }} />}
+                    <span style={{ fontSize: 12, fontWeight: 500, color: '#E8C84A' }}>
                       {locating ? (isMr ? 'शोधत…' : 'Locating…') : (isMr ? 'माझे स्थान' : 'My Location')}
                     </span>
                   </button>
@@ -292,10 +292,10 @@ export default function LocationPickerModal({ isOpen, current, isMr, onApply, on
                       {isMr ? 'निवडलेला प्रदेश / क्षेत्र' : 'Selected Region / Area'}
                     </p>
                     <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
-                      <MapPin size={15} style={{ color: '#4A8C2A', flexShrink: 0, marginTop: 1 }} />
+                      <MapPin size={15} style={{ color: '#4CAF50', flexShrink: 0, marginTop: 1 }} />
                       {geocoding ? (
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                          <div style={{ width: 14, height: 14, borderRadius: '50%', border: '2px solid #4A8C2A', borderTopColor: 'transparent', animation: 'spin .7s linear infinite' }} />
+                          <div style={{ width: 14, height: 14, borderRadius: '50%', border: '2px solid #4CAF50', borderTopColor: 'transparent', animation: 'spin .7s linear infinite' }} />
                           <span style={{ fontSize: 13, color: 'rgba(245,240,232,0.4)', fontWeight: 300 }}>
                             {isMr ? 'पत्ता शोधत आहे…' : 'Finding address…'}
                           </span>
@@ -320,7 +320,7 @@ export default function LocationPickerModal({ isOpen, current, isMr, onApply, on
                         <p style={{ fontSize: 11, fontWeight: 300, color: 'rgba(245,240,232,0.3)', marginTop: 4 }}>{hint}</p>
                       </div>
                       <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
-                        <span ref={radiusNumRef} style={{ fontSize: 32, fontWeight: 300, letterSpacing: '-0.04em', lineHeight: 1, color: '#D4C4A0' }}>{radius}</span>
+                        <span ref={radiusNumRef} style={{ fontSize: 32, fontWeight: 300, letterSpacing: '-0.04em', lineHeight: 1, color: '#E8C84A' }}>{radius}</span>
                         <span style={{ fontSize: 11, fontWeight: 500, textTransform: 'uppercase', color: 'rgba(245,240,232,0.4)' }}>km</span>
                       </div>
                     </div>
@@ -376,7 +376,7 @@ export default function LocationPickerModal({ isOpen, current, isMr, onApply, on
                   onClick={handleOk}
                   style={{
                     flex: 1, height: 52, borderRadius: 99,
-                    background: '#2D5A1B',
+                    background: '#2E7D32',
                     color: '#F5F0E8',
                     fontSize: 15, fontWeight: 500,
                     border: 'none',

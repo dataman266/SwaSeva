@@ -93,7 +93,7 @@ const STATIC_NEWS: NewsItem[] = [
 // ── Category config ───────────────────────────────────────────────────────────
 
 const CATEGORY_META: Record<NewsCategory, { labelEn: string; labelMr: string; color: string; icon: React.ElementType }> = {
-  market:  { labelEn: 'Market Price', labelMr: 'बाजारभाव',    color: '#2D5A1B', icon: TrendingUp },
+  market:  { labelEn: 'Market Price', labelMr: 'बाजारभाव',    color: '#2E7D32', icon: TrendingUp },
   weather: { labelEn: 'Weather',      labelMr: 'हवामान',      color: '#1A3D5A', icon: CloudRain  },
   scheme:  { labelEn: 'Govt Scheme',  labelMr: 'सरकारी योजना', color: '#5A3A1A', icon: Landmark  },
   general: { labelEn: 'News',         labelMr: 'बातमी',       color: '#3A1A5A', icon: Newspaper  },
@@ -257,7 +257,7 @@ function NewsCard({ item, isMr, index }: { item: NewsItem; isMr: boolean; index:
       style={{
         width: 220,
         minHeight: 160,
-        background: '#111C11',
+        background: '#162B16',
         border: '1px solid rgba(245,240,232,0.07)',
       }}
       onClick={() => item.url && openUrl(item.url)}
@@ -297,7 +297,7 @@ function SkeletonCard() {
   return (
     <div
       className="flex-shrink-0 rounded-2xl p-4 animate-pulse"
-      style={{ width: 220, minHeight: 160, background: '#111C11', border: '1px solid rgba(245,240,232,0.07)' }}
+      style={{ width: 220, minHeight: 160, background: '#162B16', border: '1px solid rgba(245,240,232,0.07)' }}
     >
       <div className="h-4 w-20 rounded-full bg-[rgba(245,240,232,0.06)] mb-3" />
       <div className="h-3 w-full rounded bg-[rgba(245,240,232,0.06)] mb-2" />

@@ -59,7 +59,7 @@ export default function ProductCard({
       <div
         onClick={onClick}
         className="relative overflow-hidden rounded-2xl cursor-pointer group"
-        style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.14)' }}
+        style={{ background: '#162B16', border: '1px solid rgba(245,240,232,0.14)' }}
       >
         {/* Hero image */}
         <div className="relative h-60 overflow-hidden">
@@ -75,7 +75,7 @@ export default function ProductCard({
 
           {/* Category badge */}
           <div className="absolute top-4 left-4 flex flex-col gap-1.5">
-            <span className="inline-block text-[11px] font-semibold tracking-[0.1em] uppercase text-[#D4C4A0] bg-[rgba(10,26,10,0.75)] backdrop-blur px-3 py-1.5 rounded-full border border-[rgba(212,196,160,0.35)]">
+            <span className="inline-block text-[11px] font-semibold tracking-[0.1em] uppercase text-[#E8C84A] bg-[rgba(10,26,10,0.75)] backdrop-blur px-3 py-1.5 rounded-full border border-[rgba(212,196,160,0.35)]">
               {product.category}
             </span>
             {isSelfListing && (
@@ -104,7 +104,7 @@ export default function ProductCard({
 
           {/* Name overlay at bottom of image */}
           <div className="absolute bottom-0 left-0 right-0 px-5 pb-4">
-            <p className="text-[10px] font-medium tracking-[0.2em] uppercase text-[#D4C4A0] mb-0.5">
+            <p className="text-[10px] font-medium tracking-[0.2em] uppercase text-[#E8C84A] mb-0.5">
               {isMr ? product.varietyMr : product.variety}
             </p>
             <h3 className="text-xl font-light leading-tight text-[#F5F0E8]" style={{ letterSpacing: '-0.01em' }}>
@@ -118,7 +118,7 @@ export default function ProductCard({
           <div className="space-y-1">
             {seller && (
               <div className="flex items-center gap-1.5">
-                <MapPin size={11} className="text-[#D4C4A0]" />
+                <MapPin size={11} className="text-[#E8C84A]" />
                 <span className="text-[13px] font-light text-[rgba(245,240,232,0.7)]">
                   {seller.location}
                 </span>
@@ -137,7 +137,7 @@ export default function ProductCard({
               product.price >= product.mspPrice ? (
                 <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full"
                   style={{ background: 'rgba(74,140,42,0.12)', border: '1px solid rgba(74,140,42,0.25)' }}>
-                  <span style={{ fontSize: '9px', fontWeight: 600, color: '#4A8C2A', letterSpacing: '0.1em' }}>
+                  <span style={{ fontSize: '9px', fontWeight: 600, color: '#4CAF50', letterSpacing: '0.1em' }}>
                     ✓ {isMr ? 'MSP पेक्षा जास्त' : 'ABOVE MSP'}
                   </span>
                 </div>
@@ -168,7 +168,7 @@ export default function ProductCard({
               </button>
             )}
             {/* Arrow CTA */}
-            <div className="w-10 h-10 rounded-full border border-[rgba(245,240,232,0.12)] flex items-center justify-center text-[rgba(245,240,232,0.35)] group-active:border-[#D4C4A0] group-active:text-[#D4C4A0] transition-all">
+            <div className="w-10 h-10 rounded-full border border-[rgba(245,240,232,0.12)] flex items-center justify-center text-[rgba(245,240,232,0.35)] group-active:border-[#E8C84A] group-active:text-[#E8C84A] transition-all">
               <ArrowRight size={16} />
             </div>
           </div>
@@ -186,7 +186,7 @@ export default function ProductCard({
               className="flex items-center justify-center gap-2 flex-1 h-12 rounded-2xl border-2 border-[rgba(245,240,232,0.25)] text-[rgba(245,240,232,0.85)] text-[14px] font-semibold active:scale-95 transition-all"
               style={{ touchAction: 'manipulation' }}
             >
-              <Phone size={15} className="text-[#D4C4A0]" />
+              <Phone size={15} className="text-[#E8C84A]" />
               {isMr ? 'कॉल' : 'Call'}
             </a>
             <button

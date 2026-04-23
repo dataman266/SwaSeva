@@ -91,13 +91,13 @@ export default function LivePriceTicker({ isMr }: LivePriceTickerProps) {
       }}>
         <span style={{
           fontSize: '8px', fontWeight: 600, letterSpacing: '0.18em',
-          textTransform: 'uppercase', color: '#4A8C2A',
+          textTransform: 'uppercase', color: '#4CAF50',
         }}>
           {isMr ? 'मंडी भाव — आज' : 'Mandi Rates — Today'}
         </span>
         <span style={{
           width: 6, height: 6, borderRadius: '50%',
-          background: '#4A8C2A',
+          background: '#4CAF50',
           boxShadow: '0 0 0 3px rgba(74,140,42,0.2)',
           animation: 'pulse 2s infinite',
           display: 'inline-block',
@@ -121,7 +121,7 @@ export default function LivePriceTicker({ isMr }: LivePriceTickerProps) {
             const { diff, pct } = getChange(item.price, item.prevPrice);
             const up   = diff > 0;
             const flat = diff === 0;
-            const color = flat ? 'rgba(245,240,232,0.4)' : up ? '#4A8C2A' : '#E57373';
+            const color = flat ? 'rgba(245,240,232,0.4)' : up ? '#4CAF50' : '#E57373';
 
             return (
               <div

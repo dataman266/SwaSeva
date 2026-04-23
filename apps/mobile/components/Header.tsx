@@ -81,7 +81,7 @@ export default function Header({
             style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'rgba(45,90,27,0.2)' }}
           >
             <Bell size={15} />
-            <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-[#D4C4A0] rounded-full" />
+            <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-[#E8C84A] rounded-full" />
           </button>
         </div>
       </div>

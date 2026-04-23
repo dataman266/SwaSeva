@@ -21,13 +21,13 @@ interface MenuItem {
 }
 
 const MENU_ITEMS: MenuItem[] = [
-  { icon: Settings,    label: 'Account Settings', labelMr: 'खाते सेटिंग्ज',      color: '#D4C4A0', action: 'settings'     },
-  { icon: Bell,        label: 'Notifications',    labelMr: 'सूचना',               color: '#4A8C2A', action: 'notifications' },
+  { icon: Settings,    label: 'Account Settings', labelMr: 'खाते सेटिंग्ज',      color: '#E8C84A', action: 'settings'     },
+  { icon: Bell,        label: 'Notifications',    labelMr: 'सूचना',               color: '#4CAF50', action: 'notifications' },
   { icon: ShieldCheck, label: 'KYC Verification', labelMr: 'KYC पडताळणी',        color: '#7EB3FF', action: 'kyc'           },
-  { icon: Newspaper,   label: 'News & About',     labelMr: 'बातम्या आणि माहिती', color: '#D4C4A0', action: 'explore'       },
-  { icon: Sprout,      label: 'Crop Calendar',    labelMr: 'पीक दिनदर्शिका',     color: '#4A8C2A', action: 'calendar'      },
-  { icon: HelpCircle,  label: 'Help & Support',   labelMr: 'मदत आणि सहाय्य',    color: '#D4C4A0', action: 'help'          },
-  { icon: Zap,         label: 'App Tour',         labelMr: 'अ‍ॅप टूर',           color: '#4A8C2A', action: 'onboarding'    },
+  { icon: Newspaper,   label: 'News & About',     labelMr: 'बातम्या आणि माहिती', color: '#E8C84A', action: 'explore'       },
+  { icon: Sprout,      label: 'Crop Calendar',    labelMr: 'पीक दिनदर्शिका',     color: '#4CAF50', action: 'calendar'      },
+  { icon: HelpCircle,  label: 'Help & Support',   labelMr: 'मदत आणि सहाय्य',    color: '#E8C84A', action: 'help'          },
+  { icon: Zap,         label: 'App Tour',         labelMr: 'अ‍ॅप टूर',           color: '#4CAF50', action: 'onboarding'    },
   { icon: LogOut,      label: 'Sign Out',         labelMr: 'बाहेर पडा',           color: '#E57373', action: 'signout'       },
 ];
 
@@ -118,7 +118,7 @@ function SettingsView({ lang, onBack }: { lang: Language; onBack: () => void }) 
       border: `1px solid ${readOnly ? 'rgba(245,240,232,0.07)' : 'rgba(74,140,42,0.25)'}`,
       borderRadius: '0.875rem', padding: '0.875rem 1rem',
     }}>
-      <Icon size={15} style={{ color: readOnly ? 'rgba(245,240,232,0.3)' : '#4A8C2A', flexShrink: 0 }} />
+      <Icon size={15} style={{ color: readOnly ? 'rgba(245,240,232,0.3)' : '#4CAF50', flexShrink: 0 }} />
       <input
         type={type}
         value={value}
@@ -143,7 +143,7 @@ function SettingsView({ lang, onBack }: { lang: Language; onBack: () => void }) 
         <div style={{ position: 'relative' }}>
           <div style={{
             width: 80, height: 80, borderRadius: '1.25rem',
-            background: '#2D5A1B', display: 'flex', alignItems: 'center', justifyContent: 'center',
+            background: '#2E7D32', display: 'flex', alignItems: 'center', justifyContent: 'center',
             fontSize: '22px', fontWeight: 500, color: '#F5F0E8', letterSpacing: '0.02em',
           }}>
             RS
@@ -153,7 +153,7 @@ function SettingsView({ lang, onBack }: { lang: Language; onBack: () => void }) 
             style={{
               position: 'absolute', bottom: -6, right: -6,
               width: 28, height: 28, borderRadius: '50%',
-              background: '#D4C4A0', border: '2px solid #0A1A0A',
+              background: '#E8C84A', border: '2px solid #0A1A0A',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               cursor: 'pointer', touchAction: 'manipulation',
               WebkitTapHighlightColor: 'transparent',
@@ -166,7 +166,7 @@ function SettingsView({ lang, onBack }: { lang: Language; onBack: () => void }) 
 
       {/* Personal info */}
       <div style={{
-        background: '#111C11', border: '1px solid rgba(245,240,232,0.07)',
+        background: '#162B16', border: '1px solid rgba(245,240,232,0.07)',
         borderRadius: '1.25rem', padding: '1.25rem', marginBottom: '1rem',
       }}>
         <Label>{isMr ? 'वैयक्तिक माहिती' : 'Personal Info'}</Label>
@@ -179,7 +179,7 @@ function SettingsView({ lang, onBack }: { lang: Language; onBack: () => void }) 
 
       {/* Language */}
       <div style={{
-        background: '#111C11', border: '1px solid rgba(245,240,232,0.07)',
+        background: '#162B16', border: '1px solid rgba(245,240,232,0.07)',
         borderRadius: '1.25rem', padding: '1.25rem', marginBottom: '1rem',
       }}>
         <Label>{isMr ? 'भाषा' : 'Language'}</Label>
@@ -201,7 +201,7 @@ function SettingsView({ lang, onBack }: { lang: Language; onBack: () => void }) 
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
               }}
             >
-              <Globe size={13} style={{ color: (isMr ? code === 'MR' : code === 'EN') ? '#4A8C2A' : 'rgba(245,240,232,0.4)' }} />
+              <Globe size={13} style={{ color: (isMr ? code === 'MR' : code === 'EN') ? '#4CAF50' : 'rgba(245,240,232,0.4)' }} />
               <span style={{
                 fontSize: '13px', fontWeight: 400,
                 color: (isMr ? code === 'MR' : code === 'EN') ? '#F5F0E8' : 'rgba(245,240,232,0.4)',
@@ -209,7 +209,7 @@ function SettingsView({ lang, onBack }: { lang: Language; onBack: () => void }) 
                 {label}
               </span>
               {(isMr ? code === 'MR' : code === 'EN') && (
-                <Check size={12} style={{ color: '#4A8C2A' }} />
+                <Check size={12} style={{ color: '#4CAF50' }} />
               )}
             </button>
           ))}
@@ -218,7 +218,7 @@ function SettingsView({ lang, onBack }: { lang: Language; onBack: () => void }) 
 
       {/* Change password */}
       <div style={{
-        background: '#111C11', border: '1px solid rgba(245,240,232,0.07)',
+        background: '#162B16', border: '1px solid rgba(245,240,232,0.07)',
         borderRadius: '1.25rem', padding: '1.25rem', marginBottom: '1.5rem',
       }}>
         <Label>{isMr ? 'पासवर्ड बदला' : 'Change Password'}</Label>
@@ -228,7 +228,7 @@ function SettingsView({ lang, onBack }: { lang: Language; onBack: () => void }) 
             background: 'rgba(245,240,232,0.06)', border: '1px solid rgba(74,140,42,0.25)',
             borderRadius: '0.875rem', padding: '0.875rem 1rem',
           }}>
-            <Lock size={15} style={{ color: '#4A8C2A', flexShrink: 0 }} />
+            <Lock size={15} style={{ color: '#4CAF50', flexShrink: 0 }} />
             <input
               type={showOld ? 'text' : 'password'}
               value={oldPwd}
@@ -245,7 +245,7 @@ function SettingsView({ lang, onBack }: { lang: Language; onBack: () => void }) 
             background: 'rgba(245,240,232,0.06)', border: '1px solid rgba(74,140,42,0.25)',
             borderRadius: '0.875rem', padding: '0.875rem 1rem',
           }}>
-            <Lock size={15} style={{ color: '#4A8C2A', flexShrink: 0 }} />
+            <Lock size={15} style={{ color: '#4CAF50', flexShrink: 0 }} />
             <input
               type={showNew ? 'text' : 'password'}
               value={newPwd}
@@ -277,7 +277,7 @@ function SettingsView({ lang, onBack }: { lang: Language; onBack: () => void }) 
           borderRadius: '1rem', cursor: 'pointer',
           touchAction: 'manipulation',
           WebkitTapHighlightColor: 'rgba(45,90,27,0.2)',
-          background: saved ? 'rgba(74,140,42,0.2)' : '#2D5A1B',
+          background: saved ? 'rgba(74,140,42,0.2)' : '#2E7D32',
           border: `1px solid ${saved ? 'rgba(74,140,42,0.4)' : 'transparent'}`,
           color: '#F5F0E8', fontSize: '15px', fontWeight: 500,
           display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
@@ -285,7 +285,7 @@ function SettingsView({ lang, onBack }: { lang: Language; onBack: () => void }) 
         }}
       >
         {saved ? (
-          <><Check size={16} style={{ color: '#4A8C2A' }} /><span style={{ color: '#4A8C2A' }}>{isMr ? 'जतन झाले!' : 'Saved!'}</span></>
+          <><Check size={16} style={{ color: '#4CAF50' }} /><span style={{ color: '#4CAF50' }}>{isMr ? 'जतन झाले!' : 'Saved!'}</span></>
         ) : (
           isMr ? 'बदल जतन करा' : 'Save Changes'
         )}
@@ -312,7 +312,7 @@ function NotificationsView({ lang, onBack }: { lang: Language; onBack: () => voi
       style={{
         width: 44, height: 26,
         borderRadius: 13,
-        background: on ? '#2D5A1B' : 'rgba(245,240,232,0.1)',
+        background: on ? '#2E7D32' : 'rgba(245,240,232,0.1)',
         border: `1px solid ${on ? 'rgba(74,140,42,0.4)' : 'rgba(245,240,232,0.12)'}`,
         position: 'relative', cursor: 'pointer',
         touchAction: 'manipulation',
@@ -323,7 +323,7 @@ function NotificationsView({ lang, onBack }: { lang: Language; onBack: () => voi
     >
       <div style={{
         width: 20, height: 20, borderRadius: '50%',
-        background: on ? '#D4C4A0' : 'rgba(245,240,232,0.3)',
+        background: on ? '#E8C84A' : 'rgba(245,240,232,0.3)',
         position: 'absolute', top: 2,
         left: on ? 20 : 2,
         transition: 'left 0.18s ease, background 0.2s',
@@ -377,18 +377,18 @@ function NotificationsView({ lang, onBack }: { lang: Language; onBack: () => voi
     <div style={{ padding: '2rem 1.25rem 7rem', minHeight: '100vh', overflowY: 'auto', WebkitOverflowScrolling: 'touch' }}>
       <SubHeader title={isMr ? 'सूचना' : 'Notifications'} onBack={onBack} />
 
-      <div style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)', borderRadius: '1.25rem', overflow: 'hidden', marginBottom: '1rem' }}>
+      <div style={{ background: '#162B16', border: '1px solid rgba(245,240,232,0.07)', borderRadius: '1.25rem', overflow: 'hidden', marginBottom: '1rem' }}>
         <Section title={isMr ? 'अलर्ट' : 'Alerts'} />
         <Row icon={Zap}      color="#F5C518" label="Order Updates"    labelMr="ऑर्डर अपडेट"   sub="Buyer activity on your listings" subMr="तुमच्या लिस्टिंगवर खरेदीदार क्रिया" k="orders" />
-        <Row icon={TrendingUp} color="#4A8C2A" label="Price Alerts"  labelMr="किंमत अलर्ट"   sub="Daily MSP & mandi rate changes"  subMr="दैनिक MSP आणि मंडी दर बदल"         k="prices" />
-        <Row icon={Tag}      color="#D4C4A0" label="Govt Schemes"     labelMr="सरकारी योजना"  sub="PM Kisan, subsidy announcements" subMr="PM किसान, अनुदान घोषणा"            k="schemes" />
+        <Row icon={TrendingUp} color="#4CAF50" label="Price Alerts"  labelMr="किंमत अलर्ट"   sub="Daily MSP & mandi rate changes"  subMr="दैनिक MSP आणि मंडी दर बदल"         k="prices" />
+        <Row icon={Tag}      color="#E8C84A" label="Govt Schemes"     labelMr="सरकारी योजना"  sub="PM Kisan, subsidy announcements" subMr="PM किसान, अनुदान घोषणा"            k="schemes" />
         <Row icon={Megaphone} color="#7EB3FF" label="Farming News"   labelMr="शेती बातम्या"  sub="Weather, pest & market news"     subMr="हवामान, कीड आणि बाजार बातम्या"    k="news" />
       </div>
 
-      <div style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)', borderRadius: '1.25rem', overflow: 'hidden' }}>
+      <div style={{ background: '#162B16', border: '1px solid rgba(245,240,232,0.07)', borderRadius: '1.25rem', overflow: 'hidden' }}>
         <Section title={isMr ? 'चॅनेल' : 'Channels'} />
-        <Row icon={Bell}         color="#D4C4A0" label="Push Notifications" labelMr="पुश सूचना" sub="In-app and lock screen"     subMr="अ‍ॅप आणि लॉक स्क्रीन" k="push"  />
-        <Row icon={Phone}        color="#4A8C2A" label="SMS"                 labelMr="एसएमएस"   sub="Text alerts to your number"  subMr="तुमच्या नंबरवर SMS"    k="sms"   />
+        <Row icon={Bell}         color="#E8C84A" label="Push Notifications" labelMr="पुश सूचना" sub="In-app and lock screen"     subMr="अ‍ॅप आणि लॉक स्क्रीन" k="push"  />
+        <Row icon={Phone}        color="#4CAF50" label="SMS"                 labelMr="एसएमएस"   sub="Text alerts to your number"  subMr="तुमच्या नंबरवर SMS"    k="sms"   />
         <Row icon={Mail}         color="#7EB3FF" label="Email"               labelMr="ईमेल"     sub="Weekly digest & reports"    subMr="साप्ताहिक सारांश"      k="email" />
       </div>
     </div>
@@ -407,11 +407,11 @@ function KYCView({ lang, onBack }: { lang: Language; onBack: () => void }) {
       label: isMr ? 'आधार कार्ड' : 'Aadhaar Card',
       sublabel: isMr ? 'ओळख पडताळणी' : 'Identity Verification',
       status: 'verified',
-      color: '#4A8C2A',
+      color: '#4CAF50',
       content: (
         <div style={{ padding: '1rem 1.25rem 1.25rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.875rem 1rem', background: 'rgba(74,140,42,0.08)', border: '1px solid rgba(74,140,42,0.2)', borderRadius: '0.875rem' }}>
-            <Check size={14} style={{ color: '#4A8C2A', flexShrink: 0 }} />
+            <Check size={14} style={{ color: '#4CAF50', flexShrink: 0 }} />
             <div>
               <p style={{ fontSize: '13px', color: '#F5F0E8', fontWeight: 300 }}>XXXX XXXX 4321</p>
               <p style={{ fontSize: '11px', color: 'rgba(245,240,232,0.4)', marginTop: 2 }}>
@@ -427,11 +427,11 @@ function KYCView({ lang, onBack }: { lang: Language; onBack: () => void }) {
       label: isMr ? 'PAN कार्ड' : 'PAN Card',
       sublabel: isMr ? 'कर ओळख' : 'Tax Identification',
       status: 'verified',
-      color: '#4A8C2A',
+      color: '#4CAF50',
       content: (
         <div style={{ padding: '1rem 1.25rem 1.25rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.875rem 1rem', background: 'rgba(74,140,42,0.08)', border: '1px solid rgba(74,140,42,0.2)', borderRadius: '0.875rem' }}>
-            <Check size={14} style={{ color: '#4A8C2A', flexShrink: 0 }} />
+            <Check size={14} style={{ color: '#4CAF50', flexShrink: 0 }} />
             <div>
               <p style={{ fontSize: '13px', color: '#F5F0E8', fontWeight: 300 }}>ABCDE1234F</p>
               <p style={{ fontSize: '11px', color: 'rgba(245,240,232,0.4)', marginTop: 2 }}>
@@ -455,7 +455,7 @@ function KYCView({ lang, onBack }: { lang: Language; onBack: () => void }) {
             background: 'rgba(245,240,232,0.06)', border: '1px solid rgba(74,140,42,0.25)',
             borderRadius: '0.875rem', padding: '0.875rem 1rem',
           }}>
-            <Building2 size={15} style={{ color: '#4A8C2A', flexShrink: 0 }} />
+            <Building2 size={15} style={{ color: '#4CAF50', flexShrink: 0 }} />
             <input
               type="text"
               placeholder={isMr ? 'खाते क्रमांक' : 'Account Number'}
@@ -467,7 +467,7 @@ function KYCView({ lang, onBack }: { lang: Language; onBack: () => void }) {
             background: 'rgba(245,240,232,0.06)', border: '1px solid rgba(74,140,42,0.25)',
             borderRadius: '0.875rem', padding: '0.875rem 1rem',
           }}>
-            <FileText size={15} style={{ color: '#4A8C2A', flexShrink: 0 }} />
+            <FileText size={15} style={{ color: '#4CAF50', flexShrink: 0 }} />
             <input
               type="text"
               placeholder={isMr ? 'IFSC कोड' : 'IFSC Code'}
@@ -479,7 +479,7 @@ function KYCView({ lang, onBack }: { lang: Language; onBack: () => void }) {
             onClick={() => setStep(3)}
             style={{
               width: '100%', padding: '0.875rem', borderRadius: '0.875rem',
-              background: '#2D5A1B', border: 'none', color: '#F5F0E8',
+              background: '#2E7D32', border: 'none', color: '#F5F0E8',
               fontSize: '14px', fontWeight: 500, cursor: 'pointer',
               touchAction: 'manipulation',
               WebkitTapHighlightColor: 'rgba(45,90,27,0.2)',
@@ -503,7 +503,7 @@ function KYCView({ lang, onBack }: { lang: Language; onBack: () => void }) {
             background: 'rgba(245,240,232,0.06)', border: '1px solid rgba(74,140,42,0.25)',
             borderRadius: '0.875rem', padding: '0.875rem 1rem',
           }}>
-            <Tractor size={15} style={{ color: '#4A8C2A', flexShrink: 0 }} />
+            <Tractor size={15} style={{ color: '#4CAF50', flexShrink: 0 }} />
             <input
               type="text"
               placeholder={isMr ? 'जमिनीचे क्षेत्रफळ (एकर)' : 'Land area (acres)'}
@@ -515,7 +515,7 @@ function KYCView({ lang, onBack }: { lang: Language; onBack: () => void }) {
             background: 'rgba(245,240,232,0.06)', border: '1px solid rgba(74,140,42,0.25)',
             borderRadius: '0.875rem', padding: '0.875rem 1rem',
           }}>
-            <FileText size={15} style={{ color: '#4A8C2A', flexShrink: 0 }} />
+            <FileText size={15} style={{ color: '#4CAF50', flexShrink: 0 }} />
             <input
               type="text"
               placeholder={isMr ? '7/12 उतारा क्रमांक' : '7/12 Satbara number'}
@@ -528,7 +528,7 @@ function KYCView({ lang, onBack }: { lang: Language; onBack: () => void }) {
             borderRadius: '0.875rem', display: 'flex', alignItems: 'center', gap: '0.75rem',
             cursor: 'pointer', touchAction: 'manipulation',
           }}>
-            <Camera size={15} style={{ color: '#4A8C2A' }} />
+            <Camera size={15} style={{ color: '#4CAF50' }} />
             <span style={{ fontSize: '13px', color: 'rgba(245,240,232,0.6)', fontWeight: 300 }}>
               {isMr ? '7/12 छायाचित्र अपलोड करा' : 'Upload 7/12 photo'}
             </span>
@@ -537,7 +537,7 @@ function KYCView({ lang, onBack }: { lang: Language; onBack: () => void }) {
             type="button"
             style={{
               width: '100%', padding: '0.875rem', borderRadius: '0.875rem',
-              background: '#2D5A1B', border: 'none', color: '#F5F0E8',
+              background: '#2E7D32', border: 'none', color: '#F5F0E8',
               fontSize: '14px', fontWeight: 500, cursor: 'pointer',
               touchAction: 'manipulation',
               WebkitTapHighlightColor: 'rgba(45,90,27,0.2)',
@@ -559,7 +559,7 @@ function KYCView({ lang, onBack }: { lang: Language; onBack: () => void }) {
 
       {/* Progress bar */}
       <div style={{
-        background: '#111C11', border: '1px solid rgba(245,240,232,0.07)',
+        background: '#162B16', border: '1px solid rgba(245,240,232,0.07)',
         borderRadius: '1.25rem', padding: '1.25rem', marginBottom: '1.25rem',
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '0.75rem' }}>
@@ -573,7 +573,7 @@ function KYCView({ lang, onBack }: { lang: Language; onBack: () => void }) {
         <div style={{ height: 4, background: 'rgba(245,240,232,0.08)', borderRadius: 2, overflow: 'hidden' }}>
           <div style={{
             height: '100%', borderRadius: 2,
-            background: 'linear-gradient(90deg, #2D5A1B, #4A8C2A)',
+            background: 'linear-gradient(90deg, #2E7D32, #4CAF50)',
             width: `${progress}%`, transition: 'width 0.4s ease',
           }} />
         </div>
@@ -585,7 +585,7 @@ function KYCView({ lang, onBack }: { lang: Language; onBack: () => void }) {
       </div>
 
       {/* Steps accordion */}
-      <div style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)', borderRadius: '1.25rem', overflow: 'hidden' }}>
+      <div style={{ background: '#162B16', border: '1px solid rgba(245,240,232,0.07)', borderRadius: '1.25rem', overflow: 'hidden' }}>
         {steps.map((s, i) => (
           <div key={i} style={{ borderBottom: i < steps.length - 1 ? '1px solid rgba(245,240,232,0.05)' : 'none' }}>
             <button
@@ -695,7 +695,7 @@ function HelpView({ lang, onBack }: { lang: Language; onBack: () => void }) {
       icon: PhoneCall,
       label: isMr ? 'फोन करा' : 'Call Us',
       sub: '1800-XXX-XXXX',
-      color: '#4A8C2A',
+      color: '#4CAF50',
       bg: 'rgba(74,140,42,0.1)',
       border: 'rgba(74,140,42,0.2)',
     },
@@ -723,7 +723,7 @@ function HelpView({ lang, onBack }: { lang: Language; onBack: () => void }) {
 
       {/* Rating CTA */}
       <div style={{
-        background: 'linear-gradient(135deg, #111C11 0%, #1A2D1A 100%)',
+        background: 'linear-gradient(135deg, #162B16 0%, #1E3A1E 100%)',
         border: '1px solid rgba(74,140,42,0.2)', borderRadius: '1.25rem',
         padding: '1.25rem', marginBottom: '1.25rem',
         display: 'flex', alignItems: 'center', gap: '1rem',
@@ -733,7 +733,7 @@ function HelpView({ lang, onBack }: { lang: Language; onBack: () => void }) {
           background: 'rgba(212,196,160,0.1)', border: '1px solid rgba(212,196,160,0.2)',
           display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
         }}>
-          <Star size={18} style={{ color: '#D4C4A0' }} />
+          <Star size={18} style={{ color: '#E8C84A' }} />
         </div>
         <div style={{ flex: 1 }}>
           <p style={{ fontSize: '14px', fontWeight: 400, color: '#F5F0E8', letterSpacing: '-0.01em' }}>
@@ -775,7 +775,7 @@ function HelpView({ lang, onBack }: { lang: Language; onBack: () => void }) {
       }}>
         {isMr ? 'वारंवार विचारले जाणारे प्रश्न' : 'Frequently Asked Questions'}
       </p>
-      <div style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)', borderRadius: '1.25rem', overflow: 'hidden' }}>
+      <div style={{ background: '#162B16', border: '1px solid rgba(245,240,232,0.07)', borderRadius: '1.25rem', overflow: 'hidden' }}>
         {faqs.map((faq, i) => (
           <div key={i} style={{ borderBottom: i < faqs.length - 1 ? '1px solid rgba(245,240,232,0.05)' : 'none' }}>
             <button
@@ -891,19 +891,19 @@ export default function ProfileScreen({ lang, onSignOut, onExplore, onOpenCalend
               {/* ── Identity card ────────────────────────────────────── */}
               <div
                 className="p-6 rounded-2xl mb-6"
-                style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)' }}
+                style={{ background: '#162B16', border: '1px solid rgba(245,240,232,0.07)' }}
               >
                 <div className="flex items-center gap-4">
                   <div className="relative flex-shrink-0">
                     <div
                       className="w-16 h-16 rounded-2xl flex items-center justify-center font-medium text-lg text-[#F5F0E8]"
-                      style={{ background: '#2D5A1B', letterSpacing: '0.02em' }}
+                      style={{ background: '#2E7D32', letterSpacing: '0.02em' }}
                     >
                       RS
                     </div>
                     <div
                       className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center"
-                      style={{ background: '#D4C4A0', border: '2px solid #0A1A0A' }}
+                      style={{ background: '#E8C84A', border: '2px solid #0A1A0A' }}
                     >
                       <ShieldCheck size={10} className="text-[#0A1A0A]" />
                     </div>
@@ -919,8 +919,8 @@ export default function ProfileScreen({ lang, onSignOut, onExplore, onOpenCalend
                       className="inline-flex items-center gap-1.5 mt-2 px-3 py-1 rounded-full"
                       style={{ background: 'rgba(74,140,42,0.12)', border: '1px solid rgba(74,140,42,0.2)' }}
                     >
-                      <Sprout size={10} className="text-[#4A8C2A]" />
-                      <span className="text-[9px] font-medium tracking-[0.12em] uppercase text-[#4A8C2A]">
+                      <Sprout size={10} className="text-[#4CAF50]" />
+                      <span className="text-[9px] font-medium tracking-[0.12em] uppercase text-[#4CAF50]">
                         {isMr ? 'प्रीमियम शेतकरी' : 'Premium Farmer'}
                       </span>
                     </div>
@@ -938,7 +938,7 @@ export default function ProfileScreen({ lang, onSignOut, onExplore, onOpenCalend
                   <div
                     key={label}
                     className="p-4 rounded-2xl text-center"
-                    style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)' }}
+                    style={{ background: '#162B16', border: '1px solid rgba(245,240,232,0.07)' }}
                   >
                     <p className="font-light text-[#F5F0E8] mb-0.5" style={{ fontSize: '20px', letterSpacing: '-0.02em' }}>
                       {value}
@@ -953,7 +953,7 @@ export default function ProfileScreen({ lang, onSignOut, onExplore, onOpenCalend
               {/* ── Menu list ────────────────────────────────────────── */}
               <div
                 className="rounded-2xl overflow-hidden mb-6"
-                style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)' }}
+                style={{ background: '#162B16', border: '1px solid rgba(245,240,232,0.07)' }}
               >
                 {MENU_ITEMS.map(({ icon: Icon, label, labelMr, color, action }, i) => (
                   <button
@@ -1013,7 +1013,7 @@ export default function ProfileScreen({ lang, onSignOut, onExplore, onOpenCalend
               transition={{ type: 'spring', stiffness: 420, damping: 38 }}
               onClick={e => e.stopPropagation()}
               style={{
-                width: '100%', background: '#111C11',
+                width: '100%', background: '#162B16',
                 borderRadius: '1.5rem 1.5rem 0 0',
                 padding: '1.5rem 1.5rem 2.5rem',
                 border: '1px solid rgba(245,240,232,0.07)',

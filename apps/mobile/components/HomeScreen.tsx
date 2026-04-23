@@ -221,7 +221,7 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           width: '100%', margin: '0.875rem 0 0',
           padding: '0.875rem 1.25rem',
-          background: 'linear-gradient(135deg, #111C11 0%, #1A2D1A 100%)',
+          background: 'linear-gradient(135deg, #162B16 0%, #1E3A1E 100%)',
           border: 'none',
           borderTop: '1px solid rgba(245,240,232,0.06)',
           borderBottom: '1px solid rgba(245,240,232,0.06)',
@@ -235,7 +235,7 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
             background: 'rgba(212,196,160,0.1)', border: '1px solid rgba(212,196,160,0.2)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
-            <Newspaper size={16} style={{ color: '#D4C4A0' }} />
+            <Newspaper size={16} style={{ color: '#E8C84A' }} />
           </div>
           <div style={{ textAlign: 'left' }}>
             <p style={{ fontSize: '15px', fontWeight: 600, color: '#F5F0E8', letterSpacing: '-0.01em' }}>
@@ -247,7 +247,7 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
           </div>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
-          <TrendingUp size={12} style={{ color: '#4A8C2A' }} />
+          <TrendingUp size={12} style={{ color: '#4CAF50' }} />
           <ChevronRight size={14} style={{ color: 'rgba(245,240,232,0.25)' }} />
         </div>
       </button>
@@ -265,7 +265,7 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
               {t.nearYou}
             </h2>
           </div>
-          <span className="text-[9px] font-medium tracking-[0.18em] uppercase text-[#D4C4A0] bg-[rgba(212,196,160,0.1)] border border-[rgba(212,196,160,0.2)] px-3 py-1 rounded-full">
+          <span className="text-[9px] font-medium tracking-[0.18em] uppercase text-[#E8C84A] bg-[rgba(212,196,160,0.1)] border border-[rgba(212,196,160,0.2)] px-3 py-1 rounded-full">
             {isLoading ? (isMr ? 'लोड...' : 'Loading…') : 'LIVE'}
           </span>
         </SectionReveal>
@@ -285,20 +285,20 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
         >
           <MapPin
             size={13}
-            style={{ color: locationActive ? '#4A8C2A' : 'rgba(245,240,232,0.35)', flexShrink: 0 }}
+            style={{ color: locationActive ? '#4CAF50' : 'rgba(245,240,232,0.35)', flexShrink: 0 }}
           />
           <span style={{
             fontSize: '12px',
             fontWeight: 500,
             letterSpacing: '0.01em',
-            color: locationActive ? '#D4C4A0' : 'rgba(245,240,232,0.4)',
+            color: locationActive ? '#E8C84A' : 'rgba(245,240,232,0.4)',
           }}>
             {locationActive
               ? `${isMr ? locationFilter.regionLabelMr : locationFilter.regionLabel} · ${locationFilter.radius} km`
               : `${isMr ? 'सर्व भारत' : 'All India'} · ${locationFilter.radius} km`}
           </span>
           {locationActive && (
-            <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: '#4A8C2A' }} />
+            <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: '#4CAF50' }} />
           )}
         </button>
 
@@ -317,11 +317,11 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
             <button
               onClick={() => setShowFilters(true)}
               className="relative transition-colors"
-              style={{ touchAction: 'manipulation', color: filtersActive ? '#D4C4A0' : 'rgba(245,240,232,0.3)' }}
+              style={{ touchAction: 'manipulation', color: filtersActive ? '#E8C84A' : 'rgba(245,240,232,0.3)' }}
             >
               <Filter size={16} />
               {filtersActive && (
-                <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-[#D4C4A0]" />
+                <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-[#E8C84A]" />
               )}
             </button>
           </div>
@@ -432,11 +432,11 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
       <button
         onClick={onOpenAssistant}
         className="fixed bottom-24 right-5 z-50 w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-all active:scale-90 border border-[rgba(245,240,232,0.15)]"
-        style={{ background: '#2D5A1B' }}
+        style={{ background: '#2E7D32' }}
         aria-label="Open AI Assistant"
       >
-        <MessageCircle size={22} className="text-[#D4C4A0]" strokeWidth={1.5} />
-        <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-[#D4C4A0] rounded-full border-2 border-[#0A1A0A] animate-pulse" />
+        <MessageCircle size={22} className="text-[#E8C84A]" strokeWidth={1.5} />
+        <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-[#E8C84A] rounded-full border-2 border-[#0A1A0A] animate-pulse" />
       </button>
 
       {/* ── Compare bar ──────────────────────────────────────────── */}
@@ -444,9 +444,9 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
         <div className="fixed bottom-24 left-5 z-50 animate-[fadeUp_0.4s_cubic-bezier(0.16,1,0.3,1)_both]">
           <button
             className="flex items-center gap-2.5 px-5 py-3 rounded-full border border-[rgba(245,240,232,0.2)] text-[#F5F0E8] shadow-2xl active:scale-95 transition-transform font-medium text-sm"
-            style={{ background: '#1A2D1A' }}
+            style={{ background: '#1E3A1E' }}
           >
-            <Scale size={16} className="text-[#D4C4A0]" />
+            <Scale size={16} className="text-[#E8C84A]" />
             <span style={{ letterSpacing: '0.06em', fontSize: '12px' }}>
               {isMr ? `${selectedIds.length} तुलना करा` : `Compare ${selectedIds.length}`}
             </span>
@@ -479,7 +479,7 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
           {/* Sheet */}
           <div
             className="fixed bottom-0 left-0 right-0 z-50 rounded-t-3xl px-6 pt-5 pb-10 animate-[slideUp_0.35s_cubic-bezier(0.16,1,0.3,1)_both]"
-            style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)' }}
+            style={{ background: '#162B16', border: '1px solid rgba(245,240,232,0.07)' }}
           >
             {/* Handle + header */}
             <div className="w-10 h-1 rounded-full bg-[rgba(245,240,232,0.15)] mx-auto mb-5" />
@@ -512,8 +512,8 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
                   className="px-4 py-2 rounded-full border text-[12px] font-medium transition-all"
                   style={{
                     touchAction: 'manipulation',
-                    background: sortBy === opt.key ? '#2D5A1B' : 'transparent',
-                    border: `1px solid ${sortBy === opt.key ? '#2D5A1B' : 'rgba(245,240,232,0.12)'}`,
+                    background: sortBy === opt.key ? '#2E7D32' : 'transparent',
+                    border: `1px solid ${sortBy === opt.key ? '#2E7D32' : 'rgba(245,240,232,0.12)'}`,
                     color: sortBy === opt.key ? '#F5F0E8' : 'rgba(245,240,232,0.5)',
                   }}
                 >
@@ -556,7 +556,7 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
               <button
                 onClick={() => setShowFilters(false)}
                 className="flex-1 py-3 rounded-full text-[#F5F0E8] text-[13px] font-medium"
-                style={{ background: '#2D5A1B', touchAction: 'manipulation' }}
+                style={{ background: '#2E7D32', touchAction: 'manipulation' }}
               >
                 {isMr ? 'लागू करा' : 'Apply'}
               </button>

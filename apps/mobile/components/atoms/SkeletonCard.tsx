@@ -8,7 +8,7 @@ export default function SkeletonCard() {
   return (
     <div
       className="rounded-2xl overflow-hidden"
-      style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.05)' }}
+      style={{ background: '#162B16', border: '1px solid rgba(245,240,232,0.05)' }}
     >
       {/* Image area */}
       <div

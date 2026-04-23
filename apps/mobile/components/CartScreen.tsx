@@ -66,7 +66,7 @@ export default function CartScreen({ lang, onBack, onCheckout }: CartScreenProps
         <div className="flex flex-col items-center justify-center py-24 text-center space-y-5">
           <div
             className="w-20 h-20 rounded-full flex items-center justify-center"
-            style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)' }}
+            style={{ background: '#162B16', border: '1px solid rgba(245,240,232,0.07)' }}
           >
             <ShoppingCart size={28} className="text-[rgba(245,240,232,0.2)]" strokeWidth={1.5} />
           </div>
@@ -94,7 +94,7 @@ export default function CartScreen({ lang, onBack, onCheckout }: CartScreenProps
               <SectionReveal key={item.productId} delay={idx * 60}>
                 <div
                   className="p-4 rounded-2xl flex items-center gap-4"
-                  style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)' }}
+                  style={{ background: '#162B16', border: '1px solid rgba(245,240,232,0.07)' }}
                 >
                   {/* Image */}
                   <div className="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0">
@@ -114,7 +114,7 @@ export default function CartScreen({ lang, onBack, onCheckout }: CartScreenProps
                     <p className="font-light text-[rgba(245,240,232,0.4)] mt-0.5" style={{ fontSize: '11px' }}>
                       ₹{product!.price} / {isMr ? product!.unitMr : product!.unit}
                     </p>
-                    <p className="font-light text-[#D4C4A0] mt-1" style={{ fontSize: '13px', letterSpacing: '-0.01em' }}>
+                    <p className="font-light text-[#E8C84A] mt-1" style={{ fontSize: '13px', letterSpacing: '-0.01em' }}>
                       ₹{(product!.price * item.quantity).toLocaleString('en-IN')}
                     </p>
                   </div>
@@ -175,7 +175,7 @@ export default function CartScreen({ lang, onBack, onCheckout }: CartScreenProps
           <button
             onClick={onCheckout}
             className="w-full py-4 rounded-2xl font-medium text-[#F5F0E8] active:scale-[0.98] transition-all"
-            style={{ background: '#2D5A1B', fontSize: '15px', letterSpacing: '-0.01em', touchAction: 'manipulation' }}
+            style={{ background: '#2E7D32', fontSize: '15px', letterSpacing: '-0.01em', touchAction: 'manipulation' }}
           >
             {isMr ? 'पुढे जा — पेमेंट' : 'Proceed to Checkout'}
           </button>

@@ -46,8 +46,8 @@ const TIMELINE_STEPS = [
 const STATUS_STEP: Record<OrderStatus, number> = { pending: 0, transit: 2, delivered: 3 };
 
 const STATUS_META: Record<OrderStatus, { label: string; labelMr: string; icon: React.ElementType; color: string; bg: string }> = {
-  pending:   { label: 'Pending',    labelMr: 'प्रतीक्षेत',  icon: Clock,       color: '#D4C4A0',  bg: 'rgba(212,196,160,0.1)'  },
-  transit:   { label: 'In Transit', labelMr: 'मार्गावर',    icon: Truck,       color: '#4A8C2A',  bg: 'rgba(74,140,42,0.1)'    },
+  pending:   { label: 'Pending',    labelMr: 'प्रतीक्षेत',  icon: Clock,       color: '#E8C84A',  bg: 'rgba(212,196,160,0.1)'  },
+  transit:   { label: 'In Transit', labelMr: 'मार्गावर',    icon: Truck,       color: '#4CAF50',  bg: 'rgba(74,140,42,0.1)'    },
   delivered: { label: 'Delivered',  labelMr: 'पोहोचले',     icon: CheckCircle, color: '#F5F0E8',  bg: 'rgba(245,240,232,0.08)' },
 };
 
@@ -235,7 +235,7 @@ function OrderDetailPanel({
 
         {/* Order ID + product name */}
         <div style={{ position: 'absolute', bottom: '1.5rem', left: '1.25rem', right: '1.25rem' }}>
-          <p style={{ fontSize: '10px', fontWeight: 500, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#D4C4A0', marginBottom: 4 }}>
+          <p style={{ fontSize: '10px', fontWeight: 500, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#E8C84A', marginBottom: 4 }}>
             {order.id}
           </p>
           <h2 style={{ fontSize: 'clamp(22px, 6vw, 28px)', fontWeight: 300, color: '#F5F0E8', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
@@ -254,7 +254,7 @@ function OrderDetailPanel({
         <div style={{
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           padding: '1rem 1.25rem', borderRadius: '1rem',
-          background: '#111C11', border: '1px solid rgba(245,240,232,0.07)',
+          background: '#162B16', border: '1px solid rgba(245,240,232,0.07)',
         }}>
           <div>
             <p style={{ fontSize: '10px', fontWeight: 500, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(245,240,232,0.35)', marginBottom: 4 }}>
@@ -279,7 +279,7 @@ function OrderDetailPanel({
         {/* Tracking timeline */}
         <div style={{
           padding: '1.25rem', borderRadius: '1rem',
-          background: '#111C11', border: '1px solid rgba(245,240,232,0.07)',
+          background: '#162B16', border: '1px solid rgba(245,240,232,0.07)',
         }}>
           <p style={{ fontSize: '10px', fontWeight: 500, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(245,240,232,0.35)', marginBottom: '1rem' }}>
             {isMr ? 'ट्रॅकिंग' : 'Tracking'}
@@ -295,7 +295,7 @@ function OrderDetailPanel({
                     <div style={{
                       width: 20, height: 20, borderRadius: '50%', flexShrink: 0,
                       border: done ? 'none' : '1.5px solid rgba(245,240,232,0.15)',
-                      background: done ? (current ? '#4A8C2A' : 'rgba(74,140,42,0.35)') : 'transparent',
+                      background: done ? (current ? '#4CAF50' : 'rgba(74,140,42,0.35)') : 'transparent',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       position: 'relative', zIndex: 1,
                       boxShadow: current ? '0 0 0 3px rgba(74,140,42,0.2)' : 'none',
@@ -315,7 +315,7 @@ function OrderDetailPanel({
                         {isMr ? step.labelMr : step.label}
                       </p>
                       {done && (
-                        <p style={{ fontSize: '10px', color: current ? '#4A8C2A' : 'rgba(245,240,232,0.3)', marginTop: 2 }}>
+                        <p style={{ fontSize: '10px', color: current ? '#4CAF50' : 'rgba(245,240,232,0.3)', marginTop: 2 }}>
                           {step.date}
                         </p>
                       )}
@@ -330,7 +330,7 @@ function OrderDetailPanel({
         {/* Counterparty card */}
         <div style={{
           padding: '1.25rem', borderRadius: '1rem',
-          background: '#111C11', border: '1px solid rgba(245,240,232,0.07)',
+          background: '#162B16', border: '1px solid rgba(245,240,232,0.07)',
         }}>
           <p style={{ fontSize: '10px', fontWeight: 500, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(245,240,232,0.35)', marginBottom: '0.875rem' }}>
             {isMr ? (tab === 'purchased' ? 'विक्रेता' : 'खरेदीदार') : (tab === 'purchased' ? 'Seller' : 'Buyer')}
@@ -338,10 +338,10 @@ function OrderDetailPanel({
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.875rem', marginBottom: '1rem' }}>
             <div style={{
               width: 44, height: 44, borderRadius: '0.875rem', flexShrink: 0,
-              background: '#1A2D1A', border: '1px solid rgba(245,240,232,0.07)',
+              background: '#1E3A1E', border: '1px solid rgba(245,240,232,0.07)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
-              {tab === 'purchased' ? <Package size={18} style={{ color: '#D4C4A0' }} /> : <User size={18} style={{ color: '#D4C4A0' }} />}
+              {tab === 'purchased' ? <Package size={18} style={{ color: '#E8C84A' }} /> : <User size={18} style={{ color: '#E8C84A' }} />}
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
               <p style={{ fontSize: '15px', fontWeight: 400, color: '#F5F0E8', letterSpacing: '-0.01em' }}>
@@ -350,8 +350,8 @@ function OrderDetailPanel({
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: 3 }}>
                 {order.counterpartyRating && (
                   <>
-                    <Star size={11} style={{ color: '#D4C4A0', fill: '#D4C4A0' }} />
-                    <span style={{ fontSize: '11px', fontWeight: 500, color: '#D4C4A0' }}>{order.counterpartyRating}</span>
+                    <Star size={11} style={{ color: '#E8C84A', fill: '#E8C84A' }} />
+                    <span style={{ fontSize: '11px', fontWeight: 500, color: '#E8C84A' }}>{order.counterpartyRating}</span>
                     <span style={{ fontSize: '10px', color: 'rgba(245,240,232,0.25)' }}>·</span>
                   </>
                 )}
@@ -371,7 +371,7 @@ function OrderDetailPanel({
                 touchAction: 'manipulation',
               }}
             >
-              <Phone size={14} style={{ color: '#D4C4A0' }} />
+              <Phone size={14} style={{ color: '#E8C84A' }} />
               {isMr ? 'कॉल करा' : 'Call'}
             </a>
             <a
@@ -383,7 +383,7 @@ function OrderDetailPanel({
               style={{
                 flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
                 padding: '0.65rem', borderRadius: '0.75rem',
-                background: '#2D5A1B', border: 'none',
+                background: '#2E7D32', border: 'none',
                 color: '#F5F0E8', fontSize: '13px', fontWeight: 400, textDecoration: 'none',
                 touchAction: 'manipulation',
               }}
@@ -397,7 +397,7 @@ function OrderDetailPanel({
         {/* Price breakdown */}
         <div style={{
           padding: '1.25rem', borderRadius: '1rem',
-          background: '#111C11', border: '1px solid rgba(245,240,232,0.07)',
+          background: '#162B16', border: '1px solid rgba(245,240,232,0.07)',
         }}>
           <p style={{ fontSize: '10px', fontWeight: 500, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(245,240,232,0.35)', marginBottom: '0.875rem' }}>
             {isMr ? 'किंमत तपशील' : 'Price Breakdown'}
@@ -423,7 +423,7 @@ function OrderDetailPanel({
             borderTop: '1px solid rgba(245,240,232,0.1)',
           }}>
             <span style={{ fontSize: '14px', fontWeight: 500, color: '#F5F0E8' }}>{isMr ? 'एकूण' : 'Grand Total'}</span>
-            <span style={{ fontSize: '18px', fontWeight: 300, color: '#D4C4A0', letterSpacing: '-0.02em' }}>
+            <span style={{ fontSize: '18px', fontWeight: 300, color: '#E8C84A', letterSpacing: '-0.02em' }}>
               ₹{order.amount.toLocaleString('en-IN')}
             </span>
           </div>
@@ -432,7 +432,7 @@ function OrderDetailPanel({
         {/* Transport + notes */}
         <div style={{
           padding: '1rem 1.25rem', borderRadius: '1rem',
-          background: '#111C11', border: '1px solid rgba(245,240,232,0.07)',
+          background: '#162B16', border: '1px solid rgba(245,240,232,0.07)',
           display: 'flex', alignItems: 'center', gap: '0.875rem',
         }}>
           <Truck size={18} style={{ color: 'rgba(245,240,232,0.35)', flexShrink: 0 }} />
@@ -472,7 +472,7 @@ function OrderCard({
         onClick={onClick}
         className="w-full text-left rounded-2xl overflow-hidden active:scale-[0.985] transition-all"
         style={{
-          background: '#111C11', border: '1px solid rgba(245,240,232,0.07)',
+          background: '#162B16', border: '1px solid rgba(245,240,232,0.07)',
           touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent',
         }}
       >
@@ -580,7 +580,7 @@ export default function OrdersScreen({ lang }: { lang: Language }) {
         <SectionReveal delay={40}>
           <div
             className="flex gap-1 p-1 rounded-2xl"
-            style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)' }}
+            style={{ background: '#162B16', border: '1px solid rgba(245,240,232,0.07)' }}
           >
             {(['purchased', 'sold'] as OrderTab[]).map(key => (
               <button
@@ -591,7 +591,7 @@ export default function OrdersScreen({ lang }: { lang: Language }) {
                 style={{
                   touchAction: 'manipulation',
                   WebkitTapHighlightColor: 'transparent',
-                  background: tab === key ? '#2D5A1B' : 'transparent',
+                  background: tab === key ? '#2E7D32' : 'transparent',
                   color: tab === key ? '#F5F0E8' : 'rgba(245,240,232,0.4)',
                   border: tab === key ? '1px solid rgba(74,140,42,0.4)' : '1px solid transparent',
                   letterSpacing: '0.02em',
@@ -619,7 +619,7 @@ export default function OrdersScreen({ lang }: { lang: Language }) {
               <div
                 key={label}
                 className="p-4 rounded-2xl text-center"
-                style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)' }}
+                style={{ background: '#162B16', border: '1px solid rgba(245,240,232,0.07)' }}
               >
                 <p className="font-light text-[#F5F0E8] mb-0.5" style={{ fontSize: '20px', letterSpacing: '-0.02em' }}>
                   {value}
@@ -646,7 +646,7 @@ export default function OrdersScreen({ lang }: { lang: Language }) {
               <div className="flex flex-col items-center justify-center py-20 text-center space-y-4">
                 <div
                   className="w-16 h-16 rounded-full flex items-center justify-center"
-                  style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)' }}
+                  style={{ background: '#162B16', border: '1px solid rgba(245,240,232,0.07)' }}
                 >
                   <ShoppingBag size={24} className="text-[rgba(245,240,232,0.2)]" strokeWidth={1.5} />
                 </div>

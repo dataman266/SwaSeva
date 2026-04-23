@@ -54,7 +54,7 @@ export default function DarkHeroSection({
 
       {/* Dark fallback when no image */}
       {!backgroundImage && (
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(160deg, #0A1A0A 0%, #111C11 100%)' }} />
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(160deg, #0A1A0A 0%, #162B16 100%)' }} />
       )}
 
       {/* Texture grain overlay */}
@@ -69,8 +69,8 @@ export default function DarkHeroSection({
         {/* Eyebrow label */}
         {eyebrow && (
           <div className="flex items-center gap-2 mb-5">
-            <span className="w-4 h-px bg-[#D4C4A0]" />
-            <span className="text-[10px] font-medium tracking-[0.22em] uppercase text-[#D4C4A0]">
+            <span className="w-4 h-px bg-[#E8C84A]" />
+            <span className="text-[10px] font-medium tracking-[0.22em] uppercase text-[#E8C84A]">
               {eyebrow}
             </span>
           </div>
@@ -91,7 +91,7 @@ export default function DarkHeroSection({
         >
           {headline}
           {headlineAccent && (
-            <span className="text-[#D4C4A0]"> {headlineAccent}</span>
+            <span className="text-[#E8C84A]"> {headlineAccent}</span>
           )}
         </h1>
 
@@ -123,8 +123,8 @@ export default function DarkHeroSection({
 
       {/* Scroll hint */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 animate-bounce opacity-30">
-        <span className="text-[9px] font-medium tracking-[0.18em] uppercase text-[#D4C4A0]">scroll</span>
-        <div className="w-px h-8 bg-gradient-to-b from-[#D4C4A0] to-transparent" />
+        <span className="text-[9px] font-medium tracking-[0.18em] uppercase text-[#E8C84A]">scroll</span>
+        <div className="w-px h-8 bg-gradient-to-b from-[#E8C84A] to-transparent" />
       </div>
     </section>
   );

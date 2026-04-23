@@ -41,7 +41,7 @@ export default function SearchableDropdown({
     <>
       {/* Trigger */}
       <div className="flex flex-col gap-1.5">
-        <label className="text-[11px] font-medium tracking-[0.1em] uppercase" style={{ color: '#D4C4A0' }}>
+        <label className="text-[11px] font-medium tracking-[0.1em] uppercase" style={{ color: '#E8C84A' }}>
           {label}{required && <span className="text-red-400 ml-0.5">*</span>}
         </label>
         <button
@@ -51,7 +51,7 @@ export default function SearchableDropdown({
           className="flex items-center justify-between w-full px-4 rounded-2xl text-left transition-colors"
           style={{
             height: 52,
-            background: '#111C11',
+            background: '#162B16',
             border: `1px solid ${error ? '#EF4444' : 'rgba(245,240,232,0.1)'}`,
             color: selected ? '#F5F0E8' : 'rgba(245,240,232,0.35)',
             fontSize: 14,
@@ -107,7 +107,7 @@ export default function SearchableDropdown({
               <div className="px-4 pb-3">
                 <div
                   className="flex items-center gap-2.5 px-3.5 rounded-xl"
-                  style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.08)', height: 44 }}
+                  style={{ background: '#162B16', border: '1px solid rgba(245,240,232,0.08)', height: 44 }}
                 >
                   <Search size={16} style={{ color: 'rgba(245,240,232,0.3)', flexShrink: 0 }} />
                   <input
@@ -150,10 +150,10 @@ export default function SearchableDropdown({
                           background: isSelected ? 'rgba(45,90,27,0.15)' : 'transparent',
                         }}
                       >
-                        <span style={{ fontSize: 14, color: isSelected ? '#D4C4A0' : '#F5F0E8', fontWeight: isSelected ? 500 : 300 }}>
+                        <span style={{ fontSize: 14, color: isSelected ? '#E8C84A' : '#F5F0E8', fontWeight: isSelected ? 500 : 300 }}>
                           {option.label}
                         </span>
-                        {isSelected && <Check size={15} style={{ color: '#2D5A1B' }} />}
+                        {isSelected && <Check size={15} style={{ color: '#2E7D32' }} />}
                       </button>
                     );
                   })

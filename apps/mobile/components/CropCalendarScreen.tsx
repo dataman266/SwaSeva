@@ -41,8 +41,8 @@ const CROPS: Crop[] = [
 ];
 
 const SEASON_META: Record<Season, { label: string; labelMr: string; color: string; bg: string; border: string }> = {
-  kharif: { label: 'Kharif', labelMr: 'खरीफ', color: '#4A8C2A', bg: 'rgba(74,140,42,0.12)',  border: 'rgba(74,140,42,0.25)'  },
-  rabi:   { label: 'Rabi',   labelMr: 'रब्बी', color: '#D4C4A0', bg: 'rgba(212,196,160,0.1)', border: 'rgba(212,196,160,0.2)' },
+  kharif: { label: 'Kharif', labelMr: 'खरीफ', color: '#4CAF50', bg: 'rgba(74,140,42,0.12)',  border: 'rgba(74,140,42,0.25)'  },
+  rabi:   { label: 'Rabi',   labelMr: 'रब्बी', color: '#E8C84A', bg: 'rgba(212,196,160,0.1)', border: 'rgba(212,196,160,0.2)' },
   zaid:   { label: 'Zaid',   labelMr: 'उन्हाळी',color: '#7EB3FF', bg: 'rgba(126,179,255,0.1)', border: 'rgba(126,179,255,0.2)' },
 };
 
@@ -142,13 +142,13 @@ export default function CropCalendarScreen({ lang, onBack }: CropCalendarScreenP
       <SectionReveal delay={60}>
         <div
           className="flex items-center gap-3 p-4 rounded-2xl"
-          style={{ background: '#111C11', border: '1px solid rgba(74,140,42,0.2)' }}
+          style={{ background: '#162B16', border: '1px solid rgba(74,140,42,0.2)' }}
         >
           <div
             className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
             style={{ background: 'rgba(74,140,42,0.12)', border: '1px solid rgba(74,140,42,0.25)' }}
           >
-            <Sprout size={18} style={{ color: '#4A8C2A' }} />
+            <Sprout size={18} style={{ color: '#4CAF50' }} />
           </div>
           <div>
             <p className="font-medium text-[#F5F0E8]" style={{ fontSize: '14px', letterSpacing: '-0.01em' }}>
@@ -216,7 +216,7 @@ export default function CropCalendarScreen({ lang, onBack }: CropCalendarScreenP
       <SectionReveal delay={150}>
         <div
           className="rounded-2xl overflow-hidden p-4"
-          style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)' }}
+          style={{ background: '#162B16', border: '1px solid rgba(245,240,232,0.07)' }}
         >
           {/* Month header */}
           <div className="flex items-center gap-2 mb-3">
@@ -230,7 +230,7 @@ export default function CropCalendarScreen({ lang, onBack }: CropCalendarScreenP
                     textAlign: 'center',
                     fontSize: '8px',
                     fontWeight: i === currentMonth ? 600 : 400,
-                    color: i === currentMonth ? '#D4C4A0' : 'rgba(245,240,232,0.3)',
+                    color: i === currentMonth ? '#E8C84A' : 'rgba(245,240,232,0.3)',
                   }}
                 >
                   {m}

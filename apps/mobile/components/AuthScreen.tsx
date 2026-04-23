@@ -45,7 +45,7 @@ interface FieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
 function Field({ label, icon: Icon, error, required, rightEl, className, ...props }: FieldProps) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label className="text-[11px] font-medium tracking-[0.1em] uppercase" style={{ color: '#D4C4A0' }}>
+      <label className="text-[11px] font-medium tracking-[0.1em] uppercase" style={{ color: '#E8C84A' }}>
         {label}{required && <span className="text-red-400 ml-0.5">*</span>}
       </label>
       <div className="relative flex items-center">
@@ -54,10 +54,10 @@ function Field({ label, icon: Icon, error, required, rightEl, className, ...prop
         )}
         <input
           {...props}
-          className={`w-full rounded-2xl text-[#F5F0E8] font-light placeholder:text-[rgba(245,240,232,0.25)] outline-none transition-colors focus:border-[#2D5A1B] ${className ?? ''}`}
+          className={`w-full rounded-2xl text-[#F5F0E8] font-light placeholder:text-[rgba(245,240,232,0.25)] outline-none transition-colors focus:border-[#2E7D32] ${className ?? ''}`}
           style={{
             height: 52,
-            background: '#111C11',
+            background: '#162B16',
             border: `1px solid ${error ? '#EF4444' : 'rgba(245,240,232,0.1)'}`,
             fontSize: 14,
             paddingLeft: Icon ? 44 : 16,
@@ -110,7 +110,7 @@ function AuthShell({ children }: { children: React.ReactNode }) {
           <span className="text-2xl">🌾</span>
           <div>
             <p className="text-[#F5F0E8] font-light" style={{ fontSize: 18, letterSpacing: '-0.02em' }}>AgriMart</p>
-            <p className="text-[10px] font-medium tracking-[0.2em] uppercase" style={{ color: '#D4C4A0', opacity: 0.7 }}>थेट शेतातून / Direct from Farm</p>
+            <p className="text-[10px] font-medium tracking-[0.2em] uppercase" style={{ color: '#E8C84A', opacity: 0.7 }}>थेट शेतातून / Direct from Farm</p>
           </div>
         </div>
       </div>
@@ -221,7 +221,7 @@ function LoginView({ isMr, onRegister, onForgot, onSuccess }: {
       <button
         type="button"
         onClick={onForgot}
-        className="mt-3 text-right w-full text-[#D4C4A0] hover:text-[#F5F0E8] transition-colors"
+        className="mt-3 text-right w-full text-[#E8C84A] hover:text-[#F5F0E8] transition-colors"
         style={{ fontSize: 12, letterSpacing: '0.04em' }}
       >
         {isMr ? 'पासवर्ड विसरलात?' : 'Forgot password?'}
@@ -328,7 +328,7 @@ function RegisterStep1({ isMr, onBack, onNext }: { isMr: boolean; onBack: () => 
         <input ref={fileRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={handlePhoto} aria-label="Upload profile photo" />
         <button type="button" onClick={() => fileRef.current?.click()}
           className="relative w-24 h-24 rounded-full flex items-center justify-center overflow-hidden transition-opacity active:opacity-70"
-          style={{ background: '#111C11', border: `2px dashed ${errors.photo ? '#EF4444' : 'rgba(245,240,232,0.15)'}` }}
+          style={{ background: '#162B16', border: `2px dashed ${errors.photo ? '#EF4444' : 'rgba(245,240,232,0.15)'}` }}
           aria-label={isMr ? 'प्रोफाइल फोटो अपलोड करा' : 'Upload profile photo'}
         >
           {form.photoUri
@@ -340,7 +340,7 @@ function RegisterStep1({ isMr, onBack, onNext }: { isMr: boolean; onBack: () => 
                 </span>
               </div>
           }
-          <div className="absolute bottom-0 right-0 w-7 h-7 rounded-full flex items-center justify-center" style={{ background: '#2D5A1B' }}>
+          <div className="absolute bottom-0 right-0 w-7 h-7 rounded-full flex items-center justify-center" style={{ background: '#2E7D32' }}>
             <Camera size={13} className="text-white" />
           </div>
         </button>
@@ -576,15 +576,15 @@ function OtpVerify({ isMr, onBack, onVerified }: { isMr: boolean; onBack: () => 
             value={d}
             onChange={e => handleDigit(i, e.target.value)}
             onKeyDown={e => { if (e.key === 'Backspace' && !d && i > 0) refs[i-1].current?.focus(); }}
-            className="text-center text-[#F5F0E8] font-light outline-none rounded-xl transition-colors focus:border-[#2D5A1B]"
-            style={{ width: 46, height: 56, fontSize: 22, background: '#111C11', border: `1.5px solid ${error ? '#EF4444' : d ? '#2D5A1B' : 'rgba(245,240,232,0.1)'}` }}
+            className="text-center text-[#F5F0E8] font-light outline-none rounded-xl transition-colors focus:border-[#2E7D32]"
+            style={{ width: 46, height: 56, fontSize: 22, background: '#162B16', border: `1.5px solid ${error ? '#EF4444' : d ? '#2E7D32' : 'rgba(245,240,232,0.1)'}` }}
             aria-label={`OTP digit ${i + 1}`}
           />
         ))}
       </div>
       {error && <p className="text-center text-[11px] text-red-400 mb-4">{error}</p>}
 
-      <button type="button" className="w-full text-center mt-4 mb-6" style={{ fontSize: 12, color: '#D4C4A0' }}>
+      <button type="button" className="w-full text-center mt-4 mb-6" style={{ fontSize: 12, color: '#E8C84A' }}>
         {isMr ? 'OTP पुन्हा पाठवा' : 'Resend OTP'}
       </button>
 
@@ -618,7 +618,7 @@ function NewPassword({ isMr, onDone }: { isMr: boolean; onDone: () => void }) {
   if (success) return (
     <div className="flex flex-col items-center justify-center px-6 py-20">
       <motion.div initial={{ scale: 0.5, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ type: 'spring', stiffness: 400, damping: 22 }}>
-        <div className="w-20 h-20 rounded-full flex items-center justify-center mb-5" style={{ background: 'rgba(45,90,27,0.3)', border: '1.5px solid #2D5A1B' }}>
+        <div className="w-20 h-20 rounded-full flex items-center justify-center mb-5" style={{ background: 'rgba(45,90,27,0.3)', border: '1.5px solid #2E7D32' }}>
           <span style={{ fontSize: 36 }}>✓</span>
         </div>
       </motion.div>
@@ -652,7 +652,7 @@ function NewPassword({ isMr, onDone }: { isMr: boolean; onDone: () => void }) {
 function StepDot({ active, done }: { active?: boolean; done?: boolean }) {
   return (
     <div className="w-6 h-1.5 rounded-full" style={{
-      background: done ? '#2D5A1B' : active ? '#D4C4A0' : 'rgba(245,240,232,0.15)',
+      background: done ? '#2E7D32' : active ? '#E8C84A' : 'rgba(245,240,232,0.15)',
     }} />
   );
 }

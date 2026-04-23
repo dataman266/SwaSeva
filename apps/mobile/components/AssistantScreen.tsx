@@ -81,7 +81,7 @@ export default function AssistantScreen({ lang, onBack }: AssistantScreenProps) 
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div
           className="absolute top-[-20%] right-[-15%] w-[90vw] h-[90vw] rounded-full opacity-10"
-          style={{ background: '#2D5A1B', filter: 'blur(100px)' }}
+          style={{ background: '#2E7D32', filter: 'blur(100px)' }}
         />
       </div>
 
@@ -100,9 +100,9 @@ export default function AssistantScreen({ lang, onBack }: AssistantScreenProps) 
         {/* Avatar */}
         <div
           className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-          style={{ background: '#2D5A1B', border: '1px solid rgba(212,196,160,0.2)' }}
+          style={{ background: '#2E7D32', border: '1px solid rgba(212,196,160,0.2)' }}
         >
-          <Bot size={18} className="text-[#D4C4A0]" strokeWidth={1.5} />
+          <Bot size={18} className="text-[#E8C84A]" strokeWidth={1.5} />
         </div>
 
         <div className="flex-1 min-w-0">
@@ -110,8 +110,8 @@ export default function AssistantScreen({ lang, onBack }: AssistantScreenProps) 
             {isMr ? 'किसान सहाय्यक' : 'Kisan Sahayak'}
           </p>
           <div className="flex items-center gap-1.5 mt-0.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#4A8C2A] animate-pulse" />
-            <span className="text-[9px] font-medium tracking-[0.12em] uppercase text-[#4A8C2A]">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#4CAF50] animate-pulse" />
+            <span className="text-[9px] font-medium tracking-[0.12em] uppercase text-[#4CAF50]">
               {isMr ? 'ऑनलाइन' : 'Online'}
             </span>
           </div>
@@ -161,8 +161,8 @@ export default function AssistantScreen({ lang, onBack }: AssistantScreenProps) 
               }`}
               style={
                 m.role === 'user'
-                  ? { background: '#2D5A1B', border: '1px solid rgba(245,240,232,0.08)' }
-                  : { background: '#111C11', border: '1px solid rgba(245,240,232,0.07)' }
+                  ? { background: '#2E7D32', border: '1px solid rgba(245,240,232,0.08)' }
+                  : { background: '#162B16', border: '1px solid rgba(245,240,232,0.07)' }
               }
             >
               <p className="font-light text-[#F5F0E8] leading-relaxed" style={{ fontSize: '14px' }}>
@@ -180,13 +180,13 @@ export default function AssistantScreen({ lang, onBack }: AssistantScreenProps) 
           <div className="flex items-start animate-[fadeUp_0.3s_both]">
             <div
               className="px-5 py-3.5 rounded-2xl rounded-tl-sm"
-              style={{ background: '#111C11', border: '1px solid rgba(245,240,232,0.07)' }}
+              style={{ background: '#162B16', border: '1px solid rgba(245,240,232,0.07)' }}
             >
               <div className="flex gap-1.5 items-center h-4">
                 {[0, 0.2, 0.4].map(d => (
                   <span
                     key={d}
-                    className="w-1.5 h-1.5 rounded-full bg-[#D4C4A0] animate-bounce"
+                    className="w-1.5 h-1.5 rounded-full bg-[#E8C84A] animate-bounce"
                     style={{ animationDelay: `${d}s`, animationDuration: '0.9s' }}
                   />
                 ))}
@@ -228,9 +228,9 @@ export default function AssistantScreen({ lang, onBack }: AssistantScreenProps) 
           {/* Mic button */}
           <button
             className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 active:scale-90 transition-all"
-            style={{ background: '#2D5A1B', border: '1px solid rgba(212,196,160,0.15)' }}
+            style={{ background: '#2E7D32', border: '1px solid rgba(212,196,160,0.15)' }}
           >
-            <Mic size={16} className="text-[#D4C4A0]" strokeWidth={1.5} />
+            <Mic size={16} className="text-[#E8C84A]" strokeWidth={1.5} />
           </button>
 
           <input
@@ -248,7 +248,7 @@ export default function AssistantScreen({ lang, onBack }: AssistantScreenProps) 
             disabled={!input.trim() || loading}
             className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 transition-all active:scale-90 disabled:opacity-30"
             style={{
-              background: input.trim() ? '#D4C4A0' : 'rgba(245,240,232,0.06)',
+              background: input.trim() ? '#E8C84A' : 'rgba(245,240,232,0.06)',
               border: '1px solid rgba(245,240,232,0.1)',
             }}
           >
@@ -258,8 +258,8 @@ export default function AssistantScreen({ lang, onBack }: AssistantScreenProps) 
 
         {/* Gemini badge */}
         <div className="flex justify-center items-center gap-1.5 mt-2 mb-1 opacity-25">
-          <Sparkles size={10} className="text-[#D4C4A0]" />
-          <p className="text-[9px] font-medium tracking-[0.18em] uppercase text-[#D4C4A0]">
+          <Sparkles size={10} className="text-[#E8C84A]" />
+          <p className="text-[9px] font-medium tracking-[0.18em] uppercase text-[#E8C84A]">
             {isMr ? 'Gemini द्वारे संचालित' : 'Powered by Gemini'}
           </p>
         </div>

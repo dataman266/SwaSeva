@@ -24,7 +24,7 @@ const SLIDES: Slide[] = [
     subtext:    'Connect directly with verified farmers. Fresh produce, fair prices — no middlemen.',
     subtextMr:  'थेट शेतकऱ्यांशी जोडा. ताजे उत्पादन, उचित किंमत — कोणताही दलाल नाही.',
     emoji:      '🌾',
-    bg:         '#2D5A1B',
+    bg:         '#2E7D32',
     image:      'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?q=80&w=1200&auto=format&fit=crop',
   },
   {
@@ -35,7 +35,7 @@ const SLIDES: Slide[] = [
     subtext:    'Our team verifies every farmer and batch. You buy with confidence every time.',
     subtextMr:  'आमची टीम प्रत्येक शेतकरी आणि बॅचची पडताळणी करते.',
     emoji:      '✅',
-    bg:         '#4A8C2A',
+    bg:         '#4CAF50',
     image:      'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?q=80&w=1200&auto=format&fit=crop',
   },
   {
@@ -46,7 +46,7 @@ const SLIDES: Slide[] = [
     subtext:    'List your produce in minutes. Reach thousands of buyers across Maharashtra.',
     subtextMr:  'काही मिनिटांत तुमचा माल लिस्ट करा. महाराष्ट्रभर हजारो खरेदीदारांपर्यंत पोहोचा.',
     emoji:      '🤝',
-    bg:         '#1A2D1A',
+    bg:         '#1E3A1E',
     image:      'https://images.unsplash.com/photo-1464226184884-fa280b87c399?q=80&w=1200&auto=format&fit=crop',
   },
 ];
@@ -163,9 +163,9 @@ export default function OnboardingScreen({ lang, onComplete }: OnboardingScreenP
 
             {/* Eyebrow */}
             <div className="flex items-center gap-2 mb-4">
-              <span className="w-4 h-px bg-[#D4C4A0]" />
+              <span className="w-4 h-px bg-[#E8C84A]" />
               <span
-                className="text-[#D4C4A0] font-medium uppercase"
+                className="text-[#E8C84A] font-medium uppercase"
                 style={{ fontSize: '10px', letterSpacing: '0.2em' }}
               >
                 {isMr ? slide.eyebrowMr : slide.eyebrow}
@@ -198,7 +198,7 @@ export default function OnboardingScreen({ lang, onComplete }: OnboardingScreenP
               onClick={() => goTo(i)}
               animate={{
                 width:      i === current ? 24 : 6,
-                background: i === current ? '#D4C4A0' : 'rgba(245,240,232,0.2)',
+                background: i === current ? '#E8C84A' : 'rgba(245,240,232,0.2)',
               }}
               transition={{ type: 'spring', stiffness: 420, damping: 30 }}
               style={{ height: 6, borderRadius: 99 }}

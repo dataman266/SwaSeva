@@ -138,9 +138,9 @@ const MOCK_LISTINGS: Listing[] = [
 ];
 
 const STATUS_CONFIG: Record<ListingStatus, { label: string; labelMr: string; color: string; bg: string; icon: React.ElementType }> = {
-  active:  { label: 'Active',   labelMr: 'सक्रिय',       color: '#4A8C2A', bg: 'rgba(74,140,42,0.12)',     icon: CheckCircle },
+  active:  { label: 'Active',   labelMr: 'सक्रिय',       color: '#4CAF50', bg: 'rgba(74,140,42,0.12)',     icon: CheckCircle },
   pending: { label: 'Pending',  labelMr: 'प्रलंबित',      color: '#F5C518', bg: 'rgba(245,197,24,0.12)',    icon: Clock       },
-  sold:    { label: 'Sold',     labelMr: 'विकले',         color: '#D4C4A0', bg: 'rgba(212,196,160,0.12)',   icon: Package     },
+  sold:    { label: 'Sold',     labelMr: 'विकले',         color: '#E8C84A', bg: 'rgba(212,196,160,0.12)',   icon: Package     },
   expired: { label: 'Expired',  labelMr: 'कालबाह्य',      color: '#E57373', bg: 'rgba(229,115,115,0.12)',   icon: XCircle     },
 };
 
@@ -257,7 +257,7 @@ export default function MyListingsScreen({ lang, onCreateNew }: MyListingsScreen
             style={{
               display: 'flex', alignItems: 'center', gap: '0.5rem',
               padding: '0.625rem 1rem', borderRadius: '2rem',
-              background: '#2D5A1B', border: 'none',
+              background: '#2E7D32', border: 'none',
               color: '#F5F0E8', fontSize: '13px', fontWeight: 500,
               cursor: 'pointer', touchAction: 'manipulation',
               WebkitTapHighlightColor: 'rgba(45,90,27,0.2)',
@@ -272,13 +272,13 @@ export default function MyListingsScreen({ lang, onCreateNew }: MyListingsScreen
       {/* ── Stats strip ───────────────────────────────────────────── */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.75rem', marginBottom: '1.25rem' }}>
         {[
-          { value: activeCount, label: isMr ? 'सक्रिय' : 'Active', icon: Sprout, color: '#4A8C2A' },
+          { value: activeCount, label: isMr ? 'सक्रिय' : 'Active', icon: Sprout, color: '#4CAF50' },
           { value: totalViews,  label: isMr ? 'व्ह्यूज' : 'Views',  icon: Eye,    color: '#7EB3FF' },
-          { value: totalInquiries, label: isMr ? 'चौकशी' : 'Leads', icon: TrendingUp, color: '#D4C4A0' },
+          { value: totalInquiries, label: isMr ? 'चौकशी' : 'Leads', icon: TrendingUp, color: '#E8C84A' },
         ].map(({ value, label, icon: Icon, color }) => (
           <div key={label} style={{
             padding: '0.875rem', borderRadius: '1rem', textAlign: 'center',
-            background: '#111C11', border: '1px solid rgba(245,240,232,0.07)',
+            background: '#162B16', border: '1px solid rgba(245,240,232,0.07)',
           }}>
             <Icon size={14} style={{ color, margin: '0 auto 0.375rem' }} />
             <p style={{ fontSize: '18px', fontWeight: 300, color: '#F5F0E8', letterSpacing: '-0.02em' }}>{value}</p>
@@ -301,7 +301,7 @@ export default function MyListingsScreen({ lang, onCreateNew }: MyListingsScreen
               fontSize: '12px', fontWeight: 500, cursor: 'pointer',
               touchAction: 'manipulation',
               WebkitTapHighlightColor: 'transparent',
-              background: filter === key ? '#2D5A1B' : 'rgba(245,240,232,0.06)',
+              background: filter === key ? '#2E7D32' : 'rgba(245,240,232,0.06)',
               border: `1px solid ${filter === key ? 'rgba(74,140,42,0.4)' : 'rgba(245,240,232,0.1)'}`,
               color: filter === key ? '#F5F0E8' : 'rgba(245,240,232,0.45)',
               transition: 'all 0.15s',
@@ -316,7 +316,7 @@ export default function MyListingsScreen({ lang, onCreateNew }: MyListingsScreen
       {visible.length === 0 ? (
         <div style={{
           padding: '3rem 1.5rem', textAlign: 'center',
-          background: '#111C11', border: '1px solid rgba(245,240,232,0.07)',
+          background: '#162B16', border: '1px solid rgba(245,240,232,0.07)',
           borderRadius: '1.25rem',
         }}>
           <Package size={32} style={{ color: 'rgba(245,240,232,0.15)', margin: '0 auto 1rem' }} />
@@ -340,7 +340,7 @@ export default function MyListingsScreen({ lang, onCreateNew }: MyListingsScreen
                   exit={{ opacity: 0, y: -8 }}
                   transition={{ duration: 0.2, delay: i * 0.04, ease: [0.16, 1, 0.3, 1] as const }}
                   style={{
-                    background: '#111C11', border: '1px solid rgba(245,240,232,0.07)',
+                    background: '#162B16', border: '1px solid rgba(245,240,232,0.07)',
                     borderRadius: '1.25rem', overflow: 'hidden', position: 'relative',
                   }}
                 >
@@ -362,7 +362,7 @@ export default function MyListingsScreen({ lang, onCreateNew }: MyListingsScreen
                           background: 'rgba(10,26,10,0.6)',
                           display: 'flex', alignItems: 'center', justifyContent: 'center',
                         }}>
-                          <span style={{ fontSize: '10px', fontWeight: 600, color: '#D4C4A0', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
+                          <span style={{ fontSize: '10px', fontWeight: 600, color: '#E8C84A', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
                             {isMr ? 'विकले' : 'Sold'}
                           </span>
                         </div>
@@ -444,7 +444,7 @@ export default function MyListingsScreen({ lang, onCreateNew }: MyListingsScreen
                         onClick={e => e.stopPropagation()}
                         style={{
                           position: 'absolute', top: 44, right: 12,
-                          background: '#1A2D1A', border: '1px solid rgba(245,240,232,0.1)',
+                          background: '#1E3A1E', border: '1px solid rgba(245,240,232,0.1)',
                           borderRadius: '0.875rem', overflow: 'hidden', zIndex: 10, minWidth: 148,
                           boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
                         }}
@@ -507,7 +507,7 @@ export default function MyListingsScreen({ lang, onCreateNew }: MyListingsScreen
               onClick={e => e.stopPropagation()}
               style={{
                 width: '100%', maxWidth: 400,
-                background: '#1A2D1A', border: '1px solid rgba(245,240,232,0.1)',
+                background: '#1E3A1E', border: '1px solid rgba(245,240,232,0.1)',
                 borderRadius: '1.25rem', padding: '1.5rem', textAlign: 'center',
               }}
             >
@@ -569,7 +569,7 @@ export default function MyListingsScreen({ lang, onCreateNew }: MyListingsScreen
               position: 'fixed', bottom: 96, left: '50%', transform: 'translateX(-50%)',
               zIndex: 150, display: 'flex', alignItems: 'center', gap: '0.75rem',
               padding: '0.625rem 0.75rem 0.625rem 1rem',
-              background: '#1A2D1A', border: '1px solid rgba(245,240,232,0.12)',
+              background: '#1E3A1E', border: '1px solid rgba(245,240,232,0.12)',
               borderRadius: '2rem', boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
               whiteSpace: 'nowrap',
             }}
@@ -583,7 +583,7 @@ export default function MyListingsScreen({ lang, onCreateNew }: MyListingsScreen
               style={{
                 padding: '0.3rem 0.75rem', borderRadius: '1rem',
                 background: 'rgba(212,196,160,0.15)', border: '1px solid rgba(212,196,160,0.25)',
-                color: '#D4C4A0', fontSize: '12px', fontWeight: 500, cursor: 'pointer',
+                color: '#E8C84A', fontSize: '12px', fontWeight: 500, cursor: 'pointer',
                 touchAction: 'manipulation',
               }}
             >
@@ -630,7 +630,7 @@ export default function MyListingsScreen({ lang, onCreateNew }: MyListingsScreen
               <ArrowLeft size={18} />
             </button>
             <div style={{ position: 'absolute', bottom: '1.5rem', left: '1.25rem', right: '1.25rem' }}>
-              <p style={{ fontSize: '10px', fontWeight: 500, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#D4C4A0', marginBottom: 4 }}>
+              <p style={{ fontSize: '10px', fontWeight: 500, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#E8C84A', marginBottom: 4 }}>
                 {selectedListing.category}
               </p>
               <h2 style={{ fontSize: 'clamp(22px, 6vw, 30px)', fontWeight: 300, color: '#F5F0E8', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
@@ -659,7 +659,7 @@ export default function MyListingsScreen({ lang, onCreateNew }: MyListingsScreen
               ].map(({ label, value }) => (
                 <div key={label} style={{
                   padding: '0.875rem 0.75rem', borderRadius: '1rem', textAlign: 'center',
-                  background: '#111C11', border: '1px solid rgba(245,240,232,0.07)',
+                  background: '#162B16', border: '1px solid rgba(245,240,232,0.07)',
                 }}>
                   <p style={{ fontSize: '16px', fontWeight: 300, color: '#F5F0E8', letterSpacing: '-0.02em' }}>{value}</p>
                   <p style={{ fontSize: '9px', fontWeight: 500, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(245,240,232,0.35)', marginTop: 2 }}>
@@ -673,10 +673,10 @@ export default function MyListingsScreen({ lang, onCreateNew }: MyListingsScreen
             {(selectedListing.description || selectedListing.descriptionMr) && (
               <div style={{
                 padding: '1.25rem', borderRadius: '1rem',
-                background: '#111C11', border: '1px solid rgba(245,240,232,0.07)',
+                background: '#162B16', border: '1px solid rgba(245,240,232,0.07)',
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
-                  <FileText size={14} style={{ color: '#D4C4A0' }} />
+                  <FileText size={14} style={{ color: '#E8C84A' }} />
                   <p style={{ fontSize: '10px', fontWeight: 500, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(245,240,232,0.35)' }}>
                     {isMr ? 'वर्णन' : 'Description'}
                   </p>
@@ -691,7 +691,7 @@ export default function MyListingsScreen({ lang, onCreateNew }: MyListingsScreen
             {selectedListing.location && (
               <div style={{
                 padding: '1rem 1.25rem', borderRadius: '1rem',
-                background: '#111C11', border: '1px solid rgba(245,240,232,0.07)',
+                background: '#162B16', border: '1px solid rgba(245,240,232,0.07)',
                 display: 'flex', alignItems: 'center', gap: '1rem',
               }}>
                 <div style={{
@@ -699,7 +699,7 @@ export default function MyListingsScreen({ lang, onCreateNew }: MyListingsScreen
                   background: 'rgba(45,90,27,0.2)', border: '1px solid rgba(74,140,42,0.25)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}>
-                  <MapPin size={16} style={{ color: '#4A8C2A' }} />
+                  <MapPin size={16} style={{ color: '#4CAF50' }} />
                 </div>
                 <div>
                   <p style={{ fontSize: '10px', fontWeight: 500, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(245,240,232,0.35)', marginBottom: 3 }}>
@@ -716,10 +716,10 @@ export default function MyListingsScreen({ lang, onCreateNew }: MyListingsScreen
             {selectedListing.leads && selectedListing.leads.length > 0 && (
               <div style={{
                 padding: '1.25rem', borderRadius: '1rem',
-                background: '#111C11', border: '1px solid rgba(245,240,232,0.07)',
+                background: '#162B16', border: '1px solid rgba(245,240,232,0.07)',
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.875rem' }}>
-                  <Users size={14} style={{ color: '#D4C4A0' }} />
+                  <Users size={14} style={{ color: '#E8C84A' }} />
                   <p style={{ fontSize: '10px', fontWeight: 500, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(245,240,232,0.35)' }}>
                     {isMr ? 'खरेदीची विचारणा' : 'Buyer Enquiries'}
                   </p>
@@ -741,7 +741,7 @@ export default function MyListingsScreen({ lang, onCreateNew }: MyListingsScreen
                         padding: '0.25rem 0.625rem', borderRadius: '2rem',
                         background: 'rgba(212,196,160,0.1)', border: '1px solid rgba(212,196,160,0.2)',
                       }}>
-                        <span style={{ fontSize: '10px', fontWeight: 500, color: '#D4C4A0' }}>
+                        <span style={{ fontSize: '10px', fontWeight: 500, color: '#E8C84A' }}>
                           {isMr ? 'उत्तर द्या' : 'Reply'}
                         </span>
                       </div>
