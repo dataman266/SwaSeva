@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useMemo } from 'react'; // useState kept for tappedIdx
+import React, { useEffect, useRef, useMemo } from 'react';
 import { TrendingUp, TrendingDown, Minus, ExternalLink } from 'lucide-react';
 
 interface PriceItem {
@@ -104,11 +104,9 @@ interface LivePriceTickerProps {
 }
 
 export default function LivePriceTicker({ isMr, location = '' }: LivePriceTickerProps) {
-  const trackRef   = useRef<HTMLDivElement>(null);
-  const pausedRef  = useRef(false);   // ref — no re-renders, no effect restarts
-  const posRef     = useRef(0);
-  const rafRef     = useRef<number>(0);
-  const [tappedIdx, setTappedIdx] = useState<number | null>(null);
+  const trackRef  = useRef<HTMLDivElement>(null);
+  const pausedRef = useRef(false);
+  const posRef    = useRef(0);
 
   // Sort PRICE_DATA by distance to user's location (nearest first)
   const sorted = useMemo<PriceItem[]>(() => {
@@ -157,12 +155,8 @@ export default function LivePriceTicker({ isMr, location = '' }: LivePriceTicker
     return () => cancelAnimationFrame(raf);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Open URL directly in the click handler — window.open in setTimeout is
-  // blocked by mobile browsers as a pop-up.
-  const handleTap = (item: PriceItem, idx: number) => {
-    setTappedIdx(idx);
-    setTimeout(() => setTappedIdx(null), 250);
-    window.open(item.sourceUrl, '_blank', 'noopener,noreferrer');
+  const handleTap = (sourceUrl: string) => {
+    window.open(sourceUrl, '_blank', 'noopener,noreferrer');
   };
 
   // Duplicate for seamless loop
@@ -218,26 +212,25 @@ export default function LivePriceTicker({ isMr, location = '' }: LivePriceTicker
             const up   = diff > 0;
             const flat = diff === 0;
             const color = flat ? 'rgba(245,240,232,0.4)' : up ? '#4CAF50' : '#E57373';
-            const isTapped = tappedIdx === i;
 
             return (
               <button
                 key={i}
                 onPointerDown={(e) => e.stopPropagation()}
-                onClick={() => handleTap(item, i)}
+                onClick={() => handleTap(item.sourceUrl)}
+                className="active:scale-95 active:opacity-70"
                 style={{
                   flexShrink: 0,
                   display: 'flex', alignItems: 'center', gap: '0.5rem',
                   padding: '0.375rem 0.75rem',
-                  background: isTapped ? 'rgba(74,140,42,0.18)' : 'rgba(245,240,232,0.04)',
-                  border: `1px solid ${isTapped ? 'rgba(74,140,42,0.45)' : 'rgba(245,240,232,0.07)'}`,
+                  background: 'rgba(245,240,232,0.04)',
+                  border: '1px solid rgba(245,240,232,0.07)',
                   borderRadius: '0.625rem',
                   whiteSpace: 'nowrap',
                   cursor: 'pointer',
                   touchAction: 'manipulation',
                   WebkitTapHighlightColor: 'transparent',
-                  transition: 'background 0.15s, border-color 0.15s',
-                  transform: isTapped ? 'scale(0.96)' : 'scale(1)',
+                  transition: 'transform 0.1s, opacity 0.1s',
                 }}
                 aria-label={`${isMr ? item.nameMr : item.name} ₹${item.price} — ${isMr ? 'स्रोत उघडा' : 'open source'}`}
               >
