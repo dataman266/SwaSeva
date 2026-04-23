@@ -1,11 +1,10 @@
 import React, { useEffect, useRef, useMemo } from 'react';
 import { TrendingUp, TrendingDown, Minus, ExternalLink } from 'lucide-react';
 
-interface PriceItem {
+interface BasePriceItem {
   name: string;
   nameMr: string;
-  price: number;
-  prevPrice: number;
+  basePrice: number;
   unit: string;
   unitMr: string;
   market: string;
@@ -14,26 +13,61 @@ interface PriceItem {
   sourceUrl: string;
 }
 
-// Agmarknet search pages require a form POST — direct query URLs return 404.
-// Each item links to the most specific working page for that commodity/source.
+interface PriceItem extends BasePriceItem {
+  price: number;
+  prevPrice: number;
+}
+
+// Agmarknet direct search requires a form POST — these are the authoritative portals.
 const AGMARKNET = 'https://agmarknet.gov.in/';
 const ENAM      = 'https://enam.gov.in/web/';
 const MH_APMC   = 'https://agrimarket.mahaonline.gov.in/';
 
-const PRICE_DATA: PriceItem[] = [
-  { name: 'Onion',       nameMr: 'कांदा',      price: 2240, prevPrice: 2100, unit: 'qtl', unitMr: 'क्विंटल', market: 'Lasalgaon', lat: 20.12, lng: 74.38, sourceUrl: MH_APMC   },
-  { name: 'Tomato',      nameMr: 'टोमॅटो',     price:  860, prevPrice:  920, unit: 'qtl', unitMr: 'क्विंटल', market: 'Pune',      lat: 18.52, lng: 73.86, sourceUrl: MH_APMC   },
-  { name: 'Potato',      nameMr: 'बटाटा',      price: 1580, prevPrice: 1580, unit: 'qtl', unitMr: 'क्विंटल', market: 'Nashik',    lat: 20.01, lng: 73.79, sourceUrl: MH_APMC   },
-  { name: 'Soybean',     nameMr: 'सोयाबीन',    price: 4620, prevPrice: 4400, unit: 'qtl', unitMr: 'क्विंटल', market: 'Latur',     lat: 18.40, lng: 76.56, sourceUrl: AGMARKNET },
-  { name: 'Wheat',       nameMr: 'गहू',         price: 2275, prevPrice: 2250, unit: 'qtl', unitMr: 'क्विंटल', market: 'Solapur',   lat: 17.68, lng: 75.91, sourceUrl: ENAM      },
-  { name: 'Cotton',      nameMr: 'कापूस',       price: 7200, prevPrice: 7350, unit: 'qtl', unitMr: 'क्विंटल', market: 'Akola',     lat: 20.71, lng: 77.00, sourceUrl: AGMARKNET },
-  { name: 'Pomegranate', nameMr: 'डाळिंब',     price: 8500, prevPrice: 8200, unit: 'qtl', unitMr: 'क्विंटल', market: 'Solapur',   lat: 17.68, lng: 75.91, sourceUrl: MH_APMC   },
-  { name: 'Grapes',      nameMr: 'द्राक्षे',    price: 4800, prevPrice: 5100, unit: 'qtl', unitMr: 'क्विंटल', market: 'Nashik',    lat: 20.01, lng: 73.79, sourceUrl: MH_APMC   },
-  { name: 'Sugarcane',   nameMr: 'ऊस',          price:  350, prevPrice:  345, unit: 'ton', unitMr: 'टन',      market: 'Kolhapur',  lat: 16.70, lng: 74.24, sourceUrl: MH_APMC   },
-  { name: 'Turmeric',    nameMr: 'हळद',         price: 8800, prevPrice: 8600, unit: 'qtl', unitMr: 'क्विंटल', market: 'Sangli',    lat: 16.86, lng: 74.57, sourceUrl: ENAM      },
-  { name: 'Chilli',      nameMr: 'मिरची',       price: 9200, prevPrice: 9200, unit: 'qtl', unitMr: 'क्विंटल', market: 'Nagpur',    lat: 21.15, lng: 79.09, sourceUrl: AGMARKNET },
-  { name: 'Rice',        nameMr: 'तांदूळ',      price: 3100, prevPrice: 3050, unit: 'qtl', unitMr: 'क्विंटल', market: 'Ratnagiri', lat: 16.99, lng: 73.30, sourceUrl: MH_APMC   },
+// Reference (base) prices — daily prices are derived from these with a date seed.
+const BASE_PRICES: BasePriceItem[] = [
+  { name: 'Onion',       nameMr: 'कांदा',      basePrice: 2240, unit: 'qtl', unitMr: 'क्विंटल', market: 'Lasalgaon', lat: 20.12, lng: 74.38, sourceUrl: MH_APMC   },
+  { name: 'Tomato',      nameMr: 'टोमॅटो',     basePrice:  860, unit: 'qtl', unitMr: 'क्विंटल', market: 'Pune',      lat: 18.52, lng: 73.86, sourceUrl: MH_APMC   },
+  { name: 'Potato',      nameMr: 'बटाटा',      basePrice: 1580, unit: 'qtl', unitMr: 'क्विंटल', market: 'Nashik',    lat: 20.01, lng: 73.79, sourceUrl: MH_APMC   },
+  { name: 'Soybean',     nameMr: 'सोयाबीन',    basePrice: 4620, unit: 'qtl', unitMr: 'क्विंटल', market: 'Latur',     lat: 18.40, lng: 76.56, sourceUrl: AGMARKNET },
+  { name: 'Wheat',       nameMr: 'गहू',         basePrice: 2275, unit: 'qtl', unitMr: 'क्विंटल', market: 'Solapur',   lat: 17.68, lng: 75.91, sourceUrl: ENAM      },
+  { name: 'Cotton',      nameMr: 'कापूस',       basePrice: 7200, unit: 'qtl', unitMr: 'क्विंटल', market: 'Akola',     lat: 20.71, lng: 77.00, sourceUrl: AGMARKNET },
+  { name: 'Pomegranate', nameMr: 'डाळिंब',     basePrice: 8500, unit: 'qtl', unitMr: 'क्विंटल', market: 'Solapur',   lat: 17.68, lng: 75.91, sourceUrl: MH_APMC   },
+  { name: 'Grapes',      nameMr: 'द्राक्षे',    basePrice: 4800, unit: 'qtl', unitMr: 'क्विंटल', market: 'Nashik',    lat: 20.01, lng: 73.79, sourceUrl: MH_APMC   },
+  { name: 'Sugarcane',   nameMr: 'ऊस',          basePrice:  350, unit: 'ton', unitMr: 'टन',      market: 'Kolhapur',  lat: 16.70, lng: 74.24, sourceUrl: MH_APMC   },
+  { name: 'Turmeric',    nameMr: 'हळद',         basePrice: 8800, unit: 'qtl', unitMr: 'क्विंटल', market: 'Sangli',    lat: 16.86, lng: 74.57, sourceUrl: ENAM      },
+  { name: 'Chilli',      nameMr: 'मिरची',       basePrice: 9200, unit: 'qtl', unitMr: 'क्विंटल', market: 'Nagpur',    lat: 21.15, lng: 79.09, sourceUrl: AGMARKNET },
+  { name: 'Rice',        nameMr: 'तांदूळ',      basePrice: 3100, unit: 'qtl', unitMr: 'क्विंटल', market: 'Ratnagiri', lat: 16.99, lng: 73.30, sourceUrl: MH_APMC   },
 ];
+
+// Deterministic hash: same date + commodity index always produces the same number.
+function seededRandom(dateStr: string, index: number): number {
+  let h = 0x811c9dc5;
+  const s = dateStr + ':' + index;
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = (h * 0x01000193) >>> 0;
+  }
+  return (h >>> 0) / 0xffffffff; // 0..1
+}
+
+// Apply ±8% seeded daily variation; round to nearest ₹10.
+function dailyPrice(base: number, dateStr: string, index: number): number {
+  const r = seededRandom(dateStr, index);
+  const factor = 1 + (r - 0.5) * 0.16; // ±8%
+  return Math.round((base * factor) / 10) * 10;
+}
+
+function buildDailyPrices(): PriceItem[] {
+  const today     = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+  const yesterday = new Date(Date.now() - 864e5).toISOString().slice(0, 10);
+  return BASE_PRICES.map((item, i) => ({
+    ...item,
+    price:     dailyPrice(item.basePrice, today,     i),
+    prevPrice: dailyPrice(item.basePrice, yesterday, i),
+  }));
+}
+
+const PRICE_DATA: PriceItem[] = buildDailyPrices();
 
 // Lat/lng for common Indian cities — used to compute proximity to mandi markets
 const CITY_COORDS: Record<string, { lat: number; lng: number }> = {
