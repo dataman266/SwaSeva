@@ -213,46 +213,7 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
         </button>
       </div>
 
-      {/* ── 3. NEWS & IMPACT ENTRY CARD ──────────────────────────── */}
-      <button
-        type="button"
-        onClick={onOpenExplore}
-        style={{
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          width: '100%', margin: '0.875rem 0 0',
-          padding: '0.875rem 1.25rem',
-          background: 'linear-gradient(135deg, #162B16 0%, #1E3A1E 100%)',
-          border: 'none',
-          borderTop: '1px solid rgba(245,240,232,0.06)',
-          borderBottom: '1px solid rgba(245,240,232,0.06)',
-          cursor: 'pointer', touchAction: 'manipulation',
-          WebkitTapHighlightColor: 'rgba(45,90,27,0.15)',
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.875rem' }}>
-          <div style={{
-            width: 36, height: 36, borderRadius: '0.75rem', flexShrink: 0,
-            background: 'rgba(212,196,160,0.1)', border: '1px solid rgba(212,196,160,0.2)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-          }}>
-            <Newspaper size={16} style={{ color: '#E8C84A' }} />
-          </div>
-          <div style={{ textAlign: 'left' }}>
-            <p style={{ fontSize: '15px', fontWeight: 600, color: '#F5F0E8', letterSpacing: '-0.01em' }}>
-              {isMr ? 'बातम्या आणि आमचा प्रभाव' : 'News & Our Impact'}
-            </p>
-            <p style={{ fontSize: '13px', color: 'rgba(245,240,232,0.75)', marginTop: 2, fontWeight: 400 }}>
-              {isMr ? 'शेती बातम्या, MSP अपडेट आणि अधिक' : 'Farm news, MSP updates & more'}
-            </p>
-          </div>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
-          <TrendingUp size={12} style={{ color: '#4CAF50' }} />
-          <ChevronRight size={14} style={{ color: 'rgba(245,240,232,0.25)' }} />
-        </div>
-      </button>
-
-      {/* ── 4. PRODUCT LISTINGS ──────────────────────────────────── */}
+      {/* ── 3. PRODUCT LISTINGS ──────────────────────────────────── */}
       <section className="px-5 pt-6">
 
         {/* Section header */}
@@ -427,6 +388,45 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
           )}
         </div>
       </section>
+
+      {/* ── NEWS & IMPACT ENTRY CARD ─────────────────────────────── */}
+      <button
+        type="button"
+        onClick={onOpenExplore}
+        style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          width: '100%', margin: '1.5rem 0 0',
+          padding: '1rem 1.25rem',
+          background: 'linear-gradient(135deg, #162B16 0%, #1E3A1E 100%)',
+          border: 'none',
+          borderTop: '1px solid rgba(245,240,232,0.06)',
+          borderBottom: '1px solid rgba(245,240,232,0.06)',
+          cursor: 'pointer', touchAction: 'manipulation',
+          WebkitTapHighlightColor: 'rgba(45,90,27,0.15)',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.875rem' }}>
+          <div style={{
+            width: 40, height: 40, borderRadius: '0.75rem', flexShrink: 0,
+            background: 'rgba(212,196,160,0.1)', border: '1px solid rgba(212,196,160,0.2)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+            <Newspaper size={18} style={{ color: '#E8C84A' }} />
+          </div>
+          <div style={{ textAlign: 'left' }}>
+            <p style={{ fontSize: '15px', fontWeight: 600, color: '#F5F0E8', letterSpacing: '-0.01em' }}>
+              {isMr ? 'बातम्या आणि आमचा प्रभाव' : 'News & Our Impact'}
+            </p>
+            <p style={{ fontSize: '12px', color: 'rgba(245,240,232,0.55)', marginTop: 2, fontWeight: 400 }}>
+              {isMr ? 'शेती बातम्या, MSP अपडेट आणि अधिक' : 'Farm news, MSP updates & more'}
+            </p>
+          </div>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
+          <TrendingUp size={12} style={{ color: '#4CAF50' }} />
+          <ChevronRight size={14} style={{ color: 'rgba(245,240,232,0.25)' }} />
+        </div>
+      </button>
 
       {/* ── AI Assistant FAB ─────────────────────────────────────── */}
       <button
