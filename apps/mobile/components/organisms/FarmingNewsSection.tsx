@@ -3,7 +3,6 @@ import { motion } from 'motion/react';
 import { Newspaper, TrendingUp, CloudRain, Landmark, ExternalLink } from 'lucide-react';
 import SectionReveal from '../atoms/SectionReveal.tsx';
 
-// Opens URL in the system browser — works in both Capacitor WebView and regular browsers
 function openUrl(url: string) {
   const a = document.createElement('a');
   a.href = url;
@@ -12,18 +11,17 @@ function openUrl(url: string) {
   a.click();
 }
 
-// AbortSignal.timeout() is not available in older Android WebViews — use this instead
-function fetchWithTimeout(url: string, ms: number): Promise<Response> {
+// AbortSignal.timeout() is not in older Android WebViews
+async function fetchWithTimeout(url: string, ms: number): Promise<Response> {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), ms);
-  return fetch(url, { signal: ctrl.signal }).finally(() => clearTimeout(timer));
+  try { return await fetch(url, { signal: ctrl.signal }); }
+  finally { clearTimeout(timer); }
 }
 
-// Only use backend if explicitly configured — localhost:3000 is never reachable in production
 const BACKEND_URL = (import.meta as { env?: Record<string, string> }).env?.VITE_API_URL ?? null;
-
-const CACHE_KEY = 'agrimart_news_cache';
-const CACHE_TTL = 30 * 60 * 1000; // 30 minutes
+const CACHE_KEY   = 'agrimart_news_v2';
+const CACHE_TTL   = 30 * 60 * 1000; // 30 min
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -49,24 +47,22 @@ interface FarmingNewsSectionProps {
 
 function guessCategory(title: string): NewsCategory {
   const t = title.toLowerCase();
-  if (t.includes('rain') || t.includes('weather') || t.includes('monsoon') || t.includes('drought') || t.includes('flood') || t.includes('climate')) return 'weather';
-  if (t.includes('scheme') || t.includes('subsidy') || t.includes('msp') || t.includes('kisan') || t.includes('pm kisan') || t.includes('government') || t.includes('ministry') || t.includes('policy')) return 'scheme';
-  if (t.includes('price') || t.includes('mandi') || t.includes('market') || t.includes('apmc') || t.includes('quintal') || t.includes('crop') || t.includes('harvest') || t.includes('yield')) return 'market';
+  if (/rain|weather|monsoon|drought|flood|climate|imd|forecast/.test(t)) return 'weather';
+  if (/scheme|subsidy|msp|kisan|government|ministry|policy|pm kisan|nabard|loan/.test(t)) return 'scheme';
+  if (/price|mandi|market|apmc|quintal|crop|harvest|yield|commodity|rate|bhav/.test(t)) return 'market';
   return 'general';
 }
 
 function relativeDate(dateStr: string): string {
   try {
-    const diff = Date.now() - new Date(dateStr).getTime();
+    const diff  = Date.now() - new Date(dateStr).getTime();
     const hours = Math.floor(diff / 3_600_000);
-    if (hours < 3)  return 'आत्ता / Just now';
-    if (hours < 24) return `${hours} तास / ${hours}h ago`;
+    if (hours < 3)  return 'Just now';
+    if (hours < 24) return `${hours}h ago`;
     const days = Math.floor(hours / 24);
-    if (days < 7)   return `${days} दिवस / ${days}d ago`;
-    return `${Math.floor(days / 7)} आठवडा / ${Math.floor(days / 7)}w ago`;
-  } catch {
-    return '';
-  }
+    if (days < 7)   return `${days}d ago`;
+    return `${Math.floor(days / 7)}w ago`;
+  } catch { return ''; }
 }
 
 function daysAgo(n: number): string {
@@ -75,15 +71,12 @@ function daysAgo(n: number): string {
 
 // ── Session cache ─────────────────────────────────────────────────────────────
 
-interface CacheEntry { items: NewsItem[]; ts: number }
-
 function readCache(): NewsItem[] | null {
   try {
-    const raw = sessionStorage.getItem(CACHE_KEY);
+    const raw   = sessionStorage.getItem(CACHE_KEY);
     if (!raw) return null;
-    const entry = JSON.parse(raw) as CacheEntry;
-    if (Date.now() - entry.ts > CACHE_TTL) return null;
-    return entry.items;
+    const entry = JSON.parse(raw) as { items: NewsItem[]; ts: number };
+    return Date.now() - entry.ts < CACHE_TTL ? entry.items : null;
   } catch { return null; }
 }
 
@@ -91,102 +84,78 @@ function writeCache(items: NewsItem[]) {
   try { sessionStorage.setItem(CACHE_KEY, JSON.stringify({ items, ts: Date.now() })); } catch { /* ignore */ }
 }
 
-// ── Static fallback — dates computed at call time so they never look stale ───
+// ── Static fallback ───────────────────────────────────────────────────────────
 
 function buildStaticNews(): NewsItem[] {
   return [
     {
-      id: 'n1',
+      id: 'n1', category: 'market', source: 'APMC Nashik', date: daysAgo(0),
       titleEn: 'Onion prices rise to ₹1,200/qtl at Lasalgaon APMC — strong export demand',
       titleMr: 'लासलगाव APMC मध्ये कांद्याचे भाव ₹१,२०० प्रति क्विंटल — निर्यात मागणीमुळे वाढ',
-      category: 'market',
-      date: daysAgo(0),
-      source: 'APMC Nashik',
       url: 'https://agmarknet.gov.in/',
     },
     {
-      id: 'n2',
+      id: 'n2', category: 'weather', source: 'IMD India', date: daysAgo(1),
       titleEn: 'IMD forecasts above-normal monsoon for Maharashtra; sowing expected on time',
       titleMr: 'महाराष्ट्रात सामान्यापेक्षा जास्त पाऊस — IMD अंदाज; पेरणी वेळेत होण्याची शक्यता',
-      category: 'weather',
-      date: daysAgo(1),
-      source: 'IMD Mumbai',
-      url: 'https://mausam.imd.gov.in/pune/',
+      url: 'https://mausam.imd.gov.in/',
     },
     {
-      id: 'n3',
+      id: 'n3', category: 'scheme', source: 'Ministry of Agriculture', date: daysAgo(2),
       titleEn: 'PM Kisan 18th instalment: ₹2,000 to be credited — check eligibility now',
       titleMr: 'PM किसान १८वा हप्ता: ₹२,०००  थेट खात्यात — पात्रता आत्ताच तपासा',
-      category: 'scheme',
-      date: daysAgo(2),
-      source: 'Ministry of Agriculture',
       url: 'https://pmkisan.gov.in/',
     },
     {
-      id: 'n4',
+      id: 'n4', category: 'market', source: 'CACP', date: daysAgo(3),
       titleEn: 'Soybean MSP raised to ₹4,892/qtl for Kharif 2025 — cabinet approval',
       titleMr: 'खरीप २०२५ साठी सोयाबीनचा MSP ₹४,८९२/क्विंटल — मंत्रिमंडळ मंजुरी',
-      category: 'market',
-      date: daysAgo(3),
-      source: 'CACP',
       url: 'https://cacp.dacnet.nic.in/',
     },
     {
-      id: 'n5',
+      id: 'n5', category: 'scheme', source: 'MahaDBT', date: daysAgo(5),
       titleEn: 'Drip irrigation subsidy for small farmers — up to 80% via MahaDBT portal',
       titleMr: 'लहान शेतकऱ्यांसाठी ठिबक सिंचन अनुदान — MahaDBT द्वारे ८०% पर्यंत सहाय्य',
-      category: 'scheme',
-      date: daysAgo(5),
-      source: 'MahaDBT',
       url: 'https://mahadbt.maharashtra.gov.in/',
     },
     {
-      id: 'n6',
+      id: 'n6', category: 'market', source: 'APMC Latur', date: daysAgo(7),
       titleEn: 'Tur (pigeon pea) arrivals surge in Latur; prices soften to ₹6,100/qtl',
       titleMr: 'लातूरमध्ये तूर आवक वाढली; दर ₹६,१०० प्रति क्विंटलवर आले',
-      category: 'market',
-      date: daysAgo(7),
-      source: 'APMC Latur',
       url: 'https://enam.gov.in/web/',
     },
   ];
 }
 
-// ── RSS sources via rss2json proxy ────────────────────────────────────────────
-// Google News RSS feeds are highly reliable and always return fresh articles
+// ── RSS → JSON via rss2json proxy ─────────────────────────────────────────────
+// These feeds are standard RSS and work reliably through rss2json
 
 const RSS_SOURCES = [
-  {
-    url: 'https://news.google.com/rss/search?q=agriculture+farming+india+crop+price&hl=en-IN&gl=IN&ceid=IN:en',
-    source: 'Google News',
-  },
-  {
-    url: 'https://news.google.com/rss/search?q=kisan+mandi+fasal+bhav+india&hl=hi&gl=IN&ceid=IN:hi',
-    source: 'Google News',
-  },
+  // Economic Times — Agriculture section (very reliable)
+  'https://economictimes.indiatimes.com/news/economy/agriculture/rssfeeds/7377991.cms',
+  // The Hindu BusinessLine — Agri section
+  'https://www.thehindubusinessline.com/economy/agri-business/feeder/default.rss',
+  // Business Standard — Agriculture
+  'https://www.business-standard.com/rss/agriculture-39.rss',
 ];
 
-interface RssItem {
-  title: string;
-  pubDate: string;
-  link: string;
-  source?: { title?: string };
-}
+interface RawRssItem { title: string; pubDate: string; link: string; source?: { title?: string } }
+interface Rss2JsonResp { status: string; feed?: { title?: string }; items?: RawRssItem[] }
 
-async function fetchRssSource(feedUrl: string, source: string): Promise<NewsItem[]> {
-  const proxy = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}&count=8`;
-  const res  = await fetchWithTimeout(proxy, 9_000);
+async function fetchOneFeed(feedUrl: string): Promise<NewsItem[]> {
+  const proxy = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}&count=10`;
+  const res   = await fetchWithTimeout(proxy, 9_000);
   if (!res.ok) return [];
-  const data = await res.json() as { status: string; items?: RssItem[] };
+  const data  = await res.json() as Rss2JsonResp;
   if (data.status !== 'ok' || !Array.isArray(data.items) || data.items.length === 0) return [];
-
-  return data.items.slice(0, 8).map((item, i) => ({
-    id:       `${source.toLowerCase().replace(/\s+/g, '-')}-${i}-${Date.now()}`,
+  const feedName = data.feed?.title ?? new URL(feedUrl).hostname.replace('www.', '');
+  return data.items.map((item, i) => ({
+    id:       `feed-${i}-${feedUrl.slice(-8)}`,
     titleEn:  item.title,
     titleMr:  item.title,
     category: guessCategory(item.title),
     date:     relativeDate(item.pubDate),
-    source:   item.source?.title ?? source,
+    source:   feedName,
     url:      item.link || undefined,
     isLive:   true,
   }));
@@ -194,89 +163,70 @@ async function fetchRssSource(feedUrl: string, source: string): Promise<NewsItem
 
 // ── Category config ───────────────────────────────────────────────────────────
 
-const CATEGORY_META: Record<NewsCategory, { labelEn: string; labelMr: string; color: string; icon: React.ElementType }> = {
-  market:  { labelEn: 'Market Price', labelMr: 'बाजारभाव',     color: '#2E7D32', icon: TrendingUp },
-  weather: { labelEn: 'Weather',      labelMr: 'हवामान',       color: '#1A3D5A', icon: CloudRain  },
-  scheme:  { labelEn: 'Govt Scheme',  labelMr: 'सरकारी योजना', color: '#5A3A1A', icon: Landmark  },
-  general: { labelEn: 'News',         labelMr: 'बातमी',        color: '#3A1A5A', icon: Newspaper  },
+const CATEGORY_META: Record<NewsCategory, {
+  labelEn: string; labelMr: string; accent: string; dim: string; icon: React.ElementType
+}> = {
+  market:  { labelEn: 'Market',   labelMr: 'बाजार',   accent: '#6FCF4A', dim: '#6FCF4A22', icon: TrendingUp },
+  weather: { labelEn: 'Weather',  labelMr: 'हवामान',  accent: '#5AC8FA', dim: '#5AC8FA22', icon: CloudRain  },
+  scheme:  { labelEn: 'Scheme',   labelMr: 'योजना',   accent: '#F0A500', dim: '#F0A50022', icon: Landmark   },
+  general: { labelEn: 'News',     labelMr: 'बातमी',   accent: '#B48EFF', dim: '#B48EFF22', icon: Newspaper  },
 };
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export default function FarmingNewsSection({ lang, location }: FarmingNewsSectionProps) {
-  const [news, setNews] = useState<NewsItem[]>(buildStaticNews);
+  const [news,    setNews]    = useState<NewsItem[]>(buildStaticNews);
   const [loading, setLoading] = useState(true);
-  const [isLive, setIsLive] = useState(false);
+  const [isLive,  setIsLive]  = useState(false);
 
   const isMr = lang === 'mr';
 
   useEffect(() => {
     let cancelled = false;
 
-    // Serve from session cache immediately if fresh
     const cached = readCache();
-    if (cached) {
-      setNews(cached);
-      setIsLive(true);
-      setLoading(false);
-      return;
-    }
+    if (cached) { setNews(cached); setIsLive(true); setLoading(false); return; }
 
     setLoading(true);
 
     async function loadNews() {
-      // ── Tier 1: AgriMart backend (only when VITE_API_URL is explicitly set) ─
+      // Tier 1: backend (only if VITE_API_URL explicitly set)
       if (BACKEND_URL) {
         try {
           const params = location && !['Detecting...', 'Mandi', 'Rural MH'].includes(location)
-            ? `?location=${encodeURIComponent(location)}`
-            : '';
+            ? `?location=${encodeURIComponent(location)}` : '';
           const res  = await fetchWithTimeout(`${BACKEND_URL}/news/farming${params}`, 6_000);
           const json = await res.json() as { ok: boolean; items?: NewsItem[] };
           if (!cancelled && json.ok && Array.isArray(json.items) && json.items.length > 0) {
-            setNews(json.items);
-            setIsLive(true);
-            setLoading(false);
-            writeCache(json.items);
-            return;
+            setNews(json.items); setIsLive(true); setLoading(false);
+            writeCache(json.items); return;
           }
         } catch { /* fall through */ }
       }
 
-      // ── Tier 2: RSS feeds via rss2json (tried in parallel) ───────────────────
+      // Tier 2: RSS feeds via rss2json (in parallel)
       try {
-        const results = await Promise.allSettled(
-          RSS_SOURCES.map(s => fetchRssSource(s.url, s.source))
-        );
-
+        const results = await Promise.allSettled(RSS_SOURCES.map(fetchOneFeed));
         const fetched: NewsItem[] = [];
         for (const r of results) {
           if (r.status === 'fulfilled') fetched.push(...r.value);
         }
 
         if (!cancelled && fetched.length > 0) {
-          // Deduplicate by URL, cap at 12 items
           const seen = new Set<string>();
           const deduped = fetched.filter(item => {
             const key = item.url ?? item.titleEn;
             if (seen.has(key)) return false;
-            seen.add(key);
-            return true;
-          }).slice(0, 12);
+            seen.add(key); return true;
+          }).slice(0, 10);
 
-          setNews(deduped);
-          setIsLive(true);
-          setLoading(false);
-          writeCache(deduped);
-          return;
+          setNews(deduped); setIsLive(true); setLoading(false);
+          writeCache(deduped); return;
         }
-      } catch { /* fall through to static */ }
+      } catch { /* fall through */ }
 
-      // ── Tier 3: Static curated (dates always computed fresh) ─────────────────
-      if (!cancelled) {
-        setNews(buildStaticNews());
-        setLoading(false);
-      }
+      // Tier 3: static (dates always fresh)
+      if (!cancelled) { setNews(buildStaticNews()); setLoading(false); }
     }
 
     loadNews();
@@ -286,120 +236,120 @@ export default function FarmingNewsSection({ lang, location }: FarmingNewsSectio
   const city = ['Detecting...', 'Mandi', 'Rural MH'].includes(location) ? 'Maharashtra' : location;
 
   return (
-    <section className="py-12 overflow-hidden" style={{ background: '#0D170D' }}>
+    <section className="py-10" style={{ background: '#0D170D' }}>
 
       {/* Header */}
-      <SectionReveal className="flex items-baseline justify-between px-6 mb-6">
+      <SectionReveal className="flex items-end justify-between px-5 mb-5">
         <div>
-          <p className="text-[10px] font-medium tracking-[0.2em] uppercase text-[rgba(245,240,232,0.35)] mb-1">
+          <p className="text-[10px] font-medium tracking-[0.2em] uppercase text-[rgba(245,240,232,0.3)] mb-1">
             {isMr ? `${city} क्षेत्र` : `${city} Region`}
           </p>
           <h2 className="font-light text-[#F5F0E8]" style={{ fontSize: '22px', letterSpacing: '-0.02em' }}>
             {isMr ? 'शेती बातम्या' : 'Farming News'}
           </h2>
         </div>
-        <div className="flex items-center gap-1.5">
-          {isLive && !loading && (
-            <span className="w-1.5 h-1.5 rounded-full bg-[#6FCF4A] animate-pulse" />
-          )}
-          <span className="text-[9px] font-medium tracking-[0.18em] uppercase text-[rgba(245,240,232,0.4)]">
-            {loading ? (isMr ? 'लोड होत आहे...' : 'Loading…') : isLive ? 'LIVE' : (isMr ? 'क्युरेटेड' : 'Curated')}
+        <div className="flex items-center gap-1.5 pb-0.5">
+          {isLive && !loading && <span className="w-1.5 h-1.5 rounded-full bg-[#6FCF4A] animate-pulse" />}
+          <span className="text-[9px] font-medium tracking-[0.18em] uppercase text-[rgba(245,240,232,0.35)]">
+            {loading ? 'Loading…' : isLive ? 'LIVE' : 'Curated'}
           </span>
         </div>
       </SectionReveal>
 
-      {/* Horizontal scroll cards */}
-      <div className="flex gap-4 px-6 overflow-x-auto scrollbar-hide pb-2">
+      {/* Vertical news list */}
+      <div className="flex flex-col gap-2.5 px-5">
         {loading
-          ? Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />)
+          ? Array.from({ length: 5 }).map((_, i) => <SkeletonRow key={i} />)
           : news.map((item, idx) => (
-              <NewsCard key={item.id} item={item} isMr={isMr} index={idx} />
+              <NewsRow key={item.id} item={item} isMr={isMr} index={idx} />
             ))
         }
       </div>
 
       {isLive && !loading && (
-        <p className="px-6 mt-4 text-[10px] text-[rgba(245,240,232,0.2)] font-light" style={{ letterSpacing: '0.04em' }}>
-          {isMr ? 'स्रोत: Google News India' : 'Source: Google News India'}
+        <p className="px-5 mt-5 text-[10px] text-[rgba(245,240,232,0.18)]" style={{ letterSpacing: '0.03em' }}>
+          {isMr ? 'स्रोत: ET · BusinessLine · Business Standard' : 'Source: ET · BusinessLine · Business Standard'}
         </p>
       )}
     </section>
   );
 }
 
-// ── NewsCard ──────────────────────────────────────────────────────────────────
+// ── NewsRow — full-width vertical list card ───────────────────────────────────
 
-function NewsCard({ item, isMr, index }: { item: NewsItem; isMr: boolean; index: number }) {
+function NewsRow({ item, isMr, index }: { item: NewsItem; isMr: boolean; index: number }) {
   const meta  = CATEGORY_META[item.category];
   const Icon  = meta.icon;
   const title = isMr ? item.titleMr : item.titleEn;
-
-  const badgeColor = item.category === 'weather' ? '#5AC8FA'
-    : item.category === 'scheme' ? '#D4A04A'
-    : '#6FCF4A';
 
   return (
     <motion.div
       role="button"
       tabIndex={0}
       aria-label={title}
-      initial={{ opacity: 0, y: 16 }}
+      initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.05, duration: 0.4, ease: [0.16, 1, 0.3, 1] as const }}
-      whileTap={{ scale: 0.97 }}
-      className="flex-shrink-0 flex flex-col justify-between rounded-2xl p-4 cursor-pointer select-none"
-      style={{
-        width: 220,
-        minHeight: 160,
-        background: '#162B16',
-        border: '1px solid rgba(245,240,232,0.07)',
-      }}
+      transition={{ delay: index * 0.04, duration: 0.35, ease: [0.16, 1, 0.3, 1] as const }}
+      whileTap={{ scale: 0.985, opacity: 0.85 }}
+      className="flex overflow-hidden rounded-xl cursor-pointer select-none"
+      style={{ background: '#111E11', border: '1px solid rgba(245,240,232,0.06)' }}
       onClick={() => item.url && openUrl(item.url)}
       onKeyDown={e => { if ((e.key === 'Enter' || e.key === ' ') && item.url) openUrl(item.url); }}
     >
-      {/* Category badge */}
-      <div className="flex items-center justify-between mb-3">
-        <span
-          className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-medium tracking-[0.1em] uppercase"
-          style={{ background: `${meta.color}33`, color: badgeColor }}
+      {/* Left accent bar */}
+      <div style={{ width: 3, background: meta.accent, flexShrink: 0 }} />
+
+      {/* Content */}
+      <div className="flex-1 px-3.5 py-3">
+        {/* Top: category pill + external icon */}
+        <div className="flex items-center justify-between mb-2">
+          <span
+            className="flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-semibold tracking-[0.08em] uppercase"
+            style={{ background: meta.dim, color: meta.accent }}
+          >
+            <Icon size={8} strokeWidth={2.5} />
+            {isMr ? meta.labelMr : meta.labelEn}
+          </span>
+          {item.url && (
+            <ExternalLink size={12} strokeWidth={1.5} style={{ color: 'rgba(245,240,232,0.22)', flexShrink: 0 }} />
+          )}
+        </div>
+
+        {/* Headline */}
+        <p
+          className="text-[#F5F0E8] leading-snug font-light"
+          style={{ fontSize: '13.5px', letterSpacing: '-0.01em' }}
         >
-          <Icon size={9} strokeWidth={2} />
-          {isMr ? meta.labelMr : meta.labelEn}
-        </span>
-        {item.url && (
-          <ExternalLink size={11} strokeWidth={1.5} style={{ color: 'rgba(245,240,232,0.2)' }} />
-        )}
-      </div>
+          {title.length > 110 ? `${title.slice(0, 110)}…` : title}
+        </p>
 
-      {/* Headline */}
-      <p className="text-[#F5F0E8] font-light leading-snug flex-1" style={{ fontSize: '13px', letterSpacing: '-0.01em' }}>
-        {title.length > 90 ? `${title.slice(0, 90)}…` : title}
-      </p>
-
-      {/* Footer */}
-      <div className="flex items-center justify-between mt-3">
-        <span className="text-[10px] text-[rgba(245,240,232,0.3)]">{item.source}</span>
-        <span className="text-[10px] text-[rgba(245,240,232,0.25)]">{item.date}</span>
+        {/* Footer */}
+        <div className="flex items-center justify-between mt-2.5">
+          <span className="text-[10px] text-[rgba(245,240,232,0.28)] font-medium">{item.source}</span>
+          <span className="text-[10px] text-[rgba(245,240,232,0.22)]">{item.date}</span>
+        </div>
       </div>
     </motion.div>
   );
 }
 
-// ── SkeletonCard ──────────────────────────────────────────────────────────────
+// ── SkeletonRow ───────────────────────────────────────────────────────────────
 
-function SkeletonCard() {
+function SkeletonRow() {
   return (
     <div
-      className="flex-shrink-0 rounded-2xl p-4 animate-pulse"
-      style={{ width: 220, minHeight: 160, background: '#162B16', border: '1px solid rgba(245,240,232,0.07)' }}
+      className="flex overflow-hidden rounded-xl animate-pulse"
+      style={{ background: '#111E11', border: '1px solid rgba(245,240,232,0.05)', minHeight: 88 }}
     >
-      <div className="h-4 w-20 rounded-full bg-[rgba(245,240,232,0.06)] mb-3" />
-      <div className="h-3 w-full rounded bg-[rgba(245,240,232,0.06)] mb-2" />
-      <div className="h-3 w-4/5 rounded bg-[rgba(245,240,232,0.06)] mb-2" />
-      <div className="h-3 w-3/5 rounded bg-[rgba(245,240,232,0.06)]" />
-      <div className="mt-6 flex justify-between">
-        <div className="h-3 w-14 rounded bg-[rgba(245,240,232,0.04)]" />
-        <div className="h-3 w-10 rounded bg-[rgba(245,240,232,0.04)]" />
+      <div style={{ width: 3, background: 'rgba(245,240,232,0.08)', flexShrink: 0 }} />
+      <div className="flex-1 px-3.5 py-3">
+        <div className="h-4 w-20 rounded-full bg-[rgba(245,240,232,0.06)] mb-3" />
+        <div className="h-3 w-full rounded bg-[rgba(245,240,232,0.05)] mb-1.5" />
+        <div className="h-3 w-3/4 rounded bg-[rgba(245,240,232,0.05)] mb-4" />
+        <div className="flex justify-between">
+          <div className="h-2.5 w-20 rounded bg-[rgba(245,240,232,0.04)]" />
+          <div className="h-2.5 w-10 rounded bg-[rgba(245,240,232,0.04)]" />
+        </div>
       </div>
     </div>
   );
