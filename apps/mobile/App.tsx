@@ -86,7 +86,7 @@ const App: React.FC = () => {
 
   const renderScreen = () => {
     switch (state.currentScreen) {
-      case 'HOME':      return <HomeScreen lang={state.userLanguage} location={state.location} onViewDetails={(p) => changeScreen('DETAILS', p)} onOpenAssistant={() => changeScreen('ASSISTANT')} onOpenExplore={() => changeScreen('EXPLORE')} onOpenMessages={() => changeScreen('MESSAGES')} />;
+      case 'HOME':      return <HomeScreen lang={state.userLanguage} location={state.location} onViewDetails={(p) => changeScreen('DETAILS', p)} onOpenAssistant={() => changeScreen('ASSISTANT')} onOpenExplore={() => changeScreen('EXPLORE')} onOpenMessages={() => changeScreen('MESSAGES')} onOpenSell={() => changeScreen('SELL')} />;
       case 'DETAILS':   return <DetailsScreen
         product={state.selectedProduct!}
         lang={state.userLanguage}
@@ -127,7 +127,7 @@ const App: React.FC = () => {
           }}
         />
       );
-      default: return <HomeScreen lang={state.userLanguage} location={state.location} onViewDetails={(p) => changeScreen('DETAILS', p)} onOpenAssistant={() => changeScreen('ASSISTANT')} onOpenExplore={() => changeScreen('EXPLORE')} onOpenMessages={() => changeScreen('MESSAGES')} />;
+      default: return <HomeScreen lang={state.userLanguage} location={state.location} onViewDetails={(p) => changeScreen('DETAILS', p)} onOpenAssistant={() => changeScreen('ASSISTANT')} onOpenExplore={() => changeScreen('EXPLORE')} onOpenMessages={() => changeScreen('MESSAGES')} onOpenSell={() => changeScreen('SELL')} />;
     }
   };
 

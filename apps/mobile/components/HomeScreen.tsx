@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, lazy, Suspense } from 'react';
-import { Search, Filter, Scale, MessageCircle, Newspaper, TrendingUp, ChevronRight, RotateCcw, X, MapPin } from 'lucide-react';
+import { Search, Filter, Scale, MessageCircle, Newspaper, TrendingUp, ChevronRight, RotateCcw, X, MapPin, PlusCircle } from 'lucide-react';
 import { haptic } from '../utils/haptic.ts';
 import { Language, Product } from '../types.ts';
 import { PRODUCTS, SELLERS, CATEGORIES, TRANSLATIONS } from '../constants.tsx';
@@ -21,6 +21,7 @@ interface HomeScreenProps {
   onOpenAssistant: () => void;
   onOpenExplore: () => void;
   onOpenMessages: () => void;
+  onOpenSell?: () => void;
 }
 
 const SAVED_KEY = 'agrimart_saved';
@@ -54,7 +55,7 @@ function getUserListings(): Product[] {
   } catch { return []; }
 }
 
-export default function HomeScreen({ lang, location, onViewDetails, onOpenAssistant, onOpenExplore, onOpenMessages }: HomeScreenProps) {
+export default function HomeScreen({ lang, location, onViewDetails, onOpenAssistant, onOpenExplore, onOpenMessages, onOpenSell }: HomeScreenProps) {
   const [search, setSearch]           = useState('');
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [activeCategory, setActiveCategory] = useState('all');
@@ -213,7 +214,41 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
         </button>
       </div>
 
-      {/* ── 3. PRODUCT LISTINGS ──────────────────────────────────── */}
+      {/* ── 3. SELL CTA ──────────────────────────────────────────── */}
+      {onOpenSell && (
+        <div style={{ padding: '0.75rem 1.25rem 0' }}>
+          <button
+            onClick={() => { haptic.medium(); onOpenSell(); }}
+            style={{
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.65rem',
+              padding: '1.1rem 1.5rem',
+              borderRadius: '1rem',
+              background: 'linear-gradient(135deg, #2D5A1B 0%, #3D7A25 100%)',
+              border: '1.5px solid rgba(74,140,42,0.5)',
+              cursor: 'pointer',
+              touchAction: 'manipulation',
+              WebkitTapHighlightColor: 'transparent',
+              boxShadow: '0 4px 16px rgba(45,90,27,0.35)',
+            }}
+          >
+            <PlusCircle size={22} style={{ color: '#F5F0E8', flexShrink: 0 }} />
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+              <span style={{ fontSize: '18px', fontWeight: 700, color: '#F5F0E8', letterSpacing: '-0.01em', lineHeight: 1.2 }}>
+                आपले उत्पादन विका
+              </span>
+              <span style={{ fontSize: '12px', fontWeight: 400, color: 'rgba(245,240,232,0.65)', letterSpacing: '0.02em' }}>
+                Sell Your Produce
+              </span>
+            </div>
+          </button>
+        </div>
+      )}
+
+      {/* ── 4. PRODUCT LISTINGS ──────────────────────────────────── */}
       <section className="px-5 pt-6">
 
         {/* Section header */}
