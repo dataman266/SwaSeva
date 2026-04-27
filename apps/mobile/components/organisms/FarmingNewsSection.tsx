@@ -3,12 +3,27 @@ import { motion } from 'motion/react';
 import { Newspaper, TrendingUp, CloudRain, Landmark, ExternalLink } from 'lucide-react';
 import SectionReveal from '../atoms/SectionReveal.tsx';
 
+// Opens URL in the system browser — works in both Capacitor WebView and regular browsers
 function openUrl(url: string) {
-  window.open(url, '_system');
+  const a = document.createElement('a');
+  a.href = url;
+  a.target = '_blank';
+  a.rel = 'noopener noreferrer';
+  a.click();
+}
+
+// AbortSignal.timeout() is not available in older Android WebViews — use this instead
+function fetchWithTimeout(url: string, ms: number): Promise<Response> {
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), ms);
+  return fetch(url, { signal: ctrl.signal }).finally(() => clearTimeout(timer));
 }
 
 // Only use backend if explicitly configured — localhost:3000 is never reachable in production
 const BACKEND_URL = (import.meta as { env?: Record<string, string> }).env?.VITE_API_URL ?? null;
+
+const CACHE_KEY = 'agrimart_news_cache';
+const CACHE_TTL = 30 * 60 * 1000; // 30 minutes
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -34,9 +49,9 @@ interface FarmingNewsSectionProps {
 
 function guessCategory(title: string): NewsCategory {
   const t = title.toLowerCase();
-  if (t.includes('पाऊस') || t.includes('हवामान') || t.includes('rain') || t.includes('weather') || t.includes('monsoon')) return 'weather';
-  if (t.includes('योजना') || t.includes('अनुदान') || t.includes('scheme') || t.includes('subsidy') || t.includes('msp') || t.includes('kisan') || t.includes('किसान')) return 'scheme';
-  if (t.includes('भाव') || t.includes('दर') || t.includes('price') || t.includes('apmc') || t.includes('market') || t.includes('quintal') || t.includes('क्विंटल')) return 'market';
+  if (t.includes('rain') || t.includes('weather') || t.includes('monsoon') || t.includes('drought') || t.includes('flood') || t.includes('climate')) return 'weather';
+  if (t.includes('scheme') || t.includes('subsidy') || t.includes('msp') || t.includes('kisan') || t.includes('pm kisan') || t.includes('government') || t.includes('ministry') || t.includes('policy')) return 'scheme';
+  if (t.includes('price') || t.includes('mandi') || t.includes('market') || t.includes('apmc') || t.includes('quintal') || t.includes('crop') || t.includes('harvest') || t.includes('yield')) return 'market';
   return 'general';
 }
 
@@ -54,9 +69,26 @@ function relativeDate(dateStr: string): string {
   }
 }
 
-// Returns a relative-date string for N days ago — keeps static fallback dates fresh
 function daysAgo(n: number): string {
   return relativeDate(new Date(Date.now() - n * 86_400_000).toISOString());
+}
+
+// ── Session cache ─────────────────────────────────────────────────────────────
+
+interface CacheEntry { items: NewsItem[]; ts: number }
+
+function readCache(): NewsItem[] | null {
+  try {
+    const raw = sessionStorage.getItem(CACHE_KEY);
+    if (!raw) return null;
+    const entry = JSON.parse(raw) as CacheEntry;
+    if (Date.now() - entry.ts > CACHE_TTL) return null;
+    return entry.items;
+  } catch { return null; }
+}
+
+function writeCache(items: NewsItem[]) {
+  try { sessionStorage.setItem(CACHE_KEY, JSON.stringify({ items, ts: Date.now() })); } catch { /* ignore */ }
 }
 
 // ── Static fallback — dates computed at call time so they never look stale ───
@@ -70,11 +102,11 @@ function buildStaticNews(): NewsItem[] {
       category: 'market',
       date: daysAgo(0),
       source: 'APMC Nashik',
-      url: 'https://www.apmc.biz/',
+      url: 'https://agmarknet.gov.in/',
     },
     {
       id: 'n2',
-      titleEn: 'IMD forecasts above-normal monsoon for Maharashtra; sowing season expected on time',
+      titleEn: 'IMD forecasts above-normal monsoon for Maharashtra; sowing expected on time',
       titleMr: 'महाराष्ट्रात सामान्यापेक्षा जास्त पाऊस — IMD अंदाज; पेरणी वेळेत होण्याची शक्यता',
       category: 'weather',
       date: daysAgo(1),
@@ -83,7 +115,7 @@ function buildStaticNews(): NewsItem[] {
     },
     {
       id: 'n3',
-      titleEn: 'PM Kisan 18th instalment: ₹2,000 to be credited; check eligibility now',
+      titleEn: 'PM Kisan 18th instalment: ₹2,000 to be credited — check eligibility now',
       titleMr: 'PM किसान १८वा हप्ता: ₹२,०००  थेट खात्यात — पात्रता आत्ताच तपासा',
       category: 'scheme',
       date: daysAgo(2),
@@ -115,30 +147,46 @@ function buildStaticNews(): NewsItem[] {
       category: 'market',
       date: daysAgo(7),
       source: 'APMC Latur',
-      url: 'https://www.apmc.biz/',
+      url: 'https://enam.gov.in/web/',
     },
   ];
 }
 
 // ── RSS sources via rss2json proxy ────────────────────────────────────────────
+// Google News RSS feeds are highly reliable and always return fresh articles
 
 const RSS_SOURCES = [
-  { url: 'https://agrowon.com/feed/', source: 'Agrowon' },
-  { url: 'https://krishijagran.com/feed/', source: 'Krishi Jagran' },
+  {
+    url: 'https://news.google.com/rss/search?q=agriculture+farming+india+crop+price&hl=en-IN&gl=IN&ceid=IN:en',
+    source: 'Google News',
+  },
+  {
+    url: 'https://news.google.com/rss/search?q=kisan+mandi+fasal+bhav+india&hl=hi&gl=IN&ceid=IN:hi',
+    source: 'Google News',
+  },
 ];
 
+interface RssItem {
+  title: string;
+  pubDate: string;
+  link: string;
+  source?: { title?: string };
+}
+
 async function fetchRssSource(feedUrl: string, source: string): Promise<NewsItem[]> {
-  const proxy = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}&count=6`;
-  const res = await fetch(proxy, { signal: AbortSignal.timeout(8_000) });
-  const data = await res.json() as { status: string; items?: Array<{ title: string; pubDate: string; link: string }> };
+  const proxy = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}&count=8`;
+  const res  = await fetchWithTimeout(proxy, 9_000);
+  if (!res.ok) return [];
+  const data = await res.json() as { status: string; items?: RssItem[] };
   if (data.status !== 'ok' || !Array.isArray(data.items) || data.items.length === 0) return [];
-  return data.items.slice(0, 6).map((item, i) => ({
-    id:       `${source.toLowerCase().replace(/\s+/g, '-')}-${i}`,
+
+  return data.items.slice(0, 8).map((item, i) => ({
+    id:       `${source.toLowerCase().replace(/\s+/g, '-')}-${i}-${Date.now()}`,
     titleEn:  item.title,
     titleMr:  item.title,
     category: guessCategory(item.title),
     date:     relativeDate(item.pubDate),
-    source,
+    source:   item.source?.title ?? source,
     url:      item.link || undefined,
     isLive:   true,
   }));
@@ -164,6 +212,16 @@ export default function FarmingNewsSection({ lang, location }: FarmingNewsSectio
 
   useEffect(() => {
     let cancelled = false;
+
+    // Serve from session cache immediately if fresh
+    const cached = readCache();
+    if (cached) {
+      setNews(cached);
+      setIsLive(true);
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
 
     async function loadNews() {
@@ -173,12 +231,13 @@ export default function FarmingNewsSection({ lang, location }: FarmingNewsSectio
           const params = location && !['Detecting...', 'Mandi', 'Rural MH'].includes(location)
             ? `?location=${encodeURIComponent(location)}`
             : '';
-          const res  = await fetch(`${BACKEND_URL}/news/farming${params}`, { signal: AbortSignal.timeout(6_000) });
+          const res  = await fetchWithTimeout(`${BACKEND_URL}/news/farming${params}`, 6_000);
           const json = await res.json() as { ok: boolean; items?: NewsItem[] };
           if (!cancelled && json.ok && Array.isArray(json.items) && json.items.length > 0) {
             setNews(json.items);
             setIsLive(true);
             setLoading(false);
+            writeCache(json.items);
             return;
           }
         } catch { /* fall through */ }
@@ -189,29 +248,31 @@ export default function FarmingNewsSection({ lang, location }: FarmingNewsSectio
         const results = await Promise.allSettled(
           RSS_SOURCES.map(s => fetchRssSource(s.url, s.source))
         );
+
         const fetched: NewsItem[] = [];
         for (const r of results) {
           if (r.status === 'fulfilled') fetched.push(...r.value);
         }
 
         if (!cancelled && fetched.length > 0) {
-          // Deduplicate by URL, then show newest first
+          // Deduplicate by URL, cap at 12 items
           const seen = new Set<string>();
           const deduped = fetched.filter(item => {
             const key = item.url ?? item.titleEn;
             if (seen.has(key)) return false;
             seen.add(key);
             return true;
-          }).slice(0, 8);
+          }).slice(0, 12);
 
           setNews(deduped);
           setIsLive(true);
           setLoading(false);
+          writeCache(deduped);
           return;
         }
       } catch { /* fall through to static */ }
 
-      // ── Tier 3: Static curated (always fresh dates via buildStaticNews) ──────
+      // ── Tier 3: Static curated (dates always computed fresh) ─────────────────
       if (!cancelled) {
         setNews(buildStaticNews());
         setLoading(false);
@@ -250,17 +311,16 @@ export default function FarmingNewsSection({ lang, location }: FarmingNewsSectio
       {/* Horizontal scroll cards */}
       <div className="flex gap-4 px-6 overflow-x-auto scrollbar-hide pb-2">
         {loading
-          ? Array.from({ length: 3 }).map((_, i) => <SkeletonCard key={i} />)
+          ? Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />)
           : news.map((item, idx) => (
               <NewsCard key={item.id} item={item} isMr={isMr} index={idx} />
             ))
         }
       </div>
 
-      {/* Source attribution when live */}
       {isLive && !loading && (
         <p className="px-6 mt-4 text-[10px] text-[rgba(245,240,232,0.2)] font-light" style={{ letterSpacing: '0.04em' }}>
-          {isMr ? 'स्रोत: Agrowon · Krishi Jagran' : 'Source: Agrowon · Krishi Jagran'}
+          {isMr ? 'स्रोत: Google News India' : 'Source: Google News India'}
         </p>
       )}
     </section>
@@ -285,7 +345,7 @@ function NewsCard({ item, isMr, index }: { item: NewsItem; isMr: boolean; index:
       aria-label={title}
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.06, duration: 0.4, ease: [0.16, 1, 0.3, 1] as const }}
+      transition={{ delay: index * 0.05, duration: 0.4, ease: [0.16, 1, 0.3, 1] as const }}
       whileTap={{ scale: 0.97 }}
       className="flex-shrink-0 flex flex-col justify-between rounded-2xl p-4 cursor-pointer select-none"
       style={{
