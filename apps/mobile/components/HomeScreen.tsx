@@ -238,10 +238,10 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
             <PlusCircle size={22} style={{ color: '#F5F0E8', flexShrink: 0 }} />
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
               <span style={{ fontSize: '18px', fontWeight: 700, color: '#F5F0E8', letterSpacing: '-0.01em', lineHeight: 1.2 }}>
-                आपले उत्पादन विका
+                शेती सामान विका
               </span>
               <span style={{ fontSize: '12px', fontWeight: 400, color: 'rgba(245,240,232,0.65)', letterSpacing: '0.02em' }}>
-                Sell Your Produce
+                Sell Agri Items
               </span>
             </div>
           </button>
