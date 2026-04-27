@@ -1,5 +1,14 @@
-import React, { useState, useEffect, useCallback, lazy, Suspense } from 'react';
-import { Search, Filter, Scale, MessageCircle, Newspaper, TrendingUp, ChevronRight, RotateCcw, X, MapPin, PlusCircle } from 'lucide-react';
+import React, { useState, useEffect, useCallback, useRef, lazy, Suspense } from 'react';
+import { Search, Filter, Scale, MessageCircle, Newspaper, TrendingUp, ChevronRight, RotateCcw, X, MapPin, PlusCircle, Mic, MicOff } from 'lucide-react';
+
+declare global {
+  interface Window {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    SpeechRecognition: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    webkitSpeechRecognition: any;
+  }
+}
 import { haptic } from '../utils/haptic.ts';
 import { Language, Product } from '../types.ts';
 import { PRODUCTS, SELLERS, CATEGORIES, TRANSLATIONS } from '../constants.tsx';
@@ -69,6 +78,10 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
   const [priceMin, setPriceMin]       = useState('');
   const [priceMax, setPriceMax]       = useState('');
   const [userListings, setUserListings] = useState<ReturnType<typeof getUserListings>>(() => getUserListings());
+  const [isListening, setIsListening] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const recognitionRef = useRef<any>(null);
+  const hasSpeech = typeof window !== 'undefined' && ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window);
 
   // Simulate initial product load (800ms)
   useEffect(() => {
@@ -80,6 +93,29 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
   useEffect(() => {
     setUserListings(getUserListings());
   }, []);
+
+  const startVoiceSearch = useCallback(() => {
+    if (!hasSpeech) return;
+    if (isListening) {
+      recognitionRef.current?.stop();
+      return;
+    }
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const rec = new SR();
+    rec.lang = lang === Language.MARATHI ? 'mr-IN' : 'en-IN';
+    rec.interimResults = false;
+    rec.maxAlternatives = 1;
+    rec.onstart  = () => { setIsListening(true); haptic.light(); };
+    rec.onresult = (e) => {
+      const transcript = e.results[0][0].transcript;
+      setSearch(transcript);
+      haptic.light();
+    };
+    rec.onerror  = () => { setIsListening(false); };
+    rec.onend    = () => { setIsListening(false); };
+    recognitionRef.current = rec;
+    rec.start();
+  }, [hasSpeech, isListening, lang]);
 
   const handleRefresh = useCallback(async () => {
     setRefreshing(true);
@@ -310,6 +346,24 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
               className="flex-1 bg-transparent border-none outline-none text-[#F5F0E8] placeholder:text-[rgba(245,240,232,0.5)] font-light"
               style={{ fontSize: '16px' }}
             />
+            {hasSpeech && (
+              <button
+                onClick={startVoiceSearch}
+                style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  width: 36, height: 36, borderRadius: '50%', flexShrink: 0,
+                  touchAction: 'manipulation',
+                  WebkitTapHighlightColor: 'transparent',
+                  background: isListening ? 'rgba(45,90,27,0.4)' : 'transparent',
+                  border: isListening ? '1.5px solid rgba(74,140,42,0.6)' : 'none',
+                  transition: 'background 0.15s, border 0.15s',
+                }}
+              >
+                {isListening
+                  ? <MicOff size={16} style={{ color: '#4CAF50' }} className="animate-pulse" />
+                  : <Mic size={16} style={{ color: 'rgba(245,240,232,0.45)' }} />}
+              </button>
+            )}
             <button
               onClick={() => setShowFilters(true)}
               className="relative transition-colors"
