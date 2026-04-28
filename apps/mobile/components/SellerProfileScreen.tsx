@@ -37,7 +37,7 @@ export default function SellerProfileScreen({ sellerId, lang, onBack, onViewProd
   const handleEnquiry = () => {
     const autoMsg = isMr
       ? `नमस्कार ${seller.name}, मला तुमच्या उत्पादनांबद्दल अधिक माहिती हवी आहे.`
-      : `Hi ${seller.name}, I'd like to know more about your products on Apla AgriMart.`;
+      : `Hi ${seller.name}, I'd like to know more about your products on KrishiSetu.`;
 
     const connections: object[] = JSON.parse(localStorage.getItem(CONNECTIONS_KEY) || '[]');
     const existing = connections.find((c: any) => c.sellerId === seller.id && !c.productId);

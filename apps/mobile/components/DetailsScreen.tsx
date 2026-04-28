@@ -58,7 +58,7 @@ export default function DetailsScreen({ product, lang, onBack, onViewSeller, onS
   const handleShare = () => {
     const productName = isMr ? product.nameMr : product.name;
     const productUnit = isMr ? product.unitMr : product.unit;
-    const text = `${productName} — ₹${product.price}/${productUnit} on Apla AgriMart`;
+    const text = `${productName} — ₹${product.price}/${productUnit} on KrishiSetu`;
     const url  = `https://agrimart.app/listing/${product.id}`;
     if (navigator.share) {
       navigator.share({ title: productName, text, url }).catch(() => {});

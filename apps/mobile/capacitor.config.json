@@ -1,7 +1,7 @@
 
 {
   "appId": "com.aplaagrimart.app",
-  "appName": "Apla Agri Mart",
+  "appName": "KrishiSetu",
   "webDir": "dist",
   "bundledWebRuntime": false,
   "server": {

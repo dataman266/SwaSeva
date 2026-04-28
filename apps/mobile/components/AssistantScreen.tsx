@@ -23,8 +23,8 @@ export default function AssistantScreen({ lang, onBack }: AssistantScreenProps) 
   const [messages, setMessages] = useState<Message[]>([{
     role: 'ai',
     text: isMr
-      ? 'नमस्कार! मी तुमचा AgriMart सहाय्यक आहे. मी तुम्हाला कशी मदत करू शकतो?'
-      : 'Namaste! I am your AgriMart Assistant. How can I help you today?',
+      ? 'नमस्कार! मी तुमचा KrishiSetu सहाय्यक आहे. मी तुम्हाला कशी मदत करू शकतो?'
+      : 'Namaste! I am your KrishiSetu Assistant. How can I help you today?',
     time: now(),
   }]);
   const [input, setInput]     = useState('');

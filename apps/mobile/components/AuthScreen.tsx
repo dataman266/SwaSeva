@@ -109,7 +109,7 @@ function AuthShell({ children }: { children: React.ReactNode }) {
         <div className="flex items-center gap-2">
           <span className="text-2xl">🌾</span>
           <div>
-            <p className="text-[#F5F0E8] font-light" style={{ fontSize: 18, letterSpacing: '-0.02em' }}>AgriMart</p>
+            <p className="text-[#F5F0E8] font-light" style={{ fontSize: 18, letterSpacing: '-0.02em' }}>KrishiSetu</p>
             <p className="text-[10px] font-medium tracking-[0.2em] uppercase" style={{ color: '#E8C84A', opacity: 0.7 }}>थेट शेतातून / Direct from Farm</p>
           </div>
         </div>
@@ -189,7 +189,7 @@ function LoginView({ isMr, onRegister, onForgot, onSuccess }: {
         {isMr ? 'लॉग इन करा' : 'Welcome back'}
       </h1>
       <p className="text-[rgba(245,240,232,0.45)] font-light mb-8" style={{ fontSize: 13 }}>
-        {isMr ? 'तुमच्या खात्यात प्रवेश करा' : 'Sign in to your AgriMart account'}
+        {isMr ? 'तुमच्या खात्यात प्रवेश करा' : 'Sign in to your KrishiSetu account'}
       </p>
 
       <div className="flex flex-col gap-4">

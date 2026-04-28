@@ -237,9 +237,9 @@ export const TRANSLATIONS = {
     noMessages: 'No Messages Yet',
     noMessagesDesc: 'Send an enquiry on any listing to start a conversation.',
     enquiryAutoMsg: (productName: string, price: number, unit: string) =>
-      `Hi, I'm interested in your ${productName} listed at ₹${price}/${unit} on Apla AgriMart. Please share more details.`,
+      `Hi, I'm interested in your ${productName} listed at ₹${price}/${unit} on KrishiSetu. Please share more details.`,
     enquiryAutoMsgMr: (productName: string, price: number, unit: string) =>
-      `नमस्कार, मला Apla AgriMart वर तुमचे ${productName} (₹${price}/${unit}) पाहिले. कृपया अधिक माहिती द्या.`,
+      `नमस्कार, मला KrishiSetu वर तुमचे ${productName} (₹${price}/${unit}) पाहिले. कृपया अधिक माहिती द्या.`,
   },
   mr: {
     home: 'बाजार',
@@ -285,8 +285,8 @@ export const TRANSLATIONS = {
     noMessages: 'अद्याप संदेश नाहीत',
     noMessagesDesc: 'संभाषण सुरू करण्यासाठी कोणत्याही लिस्टिंगवर चौकशी पाठवा.',
     enquiryAutoMsg: (productName: string, price: number, unit: string) =>
-      `नमस्कार, मला Apla AgriMart वर तुमचे ${productName} (₹${price}/${unit}) पाहिले. कृपया अधिक माहिती द्या.`,
+      `नमस्कार, मला KrishiSetu वर तुमचे ${productName} (₹${price}/${unit}) पाहिले. कृपया अधिक माहिती द्या.`,
     enquiryAutoMsgMr: (productName: string, price: number, unit: string) =>
-      `नमस्कार, मला Apla AgriMart वर तुमचे ${productName} (₹${price}/${unit}) पाहिले. कृपया अधिक माहिती द्या.`,
+      `नमस्कार, मला KrishiSetu वर तुमचे ${productName} (₹${price}/${unit}) पाहिले. कृपया अधिक माहिती द्या.`,
   }
 };

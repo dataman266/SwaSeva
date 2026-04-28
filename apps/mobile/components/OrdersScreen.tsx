@@ -87,7 +87,7 @@ const MOCK_PURCHASED: OrderEntry[] = [
     counterpartyLocation: 'Satara Road, Pune',
     counterpartyRating: 3.9,
     paymentMethod: 'Bank Transfer (NEFT)',
-    transportMode: 'AgriMart Logistics',
+    transportMode: 'KrishiSetu Logistics',
     notes: 'Handle with care — granular fertilizer',
   },
   {
@@ -161,7 +161,7 @@ const MOCK_SOLD: OrderEntry[] = [
     counterpartyPhone: '+912012345678',
     counterpartyLocation: 'Hadapsar, Pune',
     paymentMethod: 'Bank Transfer',
-    transportMode: 'AgriMart Logistics',
+    transportMode: 'KrishiSetu Logistics',
     notes: 'Corporate buyer — invoice required',
   },
   {
@@ -376,7 +376,7 @@ function OrderDetailPanel({
             </a>
             <a
               href={`https://wa.me/${order.counterpartyPhone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
-                `Hi, regarding order ${order.id} on Apla AgriMart`
+                `Hi, regarding order ${order.id} on KrishiSetu`
               )}`}
               target="_blank"
               rel="noopener noreferrer"
@@ -448,7 +448,7 @@ function OrderDetailPanel({
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', opacity: 0.2, paddingTop: '0.5rem' }}>
           <ShieldCheck size={11} />
           <span style={{ fontSize: '9px', fontWeight: 500, letterSpacing: '0.2em', textTransform: 'uppercase' }}>
-            {isMr ? 'Apla AgriMart संरक्षित' : 'Apla AgriMart Protected'}
+            {isMr ? 'KrishiSetu संरक्षित' : 'KrishiSetu Protected'}
           </span>
         </div>
       </div>
@@ -674,7 +674,7 @@ export default function OrdersScreen({ lang }: { lang: Language }) {
           <div className="flex items-center justify-center gap-2 pt-2 opacity-25">
             <Package size={11} />
             <span className="text-[9px] font-medium tracking-[0.2em] uppercase">
-              {isMr ? 'Apla AgriMart लॉजिस्टिक्स' : 'Apla AgriMart Logistics'}
+              {isMr ? 'KrishiSetu लॉजिस्टिक्स' : 'KrishiSetu Logistics'}
             </span>
           </div>
         </SectionReveal>
