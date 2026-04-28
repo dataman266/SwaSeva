@@ -377,17 +377,21 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
           </div>
         </div>
 
-        {/* Category chips */}
-        <div className="flex gap-2.5 overflow-x-auto scrollbar-hide pb-5">
-          <CategoryChip
+        {/* Category tiles */}
+        <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-5">
+          <CategoryTile
+            icon="🛒"
             label={isMr ? 'सर्व' : 'All'}
+            gradient="linear-gradient(145deg,#1A3A1A,#2D5A1B)"
             active={activeCategory === 'all'}
             onClick={() => setActiveCategory('all')}
           />
           {CATEGORIES.map(cat => (
-            <CategoryChip
+            <CategoryTile
               key={cat.id}
-              label={`${cat.icon} ${isMr ? cat.nameMr : cat.name}`}
+              icon={cat.icon}
+              label={isMr ? cat.nameMr : cat.name}
+              gradient={CAT_GRADIENTS[cat.id] ?? 'linear-gradient(145deg,#1A2D1A,#243D24)'}
               active={activeCategory === cat.name}
               onClick={() => setActiveCategory(cat.name)}
             />
@@ -657,20 +661,49 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
   );
 }
 
-// ── CategoryChip ──────────────────────────────────────────────────────────────
-interface ChipProps { label: string; active: boolean; onClick: () => void; }
+// ── Category tile gradients ───────────────────────────────────────────────────
+const CAT_GRADIENTS: Record<string, string> = {
+  c1: 'linear-gradient(145deg,#1A3320,#2A5C35)',  // Seeds — deep green
+  c2: 'linear-gradient(145deg,#142B14,#265226)',  // Saplings — forest
+  c3: 'linear-gradient(145deg,#2E2010,#5C3D1A)',  // Fertilizer — amber-brown
+  c4: 'linear-gradient(145deg,#101A2E,#1A2F52)',  // Pesticides — navy
+  c5: 'linear-gradient(145deg,#1E1E1E,#3A3A3A)',  // Tools — steel
+};
 
-function CategoryChip({ label, active, onClick }: ChipProps) {
+// ── CategoryTile ──────────────────────────────────────────────────────────────
+interface TileProps { icon: string; label: string; gradient: string; active: boolean; onClick: () => void; }
+
+function CategoryTile({ icon, label, gradient, active, onClick }: TileProps) {
   return (
     <button
       onClick={onClick}
-      className={`flex-shrink-0 px-5 py-2.5 rounded-full border-2 text-[13px] font-semibold tracking-[0.04em] transition-all active:scale-95 ${
-        active
-          ? 'bg-[#3A7522] border-[#3A7522] text-[#F5F0E8]'
-          : 'bg-transparent border-[rgba(245,240,232,0.35)] text-[rgba(245,240,232,0.85)]'
-      }`}
+      style={{
+        flexShrink: 0,
+        width: 76,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '0.35rem',
+        padding: '0.75rem 0.5rem',
+        borderRadius: '1rem',
+        background: gradient,
+        border: active ? '2px solid #4A9A2A' : '2px solid rgba(245,240,232,0.1)',
+        boxShadow: active ? '0 0 0 2px rgba(74,154,42,0.25)' : 'none',
+        touchAction: 'manipulation',
+        WebkitTapHighlightColor: 'transparent',
+        transition: 'border-color 0.15s, box-shadow 0.15s',
+      }}
     >
-      {label}
+      <span style={{ fontSize: 28, lineHeight: 1 }}>{icon}</span>
+      <span style={{
+        fontSize: 11,
+        fontWeight: active ? 700 : 500,
+        color: active ? '#F5F0E8' : 'rgba(245,240,232,0.7)',
+        textAlign: 'center',
+        lineHeight: 1.2,
+        letterSpacing: '0.01em',
+      }}>{label}</span>
     </button>
   );
 }
