@@ -38,23 +38,7 @@ export default function Header({
       <div className="flex items-center justify-between px-5 h-14">
 
         {/* ── Logo ─────────────────────────────────────────────── */}
-        <div className="flex flex-col gap-0.5">
-          <Logo height={30} />
-          {location && location !== 'Detecting...' && (
-            <span
-              style={{
-                fontSize: '11px',
-                fontWeight: 600,
-                letterSpacing: '0.1em',
-                color: 'rgba(212,196,160,0.9)',
-                textTransform: 'uppercase',
-                paddingLeft: '2px',
-              }}
-            >
-              {location}
-            </span>
-          )}
-        </div>
+        <Logo height={30} />
 
         {/* ── Right controls ───────────────────────────────────── */}
         <div className="flex items-center gap-1.5">
