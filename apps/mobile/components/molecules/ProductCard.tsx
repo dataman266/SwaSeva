@@ -183,18 +183,18 @@ export default function ProductCard({
             <a
               href={`tel:${seller.phone}`}
               onClick={e => e.stopPropagation()}
-              className="flex items-center justify-center gap-2 flex-1 h-12 rounded-2xl border-2 border-[rgba(245,240,232,0.25)] text-[rgba(245,240,232,0.85)] text-[14px] font-semibold active:scale-95 transition-all"
-              style={{ touchAction: 'manipulation' }}
-            >
-              <Phone size={15} className="text-[#E8C84A]" />
-              {isMr ? 'कॉल' : 'Call'}
-            </a>
-            <button
-              onClick={onEnquiry}
               className="flex items-center justify-center gap-2 flex-1 h-12 rounded-2xl text-[#F5F0E8] text-[14px] font-semibold active:scale-95 transition-all"
               style={{ background: '#3A7522', touchAction: 'manipulation' }}
             >
-              <MessageSquare size={15} />
+              <Phone size={15} />
+              {isMr ? 'विक्रेत्याला कॉल करा' : 'Call Seller'}
+            </a>
+            <button
+              onClick={onEnquiry}
+              className="flex items-center justify-center gap-2 flex-1 h-12 rounded-2xl border-2 border-[rgba(245,240,232,0.25)] text-[rgba(245,240,232,0.85)] text-[14px] font-semibold active:scale-95 transition-all"
+              style={{ touchAction: 'manipulation' }}
+            >
+              <MessageSquare size={15} className="text-[#E8C84A]" />
               {isMr ? 'चौकशी' : 'Enquiry'}
             </button>
           </div>
