@@ -112,7 +112,7 @@ export class NewsService {
     try {
       const res = await fetch(feed.url, {
         signal: controller.signal,
-        headers: { 'User-Agent': 'AgriMart/1.0 (farming app; Maharashtra)' },
+        headers: { 'User-Agent': 'Swaseva/1.0 (farming app; Maharashtra)' },
       });
 
       if (!res.ok) throw new Error(`HTTP ${res.status}`);

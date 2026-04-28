@@ -6,7 +6,7 @@ import {
   ChevronRight, ArrowLeft, Phone, MessageSquare, Star, User,
   MapPin, Calendar, IndianRupee, ShieldCheck,
 } from 'lucide-react';
-import { TRANSLATIONS } from '../constants.tsx';
+import { getTranslations } from '../constants.tsx';
 import PillButton from './atoms/PillButton.tsx';
 import SectionReveal from './atoms/SectionReveal.tsx';
 
@@ -444,7 +444,7 @@ function OrderDetailPanel({
           </div>
         </div>
 
-        {/* AgriMart badge */}
+        {/* Swaseva badge */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', opacity: 0.2, paddingTop: '0.5rem' }}>
           <ShieldCheck size={11} />
           <span style={{ fontSize: '9px', fontWeight: 500, letterSpacing: '0.2em', textTransform: 'uppercase' }}>
@@ -524,7 +524,7 @@ function OrderCard({
 
 // ── Main screen ───────────────────────────────────────────────────────────────
 export default function OrdersScreen({ lang }: { lang: Language }) {
-  const t    = TRANSLATIONS[lang === Language.ENGLISH ? 'en' : 'mr'];
+  const t    = getTranslations(lang);
   const isMr = lang === Language.MARATHI;
 
   const [tab, setTab] = useState<OrderTab>('purchased');

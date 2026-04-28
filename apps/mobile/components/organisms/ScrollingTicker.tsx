@@ -57,7 +57,7 @@ export default function ScrollingTicker({
   );
 }
 
-// ── Preset data for AgriMart partner / category ticker ──────────────────────
+// ── Preset data for Swaseva partner / category ticker ───────────────────────
 
 export const AGRI_TICKER_ITEMS: TickerItem[] = [
   { emoji: '🌾', label: 'Wheat · गहू' },

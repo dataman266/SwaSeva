@@ -1,9 +1,16 @@
 
 export enum Language {
-  ENGLISH = 'en',
-  MARATHI = 'mr',
-  HINDI = 'hi', // Keeping for enum support if needed, but primary focus is MR
-  KANNADA = 'kn'
+  ENGLISH   = 'en',
+  MARATHI   = 'mr',
+  HINDI     = 'hi',
+  GUJARATI  = 'gu',
+  TELUGU    = 'te',
+  PUNJABI   = 'pa',
+  KANNADA   = 'kn',
+  TAMIL     = 'ta',
+  BENGALI   = 'bn',
+  ODIA      = 'or',
+  MALAYALAM = 'ml',
 }
 
 export interface Seller {

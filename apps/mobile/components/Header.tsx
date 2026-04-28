@@ -1,8 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { Languages, Bell } from 'lucide-react';
+import { Languages, Bell, ChevronDown } from 'lucide-react';
 import { Language } from '../types.ts';
 import Logo from './Logo.tsx';
 import CartBadge from './atoms/CartBadge.tsx';
+import LanguagePicker from './LanguagePicker.tsx';
+
+const LANG_SHORT: Record<Language, string> = {
+  [Language.ENGLISH]:   'EN',
+  [Language.HINDI]:     'हि',
+  [Language.MARATHI]:   'मर',
+  [Language.GUJARATI]:  'ગુ',
+  [Language.TELUGU]:    'తె',
+  [Language.TAMIL]:     'த',
+  [Language.PUNJABI]:   'ਪੰ',
+  [Language.KANNADA]:   'ಕ',
+  [Language.BENGALI]:   'বা',
+  [Language.ODIA]:      'ଓ',
+  [Language.MALAYALAM]: 'മ',
+};
 
 interface HeaderProps {
   location: string;
@@ -20,6 +35,7 @@ export default function Header({
   onOpenCart,
 }: HeaderProps) {
   const [scrolled, setScrolled] = useState(false);
+  const [pickerOpen, setPickerOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
@@ -28,47 +44,55 @@ export default function Header({
   }, []);
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 pt-safe transition-all duration-300 ${
-        scrolled
-          ? 'bg-[rgba(10,26,10,0.88)] nav-blur border-b border-[rgba(245,240,232,0.06)]'
-          : 'bg-transparent'
-      }`}
-    >
-      <div className="flex items-center justify-between px-5 h-14">
+    <>
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 pt-safe transition-all duration-300 ${
+          scrolled
+            ? 'bg-[rgba(10,26,10,0.88)] nav-blur border-b border-[rgba(245,240,232,0.06)]'
+            : 'bg-transparent'
+        }`}
+      >
+        <div className="flex items-center justify-between px-5 h-14">
 
-        {/* ── Logo ─────────────────────────────────────────────── */}
-        <Logo height={30} />
+          {/* ── Logo ─────────────────────────────────────────────── */}
+          <Logo height={30} />
 
-        {/* ── Right controls ───────────────────────────────────── */}
-        <div className="flex items-center gap-1.5">
-          {/* Language toggle */}
-          <button
-            onClick={() => onLanguageChange(
-              language === Language.ENGLISH ? Language.MARATHI : Language.ENGLISH
-            )}
-            className="flex items-center gap-1.5 px-3 rounded-full border-2 border-[rgba(245,240,232,0.4)] text-[rgba(245,240,232,0.9)] hover:text-[#F5F0E8] transition-all active:scale-95"
-            style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'rgba(45,90,27,0.2)', minHeight: 44 }}
-          >
-            <Languages size={16} />
-            <span style={{ fontSize: '13px', fontWeight: 600, letterSpacing: '0.05em' }}>
-              {language === Language.ENGLISH ? 'मराठी' : 'ENG'}
-            </span>
-          </button>
+          {/* ── Right controls ───────────────────────────────────── */}
+          <div className="flex items-center gap-1.5">
+            {/* Language picker trigger */}
+            <button
+              onClick={() => setPickerOpen(true)}
+              className="flex items-center gap-1 px-3 rounded-full border-2 border-[rgba(245,240,232,0.4)] text-[rgba(245,240,232,0.9)] hover:text-[#F5F0E8] transition-all active:scale-95"
+              style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'rgba(45,90,27,0.2)', minHeight: 44 }}
+            >
+              <Languages size={14} />
+              <span style={{ fontSize: '13px', fontWeight: 600, letterSpacing: '0.05em' }}>
+                {LANG_SHORT[language]}
+              </span>
+              <ChevronDown size={11} strokeWidth={2.5} style={{ opacity: 0.65 }} />
+            </button>
 
-          {/* Cart badge */}
-          <CartBadge onOpen={onOpenCart} />
+            {/* Cart badge */}
+            <CartBadge onOpen={onOpenCart} />
 
-          {/* Notification bell */}
-          <button
-            className="relative w-11 h-11 flex items-center justify-center rounded-full border border-[rgba(245,240,232,0.1)] text-[rgba(245,240,232,0.55)] hover:text-[#F5F0E8] transition-all active:scale-90"
-            style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'rgba(45,90,27,0.2)' }}
-          >
-            <Bell size={17} />
-            <span className="absolute top-2 right-2 w-1.5 h-1.5 bg-[#E8C84A] rounded-full" />
-          </button>
+            {/* Notification bell */}
+            <button
+              className="relative w-11 h-11 flex items-center justify-center rounded-full border border-[rgba(245,240,232,0.1)] text-[rgba(245,240,232,0.55)] hover:text-[#F5F0E8] transition-all active:scale-90"
+              style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'rgba(45,90,27,0.2)' }}
+            >
+              <Bell size={17} />
+              <span className="absolute top-2 right-2 w-1.5 h-1.5 bg-[#E8C84A] rounded-full" />
+            </button>
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+
+      <LanguagePicker
+        open={pickerOpen}
+        current={language}
+        onSelect={(l) => { onLanguageChange(l); setPickerOpen(false); }}
+        onClose={() => setPickerOpen(false)}
+      />
+    </>
   );
 }

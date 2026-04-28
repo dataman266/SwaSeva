@@ -59,7 +59,7 @@ export default function DetailsScreen({ product, lang, onBack, onViewSeller, onS
     const productName = isMr ? product.nameMr : product.name;
     const productUnit = isMr ? product.unitMr : product.unit;
     const text = `${productName} — ₹${product.price}/${productUnit} on Swaseva`;
-    const url  = `https://agrimart.app/listing/${product.id}`;
+    const url  = `https://swaseva.in/listing/${product.id}`;
     if (navigator.share) {
       navigator.share({ title: productName, text, url }).catch(() => {});
     } else {

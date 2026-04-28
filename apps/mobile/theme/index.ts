@@ -1,4 +1,4 @@
-// AgriMart Design System — FarmMinerals-inspired
+// Swaseva Design System — FarmMinerals-inspired
 // Single source of truth for all design tokens
 
 export const Colors = {
