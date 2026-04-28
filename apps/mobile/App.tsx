@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, lazy, Suspense } from 'react';
+import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { AppScreen, AppState, Language, Product } from './types.ts';
 import HomeScreen from './components/HomeScreen.tsx';
@@ -46,6 +46,7 @@ const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(
     !!localStorage.getItem(AUTH_TOKEN_KEY)
   );
+  const langOverridden = useRef(false);
   const [state, setState] = useState<AppState>({
     currentScreen: localStorage.getItem(ONBOARDED_KEY) ? 'HOME' : 'ONBOARDING',
     userLanguage: Language.ENGLISH,
@@ -61,7 +62,12 @@ const App: React.FC = () => {
             const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&zoom=10`);
             const data = await res.json();
             const city = data.address.city || data.address.town || data.address.village || 'Nearby';
-            setState(prev => ({ ...prev, location: city }));
+            const isMH = data.address.state === 'Maharashtra';
+            setState(prev => ({
+              ...prev,
+              location: city,
+              userLanguage: isMH && !langOverridden.current ? Language.MARATHI : prev.userLanguage,
+            }));
           } catch {
             setState(prev => ({ ...prev, location: 'Rural MH' }));
           }
@@ -153,7 +159,7 @@ const App: React.FC = () => {
         <Header
           location={state.location}
           language={state.userLanguage}
-          onLanguageChange={l => setState(prev => ({ ...prev, userLanguage: l }))}
+          onLanguageChange={l => { langOverridden.current = true; setState(prev => ({ ...prev, userLanguage: l })); }}
           onOpenAssistant={() => changeScreen('ASSISTANT')}
           onOpenCart={() => changeScreen('CART')}
         />
