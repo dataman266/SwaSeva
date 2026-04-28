@@ -12,7 +12,6 @@ interface Slide {
   subtextMr: string;
   emoji: string;
   bg: string;
-  image: string;
 }
 
 const SLIDES: Slide[] = [
@@ -24,8 +23,7 @@ const SLIDES: Slide[] = [
     subtext:    'Connect directly with verified farmers. Fresh produce, fair prices — no middlemen.',
     subtextMr:  'थेट शेतकऱ्यांशी जोडा. ताजे उत्पादन, उचित किंमत — कोणताही दलाल नाही.',
     emoji:      '🌾',
-    bg:         '#2E7D32',
-    image:      'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?q=80&w=1200&auto=format&fit=crop',
+    bg:         'linear-gradient(160deg, #0D2E10 0%, #1A4A1A 50%, #0A1A0A 100%)',
   },
   {
     eyebrow:    'Verified Quality',
@@ -35,8 +33,7 @@ const SLIDES: Slide[] = [
     subtext:    'Our team verifies every farmer and batch. You buy with confidence every time.',
     subtextMr:  'आमची टीम प्रत्येक शेतकरी आणि बॅचची पडताळणी करते.',
     emoji:      '✅',
-    bg:         '#4CAF50',
-    image:      'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?q=80&w=1200&auto=format&fit=crop',
+    bg:         'linear-gradient(160deg, #0D2818 0%, #1A4A30 50%, #0A1A0A 100%)',
   },
   {
     eyebrow:    'Grow Together',
@@ -46,8 +43,7 @@ const SLIDES: Slide[] = [
     subtext:    'List your produce in minutes. Reach thousands of buyers across Maharashtra.',
     subtextMr:  'काही मिनिटांत तुमचा माल लिस्ट करा. महाराष्ट्रभर हजारो खरेदीदारांपर्यंत पोहोचा.',
     emoji:      '🤝',
-    bg:         '#1E3A1E',
-    image:      'https://images.unsplash.com/photo-1464226184884-fa280b87c399?q=80&w=1200&auto=format&fit=crop',
+    bg:         'linear-gradient(160deg, #1A1A0A 0%, #2E4A10 50%, #0A1A0A 100%)',
   },
 ];
 
@@ -106,7 +102,7 @@ export default function OnboardingScreen({ lang, onComplete }: OnboardingScreenP
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
-      {/* ── Background image (crossfade) ──────────────────────────── */}
+      {/* ── Full-screen gradient background (crossfade per slide) ──── */}
       <AnimatePresence mode="sync">
         <motion.div
           key={`bg-${current}`}
@@ -114,40 +110,74 @@ export default function OnboardingScreen({ lang, onComplete }: OnboardingScreenP
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.65 }}
-        >
-          <img
-            src={slide.image}
-            alt=""
-            aria-hidden
-            className="w-full h-full object-cover"
-            style={{ filter: 'brightness(0.35) saturate(0.7)' }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0A1A0A] via-[rgba(10,26,10,0.6)] to-[rgba(10,26,10,0.25)]" />
-        </motion.div>
+          transition={{ duration: 0.55 }}
+          style={{ background: slide.bg }}
+        />
       </AnimatePresence>
-
-      {/* ── Accent glow (animates colour independently) ───────────── */}
-      <motion.div
-        className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[120vw] h-[40vh] opacity-20 pointer-events-none"
-        animate={{ background: slide.bg }}
-        transition={{ duration: 0.6 }}
-        style={{ filter: 'blur(80px)' }}
-      />
 
       {/* ── Skip button ───────────────────────────────────────────── */}
       {!isLast && (
         <button
           onClick={onComplete}
-          className="absolute top-safe right-5 mt-5 z-10 text-[rgba(245,240,232,0.4)] hover:text-[rgba(245,240,232,0.65)] transition-colors"
-          style={{ fontSize: '12px', fontWeight: 500, letterSpacing: '0.08em' }}
+          className="absolute top-safe right-5 mt-5 z-10 text-[rgba(245,240,232,0.4)] active:text-[rgba(245,240,232,0.7)] transition-colors"
+          style={{ fontSize: '12px', fontWeight: 500, letterSpacing: '0.08em', minHeight: 44, minWidth: 44, display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}
         >
           {isMr ? 'वगळा' : 'Skip'}
         </button>
       )}
 
-      {/* ── Slide content ─────────────────────────────────────────── */}
-      <div className="relative z-10 flex flex-col justify-end flex-1 px-6 pb-14">
+      {/* ── Illustration panel (top 45%) ──────────────────────────── */}
+      <div className="relative z-10 flex items-center justify-center" style={{ flex: '0 0 45%' }}>
+        <AnimatePresence mode="wait" custom={direction}>
+          <motion.div
+            key={`ill-${current}`}
+            custom={direction}
+            variants={contentVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={contentTransition}
+            style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}
+          >
+            {/* Outer decorative ring */}
+            <div style={{
+              width: 160, height: 160,
+              borderRadius: '50%',
+              background: 'rgba(245,240,232,0.04)',
+              border: '1.5px solid rgba(245,240,232,0.08)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              {/* Inner glow ring */}
+              <div style={{
+                width: 120, height: 120,
+                borderRadius: '50%',
+                background: 'rgba(232,200,74,0.08)',
+                border: '1.5px solid rgba(232,200,74,0.2)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                boxShadow: '0 0 32px rgba(232,200,74,0.1)',
+              }}>
+                <span style={{ fontSize: 56, lineHeight: 1 }}>{slide.emoji}</span>
+              </div>
+            </div>
+            {/* Step indicator dots on illustration */}
+            <div style={{ display: 'flex', gap: 6 }}>
+              {SLIDES.map((_, i) => (
+                <div key={i} style={{
+                  width: i === current ? 20 : 5, height: 5, borderRadius: 99,
+                  background: i === current ? '#E8C84A' : 'rgba(245,240,232,0.2)',
+                  transition: 'width 0.25s, background 0.25s',
+                }} />
+              ))}
+            </div>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      {/* ── Text content (bottom 55%) ──────────────────────────────── */}
+      <div
+        className="relative z-10 flex flex-col justify-between flex-1 px-6 pb-10 pt-2"
+        style={{ background: 'linear-gradient(to bottom, transparent 0%, rgba(10,26,10,0.9) 20%, #0A1A0A 50%)' }}
+      >
         <AnimatePresence mode="wait" custom={direction}>
           <motion.div
             key={current}
@@ -158,9 +188,6 @@ export default function OnboardingScreen({ lang, onComplete }: OnboardingScreenP
             exit="exit"
             transition={contentTransition}
           >
-            {/* Emoji */}
-            <div className="text-6xl mb-8">{slide.emoji}</div>
-
             {/* Eyebrow */}
             <div className="flex items-center gap-2 mb-4">
               <span className="w-4 h-px bg-[#E8C84A]" />
@@ -175,14 +202,14 @@ export default function OnboardingScreen({ lang, onComplete }: OnboardingScreenP
             {/* Headline */}
             <h1
               className="text-[#F5F0E8] font-light mb-4 whitespace-pre-line"
-              style={{ fontSize: 'clamp(32px, 10vw, 48px)', letterSpacing: '-0.03em', lineHeight: 1.05 }}
+              style={{ fontSize: 'clamp(30px, 9vw, 44px)', letterSpacing: '-0.03em', lineHeight: 1.05 }}
             >
               {isMr ? slide.headlineMr : slide.headline}
             </h1>
 
             {/* Subtext */}
             <p
-              className="font-light leading-relaxed mb-10 text-[rgba(245,240,232,0.55)] max-w-sm"
+              className="font-light leading-relaxed text-[rgba(245,240,232,0.55)] max-w-sm"
               style={{ fontSize: '14px' }}
             >
               {isMr ? slide.subtextMr : slide.subtext}
@@ -190,26 +217,12 @@ export default function OnboardingScreen({ lang, onComplete }: OnboardingScreenP
           </motion.div>
         </AnimatePresence>
 
-        {/* Dot pagination — outside AnimatePresence so dots stay stable */}
-        <div className="flex items-center gap-2 mb-8">
-          {SLIDES.map((_, i) => (
-            <motion.button
-              key={i}
-              onClick={() => goTo(i)}
-              animate={{
-                width:      i === current ? 24 : 6,
-                background: i === current ? '#E8C84A' : 'rgba(245,240,232,0.2)',
-              }}
-              transition={{ type: 'spring', stiffness: 420, damping: 30 }}
-              style={{ height: 6, borderRadius: 99 }}
-            />
-          ))}
+        {/* CTA */}
+        <div style={{ marginTop: '2rem' }}>
+          <PillButton variant="light" fullWidth size="lg" onClick={isLast ? onComplete : next}>
+            {isLast ? (isMr ? 'सुरू करा' : 'Get Started') : (isMr ? 'पुढे' : 'Continue')}
+          </PillButton>
         </div>
-
-        {/* CTAs */}
-        <PillButton variant="light" fullWidth size="lg" onClick={isLast ? onComplete : next}>
-          {isLast ? (isMr ? 'सुरू करा' : 'Get Started') : (isMr ? 'पुढे' : 'Continue')}
-        </PillButton>
       </div>
     </div>
   );
