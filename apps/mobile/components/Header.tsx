@@ -63,10 +63,10 @@ export default function Header({
             onClick={() => onLanguageChange(
               language === Language.ENGLISH ? Language.MARATHI : Language.ENGLISH
             )}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-full border-2 border-[rgba(245,240,232,0.4)] text-[rgba(245,240,232,0.9)] hover:text-[#F5F0E8] transition-all active:scale-95"
-            style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'rgba(45,90,27,0.2)' }}
+            className="flex items-center gap-1.5 px-3 rounded-full border-2 border-[rgba(245,240,232,0.4)] text-[rgba(245,240,232,0.9)] hover:text-[#F5F0E8] transition-all active:scale-95"
+            style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'rgba(45,90,27,0.2)', minHeight: 44 }}
           >
-            <Languages size={14} />
+            <Languages size={16} />
             <span style={{ fontSize: '13px', fontWeight: 600, letterSpacing: '0.05em' }}>
               {language === Language.ENGLISH ? 'मराठी' : 'ENG'}
             </span>
@@ -77,11 +77,11 @@ export default function Header({
 
           {/* Notification bell */}
           <button
-            className="relative w-8 h-8 flex items-center justify-center rounded-full border border-[rgba(245,240,232,0.1)] text-[rgba(245,240,232,0.55)] hover:text-[#F5F0E8] transition-all active:scale-90"
+            className="relative w-11 h-11 flex items-center justify-center rounded-full border border-[rgba(245,240,232,0.1)] text-[rgba(245,240,232,0.55)] hover:text-[#F5F0E8] transition-all active:scale-90"
             style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'rgba(45,90,27,0.2)' }}
           >
-            <Bell size={15} />
-            <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-[#E8C84A] rounded-full" />
+            <Bell size={17} />
+            <span className="absolute top-2 right-2 w-1.5 h-1.5 bg-[#E8C84A] rounded-full" />
           </button>
         </div>
       </div>

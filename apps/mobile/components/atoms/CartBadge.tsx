@@ -18,7 +18,7 @@ export default function CartBadge({ onOpen }: CartBadgeProps) {
   return (
     <button
       onClick={onOpen}
-      className="relative w-8 h-8 flex items-center justify-center rounded-full border border-[rgba(245,240,232,0.1)] text-[rgba(245,240,232,0.55)] hover:text-[#F5F0E8] transition-all active:scale-90"
+      className="relative w-11 h-11 flex items-center justify-center rounded-full border border-[rgba(245,240,232,0.1)] text-[rgba(245,240,232,0.55)] hover:text-[#F5F0E8] transition-all active:scale-90"
       style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'rgba(45,90,27,0.2)' }}
       aria-label="Open cart"
     >
