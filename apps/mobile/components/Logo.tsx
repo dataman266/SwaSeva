@@ -1,12 +1,17 @@
 import React from 'react';
 
 /**
- * AplaAgriMart logo — FarmMinerals palette
+ * KrishiSetu logo — FarmMinerals palette
  *
- * Icon mark:  Circular badge with a sprouting seedling (wheat grains + mango-
- *             leaf shapes) and rangoli-inspired accent dots.
- * Wordmark:   "अपला" in Noto Sans Devanagari ExtraBold + "AGRIMART" in Inter
- *             spaced caps below it.
+ * Icon mark:  Circular lotus-ring badge.
+ *   Top:     Stylised Surya (sun) with 5 rays — divinity, life, Indian identity.
+ *   Middle:  Paired mango-leaf "hands" (farmer cupping + seller offering).
+ *   Center:  Wheat stem rising through the leaves.
+ *   Sides:   Two coin-dots on balance arms — the market/seller element.
+ *   Base:    Earth arc + rangoli soil dots.
+ *   Ring:    8-petal lotus outer ring — distinctly Indian.
+ * Wordmark:  "कृषिसेतु" Noto Sans Devanagari ExtraBold
+ *            "KRISHISETU" Inter spaced caps below.
  */
 export default function Logo({ height = 34 }: { height?: number }) {
   // Maintain 155:36 aspect ratio
@@ -19,133 +24,126 @@ export default function Logo({ height = 34 }: { height?: number }) {
       viewBox="0 0 155 36"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      aria-label="Apla AgriMart"
+      aria-label="KrishiSetu"
     >
-      {/* ── BADGE BACKGROUND ───────────────────────────────────── */}
-      {/* Deep-dark fill */}
-      <circle cx="18" cy="18" r="17" fill="#0A1A0A" />
-      {/* Subtle radial highlight (top-left) */}
-      <circle cx="18" cy="18" r="17" fill="url(#badgeGlow)" />
-      {/* Outer beige ring */}
-      <circle cx="18" cy="18" r="16.8" fill="none" stroke="#E8C84A" strokeWidth="0.55" strokeOpacity="0.5" />
-      {/* Inner dashed accent ring */}
-      <circle cx="18" cy="18" r="13.6" fill="none" stroke="#E8C84A" strokeWidth="0.3" strokeOpacity="0.18" strokeDasharray="1.4 3.2" />
+      <defs>
+        <radialGradient id="ksBadgeGlow" cx="35%" cy="28%" r="65%">
+          <stop offset="0%"   stopColor="#3A7D22" stopOpacity="0.55" />
+          <stop offset="100%" stopColor="#0A1A0A" stopOpacity="0"    />
+        </radialGradient>
+      </defs>
 
-      {/* ── RANGOLI DOTS at cardinal points of inner ring ──────── */}
-      <circle cx="18"    cy="4.4"  r="0.85" fill="#E8C84A" opacity="0.35" />
-      <circle cx="31.6"  cy="18"   r="0.85" fill="#E8C84A" opacity="0.35" />
-      <circle cx="18"    cy="31.6" r="0.85" fill="#E8C84A" opacity="0.35" />
-      <circle cx="4.4"   cy="18"   r="0.85" fill="#E8C84A" opacity="0.35" />
-      {/* Diagonal dots */}
-      <circle cx="27.2"  cy="8.8"  r="0.55" fill="#E8C84A" opacity="0.2" />
-      <circle cx="27.2"  cy="27.2" r="0.55" fill="#E8C84A" opacity="0.2" />
-      <circle cx="8.8"   cy="27.2" r="0.55" fill="#E8C84A" opacity="0.2" />
-      <circle cx="8.8"   cy="8.8"  r="0.55" fill="#E8C84A" opacity="0.2" />
+      {/* ── BADGE BACKGROUND ─────────────────────────────────────── */}
+      <circle cx="18" cy="18" r="17"   fill="#0A1A0A" />
+      <circle cx="18" cy="18" r="17"   fill="url(#ksBadgeGlow)" />
 
-      {/* ── SPROUT STEM ────────────────────────────────────────── */}
+      {/* ── LOTUS PETAL RING (8 petals at r≈15) ─────────────────── */}
+      {/* Each petal: small ellipse rotated to point outward from centre */}
+      <ellipse cx="18"    cy="3.4"  rx="1.4" ry="2.6" fill="#E8C84A" opacity="0.22" />
+      <ellipse cx="28.8"  cy="6.2"  rx="1.4" ry="2.6" fill="#E8C84A" opacity="0.18" transform="rotate(45 28.8 6.2)" />
+      <ellipse cx="32.6"  cy="18"   rx="1.4" ry="2.6" fill="#E8C84A" opacity="0.22" transform="rotate(90 32.6 18)" />
+      <ellipse cx="28.8"  cy="29.8" rx="1.4" ry="2.6" fill="#E8C84A" opacity="0.18" transform="rotate(135 28.8 29.8)" />
+      <ellipse cx="18"    cy="32.6" rx="1.4" ry="2.6" fill="#E8C84A" opacity="0.22" transform="rotate(180 18 32.6)" />
+      <ellipse cx="7.2"   cy="29.8" rx="1.4" ry="2.6" fill="#E8C84A" opacity="0.18" transform="rotate(225 7.2 29.8)" />
+      <ellipse cx="3.4"   cy="18"   rx="1.4" ry="2.6" fill="#E8C84A" opacity="0.22" transform="rotate(270 3.4 18)" />
+      <ellipse cx="7.2"   cy="6.2"  rx="1.4" ry="2.6" fill="#E8C84A" opacity="0.18" transform="rotate(315 7.2 6.2)" />
+
+      {/* ── OUTER RING + INNER DASH RING ─────────────────────────── */}
+      <circle cx="18" cy="18" r="16.5" fill="none" stroke="#E8C84A" strokeWidth="0.5"  strokeOpacity="0.48" />
+      <circle cx="18" cy="18" r="13.2" fill="none" stroke="#E8C84A" strokeWidth="0.28" strokeOpacity="0.18" strokeDasharray="1.3 3" />
+
+      {/* ── SURYA / SUN (top) — Indian divinity + life force ──────── */}
+      {/* Sun disc */}
+      <circle cx="18" cy="8.2" r="2.5" fill="#E8C84A" opacity="0.9" />
+      {/* 5 rays radiating outward */}
+      <line x1="18"    y1="4.5"  x2="18"    y2="3.1"  stroke="#E8C84A" strokeWidth="0.9"  strokeLinecap="round" strokeOpacity="0.65" />
+      <line x1="21.6"  y1="5.3"  x2="22.6"  y2="4.3"  stroke="#E8C84A" strokeWidth="0.9"  strokeLinecap="round" strokeOpacity="0.55" />
+      <line x1="22.8"  y1="8.8"  x2="24.2"  y2="8.8"  stroke="#E8C84A" strokeWidth="0.9"  strokeLinecap="round" strokeOpacity="0.55" />
+      <line x1="14.4"  y1="5.3"  x2="13.4"  y2="4.3"  stroke="#E8C84A" strokeWidth="0.9"  strokeLinecap="round" strokeOpacity="0.55" />
+      <line x1="13.2"  y1="8.8"  x2="11.8"  y2="8.8"  stroke="#E8C84A" strokeWidth="0.9"  strokeLinecap="round" strokeOpacity="0.55" />
+      {/* Sun inner crease */}
+      <circle cx="18" cy="8.2" r="1.1" fill="#0A1A0A" opacity="0.35" />
+
+      {/* ── WHEAT STEM ───────────────────────────────────────────── */}
       <path
-        d="M18 28.5 L18 12"
+        d="M18 28.5 L18 11.5"
         stroke="#E8C84A"
-        strokeWidth="1.25"
+        strokeWidth="1.2"
         strokeLinecap="round"
-        strokeOpacity="0.82"
+        strokeOpacity="0.78"
       />
 
-      {/* ── LEFT MANGO LEAF ────────────────────────────────────── */}
+      {/* ── LEFT MANGO-HAND LEAF ──────────────────────────────────── */}
+      {/* Leaf body */}
       <path
-        d="M18 21.5 C16.8 19.8 13.2 18.2 11 15.8 C9.2 13.8 9.8 10.8 12 10.2 C14.3 9.6 16.5 12.3 17.4 15.4 C17.8 17.2 17.9 19.2 18 21.5Z"
-        fill="#2E7D32"
+        d="M18 22 C16.6 20 13 18.2 10.8 15.5 C9 13.4 9.6 10.5 11.8 9.9 C14 9.3 16.2 12 17.2 15.2 C17.7 17 17.9 19.2 18 22Z"
+        fill="#2D5A1B"
       />
-      {/* Left leaf vein */}
-      <path
-        d="M18 21.5 C15.5 18.5 12 16.5 11 14.8"
-        stroke="#E8C84A"
-        strokeWidth="0.35"
-        strokeOpacity="0.28"
-        strokeLinecap="round"
-        fill="none"
-      />
-      {/* Left leaf highlight edge */}
-      <path
-        d="M18 21.5 C16.8 19.8 13.2 18.2 11 15.8 C9.2 13.8 9.8 10.8 12 10.2"
-        stroke="#4CAF50"
-        strokeWidth="0.5"
-        strokeOpacity="0.4"
-        strokeLinecap="round"
-        fill="none"
-      />
+      {/* Fingertip bumps at leaf tip — the farmer's hand reading */}
+      <circle cx="11"   cy="10.6" r="0.9" fill="#3A7522" opacity="0.7" />
+      <circle cx="9.8"  cy="12.5" r="0.7" fill="#3A7522" opacity="0.5" />
+      {/* Leaf vein */}
+      <path d="M18 22 C15.2 18.8 11.8 16.5 10.8 14.5"
+        stroke="#E8C84A" strokeWidth="0.35" strokeOpacity="0.28" strokeLinecap="round" fill="none" />
+      {/* Leaf edge highlight */}
+      <path d="M18 22 C16.6 20 13 18.2 10.8 15.5 C9 13.4 9.6 10.5 11.8 9.9"
+        stroke="#4CAF50" strokeWidth="0.5" strokeOpacity="0.38" strokeLinecap="round" fill="none" />
 
-      {/* ── RIGHT MANGO LEAF ───────────────────────────────────── */}
+      {/* ── RIGHT MANGO-HAND LEAF ─────────────────────────────────── */}
       <path
-        d="M18 21.5 C19.2 19.8 22.8 18.2 25 15.8 C26.8 13.8 26.2 10.8 24 10.2 C21.7 9.6 19.5 12.3 18.6 15.4 C18.2 17.2 18.1 19.2 18 21.5Z"
-        fill="#2E7D32"
+        d="M18 22 C19.4 20 23 18.2 25.2 15.5 C27 13.4 26.4 10.5 24.2 9.9 C22 9.3 19.8 12 18.8 15.2 C18.3 17 18.1 19.2 18 22Z"
+        fill="#2D5A1B"
       />
-      {/* Right leaf vein */}
-      <path
-        d="M18 21.5 C20.5 18.5 24 16.5 25 14.8"
-        stroke="#E8C84A"
-        strokeWidth="0.35"
-        strokeOpacity="0.28"
-        strokeLinecap="round"
-        fill="none"
-      />
-      <path
-        d="M18 21.5 C19.2 19.8 22.8 18.2 25 15.8 C26.8 13.8 26.2 10.8 24 10.2"
-        stroke="#4CAF50"
-        strokeWidth="0.5"
-        strokeOpacity="0.4"
-        strokeLinecap="round"
-        fill="none"
-      />
+      {/* Fingertip bumps */}
+      <circle cx="25"   cy="10.6" r="0.9" fill="#3A7522" opacity="0.7" />
+      <circle cx="26.2" cy="12.5" r="0.7" fill="#3A7522" opacity="0.5" />
+      {/* Vein */}
+      <path d="M18 22 C20.8 18.8 24.2 16.5 25.2 14.5"
+        stroke="#E8C84A" strokeWidth="0.35" strokeOpacity="0.28" strokeLinecap="round" fill="none" />
+      {/* Edge highlight */}
+      <path d="M18 22 C19.4 20 23 18.2 25.2 15.5 C27 13.4 26.4 10.5 24.2 9.9"
+        stroke="#4CAF50" strokeWidth="0.5" strokeOpacity="0.38" strokeLinecap="round" fill="none" />
 
-      {/* ── WHEAT / GRAIN HEADS ────────────────────────────────── */}
-      {/* Left grain (tilted left) */}
-      <ellipse cx="15.2" cy="9.8" rx="1.65" ry="2.7" fill="#E8C84A" opacity="0.88" transform="rotate(-18 15.2 9.8)" />
-      {/* Center grain (tallest, upright) */}
-      <ellipse cx="18" cy="8" rx="1.75" ry="3.1" fill="#E8C84A" />
-      {/* Right grain (tilted right) */}
-      <ellipse cx="20.8" cy="9.8" rx="1.65" ry="2.7" fill="#E8C84A" opacity="0.88" transform="rotate(18 20.8 9.8)" />
+      {/* ── TARAZU ARMS (balance scale = seller/market) ───────────── */}
+      {/* Left arm — curves gently from stem mid to left coin */}
+      <path d="M18 19.5 Q14.5 18.8 12 21.5"
+        stroke="#E8C84A" strokeWidth="0.9" strokeLinecap="round" strokeOpacity="0.65" fill="none" />
+      {/* Right arm */}
+      <path d="M18 19.5 Q21.5 18.8 24 21.5"
+        stroke="#E8C84A" strokeWidth="0.9" strokeLinecap="round" strokeOpacity="0.65" fill="none" />
 
-      {/* Grain center crease lines */}
-      <line x1="18"   y1="6.2"  x2="18"   y2="11"   stroke="#0A1A0A" strokeWidth="0.45" strokeOpacity="0.4" />
-      <line x1="15.2" y1="8.2"  x2="15.2" y2="12.2" stroke="#0A1A0A" strokeWidth="0.4"  strokeOpacity="0.35" transform="rotate(-18 15.2 9.8)" />
-      <line x1="20.8" y1="8.2"  x2="20.8" y2="12.2" stroke="#0A1A0A" strokeWidth="0.4"  strokeOpacity="0.35" transform="rotate(18 20.8 9.8)" />
+      {/* ── COIN DOTS at arm ends (trade/market indicator) ────────── */}
+      <circle cx="12"   cy="21.5" r="1.7" fill="#E8C84A" opacity="0.72" />
+      <circle cx="12"   cy="21.5" r="0.75" fill="#0A1A0A" opacity="0.45" />
+      <circle cx="24"   cy="21.5" r="1.7" fill="#E8C84A" opacity="0.72" />
+      <circle cx="24"   cy="21.5" r="0.75" fill="#0A1A0A" opacity="0.45" />
 
-      {/* ── SOIL / GROUND ──────────────────────────────────────── */}
-      <path
-        d="M11.5 28.5 Q18 30.5 24.5 28.5"
-        stroke="#E8C84A"
-        strokeWidth="0.9"
-        strokeLinecap="round"
-        strokeOpacity="0.28"
-        fill="none"
-      />
-      {/* Soil dots */}
-      <circle cx="13.5" cy="30.8" r="0.65" fill="#E8C84A" opacity="0.18" />
-      <circle cx="18"   cy="31.8" r="0.65" fill="#E8C84A" opacity="0.18" />
-      <circle cx="22.5" cy="30.8" r="0.65" fill="#E8C84A" opacity="0.18" />
+      {/* ── EARTH ARC + SOIL DOTS ─────────────────────────────────── */}
+      <path d="M11.5 28.5 Q18 30.5 24.5 28.5"
+        stroke="#E8C84A" strokeWidth="0.85" strokeLinecap="round" strokeOpacity="0.25" fill="none" />
+      <circle cx="13.5" cy="30.8" r="0.6" fill="#E8C84A" opacity="0.18" />
+      <circle cx="18"   cy="31.8" r="0.6" fill="#E8C84A" opacity="0.18" />
+      <circle cx="22.5" cy="30.8" r="0.6" fill="#E8C84A" opacity="0.18" />
 
-      {/* ── DIVIDER ────────────────────────────────────────────── */}
+      {/* ── DIVIDER ───────────────────────────────────────────────── */}
       <line x1="41.5" y1="7" x2="41.5" y2="29" stroke="#E8C84A" strokeWidth="0.45" strokeOpacity="0.22" />
 
-      {/* ── WORDMARK ───────────────────────────────────────────── */}
-      {/* "अपला" — Noto Sans Devanagari ExtraBold */}
+      {/* ── WORDMARK ──────────────────────────────────────────────── */}
+      {/* "कृषिसेतु" — Noto Sans Devanagari ExtraBold */}
       <text
-        x="49"
-        y="21"
+        x="49" y="21"
         fontFamily="'Noto Sans Devanagari', 'Mangal', 'Arial Unicode MS', sans-serif"
         fontWeight="800"
         fontSize="17"
         fill="#F5F0E8"
         dominantBaseline="auto"
       >
-        अपला
+        कृषिसेतु
       </text>
 
-      {/* "AGRIMART" — Inter spaced caps */}
+      {/* "KRISHISETU" — Inter spaced caps */}
       <text
-        x="50"
-        y="31"
+        x="50" y="31"
         fontFamily="'Inter', system-ui, sans-serif"
         fontWeight="400"
         fontSize="9.5"
@@ -153,16 +151,8 @@ export default function Logo({ height = 34 }: { height?: number }) {
         letterSpacing="0.18em"
         dominantBaseline="auto"
       >
-        AGRIMART
+        KRISHISETU
       </text>
-
-      {/* ── DEFS ───────────────────────────────────────────────── */}
-      <defs>
-        <radialGradient id="badgeGlow" cx="35%" cy="30%" r="65%">
-          <stop offset="0%"   stopColor="#2E7D32" stopOpacity="0.5" />
-          <stop offset="100%" stopColor="#0A1A0A" stopOpacity="0" />
-        </radialGradient>
-      </defs>
     </svg>
   );
 }
