@@ -153,7 +153,7 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
     const productUnit = isMr ? product.unitMr : product.unit;
     const autoMsg = isMr
       ? `नमस्कार ${seller.name}, मला ${productName} (₹${product.price}/${productUnit}) बद्दल अधिक माहिती हवी आहे.`
-      : `Hi ${seller.name}, I'm interested in your ${productName} listed at ₹${product.price}/${productUnit} on KrishiSetu.`;
+      : `Hi ${seller.name}, I'm interested in your ${productName} listed at ₹${product.price}/${productUnit} on Swaseva.`;
     try {
       const connections: object[] = JSON.parse(localStorage.getItem(CONNECTIONS_KEY) || '[]');
       const existing = connections.find((c: any) => c.sellerId === seller.id && c.productId === product.id);

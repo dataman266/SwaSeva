@@ -683,7 +683,7 @@ function HelpView({ lang, onBack }: { lang: Language; onBack: () => void }) {
         : 'Orders can be cancelled before acceptance. Cancellations after acceptance may attract a penalty.',
     },
     {
-      q: isMr ? 'KrishiSetu खर्च किती?' : 'Is KrishiSetu free?',
+      q: isMr ? 'Swaseva खर्च किती?' : 'Is Swaseva free?',
       a: isMr
         ? 'लिस्टिंग मोफत आहे. यशस्वी व्यवहारावर फक्त 2% कमिशन आकारतो.'
         : 'Listing is free. We charge a 2% commission only on successful transactions — no success, no fee.',
@@ -710,7 +710,7 @@ function HelpView({ lang, onBack }: { lang: Language; onBack: () => void }) {
     {
       icon: Mail,
       label: isMr ? 'ईमेल करा' : 'Email Us',
-      sub: 'support@krishisetu.in',
+      sub: 'support@swaseva.in',
       color: '#7EB3FF',
       bg: 'rgba(126,179,255,0.08)',
       border: 'rgba(126,179,255,0.2)',
@@ -984,7 +984,7 @@ export default function ProfileScreen({ lang, onSignOut, onExplore, onOpenCalend
               {/* ── Version footer ───────────────────────────────────── */}
               <div className="flex items-center justify-center pt-2">
                 <span style={{ fontSize: '9px', fontWeight: 500, letterSpacing: '0.2em', color: 'rgba(245,240,232,0.2)', textTransform: 'uppercase' }}>
-                  KrishiSetu · v1.2.4
+                  Swaseva · v1.2.4
                 </span>
               </div>
             </div>

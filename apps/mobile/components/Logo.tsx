@@ -1,7 +1,7 @@
 import React from 'react';
 
 /**
- * KrishiSetu logo — FarmMinerals palette
+ * Swaseva logo — FarmMinerals palette
  *
  * Icon mark:  Circular lotus-ring badge.
  *   Top:     Stylised Surya (sun) with 5 rays — divinity, life, Indian identity.
@@ -24,7 +24,7 @@ export default function Logo({ height = 34 }: { height?: number }) {
       viewBox="0 0 155 36"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      aria-label="KrishiSetu"
+      aria-label="Swaseva"
     >
       <defs>
         <radialGradient id="ksBadgeGlow" cx="35%" cy="28%" r="65%">
@@ -138,7 +138,7 @@ export default function Logo({ height = 34 }: { height?: number }) {
         fill="#F5F0E8"
         dominantBaseline="auto"
       >
-        कृषिसेतु
+        स्वसेवा
       </text>
 
       {/* "KRISHISETU" — Inter spaced caps */}
@@ -151,7 +151,7 @@ export default function Logo({ height = 34 }: { height?: number }) {
         letterSpacing="0.18em"
         dominantBaseline="auto"
       >
-        KRISHISETU
+        SWASEVA
       </text>
     </svg>
   );

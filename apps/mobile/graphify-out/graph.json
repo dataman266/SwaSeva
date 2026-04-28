@@ -8,7 +8,7 @@
       "file_type": "code",
       "source_file": "App.tsx",
       "source_location": "L1",
-      "community": 5,
+      "community": 0,
       "id": "app_tsx"
     },
     {
@@ -16,7 +16,7 @@
       "file_type": "code",
       "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\App.tsx",
       "source_location": "L61",
-      "community": 5,
+      "community": 0,
       "id": "app_changescreen"
     },
     {
@@ -32,7 +32,7 @@
       "file_type": "code",
       "source_file": "index.tsx",
       "source_location": "L1",
-      "community": 11,
+      "community": 33,
       "id": "index_tsx"
     },
     {
@@ -40,7 +40,7 @@
       "file_type": "code",
       "source_file": "sw.js",
       "source_location": "L1",
-      "community": 12,
+      "community": 34,
       "id": "sw_js"
     },
     {
@@ -56,7 +56,7 @@
       "file_type": "code",
       "source_file": "vite.config.ts",
       "source_location": "L1",
-      "community": 13,
+      "community": 35,
       "id": "vite_config_ts"
     },
     {
@@ -80,15 +80,15 @@
       "file_type": "code",
       "source_file": "components\\DetailsScreen.tsx",
       "source_location": "L1",
-      "community": 6,
+      "community": 0,
       "id": "components_detailsscreen_tsx"
     },
     {
       "label": "DetailsScreen()",
       "file_type": "code",
       "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\DetailsScreen.tsx",
-      "source_location": "L18",
-      "community": 6,
+      "source_location": "L23",
+      "community": 0,
       "id": "detailsscreen_detailsscreen"
     },
     {
@@ -102,8 +102,8 @@
     {
       "label": "onScroll()",
       "file_type": "code",
-      "source_file": "components\\Header.tsx",
-      "source_location": "L26",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\Header.tsx",
+      "source_location": "L25",
       "community": 0,
       "id": "header_onscroll"
     },
@@ -118,8 +118,8 @@
     {
       "label": "toggleSelect()",
       "file_type": "code",
-      "source_file": "components\\HomeScreen.tsx",
-      "source_location": "L38",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\HomeScreen.tsx",
+      "source_location": "L95",
       "community": 0,
       "id": "homescreen_toggleselect"
     },
@@ -128,7 +128,7 @@
       "file_type": "code",
       "source_file": "components\\OrdersScreen.tsx",
       "source_location": "L1",
-      "community": 14,
+      "community": 36,
       "id": "components_ordersscreen_tsx"
     },
     {
@@ -136,7 +136,7 @@
       "file_type": "code",
       "source_file": "components\\ProfileScreen.tsx",
       "source_location": "L1",
-      "community": 15,
+      "community": 37,
       "id": "components_profilescreen_tsx"
     },
     {
@@ -144,15 +144,15 @@
       "file_type": "code",
       "source_file": "components\\SellScreen.tsx",
       "source_location": "L1",
-      "community": 3,
+      "community": 1,
       "id": "components_sellscreen_tsx"
     },
     {
       "label": "handlePublish()",
       "file_type": "code",
       "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\SellScreen.tsx",
-      "source_location": "L67",
-      "community": 3,
+      "source_location": "L332",
+      "community": 1,
       "id": "sellscreen_handlepublish"
     },
     {
@@ -160,7 +160,7 @@
       "file_type": "code",
       "source_file": "components\\atoms\\PillButton.tsx",
       "source_location": "L1",
-      "community": 7,
+      "community": 17,
       "id": "components_atoms_pillbutton_tsx"
     },
     {
@@ -168,7 +168,7 @@
       "file_type": "code",
       "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\atoms\\PillButton.tsx",
       "source_location": "L22",
-      "community": 7,
+      "community": 17,
       "id": "pillbutton_pillbutton"
     },
     {
@@ -176,7 +176,7 @@
       "file_type": "code",
       "source_file": "components\\atoms\\SectionReveal.tsx",
       "source_location": "L1",
-      "community": 8,
+      "community": 18,
       "id": "components_atoms_sectionreveal_tsx"
     },
     {
@@ -184,7 +184,7 @@
       "file_type": "code",
       "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\atoms\\SectionReveal.tsx",
       "source_location": "L15",
-      "community": 8,
+      "community": 18,
       "id": "sectionreveal_sectionreveal"
     },
     {
@@ -192,15 +192,15 @@
       "file_type": "code",
       "source_file": "components\\atoms\\StatCard.tsx",
       "source_location": "L1",
-      "community": 9,
+      "community": 19,
       "id": "components_atoms_statcard_tsx"
     },
     {
       "label": "StatCard()",
       "file_type": "code",
-      "source_file": "components\\atoms\\StatCard.tsx",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\atoms\\StatCard.tsx",
       "source_location": "L16",
-      "community": 9,
+      "community": 19,
       "id": "statcard_statcard"
     },
     {
@@ -214,8 +214,8 @@
     {
       "label": "ProductCard()",
       "file_type": "code",
-      "source_file": "components\\molecules\\ProductCard.tsx",
-      "source_location": "L20",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\molecules\\ProductCard.tsx",
+      "source_location": "L24",
       "community": 0,
       "id": "productcard_productcard"
     },
@@ -224,7 +224,7 @@
       "file_type": "code",
       "source_file": "components\\organisms\\DarkHeroSection.tsx",
       "source_location": "L1",
-      "community": 16,
+      "community": 38,
       "id": "components_organisms_darkherosection_tsx"
     },
     {
@@ -232,7 +232,7 @@
       "file_type": "code",
       "source_file": "components\\organisms\\ScrollingTicker.tsx",
       "source_location": "L1",
-      "community": 17,
+      "community": 39,
       "id": "components_organisms_scrollingticker_tsx"
     },
     {
@@ -240,7 +240,7 @@
       "file_type": "code",
       "source_file": "services\\geminiService.ts",
       "source_location": "L1",
-      "community": 10,
+      "community": 20,
       "id": "services_geminiservice_ts"
     },
     {
@@ -248,7 +248,7 @@
       "file_type": "code",
       "source_file": "services\\geminiService.ts",
       "source_location": "L4",
-      "community": 10,
+      "community": 20,
       "id": "geminiservice_getaimarketassistance"
     },
     {
@@ -256,7 +256,7 @@
       "file_type": "code",
       "source_file": "theme\\index.ts",
       "source_location": "L1",
-      "community": 18,
+      "community": 40,
       "id": "theme_index_ts"
     },
     {
@@ -264,176 +264,176 @@
       "file_type": "code",
       "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\App.tsx",
       "source_location": "L1",
-      "id": "e_agri_mart_agrimart_android_apps_mobile_app_tsx",
-      "community": 5
+      "community": 16,
+      "id": "e_agri_mart_agrimart_android_apps_mobile_app_tsx"
     },
     {
       "label": "getDirection()",
       "file_type": "code",
       "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\App.tsx",
-      "source_location": "L20",
-      "id": "app_getdirection",
-      "community": 5
+      "source_location": "L30",
+      "community": 16,
+      "id": "app_getdirection"
     },
     {
       "label": "types.ts",
       "file_type": "code",
       "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\types.ts",
       "source_location": "L1",
-      "id": "e_agri_mart_agrimart_android_apps_mobile_types_ts",
-      "community": 19
+      "community": 41,
+      "id": "e_agri_mart_agrimart_android_apps_mobile_types_ts"
     },
     {
       "label": "AssistantScreen.tsx",
       "file_type": "code",
       "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\AssistantScreen.tsx",
       "source_location": "L1",
-      "id": "e_agri_mart_agrimart_android_apps_mobile_components_assistantscreen_tsx",
-      "community": 4
+      "community": 0,
+      "id": "e_agri_mart_agrimart_android_apps_mobile_components_assistantscreen_tsx"
     },
     {
       "label": "now()",
       "file_type": "code",
       "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\AssistantScreen.tsx",
       "source_location": "L18",
-      "id": "assistantscreen_now",
-      "community": 4
+      "community": 0,
+      "id": "assistantscreen_now"
     },
     {
       "label": "handleSend()",
       "file_type": "code",
       "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\AssistantScreen.tsx",
-      "source_location": "L38",
-      "id": "assistantscreen_handlesend",
-      "community": 4
+      "source_location": "L58",
+      "community": 0,
+      "id": "assistantscreen_handlesend"
     },
     {
       "label": "handleReset()",
       "file_type": "code",
       "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\AssistantScreen.tsx",
-      "source_location": "L49",
-      "id": "assistantscreen_handlereset",
-      "community": 4
+      "source_location": "L69",
+      "community": 0,
+      "id": "assistantscreen_handlereset"
     },
     {
       "label": "DetailsScreen.tsx",
       "file_type": "code",
       "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\DetailsScreen.tsx",
       "source_location": "L1",
-      "id": "e_agri_mart_agrimart_android_apps_mobile_components_detailsscreen_tsx",
-      "community": 6
+      "community": 0,
+      "id": "e_agri_mart_agrimart_android_apps_mobile_components_detailsscreen_tsx"
     },
     {
       "label": "OnboardingScreen.tsx",
       "file_type": "code",
       "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\OnboardingScreen.tsx",
       "source_location": "L1",
-      "id": "e_agri_mart_agrimart_android_apps_mobile_components_onboardingscreen_tsx",
-      "community": 2
+      "community": 12,
+      "id": "e_agri_mart_agrimart_android_apps_mobile_components_onboardingscreen_tsx"
     },
     {
       "label": "next()",
       "file_type": "code",
       "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\OnboardingScreen.tsx",
       "source_location": "L76",
-      "id": "onboardingscreen_next",
-      "community": 2
+      "community": 12,
+      "id": "onboardingscreen_next"
     },
     {
       "label": "prev()",
       "file_type": "code",
       "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\OnboardingScreen.tsx",
       "source_location": "L82",
-      "id": "onboardingscreen_prev",
-      "community": 2
+      "community": 12,
+      "id": "onboardingscreen_prev"
     },
     {
       "label": "goTo()",
       "file_type": "code",
       "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\OnboardingScreen.tsx",
       "source_location": "L88",
-      "id": "onboardingscreen_goto",
-      "community": 2
+      "community": 12,
+      "id": "onboardingscreen_goto"
     },
     {
       "label": "onTouchStart()",
       "file_type": "code",
       "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\OnboardingScreen.tsx",
       "source_location": "L93",
-      "id": "onboardingscreen_ontouchstart",
-      "community": 2
+      "community": 12,
+      "id": "onboardingscreen_ontouchstart"
     },
     {
       "label": "onTouchEnd()",
       "file_type": "code",
       "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\OnboardingScreen.tsx",
       "source_location": "L94",
-      "id": "onboardingscreen_ontouchend",
-      "community": 2
+      "community": 12,
+      "id": "onboardingscreen_ontouchend"
     },
     {
       "label": "OrdersScreen.tsx",
       "file_type": "code",
       "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\OrdersScreen.tsx",
       "source_location": "L1",
-      "id": "e_agri_mart_agrimart_android_apps_mobile_components_ordersscreen_tsx",
-      "community": 0
+      "community": 0,
+      "id": "e_agri_mart_agrimart_android_apps_mobile_components_ordersscreen_tsx"
     },
     {
       "label": "OrderCard()",
       "file_type": "code",
       "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\OrdersScreen.tsx",
       "source_location": "L53",
-      "id": "ordersscreen_ordercard",
-      "community": 0
+      "community": 0,
+      "id": "ordersscreen_ordercard"
     },
     {
       "label": "ProfileScreen.tsx",
       "file_type": "code",
       "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\ProfileScreen.tsx",
       "source_location": "L1",
-      "id": "e_agri_mart_agrimart_android_apps_mobile_components_profilescreen_tsx",
-      "community": 20
+      "community": 13,
+      "id": "e_agri_mart_agrimart_android_apps_mobile_components_profilescreen_tsx"
     },
     {
       "label": "SellScreen.tsx",
       "file_type": "code",
       "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\SellScreen.tsx",
       "source_location": "L1",
-      "id": "e_agri_mart_agrimart_android_apps_mobile_components_sellscreen_tsx",
-      "community": 3
+      "community": 1,
+      "id": "e_agri_mart_agrimart_android_apps_mobile_components_sellscreen_tsx"
     },
     {
       "label": "SuccessView()",
       "file_type": "code",
       "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\SellScreen.tsx",
       "source_location": "L14",
-      "id": "sellscreen_successview",
-      "community": 3
+      "community": 1,
+      "id": "sellscreen_successview"
     },
     {
       "label": "Field()",
       "file_type": "code",
       "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\SellScreen.tsx",
       "source_location": "L42",
-      "id": "sellscreen_field",
-      "community": 3
+      "community": 1,
+      "id": "sellscreen_field"
     },
     {
       "label": "PillButton.tsx",
       "file_type": "code",
       "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\atoms\\PillButton.tsx",
       "source_location": "L1",
-      "id": "e_agri_mart_agrimart_android_apps_mobile_components_atoms_pillbutton_tsx",
-      "community": 7
+      "community": 17,
+      "id": "e_agri_mart_agrimart_android_apps_mobile_components_atoms_pillbutton_tsx"
     },
     {
       "label": "SectionReveal.tsx",
       "file_type": "code",
       "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\atoms\\SectionReveal.tsx",
       "source_location": "L1",
-      "id": "e_agri_mart_agrimart_android_apps_mobile_components_atoms_sectionreveal_tsx",
-      "community": 8
+      "community": 18,
+      "id": "e_agri_mart_agrimart_android_apps_mobile_components_atoms_sectionreveal_tsx"
     },
     {
       "label": "AgriMart Mobile App",
@@ -444,8 +444,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_agrimart_mobile_app",
-      "community": 1
+      "community": 7,
+      "id": "readme_agrimart_mobile_app"
     },
     {
       "label": "AI Studio",
@@ -456,8 +456,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_ai_studio",
-      "community": 1
+      "community": 7,
+      "id": "readme_ai_studio"
     },
     {
       "label": "Node.js",
@@ -468,8 +468,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_nodejs",
-      "community": 1
+      "community": 7,
+      "id": "readme_nodejs"
     },
     {
       "label": "GEMINI_API_KEY",
@@ -480,8 +480,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_gemini_api_key",
-      "community": 1
+      "community": 7,
+      "id": "readme_gemini_api_key"
     },
     {
       "label": ".env.local",
@@ -492,8 +492,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_env_local",
-      "community": 1
+      "community": 7,
+      "id": "readme_env_local"
     },
     {
       "label": "npm install",
@@ -504,8 +504,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_npm_install",
-      "community": 1
+      "community": 7,
+      "id": "readme_npm_install"
     },
     {
       "label": "npm run dev",
@@ -516,8 +516,1216 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_npm_run_dev",
+      "community": 7,
+      "id": "readme_npm_run_dev"
+    },
+    {
+      "label": "App()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\App.tsx",
+      "source_location": "L45",
+      "id": "app_app",
+      "community": 16
+    },
+    {
+      "label": "constants.tsx",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\constants.tsx",
+      "source_location": "L1",
+      "id": "e_agri_mart_agrimart_android_apps_mobile_constants_tsx",
+      "community": 42
+    },
+    {
+      "label": "vite.config.ts",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\vite.config.ts",
+      "source_location": "L1",
+      "id": "e_agri_mart_agrimart_android_apps_mobile_vite_config_ts",
+      "community": 43
+    },
+    {
+      "label": "sendQuery()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\AssistantScreen.tsx",
+      "source_location": "L44",
+      "id": "assistantscreen_sendquery",
+      "community": 0
+    },
+    {
+      "label": "handleRetry()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\AssistantScreen.tsx",
+      "source_location": "L65",
+      "id": "assistantscreen_handleretry",
+      "community": 0
+    },
+    {
+      "label": "AuthScreen.tsx",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\AuthScreen.tsx",
+      "source_location": "L1",
+      "id": "e_agri_mart_agrimart_android_apps_mobile_components_authscreen_tsx",
+      "community": 5
+    },
+    {
+      "label": "err()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\AuthScreen.tsx",
+      "source_location": "L31",
+      "id": "authscreen_err",
+      "community": 5
+    },
+    {
+      "label": "validate()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\AuthScreen.tsx",
+      "source_location": "L167",
+      "id": "authscreen_validate",
+      "community": 5
+    },
+    {
+      "label": "submit()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\AuthScreen.tsx",
+      "source_location": "L175",
+      "id": "authscreen_submit",
+      "community": 5
+    },
+    {
+      "label": "set()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\AuthScreen.tsx",
+      "source_location": "L279",
+      "id": "authscreen_set",
+      "community": 5
+    },
+    {
+      "label": "handlePhoto()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\AuthScreen.tsx",
+      "source_location": "L282",
+      "id": "authscreen_handlephoto",
+      "community": 5
+    },
+    {
+      "label": "next()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\AuthScreen.tsx",
+      "source_location": "L300",
+      "id": "authscreen_next",
+      "community": 5
+    },
+    {
+      "label": "handleDigit()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\AuthScreen.tsx",
+      "source_location": "L540",
+      "id": "authscreen_handledigit",
+      "community": 5
+    },
+    {
+      "label": "BottomNav.tsx",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\BottomNav.tsx",
+      "source_location": "L1",
+      "id": "e_agri_mart_agrimart_android_apps_mobile_components_bottomnav_tsx",
+      "community": 21
+    },
+    {
+      "label": "BottomNav()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\BottomNav.tsx",
+      "source_location": "L13",
+      "id": "bottomnav_bottomnav",
+      "community": 21
+    },
+    {
+      "label": "CartScreen.tsx",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\CartScreen.tsx",
+      "source_location": "L1",
+      "id": "e_agri_mart_agrimart_android_apps_mobile_components_cartscreen_tsx",
+      "community": 22
+    },
+    {
+      "label": "handler()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\CartScreen.tsx",
+      "source_location": "L21",
+      "id": "cartscreen_handler",
+      "community": 22
+    },
+    {
+      "label": "CheckoutScreen.tsx",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\CheckoutScreen.tsx",
+      "source_location": "L1",
+      "id": "e_agri_mart_agrimart_android_apps_mobile_components_checkoutscreen_tsx",
+      "community": 23
+    },
+    {
+      "label": "handleConfirm()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\CheckoutScreen.tsx",
+      "source_location": "L47",
+      "id": "checkoutscreen_handleconfirm",
+      "community": 23
+    },
+    {
+      "label": "CropCalendarScreen.tsx",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\CropCalendarScreen.tsx",
+      "source_location": "L1",
+      "id": "e_agri_mart_agrimart_android_apps_mobile_components_cropcalendarscreen_tsx",
+      "community": 24
+    },
+    {
+      "label": "getPhase()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\CropCalendarScreen.tsx",
+      "source_location": "L58",
+      "id": "cropcalendarscreen_getphase",
+      "community": 24
+    },
+    {
+      "label": "ExploreScreen.tsx",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\ExploreScreen.tsx",
+      "source_location": "L1",
+      "id": "e_agri_mart_agrimart_android_apps_mobile_components_explorescreen_tsx",
+      "community": 44
+    },
+    {
+      "label": "Header.tsx",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\Header.tsx",
+      "source_location": "L1",
+      "id": "e_agri_mart_agrimart_android_apps_mobile_components_header_tsx",
+      "community": 0
+    },
+    {
+      "label": "HomeScreen.tsx",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\HomeScreen.tsx",
+      "source_location": "L1",
+      "id": "e_agri_mart_agrimart_android_apps_mobile_components_homescreen_tsx",
+      "community": 11
+    },
+    {
+      "label": "getSavedIds()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\HomeScreen.tsx",
+      "source_location": "L30",
+      "id": "homescreen_getsavedids",
+      "community": 11
+    },
+    {
+      "label": "getUserListings()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\HomeScreen.tsx",
+      "source_location": "L34",
+      "id": "homescreen_getuserlistings",
+      "community": 11
+    },
+    {
+      "label": "toggleSave()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\HomeScreen.tsx",
+      "source_location": "L102",
+      "id": "homescreen_togglesave",
+      "community": 11
+    },
+    {
+      "label": "handleEnquiry()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\HomeScreen.tsx",
+      "source_location": "L112",
+      "id": "homescreen_handleenquiry",
+      "community": 11
+    },
+    {
+      "label": "isLocalProduct()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\HomeScreen.tsx",
+      "source_location": "L170",
+      "id": "homescreen_islocalproduct",
+      "community": 11
+    },
+    {
+      "label": "LocationPickerModal.tsx",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\LocationPickerModal.tsx",
+      "source_location": "L1",
+      "id": "e_agri_mart_agrimart_android_apps_mobile_components_locationpickermodal_tsx",
+      "community": 8
+    },
+    {
+      "label": "markerIcon()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\LocationPickerModal.tsx",
+      "source_location": "L23",
+      "id": "locationpickermodal_markericon",
+      "community": 8
+    },
+    {
+      "label": "applySliderUI()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\LocationPickerModal.tsx",
+      "source_location": "L55",
+      "id": "locationpickermodal_applysliderui",
+      "community": 8
+    },
+    {
+      "label": "upsertCircle()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\LocationPickerModal.tsx",
+      "source_location": "L82",
+      "id": "locationpickermodal_upsertcircle",
+      "community": 8
+    },
+    {
+      "label": "geocode()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\LocationPickerModal.tsx",
+      "source_location": "L97",
+      "id": "locationpickermodal_geocode",
+      "community": 8
+    },
+    {
+      "label": "handleGPS()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\LocationPickerModal.tsx",
+      "source_location": "L156",
+      "id": "locationpickermodal_handlegps",
+      "community": 8
+    },
+    {
+      "label": "handleOk()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\LocationPickerModal.tsx",
+      "source_location": "L171",
+      "id": "locationpickermodal_handleok",
+      "community": 8
+    },
+    {
+      "label": "locationTypes.ts",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\locationTypes.ts",
+      "source_location": "L1",
+      "id": "e_agri_mart_agrimart_android_apps_mobile_components_locationtypes_ts",
+      "community": 45
+    },
+    {
+      "label": "Logo.tsx",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\Logo.tsx",
+      "source_location": "L1",
+      "id": "e_agri_mart_agrimart_android_apps_mobile_components_logo_tsx",
+      "community": 25
+    },
+    {
+      "label": "Logo()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\Logo.tsx",
+      "source_location": "L11",
+      "id": "logo_logo",
+      "community": 25
+    },
+    {
+      "label": "MessagesScreen.tsx",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\MessagesScreen.tsx",
+      "source_location": "L1",
+      "id": "e_agri_mart_agrimart_android_apps_mobile_components_messagesscreen_tsx",
+      "community": 26
+    },
+    {
+      "label": "formatTime()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\MessagesScreen.tsx",
+      "source_location": "L41",
+      "id": "messagesscreen_formattime",
+      "community": 26
+    },
+    {
+      "label": "MyListingsScreen.tsx",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\MyListingsScreen.tsx",
+      "source_location": "L1",
+      "id": "e_agri_mart_agrimart_android_apps_mobile_components_mylistingsscreen_tsx",
+      "community": 27
+    },
+    {
+      "label": "loadUserListings()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\MyListingsScreen.tsx",
+      "source_location": "L42",
+      "id": "mylistingsscreen_loaduserlistings",
+      "community": 27
+    },
+    {
+      "label": "OrderDetailPanel()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\OrdersScreen.tsx",
+      "source_location": "L187",
+      "id": "ordersscreen_orderdetailpanel",
+      "community": 0
+    },
+    {
+      "label": "rupeeFormat()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\OrdersScreen.tsx",
+      "source_location": "L546",
+      "id": "ordersscreen_rupeeformat",
+      "community": 0
+    },
+    {
+      "label": "handleSave()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\ProfileScreen.tsx",
+      "source_location": "L98",
+      "id": "profilescreen_handlesave",
+      "community": 13
+    },
+    {
+      "label": "toggle()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\ProfileScreen.tsx",
+      "source_location": "L306",
+      "id": "profilescreen_toggle",
+      "community": 13
+    },
+    {
+      "label": "navigateTo()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\ProfileScreen.tsx",
+      "source_location": "L836",
+      "id": "profilescreen_navigateto",
+      "community": 13
+    },
+    {
+      "label": "goBack()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\ProfileScreen.tsx",
+      "source_location": "L840",
+      "id": "profilescreen_goback",
+      "community": 13
+    },
+    {
+      "label": "handleAction()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\ProfileScreen.tsx",
+      "source_location": "L847",
+      "id": "profilescreen_handleaction",
+      "community": 13
+    },
+    {
+      "label": "SellerProfileScreen.tsx",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\SellerProfileScreen.tsx",
+      "source_location": "L1",
+      "id": "e_agri_mart_agrimart_android_apps_mobile_components_sellerprofilescreen_tsx",
+      "community": 28
+    },
+    {
+      "label": "handleEnquiry()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\SellerProfileScreen.tsx",
+      "source_location": "L37",
+      "id": "sellerprofilescreen_handleenquiry",
+      "community": 28
+    },
+    {
+      "label": "processMedia()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\SellScreen.tsx",
+      "source_location": "L51",
+      "id": "sellscreen_processmedia",
       "community": 1
+    },
+    {
+      "label": "loadDraft()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\SellScreen.tsx",
+      "source_location": "L91",
+      "id": "sellscreen_loaddraft",
+      "community": 1
+    },
+    {
+      "label": "farmMarkerIcon()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\SellScreen.tsx",
+      "source_location": "L96",
+      "id": "sellscreen_farmmarkericon",
+      "community": 1
+    },
+    {
+      "label": "updatePin()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\SellScreen.tsx",
+      "source_location": "L153",
+      "id": "sellscreen_updatepin",
+      "community": 1
+    },
+    {
+      "label": "handlePhotoChange()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\SellScreen.tsx",
+      "source_location": "L320",
+      "id": "sellscreen_handlephotochange",
+      "community": 1
+    },
+    {
+      "label": "handleIdentityChange()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\SellScreen.tsx",
+      "source_location": "L328",
+      "id": "sellscreen_handleidentitychange",
+      "community": 1
+    },
+    {
+      "label": "CartBadge.tsx",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\atoms\\CartBadge.tsx",
+      "source_location": "L1",
+      "id": "e_agri_mart_agrimart_android_apps_mobile_components_atoms_cartbadge_tsx",
+      "community": 29
+    },
+    {
+      "label": "CartBadge()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\atoms\\CartBadge.tsx",
+      "source_location": "L9",
+      "id": "cartbadge_cartbadge",
+      "community": 29
+    },
+    {
+      "label": "SearchableDropdown.tsx",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\atoms\\SearchableDropdown.tsx",
+      "source_location": "L1",
+      "id": "e_agri_mart_agrimart_android_apps_mobile_components_atoms_searchabledropdown_tsx",
+      "community": 46
+    },
+    {
+      "label": "SkeletonCard.tsx",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\atoms\\SkeletonCard.tsx",
+      "source_location": "L1",
+      "id": "e_agri_mart_agrimart_android_apps_mobile_components_atoms_skeletoncard_tsx",
+      "community": 47
+    },
+    {
+      "label": "StatCard.tsx",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\atoms\\StatCard.tsx",
+      "source_location": "L1",
+      "id": "e_agri_mart_agrimart_android_apps_mobile_components_atoms_statcard_tsx",
+      "community": 19
+    },
+    {
+      "label": "WeatherWidget.tsx",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\atoms\\WeatherWidget.tsx",
+      "source_location": "L1",
+      "id": "e_agri_mart_agrimart_android_apps_mobile_components_atoms_weatherwidget_tsx",
+      "community": 30
+    },
+    {
+      "label": "weatherIcon()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\atoms\\WeatherWidget.tsx",
+      "source_location": "L10",
+      "id": "weatherwidget_weathericon",
+      "community": 30
+    },
+    {
+      "label": "ProductCard.tsx",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\molecules\\ProductCard.tsx",
+      "source_location": "L1",
+      "id": "e_agri_mart_agrimart_android_apps_mobile_components_molecules_productcard_tsx",
+      "community": 0
+    },
+    {
+      "label": "DarkHeroSection.tsx",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\organisms\\DarkHeroSection.tsx",
+      "source_location": "L1",
+      "id": "e_agri_mart_agrimart_android_apps_mobile_components_organisms_darkherosection_tsx",
+      "community": 48
+    },
+    {
+      "label": "FarmingNewsSection.tsx",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\organisms\\FarmingNewsSection.tsx",
+      "source_location": "L1",
+      "id": "e_agri_mart_agrimart_android_apps_mobile_components_organisms_farmingnewssection_tsx",
+      "community": 2
+    },
+    {
+      "label": "openUrl()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\organisms\\FarmingNewsSection.tsx",
+      "source_location": "L6",
+      "id": "farmingnewssection_openurl",
+      "community": 2
+    },
+    {
+      "label": "fetchWithTimeout()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\organisms\\FarmingNewsSection.tsx",
+      "source_location": "L15",
+      "id": "farmingnewssection_fetchwithtimeout",
+      "community": 2
+    },
+    {
+      "label": "guessCategory()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\organisms\\FarmingNewsSection.tsx",
+      "source_location": "L48",
+      "id": "farmingnewssection_guesscategory",
+      "community": 2
+    },
+    {
+      "label": "relativeDate()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\organisms\\FarmingNewsSection.tsx",
+      "source_location": "L56",
+      "id": "farmingnewssection_relativedate",
+      "community": 2
+    },
+    {
+      "label": "daysAgo()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\organisms\\FarmingNewsSection.tsx",
+      "source_location": "L68",
+      "id": "farmingnewssection_daysago",
+      "community": 2
+    },
+    {
+      "label": "readCache()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\organisms\\FarmingNewsSection.tsx",
+      "source_location": "L74",
+      "id": "farmingnewssection_readcache",
+      "community": 2
+    },
+    {
+      "label": "writeCache()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\organisms\\FarmingNewsSection.tsx",
+      "source_location": "L83",
+      "id": "farmingnewssection_writecache",
+      "community": 2
+    },
+    {
+      "label": "buildStaticNews()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\organisms\\FarmingNewsSection.tsx",
+      "source_location": "L89",
+      "id": "farmingnewssection_buildstaticnews",
+      "community": 2
+    },
+    {
+      "label": "fetchOneFeed()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\organisms\\FarmingNewsSection.tsx",
+      "source_location": "L145",
+      "id": "farmingnewssection_fetchonefeed",
+      "community": 2
+    },
+    {
+      "label": "loadNews()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\organisms\\FarmingNewsSection.tsx",
+      "source_location": "L192",
+      "id": "farmingnewssection_loadnews",
+      "community": 2
+    },
+    {
+      "label": "LivePriceTicker.tsx",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\organisms\\LivePriceTicker.tsx",
+      "source_location": "L1",
+      "id": "e_agri_mart_agrimart_android_apps_mobile_components_organisms_livepriceticker_tsx",
+      "community": 3
+    },
+    {
+      "label": "seededRandom()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\organisms\\LivePriceTicker.tsx",
+      "source_location": "L43",
+      "id": "livepriceticker_seededrandom",
+      "community": 3
+    },
+    {
+      "label": "dailyPrice()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\organisms\\LivePriceTicker.tsx",
+      "source_location": "L54",
+      "id": "livepriceticker_dailyprice",
+      "community": 3
+    },
+    {
+      "label": "buildDailyPrices()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\organisms\\LivePriceTicker.tsx",
+      "source_location": "L60",
+      "id": "livepriceticker_builddailyprices",
+      "community": 3
+    },
+    {
+      "label": "haversineKm()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\organisms\\LivePriceTicker.tsx",
+      "source_location": "L111",
+      "id": "livepriceticker_haversinekm",
+      "community": 3
+    },
+    {
+      "label": "resolveUserCoords()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\organisms\\LivePriceTicker.tsx",
+      "source_location": "L123",
+      "id": "livepriceticker_resolveusercoords",
+      "community": 3
+    },
+    {
+      "label": "getChange()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\organisms\\LivePriceTicker.tsx",
+      "source_location": "L135",
+      "id": "livepriceticker_getchange",
+      "community": 3
+    },
+    {
+      "label": "step()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\organisms\\LivePriceTicker.tsx",
+      "source_location": "L179",
+      "id": "livepriceticker_step",
+      "community": 3
+    },
+    {
+      "label": "handleTap()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\organisms\\LivePriceTicker.tsx",
+      "source_location": "L198",
+      "id": "livepriceticker_handletap",
+      "community": 3
+    },
+    {
+      "label": "demo.tsx",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\ui\\demo.tsx",
+      "source_location": "L1",
+      "id": "e_agri_mart_agrimart_android_apps_mobile_components_ui_demo_tsx",
+      "community": 31
+    },
+    {
+      "label": "DemoOne()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\ui\\demo.tsx",
+      "source_location": "L3",
+      "id": "demo_demoone",
+      "community": 31
+    },
+    {
+      "label": "dynamic-animated-hero-section-with-gradient.tsx",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\ui\\dynamic-animated-hero-section-with-gradient.tsx",
+      "source_location": "L1",
+      "id": "e_agri_mart_agrimart_android_apps_mobile_components_ui_dynamic_animated_hero_section_with_gradient_tsx",
+      "community": 49
+    },
+    {
+      "label": "maharashtraLocations.ts",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\data\\maharashtraLocations.ts",
+      "source_location": "L1",
+      "id": "e_agri_mart_agrimart_android_apps_mobile_data_maharashtralocations_ts",
+      "community": 32
+    },
+    {
+      "label": "getTalukasByDistrict()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\data\\maharashtraLocations.ts",
+      "source_location": "L127",
+      "id": "maharashtralocations_gettalukasbydistrict",
+      "community": 32
+    },
+    {
+      "label": "index.ts",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\theme\\index.ts",
+      "source_location": "L1",
+      "id": "e_agri_mart_agrimart_android_apps_mobile_theme_index_ts",
+      "community": 50
+    },
+    {
+      "label": "cart.ts",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\utils\\cart.ts",
+      "source_location": "L1",
+      "id": "e_agri_mart_agrimart_android_apps_mobile_utils_cart_ts",
+      "community": 4
+    },
+    {
+      "label": "dispatch()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\utils\\cart.ts",
+      "source_location": "L9",
+      "id": "cart_dispatch",
+      "community": 4
+    },
+    {
+      "label": "getCart()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\utils\\cart.ts",
+      "source_location": "L13",
+      "id": "cart_getcart",
+      "community": 4
+    },
+    {
+      "label": "saveCart()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\utils\\cart.ts",
+      "source_location": "L17",
+      "id": "cart_savecart",
+      "community": 4
+    },
+    {
+      "label": "addToCart()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\utils\\cart.ts",
+      "source_location": "L22",
+      "id": "cart_addtocart",
+      "community": 4
+    },
+    {
+      "label": "removeFromCart()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\utils\\cart.ts",
+      "source_location": "L33",
+      "id": "cart_removefromcart",
+      "community": 4
+    },
+    {
+      "label": "updateQty()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\utils\\cart.ts",
+      "source_location": "L37",
+      "id": "cart_updateqty",
+      "community": 4
+    },
+    {
+      "label": "clearCart()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\utils\\cart.ts",
+      "source_location": "L43",
+      "id": "cart_clearcart",
+      "community": 4
+    },
+    {
+      "label": "getCartCount()",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\utils\\cart.ts",
+      "source_location": "L47",
+      "id": "cart_getcartcount",
+      "community": 4
+    },
+    {
+      "label": "haptic.ts",
+      "file_type": "code",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\utils\\haptic.ts",
+      "source_location": "L1",
+      "id": "e_agri_mart_agrimart_android_apps_mobile_utils_haptic_ts",
+      "community": 51
+    },
+    {
+      "label": "Drip Irrigation Kit",
+      "file_type": "image",
+      "source_file": "public/images/drip_irrigation_kit.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "drip_irrigation_kit_product",
+      "community": 14
+    },
+    {
+      "label": "Adjustable Drip Emitter",
+      "file_type": "image",
+      "source_file": "public/images/drip_irrigation_kit.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "drip_irrigation_kit_dripper",
+      "community": 14
+    },
+    {
+      "label": "Barbed T-Connector Fitting",
+      "file_type": "image",
+      "source_file": "public/images/drip_irrigation_kit.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "drip_irrigation_kit_connector",
+      "community": 14
+    },
+    {
+      "label": "Flow Control Valve",
+      "file_type": "image",
+      "source_file": "public/images/drip_irrigation_kit.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "drip_irrigation_kit_valve",
+      "community": 14
+    },
+    {
+      "label": "Agricultural Irrigation Equipment",
+      "file_type": "image",
+      "source_file": "public/images/drip_irrigation_kit.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "drip_irrigation_kit_category",
+      "community": 14
+    },
+    {
+      "label": "Precision Micro-Irrigation for Crops",
+      "file_type": "image",
+      "source_file": "public/images/drip_irrigation_kit.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "drip_irrigation_kit_use_case",
+      "community": 14
+    },
+    {
+      "label": "NPK 19:19:19 Fertilizer",
+      "file_type": "image",
+      "source_file": "public/images/npk-19-19-19.webp",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "npk191919_product",
+      "community": 9
+    },
+    {
+      "label": "Fertilizer",
+      "file_type": "image",
+      "source_file": "public/images/npk-19-19-19.webp",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "npk191919_category_fertilizer",
+      "community": 9
+    },
+    {
+      "label": "Nitrogen (N)",
+      "file_type": "image",
+      "source_file": "public/images/npk-19-19-19.webp",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "npk191919_nutrient_nitrogen",
+      "community": 9
+    },
+    {
+      "label": "Phosphorus (P)",
+      "file_type": "image",
+      "source_file": "public/images/npk-19-19-19.webp",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "npk191919_nutrient_phosphorus",
+      "community": 9
+    },
+    {
+      "label": "Potassium (K)",
+      "file_type": "image",
+      "source_file": "public/images/npk-19-19-19.webp",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "npk191919_nutrient_potassium",
+      "community": 9
+    },
+    {
+      "label": "Water-Soluble Powder Form",
+      "file_type": "image",
+      "source_file": "public/images/npk-19-19-19.webp",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "npk191919_form_powder",
+      "community": 9
+    },
+    {
+      "label": "Crop Nutrition / Agri Input",
+      "file_type": "image",
+      "source_file": "public/images/npk-19-19-19.webp",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "npk191919_use_crop_nutrition",
+      "community": 9
+    },
+    {
+      "label": "Soybean Product Photo",
+      "file_type": "image",
+      "source_file": "public/images/soybean.webp",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "soybean_image",
+      "community": 6
+    },
+    {
+      "label": "Soybean (Crop)",
+      "file_type": "image",
+      "source_file": "public/images/soybean.webp",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "soybean_crop",
+      "community": 6
+    },
+    {
+      "label": "Soybean Grains (Harvested)",
+      "file_type": "image",
+      "source_file": "public/images/soybean.webp",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "soybean_grains",
+      "community": 6
+    },
+    {
+      "label": "Farmer Holding Soybeans",
+      "file_type": "image",
+      "source_file": "public/images/soybean.webp",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "soybean_farmer",
+      "community": 6
+    },
+    {
+      "label": "Soybean Field with Irrigation",
+      "file_type": "image",
+      "source_file": "public/images/soybean.webp",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "soybean_field",
+      "community": 6
+    },
+    {
+      "label": "Jute Sack of Soybeans",
+      "file_type": "image",
+      "source_file": "public/images/soybean.webp",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "soybean_jute_sack",
+      "community": 6
+    },
+    {
+      "label": "Pulses & Oilseeds Category",
+      "file_type": "image",
+      "source_file": "public/images/soybean.webp",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "category_pulses_oilseeds",
+      "community": 6
+    },
+    {
+      "label": "AgriMart Marketplace",
+      "file_type": "image",
+      "source_file": "public/images/soybean.webp",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "agrimart_marketplace",
+      "community": 6
+    },
+    {
+      "label": "Sugarcane Saplings Product Photo",
+      "file_type": "image",
+      "source_file": "public/images/sugarcane-saplings.webp",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "sugarcane-saplings_image",
+      "community": 10
+    },
+    {
+      "label": "Sugarcane Saplings",
+      "file_type": "image",
+      "source_file": "public/images/sugarcane-saplings.webp",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "sugarcane-saplings_product",
+      "community": 10
+    },
+    {
+      "label": "Seedlings / Planting Material Category",
+      "file_type": "image",
+      "source_file": "public/images/sugarcane-saplings.webp",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "sugarcane-saplings_category_seedlings",
+      "community": 10
+    },
+    {
+      "label": "Sugarcane Crop",
+      "file_type": "image",
+      "source_file": "public/images/sugarcane-saplings.webp",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "sugarcane-saplings_crop_sugarcane",
+      "community": 10
+    },
+    {
+      "label": "Propagation Tray / Seedling Tray",
+      "file_type": "image",
+      "source_file": "public/images/sugarcane-saplings.webp",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "sugarcane-saplings_tray_propagation",
+      "community": 10
+    },
+    {
+      "label": "Field Transplanting Use Case",
+      "file_type": "image",
+      "source_file": "public/images/sugarcane-saplings.webp",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "sugarcane-saplings_use_transplanting",
+      "community": 10
+    },
+    {
+      "label": "Maharashtra Sugarcane Farming Context",
+      "file_type": "image",
+      "source_file": "public/images/sugarcane-saplings.webp",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "sugarcane-saplings_maharashtra_context",
+      "community": 10
+    },
+    {
+      "label": "Fresh Turmeric Root",
+      "file_type": "image",
+      "source_file": "public/images/trumeric.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "trumeric_turmeric_root",
+      "community": 15
+    },
+    {
+      "label": "Spices & Condiments Category",
+      "file_type": "image",
+      "source_file": "public/images/trumeric.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "trumeric_spice_category",
+      "community": 15
+    },
+    {
+      "label": "Agricultural Produce",
+      "file_type": "image",
+      "source_file": "public/images/trumeric.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "trumeric_agricultural_produce",
+      "community": 15
+    },
+    {
+      "label": "Product Listing Image (Turmeric)",
+      "file_type": "image",
+      "source_file": "public/images/trumeric.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "trumeric_product_image",
+      "community": 15
     }
   ],
   "links": [
@@ -565,9 +1773,9 @@
       "weight": 1.0,
       "_src": "e_agri_mart_agrimart_android_apps_mobile_app_tsx",
       "_tgt": "app_changescreen",
+      "confidence_score": 1.0,
       "source": "app_changescreen",
-      "target": "e_agri_mart_agrimart_android_apps_mobile_app_tsx",
-      "confidence_score": 1.0
+      "target": "e_agri_mart_agrimart_android_apps_mobile_app_tsx"
     },
     {
       "relation": "imports_from",
@@ -613,9 +1821,9 @@
       "weight": 1.0,
       "_src": "e_agri_mart_agrimart_android_apps_mobile_components_assistantscreen_tsx",
       "_tgt": "constants_tsx",
+      "confidence_score": 1.0,
       "source": "constants_tsx",
-      "target": "e_agri_mart_agrimart_android_apps_mobile_components_assistantscreen_tsx",
-      "confidence_score": 1.0
+      "target": "e_agri_mart_agrimart_android_apps_mobile_components_assistantscreen_tsx"
     },
     {
       "relation": "imports_from",
@@ -625,9 +1833,9 @@
       "weight": 1.0,
       "_src": "e_agri_mart_agrimart_android_apps_mobile_components_detailsscreen_tsx",
       "_tgt": "constants_tsx",
+      "confidence_score": 1.0,
       "source": "constants_tsx",
-      "target": "e_agri_mart_agrimart_android_apps_mobile_components_detailsscreen_tsx",
-      "confidence_score": 1.0
+      "target": "e_agri_mart_agrimart_android_apps_mobile_components_detailsscreen_tsx"
     },
     {
       "relation": "imports_from",
@@ -637,9 +1845,9 @@
       "weight": 1.0,
       "_src": "e_agri_mart_agrimart_android_apps_mobile_components_ordersscreen_tsx",
       "_tgt": "constants_tsx",
+      "confidence_score": 1.0,
       "source": "constants_tsx",
-      "target": "e_agri_mart_agrimart_android_apps_mobile_components_ordersscreen_tsx",
-      "confidence_score": 1.0
+      "target": "e_agri_mart_agrimart_android_apps_mobile_components_ordersscreen_tsx"
     },
     {
       "relation": "imports_from",
@@ -649,9 +1857,9 @@
       "weight": 1.0,
       "_src": "e_agri_mart_agrimart_android_apps_mobile_components_sellscreen_tsx",
       "_tgt": "constants_tsx",
+      "confidence_score": 1.0,
       "source": "constants_tsx",
-      "target": "e_agri_mart_agrimart_android_apps_mobile_components_sellscreen_tsx",
-      "confidence_score": 1.0
+      "target": "e_agri_mart_agrimart_android_apps_mobile_components_sellscreen_tsx"
     },
     {
       "relation": "imports_from",
@@ -729,13 +1937,13 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\DetailsScreen.tsx",
-      "source_location": "L18",
+      "source_location": "L23",
       "weight": 1.0,
       "_src": "e_agri_mart_agrimart_android_apps_mobile_components_detailsscreen_tsx",
       "_tgt": "detailsscreen_detailsscreen",
+      "confidence_score": 1.0,
       "source": "detailsscreen_detailsscreen",
-      "target": "e_agri_mart_agrimart_android_apps_mobile_components_detailsscreen_tsx",
-      "confidence_score": 1.0
+      "target": "e_agri_mart_agrimart_android_apps_mobile_components_detailsscreen_tsx"
     },
     {
       "relation": "contains",
@@ -752,6 +1960,18 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\Header.tsx",
+      "source_location": "L25",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_header_tsx",
+      "_tgt": "header_onscroll",
+      "source": "header_onscroll",
+      "target": "e_agri_mart_agrimart_android_apps_mobile_components_header_tsx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "components\\HomeScreen.tsx",
       "source_location": "L38",
       "weight": 1.0,
@@ -760,6 +1980,18 @@
       "confidence_score": 1.0,
       "source": "components_homescreen_tsx",
       "target": "homescreen_toggleselect"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\HomeScreen.tsx",
+      "source_location": "L95",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_homescreen_tsx",
+      "_tgt": "homescreen_toggleselect",
+      "source": "homescreen_toggleselect",
+      "target": "e_agri_mart_agrimart_android_apps_mobile_components_homescreen_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -777,13 +2009,13 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\SellScreen.tsx",
-      "source_location": "L67",
+      "source_location": "L332",
       "weight": 1.0,
       "_src": "e_agri_mart_agrimart_android_apps_mobile_components_sellscreen_tsx",
       "_tgt": "sellscreen_handlepublish",
+      "confidence_score": 1.0,
       "source": "sellscreen_handlepublish",
-      "target": "e_agri_mart_agrimart_android_apps_mobile_components_sellscreen_tsx",
-      "confidence_score": 1.0
+      "target": "e_agri_mart_agrimart_android_apps_mobile_components_sellscreen_tsx"
     },
     {
       "relation": "contains",
@@ -805,9 +2037,9 @@
       "weight": 1.0,
       "_src": "e_agri_mart_agrimart_android_apps_mobile_components_atoms_pillbutton_tsx",
       "_tgt": "pillbutton_pillbutton",
+      "confidence_score": 1.0,
       "source": "pillbutton_pillbutton",
-      "target": "e_agri_mart_agrimart_android_apps_mobile_components_atoms_pillbutton_tsx",
-      "confidence_score": 1.0
+      "target": "e_agri_mart_agrimart_android_apps_mobile_components_atoms_pillbutton_tsx"
     },
     {
       "relation": "contains",
@@ -829,9 +2061,9 @@
       "weight": 1.0,
       "_src": "e_agri_mart_agrimart_android_apps_mobile_components_atoms_sectionreveal_tsx",
       "_tgt": "sectionreveal_sectionreveal",
+      "confidence_score": 1.0,
       "source": "sectionreveal_sectionreveal",
-      "target": "e_agri_mart_agrimart_android_apps_mobile_components_atoms_sectionreveal_tsx",
-      "confidence_score": 1.0
+      "target": "e_agri_mart_agrimart_android_apps_mobile_components_atoms_sectionreveal_tsx"
     },
     {
       "relation": "contains",
@@ -848,6 +2080,18 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\atoms\\StatCard.tsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_atoms_statcard_tsx",
+      "_tgt": "statcard_statcard",
+      "source": "statcard_statcard",
+      "target": "e_agri_mart_agrimart_android_apps_mobile_components_atoms_statcard_tsx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "components\\molecules\\ProductCard.tsx",
       "source_location": "L20",
       "weight": 1.0,
@@ -856,6 +2100,18 @@
       "confidence_score": 1.0,
       "source": "components_molecules_productcard_tsx",
       "target": "productcard_productcard"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\molecules\\ProductCard.tsx",
+      "source_location": "L24",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_molecules_productcard_tsx",
+      "_tgt": "productcard_productcard",
+      "source": "productcard_productcard",
+      "target": "e_agri_mart_agrimart_android_apps_mobile_components_molecules_productcard_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -873,12 +2129,36 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\App.tsx",
-      "source_location": "L20",
+      "source_location": "L30",
       "weight": 1.0,
       "_src": "e_agri_mart_agrimart_android_apps_mobile_app_tsx",
       "_tgt": "app_getdirection",
+      "confidence_score": 1.0,
       "source": "e_agri_mart_agrimart_android_apps_mobile_app_tsx",
-      "target": "app_getdirection",
+      "target": "app_getdirection"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\App.tsx",
+      "source_location": "L45",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_app_tsx",
+      "_tgt": "app_app",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_app_tsx",
+      "target": "app_app",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\App.tsx",
+      "source_location": "L85",
+      "weight": 1.0,
+      "_src": "app_app",
+      "_tgt": "app_getdirection",
+      "source": "app_getdirection",
+      "target": "app_app",
       "confidence_score": 1.0
     },
     {
@@ -889,32 +2169,68 @@
       "weight": 1.0,
       "_src": "e_agri_mart_agrimart_android_apps_mobile_components_assistantscreen_tsx",
       "_tgt": "assistantscreen_now",
+      "confidence_score": 1.0,
       "source": "e_agri_mart_agrimart_android_apps_mobile_components_assistantscreen_tsx",
-      "target": "assistantscreen_now",
-      "confidence_score": 1.0
+      "target": "assistantscreen_now"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\AssistantScreen.tsx",
-      "source_location": "L38",
+      "source_location": "L58",
       "weight": 1.0,
       "_src": "e_agri_mart_agrimart_android_apps_mobile_components_assistantscreen_tsx",
       "_tgt": "assistantscreen_handlesend",
+      "confidence_score": 1.0,
       "source": "e_agri_mart_agrimart_android_apps_mobile_components_assistantscreen_tsx",
-      "target": "assistantscreen_handlesend",
+      "target": "assistantscreen_handlesend"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\AssistantScreen.tsx",
+      "source_location": "L69",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_assistantscreen_tsx",
+      "_tgt": "assistantscreen_handlereset",
+      "confidence_score": 1.0,
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_assistantscreen_tsx",
+      "target": "assistantscreen_handlereset"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\AssistantScreen.tsx",
+      "source_location": "L44",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_assistantscreen_tsx",
+      "_tgt": "assistantscreen_sendquery",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_assistantscreen_tsx",
+      "target": "assistantscreen_sendquery",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\AssistantScreen.tsx",
-      "source_location": "L49",
+      "source_location": "L65",
       "weight": 1.0,
       "_src": "e_agri_mart_agrimart_android_apps_mobile_components_assistantscreen_tsx",
-      "_tgt": "assistantscreen_handlereset",
+      "_tgt": "assistantscreen_handleretry",
       "source": "e_agri_mart_agrimart_android_apps_mobile_components_assistantscreen_tsx",
-      "target": "assistantscreen_handlereset",
+      "target": "assistantscreen_handleretry",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\AssistantScreen.tsx",
+      "source_location": "L62",
+      "weight": 1.0,
+      "_src": "assistantscreen_handlesend",
+      "_tgt": "assistantscreen_sendquery",
+      "source": "assistantscreen_handlesend",
+      "target": "assistantscreen_sendquery",
       "confidence_score": 1.0
     },
     {
@@ -925,9 +2241,9 @@
       "weight": 1.0,
       "_src": "e_agri_mart_agrimart_android_apps_mobile_components_onboardingscreen_tsx",
       "_tgt": "onboardingscreen_next",
+      "confidence_score": 1.0,
       "source": "e_agri_mart_agrimart_android_apps_mobile_components_onboardingscreen_tsx",
-      "target": "onboardingscreen_next",
-      "confidence_score": 1.0
+      "target": "onboardingscreen_next"
     },
     {
       "relation": "contains",
@@ -937,9 +2253,9 @@
       "weight": 1.0,
       "_src": "e_agri_mart_agrimart_android_apps_mobile_components_onboardingscreen_tsx",
       "_tgt": "onboardingscreen_prev",
+      "confidence_score": 1.0,
       "source": "e_agri_mart_agrimart_android_apps_mobile_components_onboardingscreen_tsx",
-      "target": "onboardingscreen_prev",
-      "confidence_score": 1.0
+      "target": "onboardingscreen_prev"
     },
     {
       "relation": "contains",
@@ -949,9 +2265,9 @@
       "weight": 1.0,
       "_src": "e_agri_mart_agrimart_android_apps_mobile_components_onboardingscreen_tsx",
       "_tgt": "onboardingscreen_goto",
+      "confidence_score": 1.0,
       "source": "e_agri_mart_agrimart_android_apps_mobile_components_onboardingscreen_tsx",
-      "target": "onboardingscreen_goto",
-      "confidence_score": 1.0
+      "target": "onboardingscreen_goto"
     },
     {
       "relation": "contains",
@@ -961,9 +2277,9 @@
       "weight": 1.0,
       "_src": "e_agri_mart_agrimart_android_apps_mobile_components_onboardingscreen_tsx",
       "_tgt": "onboardingscreen_ontouchstart",
+      "confidence_score": 1.0,
       "source": "e_agri_mart_agrimart_android_apps_mobile_components_onboardingscreen_tsx",
-      "target": "onboardingscreen_ontouchstart",
-      "confidence_score": 1.0
+      "target": "onboardingscreen_ontouchstart"
     },
     {
       "relation": "contains",
@@ -973,9 +2289,9 @@
       "weight": 1.0,
       "_src": "e_agri_mart_agrimart_android_apps_mobile_components_onboardingscreen_tsx",
       "_tgt": "onboardingscreen_ontouchend",
+      "confidence_score": 1.0,
       "source": "e_agri_mart_agrimart_android_apps_mobile_components_onboardingscreen_tsx",
-      "target": "onboardingscreen_ontouchend",
-      "confidence_score": 1.0
+      "target": "onboardingscreen_ontouchend"
     },
     {
       "relation": "calls",
@@ -985,9 +2301,9 @@
       "weight": 1.0,
       "_src": "onboardingscreen_ontouchend",
       "_tgt": "onboardingscreen_next",
+      "confidence_score": 1.0,
       "source": "onboardingscreen_next",
-      "target": "onboardingscreen_ontouchend",
-      "confidence_score": 1.0
+      "target": "onboardingscreen_ontouchend"
     },
     {
       "relation": "calls",
@@ -997,9 +2313,9 @@
       "weight": 1.0,
       "_src": "onboardingscreen_ontouchend",
       "_tgt": "onboardingscreen_prev",
+      "confidence_score": 1.0,
       "source": "onboardingscreen_prev",
-      "target": "onboardingscreen_ontouchend",
-      "confidence_score": 1.0
+      "target": "onboardingscreen_ontouchend"
     },
     {
       "relation": "contains",
@@ -1009,8 +2325,92 @@
       "weight": 1.0,
       "_src": "e_agri_mart_agrimart_android_apps_mobile_components_ordersscreen_tsx",
       "_tgt": "ordersscreen_ordercard",
+      "confidence_score": 1.0,
       "source": "e_agri_mart_agrimart_android_apps_mobile_components_ordersscreen_tsx",
-      "target": "ordersscreen_ordercard",
+      "target": "ordersscreen_ordercard"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\OrdersScreen.tsx",
+      "source_location": "L187",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_ordersscreen_tsx",
+      "_tgt": "ordersscreen_orderdetailpanel",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_ordersscreen_tsx",
+      "target": "ordersscreen_orderdetailpanel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\OrdersScreen.tsx",
+      "source_location": "L546",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_ordersscreen_tsx",
+      "_tgt": "ordersscreen_rupeeformat",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_ordersscreen_tsx",
+      "target": "ordersscreen_rupeeformat",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\ProfileScreen.tsx",
+      "source_location": "L98",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_profilescreen_tsx",
+      "_tgt": "profilescreen_handlesave",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_profilescreen_tsx",
+      "target": "profilescreen_handlesave",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\ProfileScreen.tsx",
+      "source_location": "L306",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_profilescreen_tsx",
+      "_tgt": "profilescreen_toggle",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_profilescreen_tsx",
+      "target": "profilescreen_toggle",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\ProfileScreen.tsx",
+      "source_location": "L836",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_profilescreen_tsx",
+      "_tgt": "profilescreen_navigateto",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_profilescreen_tsx",
+      "target": "profilescreen_navigateto",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\ProfileScreen.tsx",
+      "source_location": "L840",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_profilescreen_tsx",
+      "_tgt": "profilescreen_goback",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_profilescreen_tsx",
+      "target": "profilescreen_goback",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\ProfileScreen.tsx",
+      "source_location": "L847",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_profilescreen_tsx",
+      "_tgt": "profilescreen_handleaction",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_profilescreen_tsx",
+      "target": "profilescreen_handleaction",
       "confidence_score": 1.0
     },
     {
@@ -1021,9 +2421,9 @@
       "weight": 1.0,
       "_src": "e_agri_mart_agrimart_android_apps_mobile_components_sellscreen_tsx",
       "_tgt": "sellscreen_successview",
+      "confidence_score": 1.0,
       "source": "e_agri_mart_agrimart_android_apps_mobile_components_sellscreen_tsx",
-      "target": "sellscreen_successview",
-      "confidence_score": 1.0
+      "target": "sellscreen_successview"
     },
     {
       "relation": "contains",
@@ -1033,8 +2433,80 @@
       "weight": 1.0,
       "_src": "e_agri_mart_agrimart_android_apps_mobile_components_sellscreen_tsx",
       "_tgt": "sellscreen_field",
+      "confidence_score": 1.0,
       "source": "e_agri_mart_agrimart_android_apps_mobile_components_sellscreen_tsx",
-      "target": "sellscreen_field",
+      "target": "sellscreen_field"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\SellScreen.tsx",
+      "source_location": "L51",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_sellscreen_tsx",
+      "_tgt": "sellscreen_processmedia",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_sellscreen_tsx",
+      "target": "sellscreen_processmedia",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\SellScreen.tsx",
+      "source_location": "L91",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_sellscreen_tsx",
+      "_tgt": "sellscreen_loaddraft",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_sellscreen_tsx",
+      "target": "sellscreen_loaddraft",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\SellScreen.tsx",
+      "source_location": "L96",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_sellscreen_tsx",
+      "_tgt": "sellscreen_farmmarkericon",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_sellscreen_tsx",
+      "target": "sellscreen_farmmarkericon",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\SellScreen.tsx",
+      "source_location": "L153",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_sellscreen_tsx",
+      "_tgt": "sellscreen_updatepin",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_sellscreen_tsx",
+      "target": "sellscreen_updatepin",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\SellScreen.tsx",
+      "source_location": "L320",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_sellscreen_tsx",
+      "_tgt": "sellscreen_handlephotochange",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_sellscreen_tsx",
+      "target": "sellscreen_handlephotochange",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\SellScreen.tsx",
+      "source_location": "L328",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_sellscreen_tsx",
+      "_tgt": "sellscreen_handleidentitychange",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_sellscreen_tsx",
+      "target": "sellscreen_handleidentitychange",
       "confidence_score": 1.0
     },
     {
@@ -1108,6 +2580,1446 @@
       "_tgt": "readme_env_local",
       "source": "readme_gemini_api_key",
       "target": "readme_env_local"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\AssistantScreen.tsx",
+      "source_location": "L66",
+      "weight": 1.0,
+      "_src": "assistantscreen_handleretry",
+      "_tgt": "assistantscreen_sendquery",
+      "source": "assistantscreen_sendquery",
+      "target": "assistantscreen_handleretry",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\AuthScreen.tsx",
+      "source_location": "L31",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_authscreen_tsx",
+      "_tgt": "authscreen_err",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_authscreen_tsx",
+      "target": "authscreen_err",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\AuthScreen.tsx",
+      "source_location": "L396",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_authscreen_tsx",
+      "_tgt": "authscreen_validate",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_authscreen_tsx",
+      "target": "authscreen_validate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\AuthScreen.tsx",
+      "source_location": "L605",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_authscreen_tsx",
+      "_tgt": "authscreen_submit",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_authscreen_tsx",
+      "target": "authscreen_submit",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\AuthScreen.tsx",
+      "source_location": "L279",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_authscreen_tsx",
+      "_tgt": "authscreen_set",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_authscreen_tsx",
+      "target": "authscreen_set",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\AuthScreen.tsx",
+      "source_location": "L282",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_authscreen_tsx",
+      "_tgt": "authscreen_handlephoto",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_authscreen_tsx",
+      "target": "authscreen_handlephoto",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\AuthScreen.tsx",
+      "source_location": "L300",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_authscreen_tsx",
+      "_tgt": "authscreen_next",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_authscreen_tsx",
+      "target": "authscreen_next",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\AuthScreen.tsx",
+      "source_location": "L540",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_authscreen_tsx",
+      "_tgt": "authscreen_handledigit",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_authscreen_tsx",
+      "target": "authscreen_handledigit",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\AuthScreen.tsx",
+      "source_location": "L177",
+      "weight": 1.0,
+      "_src": "authscreen_submit",
+      "_tgt": "authscreen_validate",
+      "source": "authscreen_validate",
+      "target": "authscreen_submit",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\AuthScreen.tsx",
+      "source_location": "L301",
+      "weight": 1.0,
+      "_src": "authscreen_next",
+      "_tgt": "authscreen_validate",
+      "source": "authscreen_validate",
+      "target": "authscreen_next",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\AuthScreen.tsx",
+      "source_location": "L285",
+      "weight": 1.0,
+      "_src": "authscreen_handlephoto",
+      "_tgt": "authscreen_set",
+      "source": "authscreen_set",
+      "target": "authscreen_handlephoto",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\BottomNav.tsx",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_bottomnav_tsx",
+      "_tgt": "bottomnav_bottomnav",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_bottomnav_tsx",
+      "target": "bottomnav_bottomnav",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\CartScreen.tsx",
+      "source_location": "L21",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_cartscreen_tsx",
+      "_tgt": "cartscreen_handler",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_cartscreen_tsx",
+      "target": "cartscreen_handler",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\CheckoutScreen.tsx",
+      "source_location": "L47",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_checkoutscreen_tsx",
+      "_tgt": "checkoutscreen_handleconfirm",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_checkoutscreen_tsx",
+      "target": "checkoutscreen_handleconfirm",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\CropCalendarScreen.tsx",
+      "source_location": "L58",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_cropcalendarscreen_tsx",
+      "_tgt": "cropcalendarscreen_getphase",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_cropcalendarscreen_tsx",
+      "target": "cropcalendarscreen_getphase",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\HomeScreen.tsx",
+      "source_location": "L30",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_homescreen_tsx",
+      "_tgt": "homescreen_getsavedids",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_homescreen_tsx",
+      "target": "homescreen_getsavedids",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\HomeScreen.tsx",
+      "source_location": "L34",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_homescreen_tsx",
+      "_tgt": "homescreen_getuserlistings",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_homescreen_tsx",
+      "target": "homescreen_getuserlistings",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\HomeScreen.tsx",
+      "source_location": "L102",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_homescreen_tsx",
+      "_tgt": "homescreen_togglesave",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_homescreen_tsx",
+      "target": "homescreen_togglesave",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\HomeScreen.tsx",
+      "source_location": "L112",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_homescreen_tsx",
+      "_tgt": "homescreen_handleenquiry",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_homescreen_tsx",
+      "target": "homescreen_handleenquiry",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\HomeScreen.tsx",
+      "source_location": "L170",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_homescreen_tsx",
+      "_tgt": "homescreen_islocalproduct",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_homescreen_tsx",
+      "target": "homescreen_islocalproduct",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\LocationPickerModal.tsx",
+      "source_location": "L23",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_locationpickermodal_tsx",
+      "_tgt": "locationpickermodal_markericon",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_locationpickermodal_tsx",
+      "target": "locationpickermodal_markericon",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\LocationPickerModal.tsx",
+      "source_location": "L55",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_locationpickermodal_tsx",
+      "_tgt": "locationpickermodal_applysliderui",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_locationpickermodal_tsx",
+      "target": "locationpickermodal_applysliderui",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\LocationPickerModal.tsx",
+      "source_location": "L82",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_locationpickermodal_tsx",
+      "_tgt": "locationpickermodal_upsertcircle",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_locationpickermodal_tsx",
+      "target": "locationpickermodal_upsertcircle",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\LocationPickerModal.tsx",
+      "source_location": "L97",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_locationpickermodal_tsx",
+      "_tgt": "locationpickermodal_geocode",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_locationpickermodal_tsx",
+      "target": "locationpickermodal_geocode",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\LocationPickerModal.tsx",
+      "source_location": "L156",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_locationpickermodal_tsx",
+      "_tgt": "locationpickermodal_handlegps",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_locationpickermodal_tsx",
+      "target": "locationpickermodal_handlegps",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\LocationPickerModal.tsx",
+      "source_location": "L171",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_locationpickermodal_tsx",
+      "_tgt": "locationpickermodal_handleok",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_locationpickermodal_tsx",
+      "target": "locationpickermodal_handleok",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\LocationPickerModal.tsx",
+      "source_location": "L99",
+      "weight": 1.0,
+      "_src": "locationpickermodal_geocode",
+      "_tgt": "locationpickermodal_upsertcircle",
+      "source": "locationpickermodal_upsertcircle",
+      "target": "locationpickermodal_geocode",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\Logo.tsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_logo_tsx",
+      "_tgt": "logo_logo",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_logo_tsx",
+      "target": "logo_logo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\MessagesScreen.tsx",
+      "source_location": "L41",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_messagesscreen_tsx",
+      "_tgt": "messagesscreen_formattime",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_messagesscreen_tsx",
+      "target": "messagesscreen_formattime",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\MyListingsScreen.tsx",
+      "source_location": "L42",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_mylistingsscreen_tsx",
+      "_tgt": "mylistingsscreen_loaduserlistings",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_mylistingsscreen_tsx",
+      "target": "mylistingsscreen_loaduserlistings",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\ProfileScreen.tsx",
+      "source_location": "L850",
+      "weight": 1.0,
+      "_src": "profilescreen_handleaction",
+      "_tgt": "profilescreen_navigateto",
+      "source": "profilescreen_navigateto",
+      "target": "profilescreen_handleaction",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\SellerProfileScreen.tsx",
+      "source_location": "L37",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_sellerprofilescreen_tsx",
+      "_tgt": "sellerprofilescreen_handleenquiry",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_sellerprofilescreen_tsx",
+      "target": "sellerprofilescreen_handleenquiry",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\SellScreen.tsx",
+      "source_location": "L324",
+      "weight": 1.0,
+      "_src": "sellscreen_handlephotochange",
+      "_tgt": "sellscreen_processmedia",
+      "source": "sellscreen_processmedia",
+      "target": "sellscreen_handlephotochange",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\atoms\\CartBadge.tsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_atoms_cartbadge_tsx",
+      "_tgt": "cartbadge_cartbadge",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_atoms_cartbadge_tsx",
+      "target": "cartbadge_cartbadge",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\atoms\\WeatherWidget.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_atoms_weatherwidget_tsx",
+      "_tgt": "weatherwidget_weathericon",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_atoms_weatherwidget_tsx",
+      "target": "weatherwidget_weathericon",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\organisms\\FarmingNewsSection.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_organisms_farmingnewssection_tsx",
+      "_tgt": "farmingnewssection_openurl",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_organisms_farmingnewssection_tsx",
+      "target": "farmingnewssection_openurl",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\organisms\\FarmingNewsSection.tsx",
+      "source_location": "L15",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_organisms_farmingnewssection_tsx",
+      "_tgt": "farmingnewssection_fetchwithtimeout",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_organisms_farmingnewssection_tsx",
+      "target": "farmingnewssection_fetchwithtimeout",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\organisms\\FarmingNewsSection.tsx",
+      "source_location": "L48",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_organisms_farmingnewssection_tsx",
+      "_tgt": "farmingnewssection_guesscategory",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_organisms_farmingnewssection_tsx",
+      "target": "farmingnewssection_guesscategory",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\organisms\\FarmingNewsSection.tsx",
+      "source_location": "L56",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_organisms_farmingnewssection_tsx",
+      "_tgt": "farmingnewssection_relativedate",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_organisms_farmingnewssection_tsx",
+      "target": "farmingnewssection_relativedate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\organisms\\FarmingNewsSection.tsx",
+      "source_location": "L68",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_organisms_farmingnewssection_tsx",
+      "_tgt": "farmingnewssection_daysago",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_organisms_farmingnewssection_tsx",
+      "target": "farmingnewssection_daysago",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\organisms\\FarmingNewsSection.tsx",
+      "source_location": "L74",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_organisms_farmingnewssection_tsx",
+      "_tgt": "farmingnewssection_readcache",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_organisms_farmingnewssection_tsx",
+      "target": "farmingnewssection_readcache",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\organisms\\FarmingNewsSection.tsx",
+      "source_location": "L83",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_organisms_farmingnewssection_tsx",
+      "_tgt": "farmingnewssection_writecache",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_organisms_farmingnewssection_tsx",
+      "target": "farmingnewssection_writecache",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\organisms\\FarmingNewsSection.tsx",
+      "source_location": "L89",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_organisms_farmingnewssection_tsx",
+      "_tgt": "farmingnewssection_buildstaticnews",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_organisms_farmingnewssection_tsx",
+      "target": "farmingnewssection_buildstaticnews",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\organisms\\FarmingNewsSection.tsx",
+      "source_location": "L145",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_organisms_farmingnewssection_tsx",
+      "_tgt": "farmingnewssection_fetchonefeed",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_organisms_farmingnewssection_tsx",
+      "target": "farmingnewssection_fetchonefeed",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\organisms\\FarmingNewsSection.tsx",
+      "source_location": "L192",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_organisms_farmingnewssection_tsx",
+      "_tgt": "farmingnewssection_loadnews",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_organisms_farmingnewssection_tsx",
+      "target": "farmingnewssection_loadnews",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\organisms\\FarmingNewsSection.tsx",
+      "source_location": "L147",
+      "weight": 1.0,
+      "_src": "farmingnewssection_fetchonefeed",
+      "_tgt": "farmingnewssection_fetchwithtimeout",
+      "source": "farmingnewssection_fetchwithtimeout",
+      "target": "farmingnewssection_fetchonefeed",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\organisms\\FarmingNewsSection.tsx",
+      "source_location": "L198",
+      "weight": 1.0,
+      "_src": "farmingnewssection_loadnews",
+      "_tgt": "farmingnewssection_fetchwithtimeout",
+      "source": "farmingnewssection_fetchwithtimeout",
+      "target": "farmingnewssection_loadnews",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\organisms\\FarmingNewsSection.tsx",
+      "source_location": "L69",
+      "weight": 1.0,
+      "_src": "farmingnewssection_daysago",
+      "_tgt": "farmingnewssection_relativedate",
+      "source": "farmingnewssection_relativedate",
+      "target": "farmingnewssection_daysago",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\organisms\\FarmingNewsSection.tsx",
+      "source_location": "L92",
+      "weight": 1.0,
+      "_src": "farmingnewssection_buildstaticnews",
+      "_tgt": "farmingnewssection_daysago",
+      "source": "farmingnewssection_daysago",
+      "target": "farmingnewssection_buildstaticnews",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\organisms\\FarmingNewsSection.tsx",
+      "source_location": "L202",
+      "weight": 1.0,
+      "_src": "farmingnewssection_loadnews",
+      "_tgt": "farmingnewssection_writecache",
+      "source": "farmingnewssection_writecache",
+      "target": "farmingnewssection_loadnews",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\organisms\\FarmingNewsSection.tsx",
+      "source_location": "L229",
+      "weight": 1.0,
+      "_src": "farmingnewssection_loadnews",
+      "_tgt": "farmingnewssection_buildstaticnews",
+      "source": "farmingnewssection_buildstaticnews",
+      "target": "farmingnewssection_loadnews",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\organisms\\LivePriceTicker.tsx",
+      "source_location": "L43",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_organisms_livepriceticker_tsx",
+      "_tgt": "livepriceticker_seededrandom",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_organisms_livepriceticker_tsx",
+      "target": "livepriceticker_seededrandom",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\organisms\\LivePriceTicker.tsx",
+      "source_location": "L54",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_organisms_livepriceticker_tsx",
+      "_tgt": "livepriceticker_dailyprice",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_organisms_livepriceticker_tsx",
+      "target": "livepriceticker_dailyprice",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\organisms\\LivePriceTicker.tsx",
+      "source_location": "L60",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_organisms_livepriceticker_tsx",
+      "_tgt": "livepriceticker_builddailyprices",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_organisms_livepriceticker_tsx",
+      "target": "livepriceticker_builddailyprices",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\organisms\\LivePriceTicker.tsx",
+      "source_location": "L111",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_organisms_livepriceticker_tsx",
+      "_tgt": "livepriceticker_haversinekm",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_organisms_livepriceticker_tsx",
+      "target": "livepriceticker_haversinekm",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\organisms\\LivePriceTicker.tsx",
+      "source_location": "L123",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_organisms_livepriceticker_tsx",
+      "_tgt": "livepriceticker_resolveusercoords",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_organisms_livepriceticker_tsx",
+      "target": "livepriceticker_resolveusercoords",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\organisms\\LivePriceTicker.tsx",
+      "source_location": "L135",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_organisms_livepriceticker_tsx",
+      "_tgt": "livepriceticker_getchange",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_organisms_livepriceticker_tsx",
+      "target": "livepriceticker_getchange",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\organisms\\LivePriceTicker.tsx",
+      "source_location": "L179",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_organisms_livepriceticker_tsx",
+      "_tgt": "livepriceticker_step",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_organisms_livepriceticker_tsx",
+      "target": "livepriceticker_step",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\organisms\\LivePriceTicker.tsx",
+      "source_location": "L198",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_organisms_livepriceticker_tsx",
+      "_tgt": "livepriceticker_handletap",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_organisms_livepriceticker_tsx",
+      "target": "livepriceticker_handletap",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\organisms\\LivePriceTicker.tsx",
+      "source_location": "L55",
+      "weight": 1.0,
+      "_src": "livepriceticker_dailyprice",
+      "_tgt": "livepriceticker_seededrandom",
+      "source": "livepriceticker_seededrandom",
+      "target": "livepriceticker_dailyprice",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\components\\ui\\demo.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_components_ui_demo_tsx",
+      "_tgt": "demo_demoone",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_components_ui_demo_tsx",
+      "target": "demo_demoone",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\data\\maharashtraLocations.ts",
+      "source_location": "L127",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_data_maharashtralocations_ts",
+      "_tgt": "maharashtralocations_gettalukasbydistrict",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_data_maharashtralocations_ts",
+      "target": "maharashtralocations_gettalukasbydistrict",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\utils\\cart.ts",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_utils_cart_ts",
+      "_tgt": "cart_dispatch",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_utils_cart_ts",
+      "target": "cart_dispatch",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\utils\\cart.ts",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_utils_cart_ts",
+      "_tgt": "cart_getcart",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_utils_cart_ts",
+      "target": "cart_getcart",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\utils\\cart.ts",
+      "source_location": "L17",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_utils_cart_ts",
+      "_tgt": "cart_savecart",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_utils_cart_ts",
+      "target": "cart_savecart",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\utils\\cart.ts",
+      "source_location": "L22",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_utils_cart_ts",
+      "_tgt": "cart_addtocart",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_utils_cart_ts",
+      "target": "cart_addtocart",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\utils\\cart.ts",
+      "source_location": "L33",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_utils_cart_ts",
+      "_tgt": "cart_removefromcart",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_utils_cart_ts",
+      "target": "cart_removefromcart",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\utils\\cart.ts",
+      "source_location": "L37",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_utils_cart_ts",
+      "_tgt": "cart_updateqty",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_utils_cart_ts",
+      "target": "cart_updateqty",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\utils\\cart.ts",
+      "source_location": "L43",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_utils_cart_ts",
+      "_tgt": "cart_clearcart",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_utils_cart_ts",
+      "target": "cart_clearcart",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\utils\\cart.ts",
+      "source_location": "L47",
+      "weight": 1.0,
+      "_src": "e_agri_mart_agrimart_android_apps_mobile_utils_cart_ts",
+      "_tgt": "cart_getcartcount",
+      "source": "e_agri_mart_agrimart_android_apps_mobile_utils_cart_ts",
+      "target": "cart_getcartcount",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\utils\\cart.ts",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_src": "cart_savecart",
+      "_tgt": "cart_dispatch",
+      "source": "cart_dispatch",
+      "target": "cart_savecart",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\utils\\cart.ts",
+      "source_location": "L23",
+      "weight": 1.0,
+      "_src": "cart_addtocart",
+      "_tgt": "cart_getcart",
+      "source": "cart_getcart",
+      "target": "cart_addtocart",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\utils\\cart.ts",
+      "source_location": "L34",
+      "weight": 1.0,
+      "_src": "cart_removefromcart",
+      "_tgt": "cart_getcart",
+      "source": "cart_getcart",
+      "target": "cart_removefromcart",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\utils\\cart.ts",
+      "source_location": "L39",
+      "weight": 1.0,
+      "_src": "cart_updateqty",
+      "_tgt": "cart_getcart",
+      "source": "cart_getcart",
+      "target": "cart_updateqty",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\utils\\cart.ts",
+      "source_location": "L48",
+      "weight": 1.0,
+      "_src": "cart_getcartcount",
+      "_tgt": "cart_getcart",
+      "source": "cart_getcart",
+      "target": "cart_getcartcount",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\utils\\cart.ts",
+      "source_location": "L27",
+      "weight": 1.0,
+      "_src": "cart_addtocart",
+      "_tgt": "cart_savecart",
+      "source": "cart_savecart",
+      "target": "cart_addtocart",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\utils\\cart.ts",
+      "source_location": "L34",
+      "weight": 1.0,
+      "_src": "cart_removefromcart",
+      "_tgt": "cart_savecart",
+      "source": "cart_savecart",
+      "target": "cart_removefromcart",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\utils\\cart.ts",
+      "source_location": "L40",
+      "weight": 1.0,
+      "_src": "cart_updateqty",
+      "_tgt": "cart_savecart",
+      "source": "cart_savecart",
+      "target": "cart_updateqty",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\utils\\cart.ts",
+      "source_location": "L44",
+      "weight": 1.0,
+      "_src": "cart_clearcart",
+      "_tgt": "cart_savecart",
+      "source": "cart_savecart",
+      "target": "cart_clearcart",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "e:\\Agri_Mart\\AgriMart_Android\\apps\\mobile\\utils\\cart.ts",
+      "source_location": "L38",
+      "weight": 1.0,
+      "_src": "cart_updateqty",
+      "_tgt": "cart_removefromcart",
+      "source": "cart_removefromcart",
+      "target": "cart_updateqty",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains_component",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/images/drip_irrigation_kit.jpg",
+      "source_location": null,
+      "weight": 1.0,
+      "_src": "drip_irrigation_kit_product",
+      "_tgt": "drip_irrigation_kit_dripper",
+      "source": "drip_irrigation_kit_product",
+      "target": "drip_irrigation_kit_dripper"
+    },
+    {
+      "relation": "contains_component",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/images/drip_irrigation_kit.jpg",
+      "source_location": null,
+      "weight": 1.0,
+      "_src": "drip_irrigation_kit_product",
+      "_tgt": "drip_irrigation_kit_connector",
+      "source": "drip_irrigation_kit_product",
+      "target": "drip_irrigation_kit_connector"
+    },
+    {
+      "relation": "contains_component",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/images/drip_irrigation_kit.jpg",
+      "source_location": null,
+      "weight": 1.0,
+      "_src": "drip_irrigation_kit_product",
+      "_tgt": "drip_irrigation_kit_valve",
+      "source": "drip_irrigation_kit_product",
+      "target": "drip_irrigation_kit_valve"
+    },
+    {
+      "relation": "belongs_to_category",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "public/images/drip_irrigation_kit.jpg",
+      "source_location": null,
+      "weight": 1.0,
+      "_src": "drip_irrigation_kit_product",
+      "_tgt": "drip_irrigation_kit_category",
+      "source": "drip_irrigation_kit_product",
+      "target": "drip_irrigation_kit_category"
+    },
+    {
+      "relation": "used_for",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9,
+      "source_file": "public/images/drip_irrigation_kit.jpg",
+      "source_location": null,
+      "weight": 1.0,
+      "_src": "drip_irrigation_kit_product",
+      "_tgt": "drip_irrigation_kit_use_case",
+      "source": "drip_irrigation_kit_product",
+      "target": "drip_irrigation_kit_use_case"
+    },
+    {
+      "relation": "enables",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "public/images/drip_irrigation_kit.jpg",
+      "source_location": null,
+      "weight": 1.0,
+      "_src": "drip_irrigation_kit_dripper",
+      "_tgt": "drip_irrigation_kit_use_case",
+      "source": "drip_irrigation_kit_dripper",
+      "target": "drip_irrigation_kit_use_case"
+    },
+    {
+      "relation": "enables",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "public/images/drip_irrigation_kit.jpg",
+      "source_location": null,
+      "weight": 1.0,
+      "_src": "drip_irrigation_kit_valve",
+      "_tgt": "drip_irrigation_kit_use_case",
+      "source": "drip_irrigation_kit_valve",
+      "target": "drip_irrigation_kit_use_case"
+    },
+    {
+      "relation": "belongs_to_category",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/images/npk-19-19-19.webp",
+      "source_location": null,
+      "weight": 1.0,
+      "_src": "npk191919_product",
+      "_tgt": "npk191919_category_fertilizer",
+      "source": "npk191919_product",
+      "target": "npk191919_category_fertilizer"
+    },
+    {
+      "relation": "contains_nutrient",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/images/npk-19-19-19.webp",
+      "source_location": null,
+      "weight": 1.0,
+      "_src": "npk191919_product",
+      "_tgt": "npk191919_nutrient_nitrogen",
+      "source": "npk191919_product",
+      "target": "npk191919_nutrient_nitrogen"
+    },
+    {
+      "relation": "contains_nutrient",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/images/npk-19-19-19.webp",
+      "source_location": null,
+      "weight": 1.0,
+      "_src": "npk191919_product",
+      "_tgt": "npk191919_nutrient_phosphorus",
+      "source": "npk191919_product",
+      "target": "npk191919_nutrient_phosphorus"
+    },
+    {
+      "relation": "contains_nutrient",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/images/npk-19-19-19.webp",
+      "source_location": null,
+      "weight": 1.0,
+      "_src": "npk191919_product",
+      "_tgt": "npk191919_nutrient_potassium",
+      "source": "npk191919_product",
+      "target": "npk191919_nutrient_potassium"
+    },
+    {
+      "relation": "has_physical_form",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9,
+      "source_file": "public/images/npk-19-19-19.webp",
+      "source_location": null,
+      "weight": 1.0,
+      "_src": "npk191919_product",
+      "_tgt": "npk191919_form_powder",
+      "source": "npk191919_product",
+      "target": "npk191919_form_powder"
+    },
+    {
+      "relation": "used_for",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9,
+      "source_file": "public/images/npk-19-19-19.webp",
+      "source_location": null,
+      "weight": 1.0,
+      "_src": "npk191919_product",
+      "_tgt": "npk191919_use_crop_nutrition",
+      "source": "npk191919_product",
+      "target": "npk191919_use_crop_nutrition"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "public/images/npk-19-19-19.webp",
+      "source_location": null,
+      "weight": 1.0,
+      "_src": "npk191919_category_fertilizer",
+      "_tgt": "npk191919_use_crop_nutrition",
+      "source": "npk191919_category_fertilizer",
+      "target": "npk191919_use_crop_nutrition"
+    },
+    {
+      "relation": "depicts",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/images/soybean.webp",
+      "source_location": null,
+      "weight": 1.0,
+      "_src": "soybean_image",
+      "_tgt": "soybean_crop",
+      "source": "soybean_image",
+      "target": "soybean_crop"
+    },
+    {
+      "relation": "depicts",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/images/soybean.webp",
+      "source_location": null,
+      "weight": 1.0,
+      "_src": "soybean_image",
+      "_tgt": "soybean_grains",
+      "source": "soybean_image",
+      "target": "soybean_grains"
+    },
+    {
+      "relation": "depicts",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/images/soybean.webp",
+      "source_location": null,
+      "weight": 1.0,
+      "_src": "soybean_image",
+      "_tgt": "soybean_farmer",
+      "source": "soybean_image",
+      "target": "soybean_farmer"
+    },
+    {
+      "relation": "depicts",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/images/soybean.webp",
+      "source_location": null,
+      "weight": 1.0,
+      "_src": "soybean_image",
+      "_tgt": "soybean_field",
+      "source": "soybean_image",
+      "target": "soybean_field"
+    },
+    {
+      "relation": "depicts",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/images/soybean.webp",
+      "source_location": null,
+      "weight": 1.0,
+      "_src": "soybean_image",
+      "_tgt": "soybean_jute_sack",
+      "source": "soybean_image",
+      "target": "soybean_jute_sack"
+    },
+    {
+      "relation": "used_as_product_image_in",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "public/images/soybean.webp",
+      "source_location": null,
+      "weight": 1.0,
+      "_src": "soybean_image",
+      "_tgt": "agrimart_marketplace",
+      "source": "soybean_image",
+      "target": "agrimart_marketplace"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/images/soybean.webp",
+      "source_location": null,
+      "weight": 1.0,
+      "_src": "soybean_field",
+      "_tgt": "soybean_crop",
+      "source": "soybean_crop",
+      "target": "soybean_field"
+    },
+    {
+      "relation": "belongs_to_category",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9,
+      "source_file": "public/images/soybean.webp",
+      "source_location": null,
+      "weight": 1.0,
+      "_src": "soybean_crop",
+      "_tgt": "category_pulses_oilseeds",
+      "source": "soybean_crop",
+      "target": "category_pulses_oilseeds"
+    },
+    {
+      "relation": "holds",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/images/soybean.webp",
+      "source_location": null,
+      "weight": 1.0,
+      "_src": "soybean_farmer",
+      "_tgt": "soybean_grains",
+      "source": "soybean_grains",
+      "target": "soybean_farmer"
+    },
+    {
+      "relation": "stored_in",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/images/soybean.webp",
+      "source_location": null,
+      "weight": 1.0,
+      "_src": "soybean_grains",
+      "_tgt": "soybean_jute_sack",
+      "source": "soybean_grains",
+      "target": "soybean_jute_sack"
+    },
+    {
+      "relation": "belongs_to_category",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9,
+      "source_file": "public/images/soybean.webp",
+      "source_location": null,
+      "weight": 1.0,
+      "_src": "soybean_grains",
+      "_tgt": "category_pulses_oilseeds",
+      "source": "soybean_grains",
+      "target": "category_pulses_oilseeds"
+    },
+    {
+      "relation": "represents_seller_in",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "public/images/soybean.webp",
+      "source_location": null,
+      "weight": 1.0,
+      "_src": "soybean_farmer",
+      "_tgt": "agrimart_marketplace",
+      "source": "soybean_farmer",
+      "target": "agrimart_marketplace"
+    },
+    {
+      "relation": "worked_by",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "public/images/soybean.webp",
+      "source_location": null,
+      "weight": 1.0,
+      "_src": "soybean_field",
+      "_tgt": "soybean_farmer",
+      "source": "soybean_farmer",
+      "target": "soybean_field"
+    },
+    {
+      "relation": "listed_in",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "public/images/soybean.webp",
+      "source_location": null,
+      "weight": 1.0,
+      "_src": "category_pulses_oilseeds",
+      "_tgt": "agrimart_marketplace",
+      "source": "category_pulses_oilseeds",
+      "target": "agrimart_marketplace"
+    },
+    {
+      "relation": "depicts",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/images/sugarcane-saplings.webp",
+      "source_location": null,
+      "weight": 1.0,
+      "_src": "sugarcane-saplings_image",
+      "_tgt": "sugarcane-saplings_product",
+      "source": "sugarcane-saplings_image",
+      "target": "sugarcane-saplings_product"
+    },
+    {
+      "relation": "depicts",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/images/sugarcane-saplings.webp",
+      "source_location": null,
+      "weight": 1.0,
+      "_src": "sugarcane-saplings_image",
+      "_tgt": "sugarcane-saplings_tray_propagation",
+      "source": "sugarcane-saplings_image",
+      "target": "sugarcane-saplings_tray_propagation"
+    },
+    {
+      "relation": "belongs_to_category",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/images/sugarcane-saplings.webp",
+      "source_location": null,
+      "weight": 1.0,
+      "_src": "sugarcane-saplings_product",
+      "_tgt": "sugarcane-saplings_category_seedlings",
+      "source": "sugarcane-saplings_product",
+      "target": "sugarcane-saplings_category_seedlings"
+    },
+    {
+      "relation": "is_early_stage_of",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/images/sugarcane-saplings.webp",
+      "source_location": null,
+      "weight": 1.0,
+      "_src": "sugarcane-saplings_product",
+      "_tgt": "sugarcane-saplings_crop_sugarcane",
+      "source": "sugarcane-saplings_product",
+      "target": "sugarcane-saplings_crop_sugarcane"
+    },
+    {
+      "relation": "contained_in",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/images/sugarcane-saplings.webp",
+      "source_location": null,
+      "weight": 1.0,
+      "_src": "sugarcane-saplings_product",
+      "_tgt": "sugarcane-saplings_tray_propagation",
+      "source": "sugarcane-saplings_product",
+      "target": "sugarcane-saplings_tray_propagation"
+    },
+    {
+      "relation": "used_for",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9,
+      "source_file": "public/images/sugarcane-saplings.webp",
+      "source_location": null,
+      "weight": 1.0,
+      "_src": "sugarcane-saplings_product",
+      "_tgt": "sugarcane-saplings_use_transplanting",
+      "source": "sugarcane-saplings_product",
+      "target": "sugarcane-saplings_use_transplanting"
+    },
+    {
+      "relation": "relevant_to_market",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "public/images/sugarcane-saplings.webp",
+      "source_location": null,
+      "weight": 1.0,
+      "_src": "sugarcane-saplings_product",
+      "_tgt": "sugarcane-saplings_maharashtra_context",
+      "source": "sugarcane-saplings_product",
+      "target": "sugarcane-saplings_maharashtra_context"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "public/images/sugarcane-saplings.webp",
+      "source_location": null,
+      "weight": 1.0,
+      "_src": "sugarcane-saplings_crop_sugarcane",
+      "_tgt": "sugarcane-saplings_maharashtra_context",
+      "source": "sugarcane-saplings_crop_sugarcane",
+      "target": "sugarcane-saplings_maharashtra_context"
+    },
+    {
+      "relation": "depicts",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/images/trumeric.jpg",
+      "source_location": null,
+      "weight": 1.0,
+      "_src": "trumeric_product_image",
+      "_tgt": "trumeric_turmeric_root",
+      "source": "trumeric_turmeric_root",
+      "target": "trumeric_product_image"
+    },
+    {
+      "relation": "belongs_to_category",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "public/images/trumeric.jpg",
+      "source_location": null,
+      "weight": 1.0,
+      "_src": "trumeric_turmeric_root",
+      "_tgt": "trumeric_spice_category",
+      "source": "trumeric_turmeric_root",
+      "target": "trumeric_spice_category"
+    },
+    {
+      "relation": "is_a",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "public/images/trumeric.jpg",
+      "source_location": null,
+      "weight": 1.0,
+      "_src": "trumeric_turmeric_root",
+      "_tgt": "trumeric_agricultural_produce",
+      "source": "trumeric_turmeric_root",
+      "target": "trumeric_agricultural_produce"
+    },
+    {
+      "relation": "used_as_product_photo_for",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9,
+      "source_file": "public/images/trumeric.jpg",
+      "source_location": null,
+      "weight": 1.0,
+      "_src": "trumeric_product_image",
+      "_tgt": "trumeric_agricultural_produce",
+      "source": "trumeric_agricultural_produce",
+      "target": "trumeric_product_image"
     }
   ],
   "hyperedges": []

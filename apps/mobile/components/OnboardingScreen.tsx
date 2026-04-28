@@ -16,8 +16,8 @@ interface Slide {
 
 const SLIDES: Slide[] = [
   {
-    eyebrow:    'Welcome to KrishiSetu',
-    eyebrowMr:  'KrishiSetu मध्ये स्वागत',
+    eyebrow:    'Welcome to Swaseva',
+    eyebrowMr:  'Swaseva मध्ये स्वागत',
     headline:   'The Farmers\' Market\nReimagined',
     headlineMr: 'शेतकऱ्यांचा बाजार\nनव्याने',
     subtext:    'Connect directly with verified farmers. Fresh produce, fair prices — no middlemen.',
