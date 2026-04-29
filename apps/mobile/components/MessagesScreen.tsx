@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, MessageSquare, Phone } from 'lucide-react';
 import { Language } from '../types.ts';
-import { SELLERS, TRANSLATIONS } from '../constants.tsx';
+import { SELLERS, getTranslations } from '../constants.tsx';
 
 const CONNECTIONS_KEY = 'agrimart_connections';
 
@@ -25,8 +25,8 @@ export default function MessagesScreen({ lang, onViewSeller }: MessagesScreenPro
   const [connections, setConnections] = useState<Connection[]>([]);
   const [activeChat, setActiveChat] = useState<Connection | null>(null);
 
+  const t    = getTranslations(lang);
   const isMr = lang === Language.MARATHI;
-  const t    = TRANSLATIONS[isMr ? 'mr' : 'en'];
 
   useEffect(() => {
     const raw: Connection[] = JSON.parse(localStorage.getItem(CONNECTIONS_KEY) || '[]');

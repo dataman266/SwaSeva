@@ -5,18 +5,18 @@ import Logo from './Logo.tsx';
 import CartBadge from './atoms/CartBadge.tsx';
 import LanguagePicker from './LanguagePicker.tsx';
 
-const LANG_SHORT: Record<Language, string> = {
-  [Language.ENGLISH]:   'EN',
-  [Language.HINDI]:     'हि',
-  [Language.MARATHI]:   'मर',
-  [Language.GUJARATI]:  'ગુ',
-  [Language.TELUGU]:    'తె',
-  [Language.TAMIL]:     'த',
-  [Language.PUNJABI]:   'ਪੰ',
-  [Language.KANNADA]:   'ಕ',
-  [Language.BENGALI]:   'বা',
-  [Language.ODIA]:      'ଓ',
-  [Language.MALAYALAM]: 'മ',
+const LANG_NAME: Record<Language, string> = {
+  [Language.ENGLISH]:   'English',
+  [Language.HINDI]:     'हिंदी',
+  [Language.MARATHI]:   'मराठी',
+  [Language.GUJARATI]:  'ગુજરાતી',
+  [Language.TELUGU]:    'తెలుగు',
+  [Language.TAMIL]:     'தமிழ்',
+  [Language.PUNJABI]:   'ਪੰਜਾਬੀ',
+  [Language.KANNADA]:   'ಕನ್ನಡ',
+  [Language.BENGALI]:   'বাংলা',
+  [Language.ODIA]:      'ଓଡ଼ିଆ',
+  [Language.MALAYALAM]: 'മലയാളം',
 };
 
 interface HeaderProps {
@@ -29,7 +29,6 @@ interface HeaderProps {
 }
 
 export default function Header({
-  location,
   language,
   onLanguageChange,
   onOpenCart,
@@ -67,7 +66,7 @@ export default function Header({
             >
               <Languages size={14} />
               <span style={{ fontSize: '13px', fontWeight: 600, letterSpacing: '0.05em' }}>
-                {LANG_SHORT[language]}
+                {LANG_NAME[language]}
               </span>
               <ChevronDown size={11} strokeWidth={2.5} style={{ opacity: 0.65 }} />
             </button>

@@ -4,7 +4,7 @@ import {
   MapPin, Package, Calendar, TrendingUp,
 } from 'lucide-react';
 import { Language, Product } from '../types.ts';
-import { SELLERS, PRODUCTS, TRANSLATIONS } from '../constants.tsx';
+import { SELLERS, PRODUCTS, getTranslations } from '../constants.tsx';
 import SectionReveal from './atoms/SectionReveal.tsx';
 
 const CONNECTIONS_KEY = 'agrimart_connections';
@@ -20,7 +20,7 @@ interface SellerProfileScreenProps {
 export default function SellerProfileScreen({ sellerId, lang, onBack, onViewProduct, onSendEnquiry }: SellerProfileScreenProps) {
   const [enquiryToast, setEnquiryToast] = useState(false);
   const isMr   = lang === Language.MARATHI;
-  const t      = TRANSLATIONS[isMr ? 'mr' : 'en'];
+  const t      = getTranslations(lang);
   const seller = SELLERS.find(s => s.id === sellerId);
   const listings = PRODUCTS.filter(p => p.sellerId === sellerId);
 

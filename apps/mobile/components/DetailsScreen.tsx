@@ -9,7 +9,7 @@ import { haptic } from '../utils/haptic.ts';
 const SAVED_KEY = 'agrimart_saved';
 const CONNECTIONS_KEY = 'agrimart_connections';
 import { Product, Language } from '../types.ts';
-import { SELLERS, TRANSLATIONS } from '../constants.tsx';
+import { SELLERS, getTranslations } from '../constants.tsx';
 import SectionReveal from './atoms/SectionReveal.tsx';
 
 interface DetailsScreenProps {
@@ -38,7 +38,7 @@ export default function DetailsScreen({ product, lang, onBack, onViewSeller, onS
 
   const seller = SELLERS.find(s => s.id === product.sellerId);
   const isMr   = lang === Language.MARATHI;
-  const t      = TRANSLATIONS[isMr ? 'mr' : 'en'];
+  const t      = getTranslations(lang);
 
   useEffect(() => { setMounted(true); }, []);
 

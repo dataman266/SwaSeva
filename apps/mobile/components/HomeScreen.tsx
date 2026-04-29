@@ -11,7 +11,7 @@ declare global {
 }
 import { haptic } from '../utils/haptic.ts';
 import { Language, Product } from '../types.ts';
-import { PRODUCTS, SELLERS, CATEGORIES, TRANSLATIONS } from '../constants.tsx';
+import { PRODUCTS, SELLERS, CATEGORIES, getTranslations } from '../constants.tsx';
 
 import LivePriceTicker from './organisms/LivePriceTicker.tsx';
 import ProductCard from './molecules/ProductCard.tsx';
@@ -106,7 +106,8 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
     rec.interimResults = false;
     rec.maxAlternatives = 1;
     rec.onstart  = () => { setIsListening(true); haptic.light(); };
-    rec.onresult = (e) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    rec.onresult = (e: any) => {
       const transcript = e.results[0][0].transcript;
       setSearch(transcript);
       haptic.light();
@@ -126,7 +127,7 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
   }, []);
 
   const isMr = lang === Language.MARATHI;
-  const t    = TRANSLATIONS[isMr ? 'mr' : 'en'];
+  const t    = getTranslations(lang);
 
   const toggleSelect = (e: React.MouseEvent, id: string) => {
     e.stopPropagation();

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Camera, Video, CheckCircle, ChevronLeft, X, ShieldCheck, MapPin } from 'lucide-react';
 import L from 'leaflet';
 import { Language } from '../types.ts';
-import { CATEGORIES, TRANSLATIONS } from '../constants.tsx';
+import { CATEGORIES, getTranslations } from '../constants.tsx';
 import PillButton from './atoms/PillButton.tsx';
 import SectionReveal from './atoms/SectionReveal.tsx';
 import { haptic } from '../utils/haptic.ts';
@@ -305,7 +305,7 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
   const identityInputRef = useRef<HTMLInputElement>(null);
 
   const isMr = lang === Language.MARATHI;
-  const t    = TRANSLATIONS[isMr ? 'mr' : 'en'];
+  const t    = getTranslations(lang);
 
   useEffect(() => {
     if (isSuccess) {
