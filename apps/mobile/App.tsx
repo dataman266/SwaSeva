@@ -9,6 +9,7 @@ import OrdersScreen from './components/OrdersScreen.tsx';
 const SellScreen = lazy(() => import('./components/SellScreen.tsx'));
 import ProfileScreen from './components/ProfileScreen.tsx';
 import MyListingsScreen from './components/MyListingsScreen.tsx';
+import MyShopGateScreen from './components/MyShopGateScreen.tsx';
 import SellerProfileScreen from './components/SellerProfileScreen.tsx';
 import MessagesScreen from './components/MessagesScreen.tsx';
 import ExploreScreen from './components/ExploreScreen.tsx';
@@ -104,9 +105,23 @@ const App: React.FC = () => {
         onSendEnquiry={(_sellerId, _productId) => changeScreen('MESSAGES')}
       />;
       case 'SELL':      return <Suspense fallback={<div className="flex items-center justify-center h-screen" style={{color:'rgba(245,240,232,0.3)',fontSize:13}}>Loading…</div>}><SellScreen lang={state.userLanguage} onDone={() => changeScreen('LISTINGS')} /></Suspense>;
-      case 'LISTINGS':  return <MyListingsScreen lang={state.userLanguage} onCreateNew={() => changeScreen('SELL')} />;
+      case 'LISTINGS':
+        if (state.userRole === 'shopkeeper') {
+          return (
+            <Suspense fallback={<div className="flex items-center justify-center h-screen" style={{color:'rgba(245,240,232,0.3)',fontSize:13}}>Loading…</div>}>
+              <DukaanScreen lang={state.userLanguage} userRole={state.userRole} />
+            </Suspense>
+          );
+        }
+        return (
+          <MyShopGateScreen
+            lang={state.userLanguage}
+            onCreateNew={() => changeScreen('SELL')}
+            onRegistered={(role) => setState(s => ({ ...s, userRole: role }))}
+          />
+        );
       case 'ORDERS':    return <OrdersScreen lang={state.userLanguage} />;
-      case 'PROFILE':   return <ProfileScreen lang={state.userLanguage} userRole={state.userRole} onDukaanMode={() => changeScreen('DUKAAN')} onBecomeShopkeeper={(role) => {
+      case 'PROFILE':   return <ProfileScreen lang={state.userLanguage} userRole={state.userRole} onBecomeShopkeeper={(role) => {
         setState(s => ({ ...s, userRole: role }));
       }} onSignOut={() => {
         localStorage.removeItem(AUTH_TOKEN_KEY);
@@ -116,7 +131,6 @@ const App: React.FC = () => {
         setIsAuthenticated(false);
         changeScreen('ONBOARDING');
       }} />;
-      case 'DUKAAN':    return <Suspense fallback={<div className="flex items-center justify-center h-screen" style={{color:'rgba(245,240,232,0.3)',fontSize:13}}>Loading…</div>}><DukaanScreen lang={state.userLanguage} onBack={() => changeScreen('PROFILE')} userRole={state.userRole} /></Suspense>;
       case 'SELLER_PROFILE': return <SellerProfileScreen
         sellerId={state.selectedSellerId!}
         lang={state.userLanguage}
