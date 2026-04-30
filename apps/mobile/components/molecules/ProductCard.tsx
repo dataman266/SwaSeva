@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { MapPin, ArrowRight, Heart, Phone, MessageSquare } from 'lucide-react';
-import { Product, Seller } from '../../types.ts';
+import { Product, Seller, MappedShopProduct } from '../../types.ts';
 
 interface ProductCardProps {
   product: Product;
@@ -37,6 +37,8 @@ export default function ProductCard({
   const [visible, setVisible] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const isMr = lang === 'mr';
+  const isDukaan = !!(product as MappedShopProduct).isDukaanItem;
+  const dukaanProduct = isDukaan ? (product as MappedShopProduct) : null;
 
   useEffect(() => {
     const el = ref.current;
@@ -75,9 +77,16 @@ export default function ProductCard({
 
           {/* Category badge */}
           <div className="absolute top-4 left-4 flex flex-col gap-1.5">
-            <span className="inline-block text-[11px] font-semibold tracking-[0.1em] uppercase text-[#E8C84A] bg-[rgba(10,26,10,0.75)] backdrop-blur px-3 py-1.5 rounded-full border border-[rgba(212,196,160,0.35)]">
-              {product.category}
-            </span>
+            {isDukaan ? (
+              <span className="inline-block text-[11px] font-semibold tracking-[0.1em] uppercase px-3 py-1.5 rounded-full border"
+                style={{ background: 'rgba(45,90,27,0.85)', border: '1px solid rgba(74,140,42,0.5)', color: '#7EC95A', backdropFilter: 'blur(8px)' }}>
+                🏪 Dukaan
+              </span>
+            ) : (
+              <span className="inline-block text-[11px] font-semibold tracking-[0.1em] uppercase text-[#E8C84A] bg-[rgba(10,26,10,0.75)] backdrop-blur px-3 py-1.5 rounded-full border border-[rgba(212,196,160,0.35)]">
+                {product.category}
+              </span>
+            )}
             {isSelfListing && (
               <span className="inline-block text-[8px] font-semibold tracking-[0.12em] uppercase px-2.5 py-0.5 rounded-full"
                 style={{ background: 'rgba(45,90,27,0.85)', border: '1px solid rgba(74,140,42,0.5)', color: '#7EC95A', backdropFilter: 'blur(8px)' }}>
@@ -105,7 +114,9 @@ export default function ProductCard({
           {/* Name overlay at bottom of image */}
           <div className="absolute bottom-0 left-0 right-0 px-5 pb-4">
             <p className="text-[10px] font-medium tracking-[0.2em] uppercase text-[#E8C84A] mb-0.5">
-              {isMr ? product.varietyMr : product.variety}
+              {isDukaan
+                ? (dukaanProduct?.brand ?? (isMr ? product.varietyMr : product.variety))
+                : (isMr ? product.varietyMr : product.variety)}
             </p>
             <h3 className="text-xl font-light leading-tight text-[#F5F0E8]" style={{ letterSpacing: '-0.01em' }}>
               {isMr ? product.nameMr : product.name}
@@ -132,8 +143,8 @@ export default function ProductCard({
                 / {isMr ? product.unitMr : product.unit}
               </span>
             </div>
-            {/* MSP comparison badge */}
-            {product.mspPrice !== undefined && (
+            {/* MSP comparison badge — hidden for dukaan items */}
+            {!isDukaan && product.mspPrice !== undefined && (
               product.price >= product.mspPrice ? (
                 <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full"
                   style={{ background: 'rgba(74,140,42,0.12)', border: '1px solid rgba(74,140,42,0.25)' }}>

@@ -10,8 +10,8 @@ declare global {
   }
 }
 import { haptic } from '../utils/haptic.ts';
-import { Language, Product } from '../types.ts';
-import { PRODUCTS, SELLERS, CATEGORIES, getTranslations } from '../constants.tsx';
+import { Language, Product, MappedShopProduct, ShopItem } from '../types.ts';
+import { PRODUCTS, SELLERS, CATEGORIES, MOCK_SHOP_PROFILES, MOCK_SHOP_ITEMS, getTranslations } from '../constants.tsx';
 
 import LivePriceTicker from './organisms/LivePriceTicker.tsx';
 import ProductCard from './molecules/ProductCard.tsx';
@@ -31,6 +31,7 @@ interface HomeScreenProps {
   onOpenExplore: () => void;
   onOpenMessages: () => void;
   onOpenSell?: () => void;
+  onOpenSellerProfile?: (id: string) => void;
 }
 
 const SAVED_KEY = 'agrimart_saved';
@@ -64,7 +65,7 @@ function getUserListings(): Product[] {
   } catch { return []; }
 }
 
-export default function HomeScreen({ lang, location, onViewDetails, onOpenAssistant, onOpenExplore, onOpenMessages, onOpenSell }: HomeScreenProps) {
+export default function HomeScreen({ lang, location, onViewDetails, onOpenAssistant, onOpenExplore, onOpenMessages, onOpenSell, onOpenSellerProfile }: HomeScreenProps) {
   const [search, setSearch]           = useState('');
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [activeCategory, setActiveCategory] = useState('all');
@@ -183,13 +184,45 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
 
   const allProducts = [...userListings, ...PRODUCTS];
 
-  const filtered = allProducts
+  const loadDukaanItems = (): MappedShopProduct[] => {
+    let shopItems: ShopItem[] = MOCK_SHOP_ITEMS;
+    try {
+      const raw = localStorage.getItem('agrimart_shop_inventory');
+      if (raw) shopItems = [...JSON.parse(raw), ...MOCK_SHOP_ITEMS];
+    } catch { /* use mock */ }
+    return shopItems
+      .filter(i => i.isActive)
+      .map(i => ({
+        id:          i.id,
+        name:        i.name,
+        nameMr:      i.nameMr,
+        category:    'agri-input',
+        variety:     i.brand ?? i.category,
+        varietyMr:   i.brand ?? i.category,
+        price:       i.price,
+        unit:        i.unit,
+        unitMr:      i.unit,
+        quantity:    i.stockQty,
+        imageUrl:    i.imageUris[0] ?? 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400',
+        sellerId:    i.shopkeeperId,
+        description: i.description,
+        descriptionMr: i.descriptionMr,
+        isDukaanItem: true as const,
+        brand:       i.brand,
+        expiryDate:  i.expiryDate,
+      }));
+  };
+
+  const isDukaanMode = activeCategory === 'agri-input';
+  const productsToFilter: Product[] = isDukaanMode ? loadDukaanItems() : allProducts;
+
+  const filtered = productsToFilter
     .filter(p => {
       const name    = (isMr ? p.nameMr    : p.name   ).toLowerCase();
       const variety = (isMr ? p.varietyMr : p.variety).toLowerCase();
       const q       = search.toLowerCase();
       const matchSearch = name.includes(q) || variety.includes(q);
-      const matchCat    = activeCategory === 'all' || p.category === activeCategory;
+      const matchCat    = isDukaanMode || activeCategory === 'all' || p.category === activeCategory;
       const matchMin    = priceMin === '' || p.price >= Number(priceMin);
       const matchMax    = priceMax === '' || p.price <= Number(priceMax);
       return matchSearch && matchCat && matchMin && matchMax;
@@ -279,6 +312,42 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
           </button>
         </div>
       )}
+
+      {/* ── 3b. NEARBY DUKAANDAARS SHELF ─────────────────────────── */}
+      <div className="pt-5 pb-1">
+        <div className="flex items-center justify-between px-5 mb-3">
+          <h2 className="text-[16px] font-semibold text-[#F5F0E8]">🏪 {isMr ? 'जवळचे दुकानदार' : 'Nearby Dukaandaars'}</h2>
+          <button
+            onClick={() => setActiveCategory('agri-input')}
+            className="text-[12px] text-[#E8C84A] font-medium"
+          >
+            {isMr ? 'सर्व पहा →' : 'See all →'}
+          </button>
+        </div>
+        <div className="flex gap-3 overflow-x-auto px-5 pb-2" style={{ scrollbarWidth: 'none' }}>
+          {MOCK_SHOP_PROFILES.map(shop => (
+            <button
+              key={shop.shopkeeperId}
+              onClick={() => onOpenSellerProfile?.(shop.shopkeeperId)}
+              className="flex-shrink-0 w-36 rounded-2xl overflow-hidden border border-[rgba(245,240,232,0.08)] active:scale-95 transition-all text-left"
+              style={{ background: '#162B16' }}
+            >
+              <img
+                src={shop.exteriorPhotoUri}
+                alt={shop.shopName}
+                className="w-full h-24 object-cover"
+                loading="lazy"
+              />
+              <div className="p-2.5">
+                <p className="text-[12px] font-semibold text-[#F5F0E8] leading-tight truncate">
+                  {isMr ? shop.shopNameMr : shop.shopName}
+                </p>
+                <p className="text-[10px] text-[rgba(245,240,232,0.45)] mt-0.5">📍 {shop.distance}</p>
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
 
       {/* ── 4. PRODUCT LISTINGS ──────────────────────────────────── */}
       <section className="px-5 pt-6">
@@ -392,6 +461,13 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
               onClick={() => setActiveCategory(cat.name)}
             />
           ))}
+          <CategoryTile
+            icon="🏪"
+            label={isMr ? 'कृषी निविष्ठा' : 'Agri Inputs'}
+            gradient="linear-gradient(145deg,#1A2D3A,#1A3D5A)"
+            active={activeCategory === 'agri-input'}
+            onClick={() => setActiveCategory('agri-input')}
+          />
         </div>
 
         {/* Product grid — skeletons while loading, real cards when ready */}

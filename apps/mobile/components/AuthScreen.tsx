@@ -3,14 +3,15 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Eye, EyeOff, Phone, Lock, User, Mail, MapPin, Hash, Camera, ChevronRight, ArrowLeft, Loader } from 'lucide-react';
 import PillButton from './atoms/PillButton.tsx';
 import SearchableDropdown, { DropdownOption } from './atoms/SearchableDropdown.tsx';
-import { Language } from '../types.ts';
+import { Language, ShopProfile } from '../types.ts';
 import {
   INDIAN_STATES, MAHARASHTRA_DISTRICTS, getTalukasByDistrict,
 } from '../data/maharashtraLocations.ts';
+import ShopRegistrationView from './dukaan/ShopRegistrationView.tsx';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
-type AuthView = 'login' | 'register-step1' | 'register-step2' | 'otp-phone' | 'otp-verify' | 'new-password';
+type AuthView = 'login' | 'register-step1' | 'register-step2' | 'register-step3' | 'otp-phone' | 'otp-verify' | 'new-password';
 
 interface AuthScreenProps {
   lang: Language;
@@ -142,7 +143,8 @@ export default function AuthScreen({ lang, onAuthSuccess }: AuthScreenProps) {
         <motion.div key={view} custom={dir} variants={slide} initial="enter" animate="center" exit="exit" transition={trs}>
           {view === 'login'        && <LoginView        isMr={isMr} onRegister={() => go('register-step1')} onForgot={() => go('otp-phone')} onSuccess={onAuthSuccess} />}
           {view === 'register-step1' && <RegisterStep1  isMr={isMr} onBack={() => go('login', -1)} onNext={() => go('register-step2')} />}
-          {view === 'register-step2' && <RegisterStep2  isMr={isMr} onBack={() => go('register-step1', -1)} onSuccess={onAuthSuccess} />}
+          {view === 'register-step2' && <RegisterStep2  isMr={isMr} onBack={() => go('register-step1', -1)} onSuccess={onAuthSuccess} onNextShop={() => go('register-step3')} />}
+          {view === 'register-step3' && <RegisterStep3  isMr={isMr} onBack={() => go('register-step2', -1)} onSuccess={onAuthSuccess} />}
           {view === 'otp-phone'    && <OtpPhone         isMr={isMr} onBack={() => go('login', -1)} onSent={() => go('otp-verify')} />}
           {view === 'otp-verify'   && <OtpVerify        isMr={isMr} onBack={() => go('otp-phone', -1)} onVerified={() => go('new-password')} />}
           {view === 'new-password' && <NewPassword       isMr={isMr} onDone={() => go('login', -1)} />}
@@ -270,6 +272,7 @@ interface Step1Data {
 
 // Shared step1 data store (simple module-level ref to pass between steps without prop drilling)
 let _step1: Step1Data = { fullName:'', mobile:'', email:'', password:'', confirmPassword:'', photoUri:'', photoFile:null };
+let _isShopkeeper = false;
 
 function RegisterStep1({ isMr, onBack, onNext }: { isMr: boolean; onBack: () => void; onNext: () => void }) {
   const [form,   setForm]   = useState<Step1Data>(_step1);
@@ -372,14 +375,15 @@ function RegisterStep1({ isMr, onBack, onNext }: { isMr: boolean; onBack: () => 
 // REGISTER STEP 2 — Address & Location
 // ══════════════════════════════════════════════════════════════════════════════
 
-function RegisterStep2({ isMr, onBack, onSuccess }: { isMr: boolean; onBack: () => void; onSuccess: (t: string) => void }) {
-  const [address,  setAddress]  = useState('');
-  const [pincode,  setPincode]  = useState('');
-  const [state,    setState]    = useState('Maharashtra');
-  const [district, setDistrict] = useState('');
-  const [taluka,   setTaluka]   = useState('');
-  const [errors,   setErrors]   = useState<Record<string, string>>({});
-  const [loading,  setLoading]  = useState(false);
+function RegisterStep2({ isMr, onBack, onSuccess, onNextShop }: { isMr: boolean; onBack: () => void; onSuccess: (t: string) => void; onNextShop: () => void }) {
+  const [address,       setAddress]       = useState('');
+  const [pincode,       setPincode]       = useState('');
+  const [state,         setState]         = useState('Maharashtra');
+  const [district,      setDistrict]      = useState('');
+  const [taluka,        setTaluka]        = useState('');
+  const [errors,        setErrors]        = useState<Record<string, string>>({});
+  const [loading,       setLoading]       = useState(false);
+  const [isShopkeeper,  setIsShopkeeper]  = useState(_isShopkeeper);
 
   const isMH = state === 'Maharashtra';
 
@@ -406,6 +410,11 @@ function RegisterStep2({ isMr, onBack, onSuccess }: { isMr: boolean; onBack: () 
   const submit = async () => {
     const errs = validate();
     if (Object.keys(errs).length) { setErrors(errs); return; }
+    if (isShopkeeper) {
+      _isShopkeeper = true;
+      onNextShop();
+      return;
+    }
     setLoading(true);
     // TODO: replace with real API call using _step1 + address fields
     await new Promise(r => setTimeout(r, 1400));
@@ -420,7 +429,8 @@ function RegisterStep2({ isMr, onBack, onSuccess }: { isMr: boolean; onBack: () 
       </button>
 
       <div className="flex items-center gap-2 mb-3">
-        <StepDot done /><StepDot active /><span className="text-[10px] tracking-[0.18em] uppercase text-[rgba(245,240,232,0.35)] ml-1">2 / 2</span>
+        <StepDot done /><StepDot active />{isShopkeeper && <StepDot />}
+        <span className="text-[10px] tracking-[0.18em] uppercase text-[rgba(245,240,232,0.35)] ml-1">{isShopkeeper ? '2 / 3' : '2 / 2'}</span>
       </div>
 
       <h1 className="text-[#F5F0E8] font-light mb-1" style={{ fontSize: 'clamp(24px,7vw,32px)', letterSpacing: '-0.03em' }}>
@@ -473,18 +483,40 @@ function RegisterStep2({ isMr, onBack, onSuccess }: { isMr: boolean; onBack: () 
         )}
       </div>
 
+      {/* Shopkeeper toggle */}
+      <div
+        className="mt-5 rounded-2xl border p-4 flex items-center justify-between"
+        style={{ background: 'rgba(45,90,27,0.1)', border: '1px solid rgba(74,140,42,0.25)' }}
+      >
+        <div className="flex-1 pr-3">
+          <p className="text-[14px] font-semibold text-[#F5F0E8]">🏪 {isMr ? 'दुकानदार म्हणून नोंदणी करा' : 'Register as Shopkeeper'}</p>
+          <p className="text-[11px] text-[rgba(245,240,232,0.45)] mt-0.5">{isMr ? 'कृषी निविष्ठा उत्पादने विका' : 'Sell agri-input products from your shop'}</p>
+        </div>
+        <button
+          type="button"
+          onClick={() => setIsShopkeeper(v => !v)}
+          className={`flex-shrink-0 w-12 h-6 rounded-full transition-colors relative ${isShopkeeper ? 'bg-[#4CAF50]' : 'bg-[rgba(245,240,232,0.15)]'}`}
+          aria-checked={isShopkeeper}
+          role="switch"
+        >
+          <span className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${isShopkeeper ? 'translate-x-6' : 'translate-x-0.5'}`} />
+        </button>
+      </div>
+
       {/* Terms */}
-      <p className="text-[11px] text-[rgba(245,240,232,0.3)] mt-6 leading-relaxed text-center">
+      <p className="text-[11px] text-[rgba(245,240,232,0.3)] mt-5 leading-relaxed text-center">
         {isMr
           ? 'नोंदणी करून तुम्ही आमच्या सेवा अटी आणि गोपनीयता धोरणास सहमत आहात'
           : 'By registering you agree to our Terms of Service and Privacy Policy'}
       </p>
 
-      <div className="mt-5">
+      <div className="mt-4">
         <PillButton variant="light" fullWidth size="lg" disabled={loading} onClick={submit}>
           {loading
             ? <Loader size={18} className="animate-spin" />
-            : (isMr ? 'नोंदणी पूर्ण करा' : 'Complete Registration')}
+            : isShopkeeper
+              ? (isMr ? 'पुढे — दुकान तपशील →' : 'Next — Shop Details →')
+              : (isMr ? 'नोंदणी पूर्ण करा' : 'Complete Registration')}
         </PillButton>
       </div>
     </div>
@@ -644,6 +676,42 @@ function NewPassword({ isMr, onDone }: { isMr: boolean; onDone: () => void }) {
         </PillButton>
       </div>
     </form>
+  );
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// REGISTER STEP 3 — Shop Details (shopkeeper path only)
+// ══════════════════════════════════════════════════════════════════════════════
+
+function RegisterStep3({ isMr, onBack, onSuccess }: { isMr: boolean; onBack: () => void; onSuccess: (t: string) => void }) {
+  return (
+    <div className="px-6 pb-safe pb-10 pt-2">
+      <button type="button" onClick={onBack} className="flex items-center gap-1.5 mb-5 -ml-1" style={{ color: 'rgba(245,240,232,0.5)', fontSize: 13 }}>
+        <ArrowLeft size={16} /> {isMr ? 'मागे' : 'Back'}
+      </button>
+
+      <div className="flex items-center gap-2 mb-3">
+        <StepDot done /><StepDot done /><StepDot active />
+        <span className="text-[10px] tracking-[0.18em] uppercase text-[rgba(245,240,232,0.35)] ml-1">3 / 3</span>
+      </div>
+
+      <h1 className="text-[#F5F0E8] font-light mb-1" style={{ fontSize: 'clamp(24px,7vw,32px)', letterSpacing: '-0.03em' }}>
+        {isMr ? 'दुकानाचे तपशील' : 'Shop Details'}
+      </h1>
+      <p className="text-[rgba(245,240,232,0.45)] font-light mb-7" style={{ fontSize: 13 }}>
+        {isMr ? 'दुकानाचे पुरावे द्या' : 'Provide shop proof to get verified'}
+      </p>
+
+      <ShopRegistrationView
+        lang={isMr ? Language.MARATHI : Language.ENGLISH}
+        onSave={(profile: ShopProfile) => {
+          localStorage.setItem('agrimart_user_role', 'shopkeeper');
+          localStorage.setItem('agrimart_shop_profile', JSON.stringify(profile));
+          _isShopkeeper = false;
+          onSuccess('mock-token-' + Date.now());
+        }}
+      />
+    </div>
   );
 }
 

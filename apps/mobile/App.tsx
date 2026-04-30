@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { AppScreen, AppState, Language, Product } from './types.ts';
+import { AppScreen, AppState, Language, Product, UserRole } from './types.ts';
 import HomeScreen from './components/HomeScreen.tsx';
 import DetailsScreen from './components/DetailsScreen.tsx';
 import OrdersScreen from './components/OrdersScreen.tsx';
@@ -21,11 +21,13 @@ import CheckoutScreen from './components/CheckoutScreen.tsx';
 import BottomNav from './components/BottomNav.tsx';
 import Header from './components/Header.tsx';
 
+const DukaanScreen = lazy(() => import('./components/DukaanScreen.tsx'));
+
 const ONBOARDED_KEY  = 'agrimart_onboarded';
 const AUTH_TOKEN_KEY = 'agrimart_auth_token';
 
 // Screens that push forward (slide left) vs pop back (slide right)
-const SCREEN_ORDER: AppScreen[] = ['HOME', 'DETAILS', 'SELL', 'LISTINGS', 'MESSAGES', 'ORDERS', 'PROFILE', 'EXPLORE', 'ASSISTANT', 'CALENDAR', 'CART', 'CHECKOUT', 'SELLER_PROFILE'];
+const SCREEN_ORDER: AppScreen[] = ['HOME', 'DETAILS', 'SELL', 'LISTINGS', 'MESSAGES', 'ORDERS', 'PROFILE', 'DUKAAN', 'EXPLORE', 'ASSISTANT', 'CALENDAR', 'CART', 'CHECKOUT', 'SELLER_PROFILE'];
 
 function getDirection(from: AppScreen, to: AppScreen): number {
   const fi = SCREEN_ORDER.indexOf(from);
@@ -51,6 +53,7 @@ const App: React.FC = () => {
     currentScreen: localStorage.getItem(ONBOARDED_KEY) ? 'HOME' : 'ONBOARDING',
     userLanguage: Language.ENGLISH,
     location: 'Detecting...',
+    userRole: (localStorage.getItem('agrimart_user_role') as UserRole) ?? 'farmer',
   });
   const [prevScreen, setPrevScreen] = useState<AppScreen>('HOME');
 
@@ -92,7 +95,7 @@ const App: React.FC = () => {
 
   const renderScreen = () => {
     switch (state.currentScreen) {
-      case 'HOME':      return <HomeScreen lang={state.userLanguage} location={state.location} onViewDetails={(p) => changeScreen('DETAILS', p)} onOpenAssistant={() => changeScreen('ASSISTANT')} onOpenExplore={() => changeScreen('EXPLORE')} onOpenMessages={() => changeScreen('MESSAGES')} onOpenSell={() => changeScreen('SELL')} />;
+      case 'HOME':      return <HomeScreen lang={state.userLanguage} location={state.location} onViewDetails={(p) => changeScreen('DETAILS', p)} onOpenAssistant={() => changeScreen('ASSISTANT')} onOpenExplore={() => changeScreen('EXPLORE')} onOpenMessages={() => changeScreen('MESSAGES')} onOpenSell={() => changeScreen('SELL')} onOpenSellerProfile={(id) => changeScreen('SELLER_PROFILE', undefined, id)} />;
       case 'DETAILS':   return <DetailsScreen
         product={state.selectedProduct!}
         lang={state.userLanguage}
@@ -103,7 +106,9 @@ const App: React.FC = () => {
       case 'SELL':      return <Suspense fallback={<div className="flex items-center justify-center h-screen" style={{color:'rgba(245,240,232,0.3)',fontSize:13}}>Loading…</div>}><SellScreen lang={state.userLanguage} onDone={() => changeScreen('LISTINGS')} /></Suspense>;
       case 'LISTINGS':  return <MyListingsScreen lang={state.userLanguage} onCreateNew={() => changeScreen('SELL')} />;
       case 'ORDERS':    return <OrdersScreen lang={state.userLanguage} />;
-      case 'PROFILE':   return <ProfileScreen lang={state.userLanguage} onSignOut={() => {
+      case 'PROFILE':   return <ProfileScreen lang={state.userLanguage} userRole={state.userRole} onDukaanMode={() => changeScreen('DUKAAN')} onBecomeShopkeeper={(role) => {
+        setState(s => ({ ...s, userRole: role }));
+      }} onSignOut={() => {
         localStorage.removeItem(AUTH_TOKEN_KEY);
         setIsAuthenticated(false);
         changeScreen('HOME');
@@ -111,6 +116,7 @@ const App: React.FC = () => {
         setIsAuthenticated(false);
         changeScreen('ONBOARDING');
       }} />;
+      case 'DUKAAN':    return <Suspense fallback={<div className="flex items-center justify-center h-screen" style={{color:'rgba(245,240,232,0.3)',fontSize:13}}>Loading…</div>}><DukaanScreen lang={state.userLanguage} onBack={() => changeScreen('PROFILE')} userRole={state.userRole} /></Suspense>;
       case 'SELLER_PROFILE': return <SellerProfileScreen
         sellerId={state.selectedSellerId!}
         lang={state.userLanguage}

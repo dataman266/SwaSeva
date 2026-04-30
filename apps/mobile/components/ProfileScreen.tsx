@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Language } from '../types.ts';
+import { Language, UserRole } from '../types.ts';
+import ShopRegistrationView from './dukaan/ShopRegistrationView.tsx';
 import {
   Settings, Bell, ShieldCheck, HelpCircle, LogOut,
   ChevronRight, Sprout, ArrowLeft, User, Phone, Mail,
@@ -10,7 +11,7 @@ import {
   Volume2, Tag, Megaphone, Newspaper,
 } from 'lucide-react';
 
-type ProfileView = 'main' | 'settings' | 'notifications' | 'kyc' | 'help';
+type ProfileView = 'main' | 'settings' | 'notifications' | 'kyc' | 'help' | 'shopRegister';
 
 interface MenuItem {
   icon: React.ElementType;
@@ -33,6 +34,9 @@ const MENU_ITEMS: MenuItem[] = [
 
 interface ProfileScreenProps {
   lang: Language;
+  userRole: UserRole;
+  onDukaanMode: () => void;
+  onBecomeShopkeeper: (role: UserRole) => void;
   onSignOut: () => void;
   onExplore: () => void;
   onOpenCalendar: () => void;
@@ -827,7 +831,7 @@ function HelpView({ lang, onBack }: { lang: Language; onBack: () => void }) {
 }
 
 /* ─── MAIN PROFILE SCREEN ─────────────────────────────────── */
-export default function ProfileScreen({ lang, onSignOut, onExplore, onOpenCalendar, onResetOnboarding }: ProfileScreenProps) {
+export default function ProfileScreen({ lang, userRole, onDukaanMode, onBecomeShopkeeper, onSignOut, onExplore, onOpenCalendar, onResetOnboarding }: ProfileScreenProps) {
   const isMr = lang === Language.MARATHI;
   const [profileView, setProfileView] = useState<ProfileView>('main');
   const [prevView, setPrevView]       = useState<ProfileView>('main');
@@ -885,6 +889,20 @@ export default function ProfileScreen({ lang, onSignOut, onExplore, onOpenCalend
           {profileView === 'help' && (
             <HelpView lang={lang} onBack={goBack} />
           )}
+          {profileView === 'shopRegister' && (
+            <div style={{ minHeight: '100vh', background: '#0A1A0A', padding: '1rem 1.25rem 7rem' }}>
+              <SubHeader title={isMr ? 'दुकान नोंदणी' : 'Shop Registration'} onBack={goBack} />
+              <ShopRegistrationView
+                lang={lang}
+                onSave={(profile) => {
+                  localStorage.setItem('agrimart_user_role', 'shopkeeper');
+                  localStorage.setItem('agrimart_shop_profile', JSON.stringify(profile));
+                  onBecomeShopkeeper('shopkeeper');
+                  goBack();
+                }}
+              />
+            </div>
+          )}
           {profileView === 'main' && (
             <div style={{ padding: '2rem 1.25rem 7rem' }}>
 
@@ -927,6 +945,36 @@ export default function ProfileScreen({ lang, onSignOut, onExplore, onOpenCalend
                   </div>
                 </div>
               </div>
+
+              {/* ── Role card ────────────────────────────────────────── */}
+              {userRole === 'shopkeeper' ? (
+                <button
+                  onClick={onDukaanMode}
+                  className="w-full flex items-center justify-between p-4 rounded-2xl mb-4 active:scale-[0.98] transition-all"
+                  style={{ background: 'rgba(45,90,27,0.25)', border: '1px solid rgba(74,140,42,0.3)' }}
+                >
+                  <div className="text-left">
+                    <p className="text-[15px] font-semibold text-[#F5F0E8]">🏪 {isMr ? 'दुकानदार मोड →' : 'Dukandaar Mode →'}</p>
+                    <p className="text-[12px] text-[rgba(245,240,232,0.55)] mt-0.5">{isMr ? 'इन्व्हेंटरी व्यवस्थापन · डॅशबोर्ड पहा' : 'Manage inventory · View dashboard'}</p>
+                  </div>
+                  <div className="px-2.5 py-1 rounded-full text-[10px] font-semibold flex-shrink-0"
+                    style={{ background: 'rgba(76,175,80,0.15)', color: '#4CAF50', border: '1px solid rgba(76,175,80,0.3)' }}>
+                    {isMr ? 'सक्रिय' : 'Active'}
+                  </div>
+                </button>
+              ) : (
+                <button
+                  onClick={() => navigateTo('shopRegister')}
+                  className="w-full flex items-center gap-3 p-4 rounded-2xl mb-4 active:scale-[0.98] transition-all"
+                  style={{ background: 'rgba(232,200,74,0.06)', border: '1px solid rgba(232,200,74,0.2)' }}
+                >
+                  <span className="text-2xl flex-shrink-0">🏪</span>
+                  <div className="text-left">
+                    <p className="text-[14px] font-semibold text-[#F5F0E8]">{isMr ? 'दुकानदार व्हा →' : 'Become a Shopkeeper →'}</p>
+                    <p className="text-[12px] text-[rgba(245,240,232,0.5)] mt-0.5">{isMr ? 'तुमच्या दुकानातून कृषी निविष्ठा उत्पादने विका' : 'List agri-input products from your shop'}</p>
+                  </div>
+                </button>
+              )}
 
               {/* ── Stats strip ──────────────────────────────────────── */}
               <div className="grid grid-cols-3 gap-3 mb-6">

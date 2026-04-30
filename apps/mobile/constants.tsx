@@ -1,5 +1,5 @@
 
-import { Product, Seller, Category, Language } from './types';
+import { Product, Seller, Category, Language, ShopProfile, ShopItem } from './types';
 
 export const COLORS = {
   primary: '#2D5A27', // Forest Green
@@ -726,3 +726,62 @@ export const TRANSLATIONS = {
 export function getTranslations(lang: Language): typeof TRANSLATIONS.en {
   return (TRANSLATIONS as Record<string, typeof TRANSLATIONS.en>)[lang as string] ?? TRANSLATIONS.en;
 }
+
+export const PRICE_UNITS = [
+  { value: 'kg',      label: 'per kg',      labelMr: 'प्रति किलो'      },
+  { value: 'gram',    label: 'per 100g',    labelMr: 'प्रति १०० ग्रॅम'  },
+  { value: 'quintal', label: 'per quintal', labelMr: 'प्रति क्विंटल'    },
+  { value: 'tonne',   label: 'per tonne',   labelMr: 'प्रति टन'         },
+  { value: 'dozen',   label: 'per dozen',   labelMr: 'प्रति डझन'        },
+  { value: 'piece',   label: 'per piece',   labelMr: 'प्रति नग'         },
+  { value: 'litre',   label: 'per litre',   labelMr: 'प्रति लिटर'       },
+  { value: 'bundle',  label: 'per bundle',  labelMr: 'प्रति जुडी'       },
+  { value: 'bag',     label: 'per bag',     labelMr: 'प्रति बोरे'       },
+  { value: 'box',     label: 'per box',     labelMr: 'प्रति पेटी'       },
+  { value: 'packet',  label: 'per packet',  labelMr: 'प्रति पॅकेट'      },
+];
+
+export const MOCK_SHOP_PROFILES: (ShopProfile & { shopkeeperId: string; shopNameMr: string; location: string; distance: string })[] = [
+  {
+    shopkeeperId: 'shop_001',
+    shopName: 'Ganesh Krishi Seva Kendra',
+    shopNameMr: 'गणेश कृषी सेवा केंद्र',
+    location: 'Pune, Maharashtra',
+    distance: '0.3 km',
+    exteriorPhotoUri: 'https://images.unsplash.com/photo-1604719312566-8912e9c8a213?w=400',
+    interiorPhotoUri: '',
+    verificationStatus: 'pending' as const,
+    gstOrLicense: 'GSTIN27AAACG1234A1ZD',
+  },
+  {
+    shopkeeperId: 'shop_002',
+    shopName: 'Shivaji Agro Stores',
+    shopNameMr: 'शिवाजी अॅग्रो स्टोर्स',
+    location: 'Nashik, Maharashtra',
+    distance: '1.1 km',
+    exteriorPhotoUri: 'https://images.unsplash.com/photo-1578916171728-46686eac8d58?w=400',
+    interiorPhotoUri: '',
+    verificationStatus: 'pending' as const,
+    gstOrLicense: 'LIC-PES-MH-2023-00142',
+  },
+  {
+    shopkeeperId: 'shop_003',
+    shopName: 'Mahalaxmi Seed House',
+    shopNameMr: 'महालक्ष्मी सीड हाऊस',
+    location: 'Aurangabad, Maharashtra',
+    distance: '2.4 km',
+    exteriorPhotoUri: 'https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?w=400',
+    interiorPhotoUri: '',
+    verificationStatus: 'pending' as const,
+    gstOrLicense: 'GSTIN27BBBCM5678B2ZE',
+  },
+];
+
+export const MOCK_SHOP_ITEMS: ShopItem[] = [
+  { id: 'si_001', shopkeeperId: 'shop_001', name: 'Hybrid Tomato Seeds', nameMr: 'हायब्रिड टोमॅटो बियाणे', category: 'seeds', price: 280, unit: 'packet', stockQty: 45, stockThreshold: 10, description: '50g packet, disease resistant variety', descriptionMr: '50 ग्रॅम पॅकेट, रोगप्रतिकारक जात', imageUris: ['https://images.unsplash.com/photo-1592925741908-3c60d3a4a8c3?w=400'], brand: 'Syngenta', isActive: true, createdAt: '2026-04-01T00:00:00Z' },
+  { id: 'si_002', shopkeeperId: 'shop_001', name: 'NPK Fertilizer 19:19:19', nameMr: 'NPK खत 19:19:19', category: 'fertilizer', price: 1150, unit: 'bag', stockQty: 8, stockThreshold: 5, description: 'Water soluble complex fertilizer', descriptionMr: 'पाण्यात विरघळणारे संयुक्त खत', imageUris: ['https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400'], brand: 'Iffco', expiryDate: '2027-03-31', isActive: true, createdAt: '2026-04-01T00:00:00Z' },
+  { id: 'si_003', shopkeeperId: 'shop_002', name: 'Chlorpyrifos 20% EC', nameMr: 'क्लोरपायरीफॉस 20% EC', category: 'pesticide', price: 420, unit: 'litre', stockQty: 3, stockThreshold: 5, description: 'Broad spectrum insecticide', descriptionMr: 'व्यापक स्पेक्ट्रम कीटकनाशक', imageUris: ['https://images.unsplash.com/photo-1563514227147-6d2ff665a6a0?w=400'], brand: 'Coromandel', expiryDate: '2026-12-31', isActive: true, createdAt: '2026-04-01T00:00:00Z' },
+  { id: 'si_004', shopkeeperId: 'shop_002', name: 'Hand Sprayer 16L', nameMr: 'हँड स्प्रेयर 16L', category: 'tools', price: 1850, unit: 'piece', stockQty: 12, stockThreshold: 3, description: 'Knapsack pressure sprayer', descriptionMr: 'नॅपसॅक प्रेशर स्प्रेयर', imageUris: ['https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=400'], isActive: true, createdAt: '2026-04-01T00:00:00Z' },
+  { id: 'si_005', shopkeeperId: 'shop_003', name: 'Cotton Seed BG-II', nameMr: 'कापूस बियाणे BG-II', category: 'seeds', price: 920, unit: 'packet', stockQty: 30, stockThreshold: 8, description: 'Bt cotton high yield variety', descriptionMr: 'बीटी कापूस उच्च उत्पादन जात', imageUris: ['https://images.unsplash.com/photo-1573848933048-bba9a57b5bca?w=400'], brand: 'Mahyco', isActive: true, createdAt: '2026-04-01T00:00:00Z' },
+  { id: 'si_006', shopkeeperId: 'shop_003', name: 'Animal Feed Pellets', nameMr: 'पशुखाद्य गोळ्या', category: 'feed', price: 650, unit: 'bag', stockQty: 20, stockThreshold: 5, description: 'Balanced nutrition cattle feed', descriptionMr: 'संतुलित पोषण गोमांस खाद्य', imageUris: ['https://images.unsplash.com/photo-1500595046743-cd271d694d30?w=400'], brand: 'Godrej Agrovet', isActive: true, createdAt: '2026-04-01T00:00:00Z' },
+];
