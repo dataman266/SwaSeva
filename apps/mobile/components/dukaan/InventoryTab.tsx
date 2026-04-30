@@ -138,17 +138,49 @@ export default function InventoryTab({ lang }: { lang: Language }) {
                 >
                   <Edit2 size={13} /> {isMr ? 'संपादित करा' : 'Edit'}
                 </button>
-                <div className="flex items-center gap-1.5 ml-auto">
-                  <span className="text-[11px] text-[rgba(245,240,232,0.35)]">{isMr ? 'सक्रिय' : 'Active'}</span>
-                  <button
-                    onClick={() => handleToggleActive(item.id)}
-                    className={`w-9 h-5 rounded-full transition-colors relative ${item.isActive ? 'bg-[#4CAF50]' : 'bg-[rgba(245,240,232,0.12)]'}`}
-                    role="switch"
-                    aria-checked={item.isActive}
+                <button
+                  onClick={() => handleToggleActive(item.id)}
+                  role="switch"
+                  aria-checked={item.isActive}
+                  className="ml-auto flex-shrink-0 relative overflow-hidden rounded-full transition-all active:scale-95"
+                  style={{
+                    width: 72,
+                    height: 26,
+                    border: item.isActive
+                      ? '1px solid rgba(76,175,80,0.5)'
+                      : '1px solid rgba(245,240,232,0.14)',
+                    background: 'rgba(10,26,10,0.8)',
+                  }}
+                >
+                  {/* liquid fill layer */}
+                  <span
+                    className="absolute inset-0 rounded-full"
+                    style={{
+                      background: 'linear-gradient(90deg,#2D5A1B,#4CAF50)',
+                      transform: item.isActive ? 'translateX(0%)' : 'translateX(-100%)',
+                      transition: 'transform 400ms cubic-bezier(0.32,0,0.16,1)',
+                    }}
+                  />
+                  {/* ripple sheen */}
+                  {item.isActive && (
+                    <span
+                      className="absolute inset-0 rounded-full pointer-events-none"
+                      style={{
+                        background: 'linear-gradient(180deg,rgba(255,255,255,0.12) 0%,transparent 60%)',
+                      }}
+                    />
+                  )}
+                  {/* label */}
+                  <span
+                    className="relative z-10 flex items-center justify-center w-full h-full text-[10px] font-bold tracking-[0.06em] uppercase"
+                    style={{
+                      color: item.isActive ? '#F5F0E8' : 'rgba(245,240,232,0.35)',
+                      transition: 'color 300ms',
+                    }}
                   >
-                    <span className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${item.isActive ? 'translate-x-4' : 'translate-x-0.5'}`} />
-                  </button>
-                </div>
+                    {item.isActive ? (isMr ? 'सक्रिय' : 'Active') : (isMr ? 'बंद' : 'Off')}
+                  </span>
+                </button>
                 <button
                   onClick={() => setDeleteId(item.id)}
                   className="text-red-400/50 active:text-red-400 transition-colors ml-1"
