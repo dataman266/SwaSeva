@@ -1,6 +1,6 @@
 import React from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { X, Check } from 'lucide-react';
+import { Check } from 'lucide-react';
 import { Language } from '../types.ts';
 
 interface LangOption {
@@ -35,179 +35,137 @@ export default function LanguagePicker({ open, current, onSelect, onClose }: Lan
     <AnimatePresence>
       {open && (
         <>
-          {/* ── Backdrop ──────────────────────────────────────── */}
+          {/* Click-away backdrop — light blur, doesn't feel like a modal */}
           <motion.div
             key="lp-backdrop"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.22 }}
+            transition={{ duration: 0.12 }}
             onClick={onClose}
             style={{
               position: 'fixed', inset: 0,
-              background: 'rgba(5, 13, 5, 0.80)',
-              backdropFilter: 'blur(7px)',
-              WebkitBackdropFilter: 'blur(7px)',
+              background: 'rgba(5, 13, 5, 0.35)',
+              backdropFilter: 'blur(3px)',
+              WebkitBackdropFilter: 'blur(3px)',
               zIndex: 200,
             }}
           />
 
-          {/* ── Bottom sheet ──────────────────────────────────── */}
+          {/* Dropdown — anchored below the header, top-right */}
           <motion.div
-            key="lp-sheet"
-            initial={{ y: '100%' }}
-            animate={{ y: 0 }}
-            exit={{ y: '100%' }}
-            transition={{ type: 'spring', damping: 30, stiffness: 340, mass: 0.85 }}
+            key="lp-dropdown"
+            initial={{ opacity: 0, scale: 0.92, y: -8 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.92, y: -8 }}
+            transition={{ duration: 0.15, ease: [0.32, 0, 0.16, 1] as const }}
             style={{
               position: 'fixed',
-              bottom: 0, left: 0, right: 0,
+              top: 'calc(56px + env(safe-area-inset-top, 0px) + 6px)',
+              right: 12,
               zIndex: 201,
-              background: 'linear-gradient(180deg, #0F1F0F 0%, #0A1A0A 100%)',
-              borderTop: '1px solid rgba(232,200,74,0.18)',
-              borderRadius: '22px 22px 0 0',
-              paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 16px)',
+              width: 218,
+              maxHeight: '62vh',
+              display: 'flex',
+              flexDirection: 'column',
+              borderRadius: 18,
+              overflow: 'hidden',
+              background: 'rgba(12, 24, 12, 0.84)',
+              backdropFilter: 'blur(28px)',
+              WebkitBackdropFilter: 'blur(28px)',
+              border: '1px solid rgba(245,240,232,0.10)',
+              boxShadow: '0 20px 60px rgba(0,0,0,0.5), inset 0 0 0 0.5px rgba(245,240,232,0.05)',
+              transformOrigin: 'top right',
             }}
           >
-            {/* Drag handle */}
-            <div style={{ display: 'flex', justifyContent: 'center', paddingTop: 12, paddingBottom: 2 }}>
-              <div style={{
-                width: 40, height: 4,
-                background: 'rgba(245,240,232,0.13)',
-                borderRadius: 2,
-              }} />
+            {/* Title row */}
+            <div style={{
+              padding: '13px 16px 11px',
+              borderBottom: '1px solid rgba(245,240,232,0.07)',
+              flexShrink: 0,
+            }}>
+              <p style={{
+                fontSize: 13, fontWeight: 700, color: '#F5F0E8',
+                letterSpacing: '-0.01em', lineHeight: 1.2,
+              }}>
+                भाषा <span style={{ color: 'rgba(245,240,232,0.28)', fontWeight: 300 }}>·</span> Language
+              </p>
+              <p style={{
+                fontSize: 10, color: 'rgba(245,240,232,0.35)',
+                marginTop: 2, letterSpacing: '0.03em',
+              }}>
+                Scroll to browse all languages
+              </p>
             </div>
 
-            {/* Header row */}
+            {/* Scrollable language list */}
             <div style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              padding: '14px 20px 12px',
+              overflowY: 'auto',
+              WebkitOverflowScrolling: 'touch' as React.CSSProperties['WebkitOverflowScrolling'],
+              scrollbarWidth: 'none',
+              flex: 1,
+              padding: '5px 0 6px',
             }}>
-              <div>
-                <p style={{
-                  fontSize: 19, fontWeight: 700, color: '#F5F0E8',
-                  letterSpacing: '-0.025em', lineHeight: 1.25,
-                }}>
-                  भाषा{' '}
-                  <span style={{ color: 'rgba(245,240,232,0.28)', fontWeight: 300 }}>·</span>{' '}
-                  Language
-                </p>
-                <p style={{
-                  fontSize: 11, color: 'rgba(245,240,232,0.38)',
-                  marginTop: 3, fontWeight: 400, letterSpacing: '0.02em',
-                }}>
-                  Select your preferred language
-                </p>
-              </div>
-              <button
-                onClick={onClose}
-                aria-label="Close language picker"
-                style={{
-                  width: 36, height: 36,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  borderRadius: '50%',
-                  background: 'rgba(245,240,232,0.06)',
-                  border: '1px solid rgba(245,240,232,0.10)',
-                  color: 'rgba(245,240,232,0.55)',
-                  cursor: 'pointer', touchAction: 'manipulation',
-                  flexShrink: 0,
-                }}
-              >
-                <X size={15} strokeWidth={2} />
-              </button>
-            </div>
-
-            {/* Gold fade divider */}
-            <div style={{
-              height: 1, margin: '0 20px',
-              background: 'linear-gradient(90deg, rgba(232,200,74,0) 0%, rgba(232,200,74,0.32) 35%, rgba(232,200,74,0.32) 65%, rgba(232,200,74,0) 100%)',
-            }} />
-
-            {/* 3-column language grid */}
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(3, 1fr)',
-              gap: 8,
-              padding: '14px 14px 10px',
-            }}>
-              {LANG_OPTIONS.map((lang, i) => {
+              {LANG_OPTIONS.map((lang) => {
                 const active = current === lang.code;
                 return (
-                  <motion.button
+                  <button
                     key={lang.code}
-                    initial={{ opacity: 0, scale: 0.92 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: i * 0.025, duration: 0.18, ease: 'easeOut' }}
                     onClick={() => { onSelect(lang.code); onClose(); }}
-                    whileTap={{ scale: 0.93 }}
-                    aria-label={`${lang.english} language`}
+                    aria-label={`${lang.english} — ${lang.native}`}
                     style={{
-                      position: 'relative',
-                      display: 'flex', flexDirection: 'column',
-                      alignItems: 'center', justifyContent: 'center',
-                      padding: '14px 6px 12px',
-                      borderRadius: 14,
-                      border: active
-                        ? '1.5px solid rgba(232,200,74,0.55)'
-                        : '1.5px solid rgba(245,240,232,0.07)',
-                      background: active
-                        ? 'linear-gradient(135deg, rgba(232,200,74,0.10) 0%, rgba(45,90,27,0.15) 100%)'
-                        : 'rgba(245,240,232,0.025)',
-                      cursor: 'pointer', touchAction: 'manipulation',
-                      minHeight: 76,
-                      transition: 'background 0.15s, border-color 0.15s',
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 12,
+                      padding: '9px 16px',
+                      background: active ? 'rgba(232,200,74,0.07)' : 'transparent',
+                      border: 'none',
+                      cursor: 'pointer',
+                      touchAction: 'manipulation',
+                      WebkitTapHighlightColor: 'rgba(45,90,27,0.15)',
+                      transition: 'background 0.1s',
                     }}
                   >
-                    {/* Active checkmark badge */}
+                    <div style={{ flex: 1, textAlign: 'left' }}>
+                      <span style={{
+                        display: 'block',
+                        fontSize: 16,
+                        fontWeight: 600,
+                        color: active ? '#E8C84A' : '#F5F0E8',
+                        lineHeight: 1.3,
+                        fontFamily: "'Noto Sans Devanagari', 'Noto Sans', system-ui, sans-serif",
+                      }}>
+                        {lang.native}
+                      </span>
+                      <span style={{
+                        display: 'block',
+                        fontSize: 10,
+                        fontWeight: 500,
+                        color: active ? 'rgba(232,200,74,0.55)' : 'rgba(245,240,232,0.30)',
+                        marginTop: 1,
+                        letterSpacing: '0.06em',
+                        textTransform: 'uppercase',
+                      }}>
+                        {lang.english}
+                      </span>
+                    </div>
+
                     {active && (
                       <div style={{
-                        position: 'absolute', top: 7, right: 7,
-                        width: 17, height: 17, borderRadius: '50%',
+                        width: 18, height: 18, borderRadius: '50%',
                         background: '#E8C84A',
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        boxShadow: '0 0 8px rgba(232,200,74,0.5)',
+                        flexShrink: 0,
+                        boxShadow: '0 0 8px rgba(232,200,74,0.45)',
                       }}>
                         <Check size={10} strokeWidth={3} color="#0A1A0A" />
                       </div>
                     )}
-
-                    {/* Native script name */}
-                    <span style={{
-                      fontSize: 19,
-                      fontWeight: 700,
-                      color: active ? '#E8C84A' : '#F5F0E8',
-                      lineHeight: 1.2,
-                      fontFamily: "'Noto Sans Devanagari', 'Noto Sans', system-ui, sans-serif",
-                      textAlign: 'center',
-                    }}>
-                      {lang.native}
-                    </span>
-
-                    {/* English label */}
-                    <span style={{
-                      fontSize: 10,
-                      fontWeight: 500,
-                      color: active ? 'rgba(232,200,74,0.65)' : 'rgba(245,240,232,0.35)',
-                      marginTop: 5,
-                      letterSpacing: '0.06em',
-                      textTransform: 'uppercase',
-                    }}>
-                      {lang.english}
-                    </span>
-                  </motion.button>
+                  </button>
                 );
               })}
             </div>
-
-            {/* Footer note */}
-            <p style={{
-              textAlign: 'center', fontSize: 10,
-              color: 'rgba(245,240,232,0.20)', fontWeight: 400,
-              padding: '4px 20px 12px',
-              letterSpacing: '0.05em',
-            }}>
-              Swaseva · Pan-India Agri Marketplace
-            </p>
           </motion.div>
         </>
       )}
