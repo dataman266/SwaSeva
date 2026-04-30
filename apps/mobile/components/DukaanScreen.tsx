@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { ArrowLeft } from 'lucide-react';
 import { Language, UserRole } from '../types.ts';
 import DashboardTab from './dukaan/DashboardTab.tsx';
 import InventoryTab from './dukaan/InventoryTab.tsx';
@@ -7,13 +6,12 @@ import OrdersTab from './dukaan/OrdersTab.tsx';
 
 interface Props {
   lang: Language;
-  onBack: () => void;
   userRole: UserRole;
 }
 
 type DukaanTab = 'dashboard' | 'inventory' | 'orders';
 
-export default function DukaanScreen({ lang, onBack }: Props) {
+export default function DukaanScreen({ lang, userRole }: Props) {
   const [activeTab, setActiveTab] = useState<DukaanTab>('dashboard');
   const isMr = lang === 'mr';
 
@@ -36,12 +34,6 @@ export default function DukaanScreen({ lang, onBack }: Props) {
         className="sticky top-0 z-40 flex items-center gap-3 px-4 py-4 border-b border-[rgba(245,240,232,0.08)]"
         style={{ background: 'rgba(10,26,10,0.96)', backdropFilter: 'blur(12px)' }}
       >
-        <button
-          onClick={onBack}
-          className="w-10 h-10 flex items-center justify-center rounded-full border border-[rgba(245,240,232,0.12)] active:scale-90 transition-all"
-        >
-          <ArrowLeft size={18} className="text-[#F5F0E8]" />
-        </button>
         <div className="flex-1 min-w-0">
           <p className="text-[10px] tracking-[0.2em] uppercase text-[rgba(245,240,232,0.4)]">
             {isMr ? 'दुकानदार मोड' : 'Dukandaar Mode'}
