@@ -25,6 +25,7 @@ interface HeaderProps {
   onLanguageChange: (lang: Language) => void;
   onOpenAssistant: () => void;
   onOpenCart: () => void;
+  onNavigateHome?: () => void;
   scrollParent?: React.RefObject<HTMLDivElement>;
 }
 
@@ -32,6 +33,7 @@ export default function Header({
   language,
   onLanguageChange,
   onOpenCart,
+  onNavigateHome,
 }: HeaderProps) {
   const [scrolled, setScrolled] = useState(false);
   const [pickerOpen, setPickerOpen] = useState(false);
@@ -53,8 +55,20 @@ export default function Header({
       >
         <div className="flex items-center justify-between px-5 h-14">
 
-          {/* ── Logo ─────────────────────────────────────────────── */}
-          <Logo height={30} />
+          {/* ── Logo — taps navigate to HOME with press ripple ─── */}
+          <button
+            onClick={onNavigateHome}
+            className="active:scale-90 active:opacity-60 transition-all duration-150"
+            style={{
+              display: 'flex', alignItems: 'center',
+              padding: '6px 4px', borderRadius: 12,
+              touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent',
+              background: 'transparent', border: 'none',
+            }}
+            aria-label="Go to Market"
+          >
+            <Logo height={30} />
+          </button>
 
           {/* ── Right controls ───────────────────────────────────── */}
           <div className="flex items-center gap-1.5">

@@ -25,6 +25,7 @@ const DukaanScreen = lazy(() => import('./components/DukaanScreen.tsx'));
 
 const ONBOARDED_KEY  = 'agrimart_onboarded';
 const AUTH_TOKEN_KEY = 'agrimart_auth_token';
+const LANG_KEY       = 'agrimart_user_language';
 
 // Screens that push forward (slide left) vs pop back (slide right)
 const SCREEN_ORDER: AppScreen[] = ['HOME', 'DETAILS', 'SELL', 'LISTINGS', 'MESSAGES', 'ORDERS', 'PROFILE', 'DUKAAN', 'EXPLORE', 'ASSISTANT', 'CALENDAR', 'CART', 'CHECKOUT', 'SELLER_PROFILE'];
@@ -48,10 +49,10 @@ const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(
     !!localStorage.getItem(AUTH_TOKEN_KEY)
   );
-  const langOverridden = useRef(false);
+  const langOverridden = useRef(!!localStorage.getItem(LANG_KEY));
   const [state, setState] = useState<AppState>({
     currentScreen: localStorage.getItem(ONBOARDED_KEY) ? 'HOME' : 'ONBOARDING',
-    userLanguage: Language.ENGLISH,
+    userLanguage: (localStorage.getItem(LANG_KEY) as Language | null) ?? Language.ENGLISH,
     location: 'Detecting...',
     userRole: localStorage.getItem('agrimart_user_role') === 'shopkeeper' ? 'shopkeeper' : 'farmer',
   });
@@ -175,7 +176,7 @@ const App: React.FC = () => {
           setState(prev => ({ ...prev, userRole: role }));
           setIsAuthenticated(true);
         }}
-        onLanguageChange={(l) => { langOverridden.current = true; setState(prev => ({ ...prev, userLanguage: l })); }}
+        onLanguageChange={(l) => { langOverridden.current = true; localStorage.setItem(LANG_KEY, l); setState(prev => ({ ...prev, userLanguage: l })); }}
       />
     );
   }
@@ -189,9 +190,10 @@ const App: React.FC = () => {
         <Header
           location={state.location}
           language={state.userLanguage}
-          onLanguageChange={l => { langOverridden.current = true; setState(prev => ({ ...prev, userLanguage: l })); }}
+          onLanguageChange={l => { langOverridden.current = true; localStorage.setItem(LANG_KEY, l); setState(prev => ({ ...prev, userLanguage: l })); }}
           onOpenAssistant={() => changeScreen('ASSISTANT')}
           onOpenCart={() => changeScreen('CART')}
+          onNavigateHome={() => changeScreen('HOME')}
         />
       )}
 

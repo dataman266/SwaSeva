@@ -24,15 +24,13 @@ export default function AddEditItemSheet({ lang, initial, shopkeeperId, onSave, 
   const isMr = lang === 'mr';
   const isEdit = !!initial;
 
-  const [name,          setName]          = useState(initial?.name          ?? '');
-  const [nameMr,        setNameMr]        = useState(initial?.nameMr        ?? '');
+  const [name,          setName]          = useState(initial ? (isMr ? (initial.nameMr || initial.name) : initial.name) : '');
   const [category,      setCategory]      = useState<ShopItemCategory>(initial?.category ?? 'seeds');
   const [price,         setPrice]         = useState(String(initial?.price  ?? ''));
   const [unit,          setUnit]          = useState(initial?.unit          ?? 'kg');
   const [stockQty,      setStockQty]      = useState(String(initial?.stockQty      ?? ''));
   const [stockThreshold,setStockThreshold]= useState(String(initial?.stockThreshold ?? '5'));
-  const [description,   setDescription]   = useState(initial?.description   ?? '');
-  const [descriptionMr, setDescriptionMr] = useState(initial?.descriptionMr ?? '');
+  const [description,   setDescription]   = useState(initial ? (isMr ? (initial.descriptionMr || initial.description) : initial.description) : '');
   const [brand,         setBrand]         = useState(initial?.brand         ?? '');
   const [expiryDate,    setExpiryDate]    = useState(initial?.expiryDate    ?? '');
   const [imageUris,     setImageUris]     = useState<string[]>(initial?.imageUris ?? []);
@@ -48,11 +46,9 @@ export default function AddEditItemSheet({ lang, initial, shopkeeperId, onSave, 
   const validate = () => {
     const errs: Record<string, string> = {};
     if (!name.trim())          errs.name          = isMr ? 'नाव आवश्यक आहे' : 'Required';
-    if (!nameMr.trim())        errs.nameMr        = isMr ? 'मराठी नाव आवश्यक आहे' : 'Required';
     if (!price || isNaN(Number(price)) || Number(price) <= 0) errs.price = isMr ? 'किंमत आवश्यक आहे' : 'Valid price required';
     if (!stockQty || isNaN(Number(stockQty)) || Number(stockQty) < 0) errs.stockQty = isMr ? 'साठा आवश्यक आहे' : 'Valid stock required';
     if (!description.trim())   errs.description   = isMr ? 'वर्णन आवश्यक आहे' : 'Required';
-    if (!descriptionMr.trim()) errs.descriptionMr = isMr ? 'मराठी वर्णन आवश्यक आहे' : 'Required';
     setErrors(errs);
     return Object.keys(errs).length === 0;
   };
@@ -62,15 +58,15 @@ export default function AddEditItemSheet({ lang, initial, shopkeeperId, onSave, 
     const item: ShopItem = {
       id:           initial?.id ?? `si_${Date.now()}`,
       shopkeeperId,
-      name:         name.trim(),
-      nameMr:       nameMr.trim(),
+      name:          name.trim(),
+      nameMr:        name.trim(),
       category,
-      price:        Number(price),
+      price:         Number(price),
       unit,
-      stockQty:     Number(stockQty),
+      stockQty:      Number(stockQty),
       stockThreshold: Number(stockThreshold),
-      description:  description.trim(),
-      descriptionMr: descriptionMr.trim(),
+      description:   description.trim(),
+      descriptionMr: description.trim(),
       imageUris,
       brand:        brand.trim() || undefined,
       expiryDate:   expiryDate   || undefined,
@@ -121,8 +117,7 @@ export default function AddEditItemSheet({ lang, initial, shopkeeperId, onSave, 
 
         {/* Scrollable body */}
         <div className="overflow-y-auto px-5 py-5 space-y-4 pb-10">
-          {field(isMr ? 'उत्पादनाचे नाव (इंग्रजी)' : 'Item Name (English)', name, setName, 'name', { placeholder: 'e.g. Hybrid Tomato Seeds' })}
-          {field(isMr ? 'उत्पादनाचे नाव (मराठी)' : 'Item Name (Marathi)', nameMr, setNameMr, 'nameMr', { placeholder: 'उदा. हायब्रिड टोमॅटो बियाणे' })}
+          {field(isMr ? 'उत्पादनाचे नाव' : 'Item Name', name, setName, 'name', { placeholder: isMr ? 'उदा. हायब्रिड टोमॅटो बियाणे' : 'e.g. Hybrid Tomato Seeds' })}
 
           {/* Category chips */}
           <div>
@@ -166,8 +161,7 @@ export default function AddEditItemSheet({ lang, initial, shopkeeperId, onSave, 
             {field(isMr ? 'कमी साठा सीमा' : 'Low Stock Alert', stockThreshold, setStockThreshold, 'stockThreshold', { type: 'number', inputMode: 'numeric', placeholder: '5' })}
           </div>
 
-          {field(isMr ? 'वर्णन (इंग्रजी)' : 'Description (English)', description, setDescription, 'description', { placeholder: 'Short product description' })}
-          {field(isMr ? 'वर्णन (मराठी)' : 'Description (Marathi)', descriptionMr, setDescriptionMr, 'descriptionMr', { placeholder: 'उत्पादनाचे संक्षिप्त वर्णन' })}
+          {field(isMr ? 'वर्णन' : 'Description', description, setDescription, 'description', { placeholder: isMr ? 'उत्पादनाचे संक्षिप्त वर्णन' : 'Short product description' })}
           {field(isMr ? 'ब्रँड (ऐच्छिक)' : 'Brand (optional)', brand, setBrand, '', { placeholder: 'e.g. Syngenta' })}
           {field(isMr ? 'कालबाह्यता तारीख (ऐच्छिक)' : 'Expiry Date (optional)', expiryDate, setExpiryDate, '', { type: 'date' })}
 

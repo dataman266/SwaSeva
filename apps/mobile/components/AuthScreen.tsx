@@ -413,7 +413,7 @@ function RegisterStep2({ isMr, onBack, onSuccess, onNextShop }: { isMr: boolean;
   const [taluka,        setTaluka]        = useState('');
   const [errors,        setErrors]        = useState<Record<string, string>>({});
   const [loading,       setLoading]       = useState(false);
-  const [isShopkeeper,  setIsShopkeeper]  = useState(_isShopkeeper);
+  const [isShopkeeper,  setIsShopkeeper]  = useState(localStorage.getItem('agrimart_user_role') === 'shopkeeper');
 
   const isMH = state === 'Maharashtra';
 
@@ -465,11 +465,86 @@ function RegisterStep2({ isMr, onBack, onSuccess, onNextShop }: { isMr: boolean;
       </div>
 
       <h1 className="text-[#F5F0E8] font-light mb-1" style={{ fontSize: 'clamp(24px,7vw,32px)', letterSpacing: '-0.03em' }}>
-        {isMr ? 'पत्ता आणि ठिकाण' : 'Address & Location'}
+        {isMr ? 'तुमचा तपशील' : 'Your Details'}
       </h1>
-      <p className="text-[rgba(245,240,232,0.45)] font-light mb-7" style={{ fontSize: 13 }}>
-        {isMr ? 'जवळचे शेतकरी आणि खरेदीदार शोधण्यासाठी' : 'So we can connect you with nearby farmers and buyers'}
+      <p className="text-[rgba(245,240,232,0.45)] font-light mb-5" style={{ fontSize: 13 }}>
+        {isMr ? 'भूमिका निवडा आणि पत्ता द्या' : 'Choose your role and enter your address'}
       </p>
+
+      {/* Role selection — explicit and prominent, shown before address fields */}
+      <div style={{ marginBottom: 24 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+          <span style={{ width: 16, height: 1, background: '#E8C84A', display: 'block' }} />
+          <span style={{ fontSize: '10px', fontWeight: 500, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#E8C84A' }}>
+            {isMr ? 'मी एक आहे...' : 'I am a...'}
+          </span>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          {/* Farmer */}
+          <button
+            type="button"
+            onClick={() => setIsShopkeeper(false)}
+            style={{
+              width: '100%', textAlign: 'left', borderRadius: 16, padding: '14px 16px',
+              background: !isShopkeeper ? 'rgba(45,90,27,0.35)' : 'rgba(245,240,232,0.04)',
+              border: `1.5px solid ${!isShopkeeper ? 'rgba(74,140,42,0.5)' : 'rgba(245,240,232,0.1)'}`,
+              transition: 'all 0.15s',
+            }}
+            role="radio"
+            aria-checked={!isShopkeeper}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <span style={{ fontSize: 22 }}>🌾</span>
+              <div style={{ flex: 1 }}>
+                <p style={{ fontSize: 15, fontWeight: 600, color: '#F5F0E8', margin: 0 }}>
+                  {isMr ? 'शेतकरी' : 'Farmer'}
+                </p>
+                <p style={{ fontSize: 12, color: 'rgba(245,240,232,0.5)', marginTop: 2, marginBottom: 0 }}>
+                  {isMr ? 'शेतमाल विका आणि खरेदी करा' : 'Buy & sell farm produce directly'}
+                </p>
+              </div>
+              {!isShopkeeper && (
+                <div style={{ width: 22, height: 22, borderRadius: '50%', background: '#2E7D32', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: 13, color: 'white', fontWeight: 700 }}>✓</div>
+              )}
+            </div>
+          </button>
+          {/* Shopkeeper */}
+          <button
+            type="button"
+            onClick={() => setIsShopkeeper(true)}
+            style={{
+              width: '100%', textAlign: 'left', borderRadius: 16, overflow: 'hidden',
+              background: isShopkeeper
+                ? 'linear-gradient(135deg, rgba(45,90,27,0.35) 0%, rgba(76,175,80,0.12) 100%)'
+                : 'rgba(245,240,232,0.04)',
+              border: `1.5px solid ${isShopkeeper ? 'rgba(76,175,80,0.5)' : 'rgba(245,240,232,0.1)'}`,
+              padding: 0, transition: 'all 0.15s',
+            }}
+            role="radio"
+            aria-checked={isShopkeeper}
+          >
+            {isShopkeeper && (
+              <div style={{ height: 3, background: 'linear-gradient(90deg, #2D5A1B, #4CAF50)', width: '100%' }} />
+            )}
+            <div style={{ padding: '14px 16px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <span style={{ fontSize: 22 }}>🏪</span>
+                <div style={{ flex: 1 }}>
+                  <p style={{ fontSize: 15, fontWeight: 600, color: '#F5F0E8', margin: 0 }}>
+                    {isMr ? 'दुकानदार' : 'Shopkeeper (Dukandaar)'}
+                  </p>
+                  <p style={{ fontSize: 12, color: isShopkeeper ? 'rgba(76,175,80,0.8)' : 'rgba(245,240,232,0.5)', marginTop: 2, marginBottom: 0 }}>
+                    {isMr ? 'कृषी निविष्ठा उत्पादने विका' : 'Sell agri-input products from your shop'}
+                  </p>
+                </div>
+                {isShopkeeper && (
+                  <div style={{ width: 22, height: 22, borderRadius: '50%', background: '#2E7D32', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: 13, color: 'white', fontWeight: 700 }}>✓</div>
+                )}
+              </div>
+            </div>
+          </button>
+        </div>
+      </div>
 
       <div className="flex flex-col gap-4">
         <Field label={isMr ? 'पूर्ण पत्ता' : 'Full Address'} icon={MapPin} type="text" placeholder={isMr ? 'घर नं., गल्ली, गाव' : 'House no., street, village'} value={address} onChange={e => setAddress(e.target.value)} error={errors.address} required autoComplete="street-address" />
@@ -513,47 +588,6 @@ function RegisterStep2({ isMr, onBack, onSuccess, onNextShop }: { isMr: boolean;
           </>
         )}
       </div>
-
-      {/* Shopkeeper selection card */}
-      <button
-        type="button"
-        onClick={() => setIsShopkeeper(v => !v)}
-        className="mt-5 w-full text-left rounded-2xl overflow-hidden active:scale-[0.98] transition-transform"
-        style={{
-          background: isShopkeeper
-            ? 'linear-gradient(135deg, rgba(45,90,27,0.45) 0%, rgba(76,175,80,0.18) 100%)'
-            : 'rgba(245,240,232,0.04)',
-          border: `1.5px solid ${isShopkeeper ? 'rgba(76,175,80,0.5)' : 'rgba(245,240,232,0.12)'}`,
-          padding: 0,
-        }}
-        role="switch"
-        aria-checked={isShopkeeper}
-      >
-        {isShopkeeper && (
-          <div style={{ height: 3, background: 'linear-gradient(90deg, #2D5A1B, #4CAF50)', width: '100%' }} />
-        )}
-        <div style={{ padding: '14px 18px 16px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
-            <span style={{ fontSize: 26 }}>🏪</span>
-            <div style={{
-              background: isShopkeeper ? 'rgba(76,175,80,0.15)' : 'rgba(245,240,232,0.06)',
-              border: `1px solid ${isShopkeeper ? 'rgba(76,175,80,0.4)' : 'rgba(245,240,232,0.15)'}`,
-              borderRadius: 99, padding: '3px 10px',
-              fontSize: '10px', fontWeight: 600,
-              color: isShopkeeper ? '#4CAF50' : 'rgba(245,240,232,0.35)',
-              letterSpacing: '0.06em',
-            }}>
-              {isShopkeeper ? '● ACTIVE' : (isMr ? 'टॅप करा' : 'TAP TO SELECT')}
-            </div>
-          </div>
-          <p style={{ fontSize: '15px', fontWeight: 600, color: '#F5F0E8' }}>
-            {isMr ? 'दुकानदार म्हणून नोंदणी करा' : 'Register as Shopkeeper'}
-          </p>
-          <p style={{ fontSize: '12px', color: isShopkeeper ? 'rgba(76,175,80,0.8)' : 'rgba(245,240,232,0.4)', marginTop: 3 }}>
-            {isMr ? 'कृषी निविष्ठा उत्पादने विका' : 'Sell agri-input products from your shop'}
-          </p>
-        </div>
-      </button>
 
       {/* Terms */}
       <p className="text-[11px] text-[rgba(245,240,232,0.3)] mt-5 leading-relaxed text-center">

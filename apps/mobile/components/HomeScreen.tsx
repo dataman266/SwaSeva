@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef, lazy, Suspense } from 'react';
-import { Search, Filter, Scale, MessageCircle, Newspaper, TrendingUp, ChevronRight, RotateCcw, X, MapPin, PlusCircle, Mic, MicOff } from 'lucide-react';
+import { Search, Filter, Scale, Newspaper, TrendingUp, ChevronRight, RotateCcw, X, MapPin, PlusCircle, Mic, MicOff } from 'lucide-react';
 
 declare global {
   interface Window {
@@ -279,7 +279,7 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
             style={{ color: 'rgba(245,240,232,0.45)' }}
           />
           <span style={{ fontSize: '10px', color: 'rgba(245,240,232,0.4)', letterSpacing: '0.08em', fontWeight: 400 }}>
-            {isMr ? 'ताज्या' : 'Refresh'}
+            Refresh
           </span>
         </button>
       </div>
@@ -313,13 +313,56 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
         </div>
       )}
 
+      {/* ── NEWS & IMPACT ENTRY CARD ─────────────────────────────── */}
+      <button
+        type="button"
+        onClick={onOpenExplore}
+        style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          width: '100%', margin: '0.75rem 0 0',
+          padding: '1rem 1.25rem',
+          background: 'linear-gradient(135deg, #162B16 0%, #1E3A1E 100%)',
+          border: 'none',
+          borderTop: '1px solid rgba(245,240,232,0.06)',
+          borderBottom: '1px solid rgba(245,240,232,0.06)',
+          cursor: 'pointer', touchAction: 'manipulation',
+          WebkitTapHighlightColor: 'rgba(45,90,27,0.15)',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.875rem' }}>
+          <div style={{
+            width: 40, height: 40, borderRadius: '0.75rem', flexShrink: 0,
+            background: 'rgba(212,196,160,0.1)', border: '1px solid rgba(212,196,160,0.2)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+            <Newspaper size={18} style={{ color: '#E8C84A' }} />
+          </div>
+          <div style={{ textAlign: 'left' }}>
+            <p style={{ fontSize: '15px', fontWeight: 600, color: '#F5F0E8', letterSpacing: '-0.01em' }}>
+              {isMr ? 'बातम्या आणि आमचा प्रभाव' : 'News & Our Impact'}
+            </p>
+            <p style={{ fontSize: '12px', color: 'rgba(245,240,232,0.55)', marginTop: 2, fontWeight: 400 }}>
+              {isMr ? 'शेती बातम्या, MSP अपडेट आणि अधिक' : 'Farm news, MSP updates & more'}
+            </p>
+          </div>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
+          <TrendingUp size={12} style={{ color: '#4CAF50' }} />
+          <ChevronRight size={14} style={{ color: 'rgba(245,240,232,0.25)' }} />
+        </div>
+      </button>
+
       {/* ── 3b. NEARBY DUKAANDAARS SHELF ─────────────────────────── */}
       <div className="pt-5 pb-1">
         <div className="flex items-center justify-between px-5 mb-3">
           <h2 className="text-[16px] font-semibold text-[#F5F0E8]">🏪 {isMr ? 'जवळचे दुकानदार' : 'Nearby Dukaandaars'}</h2>
           <button
-            onClick={() => setActiveCategory('agri-input')}
-            className="text-[12px] text-[#E8C84A] font-medium"
+            onClick={() => { setActiveCategory('agri-input'); haptic.light(); }}
+            style={{
+              fontSize: '12px', color: '#E8C84A', fontWeight: 500,
+              padding: '8px 2px', minHeight: 44, display: 'flex', alignItems: 'center',
+              touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent',
+            }}
           >
             {isMr ? 'सर्व पहा →' : 'See all →'}
           </button>
@@ -553,56 +596,6 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
           )}
         </div>
       </section>
-
-      {/* ── NEWS & IMPACT ENTRY CARD ─────────────────────────────── */}
-      <button
-        type="button"
-        onClick={onOpenExplore}
-        style={{
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          width: '100%', margin: '1.5rem 0 0',
-          padding: '1rem 1.25rem',
-          background: 'linear-gradient(135deg, #162B16 0%, #1E3A1E 100%)',
-          border: 'none',
-          borderTop: '1px solid rgba(245,240,232,0.06)',
-          borderBottom: '1px solid rgba(245,240,232,0.06)',
-          cursor: 'pointer', touchAction: 'manipulation',
-          WebkitTapHighlightColor: 'rgba(45,90,27,0.15)',
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.875rem' }}>
-          <div style={{
-            width: 40, height: 40, borderRadius: '0.75rem', flexShrink: 0,
-            background: 'rgba(212,196,160,0.1)', border: '1px solid rgba(212,196,160,0.2)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-          }}>
-            <Newspaper size={18} style={{ color: '#E8C84A' }} />
-          </div>
-          <div style={{ textAlign: 'left' }}>
-            <p style={{ fontSize: '15px', fontWeight: 600, color: '#F5F0E8', letterSpacing: '-0.01em' }}>
-              {isMr ? 'बातम्या आणि आमचा प्रभाव' : 'News & Our Impact'}
-            </p>
-            <p style={{ fontSize: '12px', color: 'rgba(245,240,232,0.55)', marginTop: 2, fontWeight: 400 }}>
-              {isMr ? 'शेती बातम्या, MSP अपडेट आणि अधिक' : 'Farm news, MSP updates & more'}
-            </p>
-          </div>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
-          <TrendingUp size={12} style={{ color: '#4CAF50' }} />
-          <ChevronRight size={14} style={{ color: 'rgba(245,240,232,0.25)' }} />
-        </div>
-      </button>
-
-      {/* ── AI Assistant FAB ─────────────────────────────────────── */}
-      <button
-        onClick={onOpenAssistant}
-        className="fixed bottom-24 right-5 z-50 w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-all active:scale-90 border border-[rgba(245,240,232,0.15)]"
-        style={{ background: '#2E7D32' }}
-        aria-label="Open AI Assistant"
-      >
-        <MessageCircle size={22} className="text-[#E8C84A]" strokeWidth={1.5} />
-        <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-[#E8C84A] rounded-full border-2 border-[#0A1A0A] animate-pulse" />
-      </button>
 
       {/* ── Compare bar ──────────────────────────────────────────── */}
       {selectedIds.length > 1 && (
