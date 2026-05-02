@@ -54,10 +54,10 @@ export default function BottomNav({ activeScreen, onNavigate, lang, unreadMessag
                 </div>
               </div>
               <span
-                className={`transition-colors duration-300 ${
+                className={`transition-colors duration-300 w-full text-center truncate px-0.5 ${
                   active ? 'text-[#E8C84A] font-semibold' : 'text-[rgba(245,240,232,0.55)]'
                 }`}
-                style={{ fontSize: '13px', fontWeight: active ? 700 : 500, letterSpacing: '0.02em' }}
+                style={{ fontSize: '11px', fontWeight: active ? 700 : 500, letterSpacing: '0.01em' }}
               >
                 {label}
               </span>
