@@ -449,6 +449,7 @@ function RegisterStep2({ isMr, onBack, onSuccess, onNextShop }: { isMr: boolean;
     // TODO: replace with real API call using _step1 + address fields
     await new Promise(r => setTimeout(r, 1400));
     setLoading(false);
+    localStorage.setItem('agrimart_user_role', 'farmer');
     onSuccess('mock-token-' + Date.now());
   };
 

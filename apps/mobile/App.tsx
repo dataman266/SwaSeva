@@ -171,6 +171,8 @@ const App: React.FC = () => {
         lang={state.userLanguage}
         onAuthSuccess={(token) => {
           localStorage.setItem(AUTH_TOKEN_KEY, token);
+          const role: UserRole = localStorage.getItem('agrimart_user_role') === 'shopkeeper' ? 'shopkeeper' : 'farmer';
+          setState(prev => ({ ...prev, userRole: role }));
           setIsAuthenticated(true);
         }}
         onLanguageChange={(l) => { langOverridden.current = true; setState(prev => ({ ...prev, userLanguage: l })); }}
