@@ -35,7 +35,6 @@ const MENU_ITEMS: MenuItem[] = [
 interface ProfileScreenProps {
   lang: Language;
   userRole: UserRole;
-  onDukaanMode: () => void;
   onBecomeShopkeeper: (role: UserRole) => void;
   onSignOut: () => void;
   onExplore: () => void;
@@ -831,7 +830,7 @@ function HelpView({ lang, onBack }: { lang: Language; onBack: () => void }) {
 }
 
 /* ─── MAIN PROFILE SCREEN ─────────────────────────────────── */
-export default function ProfileScreen({ lang, userRole, onDukaanMode, onBecomeShopkeeper, onSignOut, onExplore, onOpenCalendar, onResetOnboarding }: ProfileScreenProps) {
+export default function ProfileScreen({ lang, userRole, onBecomeShopkeeper, onSignOut, onExplore, onOpenCalendar, onResetOnboarding }: ProfileScreenProps) {
   const isMr = lang === Language.MARATHI;
   const [profileView, setProfileView] = useState<ProfileView>('main');
   const [prevView, setPrevView]       = useState<ProfileView>('main');
@@ -948,20 +947,21 @@ export default function ProfileScreen({ lang, userRole, onDukaanMode, onBecomeSh
 
               {/* ── Role card ────────────────────────────────────────── */}
               {userRole === 'shopkeeper' ? (
-                <button
-                  onClick={onDukaanMode}
-                  className="w-full flex items-center justify-between p-4 rounded-2xl mb-4 active:scale-[0.98] transition-all"
-                  style={{ background: 'rgba(45,90,27,0.25)', border: '1px solid rgba(74,140,42,0.3)' }}
+                <div
+                  className="w-full flex items-center justify-between p-4 rounded-2xl mb-4"
+                  style={{ background: 'rgba(45,90,27,0.18)', border: '1px solid rgba(74,140,42,0.2)' }}
                 >
                   <div className="text-left">
-                    <p className="text-[15px] font-semibold text-[#F5F0E8]">🏪 {isMr ? 'दुकानदार मोड →' : 'Dukandaar Mode →'}</p>
-                    <p className="text-[12px] text-[rgba(245,240,232,0.55)] mt-0.5">{isMr ? 'इन्व्हेंटरी व्यवस्थापन · डॅशबोर्ड पहा' : 'Manage inventory · View dashboard'}</p>
+                    <p className="text-[15px] font-semibold text-[#F5F0E8]">🏪 {isMr ? 'माझी दुकान' : 'My Dukaan'}</p>
+                    <p className="text-[12px] text-[rgba(245,240,232,0.45)] mt-0.5">
+                      {isMr ? '"माझी दुकान" टॅबमधून पोर्टल उघडा' : 'Open portal from the My Shop tab'}
+                    </p>
                   </div>
                   <div className="px-2.5 py-1 rounded-full text-[10px] font-semibold flex-shrink-0"
-                    style={{ background: 'rgba(76,175,80,0.15)', color: '#4CAF50', border: '1px solid rgba(76,175,80,0.3)' }}>
-                    {isMr ? 'सक्रिय' : 'Active'}
+                    style={{ background: 'rgba(76,175,80,0.12)', color: '#4CAF50', border: '1px solid rgba(76,175,80,0.25)' }}>
+                    ● {isMr ? 'सक्रिय' : 'Active'}
                   </div>
-                </button>
+                </div>
               ) : (
                 <button
                   onClick={() => navigateTo('shopRegister')}
