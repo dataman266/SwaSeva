@@ -54,7 +54,7 @@ const App: React.FC = () => {
     currentScreen: localStorage.getItem(ONBOARDED_KEY) ? 'HOME' : 'ONBOARDING',
     userLanguage: Language.ENGLISH,
     location: 'Detecting...',
-    userRole: (localStorage.getItem('agrimart_user_role') as UserRole) ?? 'farmer',
+    userRole: localStorage.getItem('agrimart_user_role') === 'shopkeeper' ? 'shopkeeper' : 'farmer',
   });
   const [prevScreen, setPrevScreen] = useState<AppScreen>('HOME');
 
