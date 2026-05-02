@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Language } from '../types.ts';
+import { Language, UserRole } from '../types.ts';
 import PillButton from './atoms/PillButton.tsx';
 
 interface Slide {
@@ -57,20 +57,23 @@ const contentTransition = { duration: 0.42, ease: [0.16, 1, 0.3, 1] as const };
 
 interface OnboardingScreenProps {
   lang: Language;
-  onComplete: () => void;
+  onComplete: (role: UserRole) => void;
 }
 
 export default function OnboardingScreen({ lang, onComplete }: OnboardingScreenProps) {
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(1);
+  const [showRolePicker, setShowRolePicker] = useState(false);
   const startXRef = useRef<number | null>(null);
 
   const isMr  = lang === Language.MARATHI;
   const slide  = SLIDES[current];
   const isLast = current === SLIDES.length - 1;
 
+  const finish = () => setShowRolePicker(true);
+
   const next = () => {
-    if (isLast) { onComplete(); return; }
+    if (isLast) { finish(); return; }
     setDirection(1);
     setCurrent(c => c + 1);
   };
@@ -118,7 +121,7 @@ export default function OnboardingScreen({ lang, onComplete }: OnboardingScreenP
       {/* ── Skip button ───────────────────────────────────────────── */}
       {!isLast && (
         <button
-          onClick={onComplete}
+          onClick={finish}
           className="absolute top-safe right-5 mt-5 z-10 text-[rgba(245,240,232,0.4)] active:text-[rgba(245,240,232,0.7)] transition-colors"
           style={{ fontSize: '12px', fontWeight: 500, letterSpacing: '0.08em', minHeight: 44, minWidth: 44, display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}
         >
@@ -173,6 +176,63 @@ export default function OnboardingScreen({ lang, onComplete }: OnboardingScreenP
         </AnimatePresence>
       </div>
 
+      {/* ── Role picker (shown after slides) ─────────────────────── */}
+      <AnimatePresence>
+        {showRolePicker && (
+          <motion.div
+            className="absolute inset-0 z-20 flex flex-col justify-center px-6"
+            initial={{ opacity: 0, y: 28 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            style={{ background: '#0A1A0A' }}
+          >
+            <div className="flex items-center gap-2 mb-4">
+              <span className="w-4 h-px bg-[#E8C84A]" />
+              <span className="text-[#E8C84A] font-medium uppercase" style={{ fontSize: '10px', letterSpacing: '0.2em' }}>
+                {isMr ? 'तुम्ही कोण आहात?' : 'Who are you?'}
+              </span>
+            </div>
+            <h2
+              className="text-[#F5F0E8] font-light mb-8 whitespace-pre-line"
+              style={{ fontSize: 'clamp(28px, 8vw, 40px)', letterSpacing: '-0.03em', lineHeight: 1.1 }}
+            >
+              {isMr ? 'मी एक...' : 'I am a...'}
+            </h2>
+
+            <div className="flex flex-col gap-4">
+              <button
+                onClick={() => onComplete('farmer')}
+                className="w-full text-left rounded-2xl p-5 active:scale-[0.98] transition-transform"
+                style={{ background: 'rgba(45,90,27,0.25)', border: '1.5px solid rgba(74,140,42,0.35)' }}
+              >
+                <div className="text-3xl mb-2">🌾</div>
+                <p className="text-[#F5F0E8] font-semibold" style={{ fontSize: '17px' }}>
+                  {isMr ? 'शेतकरी' : 'Farmer'}
+                </p>
+                <p className="text-[rgba(245,240,232,0.5)] mt-0.5" style={{ fontSize: '13px' }}>
+                  {isMr ? 'माझा शेतमाल विका आणि खरेदी करा' : 'Buy & sell farm produce directly'}
+                </p>
+              </button>
+
+              <button
+                onClick={() => onComplete('shopkeeper')}
+                className="w-full text-left rounded-2xl p-5 active:scale-[0.98] transition-transform"
+                style={{ background: 'rgba(212,196,160,0.08)', border: '1.5px solid rgba(212,196,160,0.22)' }}
+              >
+                <div className="text-3xl mb-2">🏪</div>
+                <p className="text-[#F5F0E8] font-semibold" style={{ fontSize: '17px' }}>
+                  {isMr ? 'दुकानदार' : 'Shopkeeper (Dukandaar)'}
+                </p>
+                <p className="text-[rgba(245,240,232,0.5)] mt-0.5" style={{ fontSize: '13px' }}>
+                  {isMr ? 'माझी दुकान पोर्टल चालवा' : 'Run my shop portal & manage orders'}
+                </p>
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* ── Text content (bottom 55%) ──────────────────────────────── */}
       <div
         className="relative z-10 flex flex-col justify-between flex-1 px-6 pb-10 pt-2"
@@ -219,7 +279,7 @@ export default function OnboardingScreen({ lang, onComplete }: OnboardingScreenP
 
         {/* CTA */}
         <div style={{ marginTop: '2rem' }}>
-          <PillButton variant="light" fullWidth size="lg" onClick={isLast ? onComplete : next}>
+          <PillButton variant="light" fullWidth size="lg" onClick={isLast ? finish : next}>
             {isLast ? (isMr ? 'सुरू करा' : 'Get Started') : (isMr ? 'पुढे' : 'Continue')}
           </PillButton>
         </div>

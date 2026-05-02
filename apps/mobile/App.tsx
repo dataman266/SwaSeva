@@ -147,8 +147,10 @@ const App: React.FC = () => {
       case 'ONBOARDING': return (
         <OnboardingScreen
           lang={state.userLanguage}
-          onComplete={() => {
+          onComplete={(role) => {
             localStorage.setItem(ONBOARDED_KEY, 'true');
+            localStorage.setItem('agrimart_user_role', role);
+            setState(s => ({ ...s, userRole: role }));
             changeScreen('HOME');
           }}
         />
