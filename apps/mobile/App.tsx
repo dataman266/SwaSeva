@@ -173,6 +173,7 @@ const App: React.FC = () => {
           localStorage.setItem(AUTH_TOKEN_KEY, token);
           setIsAuthenticated(true);
         }}
+        onLanguageChange={(l) => { langOverridden.current = true; setState(prev => ({ ...prev, userLanguage: l })); }}
       />
     );
   }

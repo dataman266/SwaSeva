@@ -16,6 +16,7 @@ type AuthView = 'login' | 'register-step1' | 'register-step2' | 'register-step3'
 interface AuthScreenProps {
   lang: Language;
   onAuthSuccess: (token: string) => void;
+  onLanguageChange?: (lang: Language) => void;
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -97,7 +98,7 @@ function PasswordField(props: Omit<FieldProps, 'type' | 'rightEl'>) {
 
 // ── Shared layout shell ───────────────────────────────────────────────────────
 
-function AuthShell({ children }: { children: React.ReactNode }) {
+function AuthShell({ children, langToggle }: { children: React.ReactNode; langToggle?: React.ReactNode }) {
   return (
     <div className="fixed inset-0 z-[300] flex flex-col overflow-hidden" style={{ background: '#0A1A0A' }}>
       {/* Background */}
@@ -105,14 +106,17 @@ function AuthShell({ children }: { children: React.ReactNode }) {
         <img src={AUTH_BG} alt="" aria-hidden className="w-full h-full object-cover" style={{ filter: 'brightness(0.25) saturate(0.6)' }} />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0A1A0A] via-[rgba(10,26,10,0.7)] to-transparent" />
       </div>
-      {/* Brand mark */}
+      {/* Brand mark + language toggle */}
       <div className="relative z-10 pt-safe px-6 pt-12 pb-4 flex-shrink-0">
-        <div className="flex items-center gap-2">
-          <span className="text-2xl">🌾</span>
-          <div>
-            <p className="text-[#F5F0E8] font-light" style={{ fontSize: 18, letterSpacing: '-0.02em' }}>Swaseva</p>
-            <p className="text-[10px] font-medium tracking-[0.2em] uppercase" style={{ color: '#E8C84A', opacity: 0.7 }}>थेट शेतातून / Direct from Farm</p>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="text-2xl">🌾</span>
+            <div>
+              <p className="text-[#F5F0E8] font-light" style={{ fontSize: 18, letterSpacing: '-0.02em' }}>Swaseva</p>
+              <p className="text-[10px] font-medium tracking-[0.2em] uppercase" style={{ color: '#E8C84A', opacity: 0.7 }}>थेट शेतातून / Direct from Farm</p>
+            </div>
           </div>
+          {langToggle}
         </div>
       </div>
       {/* Scrollable form area */}
@@ -127,18 +131,44 @@ function AuthShell({ children }: { children: React.ReactNode }) {
 // MAIN COMPONENT
 // ══════════════════════════════════════════════════════════════════════════════
 
-export default function AuthScreen({ lang, onAuthSuccess }: AuthScreenProps) {
-  const [view, setView]       = useState<AuthView>('login');
-  const [dir,  setDir]        = useState(1);
-  const isMr = lang === Language.MARATHI;
+export default function AuthScreen({ lang, onAuthSuccess, onLanguageChange }: AuthScreenProps) {
+  const [view,      setView]      = useState<AuthView>('login');
+  const [dir,       setDir]       = useState(1);
+  const [localLang, setLocalLang] = useState(lang);
+  const isMr = localLang === Language.MARATHI;
 
   const go = useCallback((next: AuthView, direction = 1) => {
     setDir(direction);
     setView(next);
   }, []);
 
+  const handleLangToggle = () => {
+    const next = localLang === Language.MARATHI ? Language.ENGLISH : Language.MARATHI;
+    setLocalLang(next);
+    onLanguageChange?.(next);
+  };
+
+  const langToggle = (
+    <button
+      type="button"
+      onClick={handleLangToggle}
+      style={{
+        background: 'rgba(232,200,74,0.1)',
+        border: '1px solid rgba(232,200,74,0.3)',
+        borderRadius: 99,
+        padding: '6px 14px',
+        fontSize: '11px',
+        fontWeight: 600,
+        color: '#E8C84A',
+        letterSpacing: '0.06em',
+      }}
+    >
+      {isMr ? 'EN' : 'मराठी'}
+    </button>
+  );
+
   return (
-    <AuthShell>
+    <AuthShell langToggle={langToggle}>
       <AnimatePresence mode="wait" custom={dir}>
         <motion.div key={view} custom={dir} variants={slide} initial="enter" animate="center" exit="exit" transition={trs}>
           {view === 'login'        && <LoginView        isMr={isMr} onRegister={() => go('register-step1')} onForgot={() => go('otp-phone')} onSuccess={onAuthSuccess} />}
@@ -483,25 +513,46 @@ function RegisterStep2({ isMr, onBack, onSuccess, onNextShop }: { isMr: boolean;
         )}
       </div>
 
-      {/* Shopkeeper toggle */}
-      <div
-        className="mt-5 rounded-2xl border p-4 flex items-center justify-between"
-        style={{ background: 'rgba(45,90,27,0.1)', border: '1px solid rgba(74,140,42,0.25)' }}
+      {/* Shopkeeper selection card */}
+      <button
+        type="button"
+        onClick={() => setIsShopkeeper(v => !v)}
+        className="mt-5 w-full text-left rounded-2xl overflow-hidden active:scale-[0.98] transition-transform"
+        style={{
+          background: isShopkeeper
+            ? 'linear-gradient(135deg, rgba(45,90,27,0.45) 0%, rgba(76,175,80,0.18) 100%)'
+            : 'rgba(245,240,232,0.04)',
+          border: `1.5px solid ${isShopkeeper ? 'rgba(76,175,80,0.5)' : 'rgba(245,240,232,0.12)'}`,
+          padding: 0,
+        }}
+        role="switch"
+        aria-checked={isShopkeeper}
       >
-        <div className="flex-1 pr-3">
-          <p className="text-[14px] font-semibold text-[#F5F0E8]">🏪 {isMr ? 'दुकानदार म्हणून नोंदणी करा' : 'Register as Shopkeeper'}</p>
-          <p className="text-[11px] text-[rgba(245,240,232,0.45)] mt-0.5">{isMr ? 'कृषी निविष्ठा उत्पादने विका' : 'Sell agri-input products from your shop'}</p>
+        {isShopkeeper && (
+          <div style={{ height: 3, background: 'linear-gradient(90deg, #2D5A1B, #4CAF50)', width: '100%' }} />
+        )}
+        <div style={{ padding: '14px 18px 16px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+            <span style={{ fontSize: 26 }}>🏪</span>
+            <div style={{
+              background: isShopkeeper ? 'rgba(76,175,80,0.15)' : 'rgba(245,240,232,0.06)',
+              border: `1px solid ${isShopkeeper ? 'rgba(76,175,80,0.4)' : 'rgba(245,240,232,0.15)'}`,
+              borderRadius: 99, padding: '3px 10px',
+              fontSize: '10px', fontWeight: 600,
+              color: isShopkeeper ? '#4CAF50' : 'rgba(245,240,232,0.35)',
+              letterSpacing: '0.06em',
+            }}>
+              {isShopkeeper ? '● ACTIVE' : (isMr ? 'टॅप करा' : 'TAP TO SELECT')}
+            </div>
+          </div>
+          <p style={{ fontSize: '15px', fontWeight: 600, color: '#F5F0E8' }}>
+            {isMr ? 'दुकानदार म्हणून नोंदणी करा' : 'Register as Shopkeeper'}
+          </p>
+          <p style={{ fontSize: '12px', color: isShopkeeper ? 'rgba(76,175,80,0.8)' : 'rgba(245,240,232,0.4)', marginTop: 3 }}>
+            {isMr ? 'कृषी निविष्ठा उत्पादने विका' : 'Sell agri-input products from your shop'}
+          </p>
         </div>
-        <button
-          type="button"
-          onClick={() => setIsShopkeeper(v => !v)}
-          className={`flex-shrink-0 w-12 h-6 rounded-full transition-colors relative ${isShopkeeper ? 'bg-[#4CAF50]' : 'bg-[rgba(245,240,232,0.15)]'}`}
-          aria-checked={isShopkeeper}
-          role="switch"
-        >
-          <span className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${isShopkeeper ? 'translate-x-6' : 'translate-x-0.5'}`} />
-        </button>
-      </div>
+      </button>
 
       {/* Terms */}
       <p className="text-[11px] text-[rgba(245,240,232,0.3)] mt-5 leading-relaxed text-center">
