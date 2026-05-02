@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { Language, UserRole } from '../types.ts';
 import ShopRegistrationView from './dukaan/ShopRegistrationView.tsx';
@@ -1040,69 +1041,72 @@ export default function ProfileScreen({ lang, userRole, onBecomeShopkeeper, onSi
         </motion.div>
       </AnimatePresence>
 
-      {/* ── Sign Out confirmation ─────────────────────────────── */}
-      <AnimatePresence>
-        {confirmSignOut && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            style={{
-              position: 'fixed', inset: 0,
-              background: 'rgba(0,0,0,0.6)',
-              display: 'flex', alignItems: 'flex-end', zIndex: 300,
-            }}
-            onClick={() => setConfirm(false)}
-          >
+      {/* ── Sign Out confirmation — portalled to body to escape motion stacking context ── */}
+      {createPortal(
+        <AnimatePresence>
+          {confirmSignOut && (
             <motion.div
-              initial={{ y: '100%' }}
-              animate={{ y: 0 }}
-              exit={{ y: '100%' }}
-              transition={{ type: 'spring', stiffness: 420, damping: 38 }}
-              onClick={e => e.stopPropagation()}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
               style={{
-                width: '100%', background: '#162B16',
-                borderRadius: '1.5rem 1.5rem 0 0',
-                padding: '1.5rem 1.5rem 2.5rem',
-                border: '1px solid rgba(245,240,232,0.07)',
+                position: 'fixed', inset: 0,
+                background: 'rgba(0,0,0,0.6)',
+                display: 'flex', alignItems: 'flex-end', zIndex: 9999,
               }}
+              onClick={() => setConfirm(false)}
             >
-              <p className="text-[#F5F0E8] font-light text-center mb-1" style={{ fontSize: '18px', letterSpacing: '-0.02em' }}>
-                {isMr ? 'लॉग आउट करायचे?' : 'Sign out?'}
-              </p>
-              <p className="text-center text-[rgba(245,240,232,0.4)] font-light mb-6" style={{ fontSize: '13px' }}>
-                {isMr ? 'तुम्हाला पुन्हा लॉग इन करावे लागेल' : 'You will need to log in again'}
-              </p>
-              <div className="flex gap-3">
-                <button
-                  type="button"
-                  onClick={() => setConfirm(false)}
-                  style={{
-                    flex: 1, padding: '0.875rem', borderRadius: '0.875rem',
-                    background: 'rgba(245,240,232,0.06)', border: 'none',
-                    color: '#F5F0E8', fontSize: '14px', fontWeight: 400,
-                    cursor: 'pointer', touchAction: 'manipulation',
-                  }}
-                >
-                  {isMr ? 'रद्द करा' : 'Cancel'}
-                </button>
-                <button
-                  type="button"
-                  onClick={onSignOut}
-                  style={{
-                    flex: 1, padding: '0.875rem', borderRadius: '0.875rem',
-                    background: 'rgba(229,115,115,0.15)', border: '1px solid rgba(229,115,115,0.3)',
-                    color: '#E57373', fontSize: '14px', fontWeight: 500,
-                    cursor: 'pointer', touchAction: 'manipulation',
-                  }}
-                >
-                  {isMr ? 'बाहेर पडा' : 'Sign Out'}
-                </button>
-              </div>
+              <motion.div
+                initial={{ y: '100%' }}
+                animate={{ y: 0 }}
+                exit={{ y: '100%' }}
+                transition={{ type: 'spring', stiffness: 420, damping: 38 }}
+                onClick={e => e.stopPropagation()}
+                style={{
+                  width: '100%', background: '#162B16',
+                  borderRadius: '1.5rem 1.5rem 0 0',
+                  padding: '1.5rem 1.5rem calc(env(safe-area-inset-bottom, 0px) + 2rem)',
+                  border: '1px solid rgba(245,240,232,0.07)',
+                }}
+              >
+                <p className="text-[#F5F0E8] font-light text-center mb-1" style={{ fontSize: '18px', letterSpacing: '-0.02em' }}>
+                  {isMr ? 'लॉग आउट करायचे?' : 'Sign out?'}
+                </p>
+                <p className="text-center text-[rgba(245,240,232,0.4)] font-light mb-6" style={{ fontSize: '13px' }}>
+                  {isMr ? 'तुम्हाला पुन्हा लॉग इन करावे लागेल' : 'You will need to log in again'}
+                </p>
+                <div className="flex gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setConfirm(false)}
+                    style={{
+                      flex: 1, padding: '0.875rem', borderRadius: '0.875rem',
+                      background: 'rgba(245,240,232,0.06)', border: 'none',
+                      color: '#F5F0E8', fontSize: '14px', fontWeight: 400,
+                      cursor: 'pointer', touchAction: 'manipulation',
+                    }}
+                  >
+                    {isMr ? 'रद्द करा' : 'Cancel'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={onSignOut}
+                    style={{
+                      flex: 1, padding: '0.875rem', borderRadius: '0.875rem',
+                      background: 'rgba(229,115,115,0.15)', border: '1px solid rgba(229,115,115,0.3)',
+                      color: '#E57373', fontSize: '14px', fontWeight: 500,
+                      cursor: 'pointer', touchAction: 'manipulation',
+                    }}
+                  >
+                    {isMr ? 'बाहेर पडा' : 'Sign Out'}
+                  </button>
+                </div>
+              </motion.div>
             </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
     </div>
   );
 }
