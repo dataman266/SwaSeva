@@ -217,16 +217,44 @@ export default function OnboardingScreen({ lang, onComplete }: OnboardingScreenP
 
               <button
                 onClick={() => onComplete('shopkeeper')}
-                className="w-full text-left rounded-2xl p-5 active:scale-[0.98] transition-transform"
-                style={{ background: 'rgba(212,196,160,0.08)', border: '1.5px solid rgba(212,196,160,0.22)' }}
+                className="w-full text-left rounded-2xl active:scale-[0.98] transition-transform overflow-hidden"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(45,90,27,0.35) 0%, rgba(76,175,80,0.12) 100%)',
+                  border: '1.5px solid rgba(76,175,80,0.4)',
+                  padding: 0,
+                  position: 'relative',
+                }}
               >
-                <div className="text-3xl mb-2">🏪</div>
-                <p className="text-[#F5F0E8] font-semibold" style={{ fontSize: '17px' }}>
-                  {isMr ? 'दुकानदार' : 'Shopkeeper (Dukandaar)'}
-                </p>
-                <p className="text-[rgba(245,240,232,0.5)] mt-0.5" style={{ fontSize: '13px' }}>
-                  {isMr ? 'माझी दुकान पोर्टल चालवा' : 'Run my shop portal & manage orders'}
-                </p>
+                {/* Green top bar — mirrors InventoryTab active indicator */}
+                <div style={{
+                  height: 3,
+                  background: 'linear-gradient(90deg, #2D5A1B, #4CAF50)',
+                  width: '100%',
+                }} />
+                <div style={{ padding: '16px 20px 20px' }}>
+                  {/* Active badge */}
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+                    <div className="text-3xl">🏪</div>
+                    <div style={{
+                      background: 'rgba(76,175,80,0.15)',
+                      border: '1px solid rgba(76,175,80,0.4)',
+                      borderRadius: 99,
+                      padding: '2px 10px',
+                      fontSize: '10px',
+                      fontWeight: 600,
+                      color: '#4CAF50',
+                      letterSpacing: '0.06em',
+                    }}>
+                      ● ACTIVE
+                    </div>
+                  </div>
+                  <p className="text-[#F5F0E8] font-semibold" style={{ fontSize: '17px' }}>
+                    {isMr ? 'दुकानदार' : 'Shopkeeper (Dukandaar)'}
+                  </p>
+                  <p style={{ color: 'rgba(76,175,80,0.75)', marginTop: 2, fontSize: '13px' }}>
+                    {isMr ? 'माझी दुकान पोर्टल चालवा' : 'Run my shop portal & manage orders'}
+                  </p>
+                </div>
               </button>
             </div>
           </motion.div>

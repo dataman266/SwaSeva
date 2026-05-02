@@ -124,10 +124,16 @@ const App: React.FC = () => {
         setState(s => ({ ...s, userRole: role }));
       }} onSignOut={() => {
         localStorage.removeItem(AUTH_TOKEN_KEY);
+        localStorage.removeItem('agrimart_user_role');
         setIsAuthenticated(false);
+        setState(s => ({ ...s, userRole: 'farmer' }));
         changeScreen('HOME');
       }} onExplore={() => changeScreen('EXPLORE')} onOpenCalendar={() => changeScreen('CALENDAR')} onResetOnboarding={() => {
+        localStorage.removeItem(AUTH_TOKEN_KEY);
+        localStorage.removeItem(ONBOARDED_KEY);
+        localStorage.removeItem('agrimart_user_role');
         setIsAuthenticated(false);
+        setState(s => ({ ...s, userRole: 'farmer' }));
         changeScreen('ONBOARDING');
       }} />;
       case 'SELLER_PROFILE': return <SellerProfileScreen
