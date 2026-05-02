@@ -9,7 +9,6 @@ import OrdersScreen from './components/OrdersScreen.tsx';
 const SellScreen = lazy(() => import('./components/SellScreen.tsx'));
 import ProfileScreen from './components/ProfileScreen.tsx';
 import MyListingsScreen from './components/MyListingsScreen.tsx';
-import MyShopGateScreen from './components/MyShopGateScreen.tsx';
 import SellerProfileScreen from './components/SellerProfileScreen.tsx';
 import MessagesScreen from './components/MessagesScreen.tsx';
 import ExploreScreen from './components/ExploreScreen.tsx';
@@ -106,19 +105,19 @@ const App: React.FC = () => {
       />;
       case 'SELL':      return <Suspense fallback={<div className="flex items-center justify-center h-screen" style={{color:'rgba(245,240,232,0.3)',fontSize:13}}>Loading…</div>}><SellScreen lang={state.userLanguage} onDone={() => changeScreen('LISTINGS')} /></Suspense>;
       case 'LISTINGS':
-        if (state.userRole === 'shopkeeper') {
-          return (
-            <Suspense fallback={<div className="flex items-center justify-center h-screen" style={{color:'rgba(245,240,232,0.3)',fontSize:13}}>Loading…</div>}>
-              <DukaanScreen lang={state.userLanguage} userRole={state.userRole} />
-            </Suspense>
-          );
-        }
         return (
-          <MyShopGateScreen
+          <MyListingsScreen
             lang={state.userLanguage}
             onCreateNew={() => changeScreen('SELL')}
-            onRegistered={(role) => setState(s => ({ ...s, userRole: role }))}
+            userRole={state.userRole}
+            onOpenDukaan={() => changeScreen('DUKAAN')}
           />
+        );
+      case 'DUKAAN':
+        return (
+          <Suspense fallback={<div className="flex items-center justify-center h-screen" style={{color:'rgba(245,240,232,0.3)',fontSize:13}}>Loading…</div>}>
+            <DukaanScreen lang={state.userLanguage} userRole={state.userRole} />
+          </Suspense>
         );
       case 'ORDERS':    return <OrdersScreen lang={state.userLanguage} />;
       case 'PROFILE':   return <ProfileScreen lang={state.userLanguage} userRole={state.userRole} onBecomeShopkeeper={(role) => {

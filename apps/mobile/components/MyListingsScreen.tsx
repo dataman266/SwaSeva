@@ -1,10 +1,10 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Language } from '../types.ts';
+import { Language, UserRole } from '../types.ts';
 import {
   Plus, MoreVertical, Eye, Edit2, Trash2, TrendingUp,
   Package, CheckCircle, Clock, XCircle, Sprout, RotateCcw,
-  AlertTriangle, ArrowLeft, MapPin, FileText, Users,
+  AlertTriangle, ArrowLeft, MapPin, FileText, Users, Store, ChevronRight,
 } from 'lucide-react';
 import { haptic } from '../utils/haptic.ts';
 
@@ -147,9 +147,11 @@ const STATUS_CONFIG: Record<ListingStatus, { label: string; labelMr: string; col
 interface MyListingsScreenProps {
   lang: Language;
   onCreateNew: () => void;
+  userRole?: UserRole;
+  onOpenDukaan?: () => void;
 }
 
-export default function MyListingsScreen({ lang, onCreateNew }: MyListingsScreenProps) {
+export default function MyListingsScreen({ lang, onCreateNew, userRole, onOpenDukaan }: MyListingsScreenProps) {
   const isMr = lang === Language.MARATHI;
   const [filter, setFilter] = useState<ListingStatus | 'all'>('all');
   const [menuOpen, setMenuOpen] = useState<string | null>(null);
@@ -158,7 +160,17 @@ export default function MyListingsScreen({ lang, onCreateNew }: MyListingsScreen
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [undoItem, setUndoItem] = useState<Listing | null>(null);
   const [selectedListing, setSelectedListing] = useState<Listing | null>(null);
+  const [showDukaanPopup, setShowDukaanPopup] = useState(false);
   const undoTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleDukaanPortal = () => {
+    if (userRole === 'shopkeeper' && onOpenDukaan) {
+      onOpenDukaan();
+    } else {
+      setShowDukaanPopup(true);
+      haptic.light();
+    }
+  };
 
   // Re-read localStorage every time this screen becomes visible
   // so newly published listings always appear immediately
@@ -288,6 +300,39 @@ export default function MyListingsScreen({ lang, onCreateNew }: MyListingsScreen
           </div>
         ))}
       </div>
+
+      {/* ── Dukaan Portal button ──────────────────────────────────── */}
+      <button
+        type="button"
+        onClick={handleDukaanPortal}
+        style={{
+          width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          padding: '1rem 1.25rem', borderRadius: '1rem', marginBottom: '1.25rem',
+          background: 'linear-gradient(135deg, rgba(232,200,74,0.1) 0%, rgba(212,196,160,0.06) 100%)',
+          border: '1px solid rgba(232,200,74,0.22)',
+          cursor: 'pointer', touchAction: 'manipulation',
+          WebkitTapHighlightColor: 'transparent',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.875rem' }}>
+          <div style={{
+            width: 42, height: 42, borderRadius: '0.75rem', flexShrink: 0,
+            background: 'rgba(232,200,74,0.13)', border: '1px solid rgba(232,200,74,0.28)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+            <Store size={20} style={{ color: '#E8C84A' }} />
+          </div>
+          <div style={{ textAlign: 'left' }}>
+            <p style={{ fontSize: '14px', fontWeight: 500, color: '#E8C84A', marginBottom: 2, letterSpacing: '-0.01em' }}>
+              {isMr ? 'दुकान पोर्टल' : 'Dukaan Portal'}
+            </p>
+            <p style={{ fontSize: '11px', fontWeight: 300, color: 'rgba(245,240,232,0.42)', lineHeight: 1.4 }}>
+              {isMr ? 'ऑर्डर, इन्व्हेंटरी आणि विक्री व्यवस्थापित करा' : 'Manage orders, inventory & sales'}
+            </p>
+          </div>
+        </div>
+        <ChevronRight size={16} style={{ color: 'rgba(232,200,74,0.55)', flexShrink: 0 }} />
+      </button>
 
       {/* ── Filter pills ──────────────────────────────────────────── */}
       <div style={{ display: 'flex', gap: '0.5rem', overflowX: 'auto', marginBottom: '1.25rem', paddingBottom: '0.25rem' }}>
@@ -593,6 +638,67 @@ export default function MyListingsScreen({ lang, onCreateNew }: MyListingsScreen
         )}
       </AnimatePresence>
     </div>
+
+    {/* ── Dukaan registration popup ────────────────────────────── */}
+    <AnimatePresence>
+      {showDukaanPopup && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.18 }}
+          style={{
+            position: 'fixed', inset: 0, zIndex: 400,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            background: 'rgba(0,0,0,0.72)', padding: '0 2rem',
+          }}
+          onClick={() => setShowDukaanPopup(false)}
+        >
+          <motion.div
+            initial={{ scale: 0.88, opacity: 0, y: 12 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.88, opacity: 0, y: 12 }}
+            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] as const }}
+            onClick={e => e.stopPropagation()}
+            style={{
+              width: '100%', maxWidth: 316,
+              background: '#1A2E1A', border: '1px solid rgba(245,240,232,0.1)',
+              borderRadius: '1.375rem', padding: '1.875rem 1.5rem 1.5rem',
+              textAlign: 'center',
+              boxShadow: '0 24px 64px rgba(0,0,0,0.6)',
+            }}
+          >
+            <div style={{
+              width: 54, height: 54, borderRadius: '50%', margin: '0 auto 1.25rem',
+              background: 'rgba(232,200,74,0.1)', border: '1px solid rgba(232,200,74,0.25)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              <Store size={26} style={{ color: '#E8C84A' }} />
+            </div>
+            <p style={{ fontSize: '16px', fontWeight: 400, color: '#F5F0E8', marginBottom: '0.625rem', letterSpacing: '-0.01em', lineHeight: 1.3 }}>
+              {isMr ? 'दुकानदार म्हणून नोंदणी करा' : 'Become a Dukandaar'}
+            </p>
+            <p style={{ fontSize: '13px', fontWeight: 300, color: 'rgba(245,240,232,0.5)', lineHeight: 1.65, marginBottom: '1.5rem' }}>
+              {isMr
+                ? 'हा पर्याय वापरण्यासाठी स्वतःला दुकानदार म्हणून नोंदणी करा'
+                : 'Register yourself as a Dukandaar to access this option'}
+            </p>
+            <button
+              type="button"
+              onClick={() => setShowDukaanPopup(false)}
+              style={{
+                width: '100%', padding: '0.75rem', borderRadius: '0.875rem',
+                background: 'rgba(245,240,232,0.08)', border: '1px solid rgba(245,240,232,0.1)',
+                color: 'rgba(245,240,232,0.65)', fontSize: '14px', fontWeight: 400,
+                cursor: 'pointer', touchAction: 'manipulation',
+              }}
+            >
+              {isMr ? 'ठीक आहे' : 'Got it'}
+            </button>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
 
     {/* ── Listing detail overlay ────────────────────────────────── */}
     <AnimatePresence>
