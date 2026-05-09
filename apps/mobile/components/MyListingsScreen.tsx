@@ -149,9 +149,10 @@ interface MyListingsScreenProps {
   onCreateNew: () => void;
   userRole?: UserRole;
   onOpenDukaan?: () => void;
+  onNavigateToProfile?: () => void;
 }
 
-export default function MyListingsScreen({ lang, onCreateNew, userRole, onOpenDukaan }: MyListingsScreenProps) {
+export default function MyListingsScreen({ lang, onCreateNew, userRole, onOpenDukaan, onNavigateToProfile }: MyListingsScreenProps) {
   const isMr = lang === Language.MARATHI;
   const [filter, setFilter] = useState<ListingStatus | 'all'>('all');
   const [menuOpen, setMenuOpen] = useState<string | null>(null);
@@ -685,15 +686,19 @@ export default function MyListingsScreen({ lang, onCreateNew, userRole, onOpenDu
             </p>
             <button
               type="button"
-              onClick={() => setShowDukaanPopup(false)}
+              onClick={() => {
+                setShowDukaanPopup(false);
+                onNavigateToProfile?.();
+              }}
               style={{
                 width: '100%', padding: '0.75rem', borderRadius: '0.875rem',
-                background: 'rgba(245,240,232,0.08)', border: '1px solid rgba(245,240,232,0.1)',
-                color: 'rgba(245,240,232,0.65)', fontSize: '14px', fontWeight: 400,
+                background: 'linear-gradient(135deg, rgba(232,200,74,0.12), rgba(232,200,74,0.06))',
+                border: '1px solid rgba(232,200,74,0.25)',
+                color: '#E8C84A', fontSize: '14px', fontWeight: 500,
                 cursor: 'pointer', touchAction: 'manipulation',
               }}
             >
-              {isMr ? 'ठीक आहे' : 'Got it'}
+              {isMr ? 'दुकानदार व्हा →' : 'Become a Shopkeeper →'}
             </button>
           </motion.div>
         </motion.div>

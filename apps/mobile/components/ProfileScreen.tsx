@@ -36,6 +36,8 @@ const MENU_ITEMS: MenuItem[] = [
 interface ProfileScreenProps {
   lang: Language;
   userRole: UserRole;
+  highlightShopkeeper?: boolean;
+  onHighlightDone?: () => void;
   onBecomeShopkeeper: (role: UserRole) => void;
   onSignOut: () => void;
   onExplore: () => void;
@@ -831,11 +833,24 @@ function HelpView({ lang, onBack }: { lang: Language; onBack: () => void }) {
 }
 
 /* ─── MAIN PROFILE SCREEN ─────────────────────────────────── */
-export default function ProfileScreen({ lang, userRole, onBecomeShopkeeper, onSignOut, onExplore, onOpenCalendar, onResetOnboarding }: ProfileScreenProps) {
+export default function ProfileScreen({ lang, userRole, highlightShopkeeper, onHighlightDone, onBecomeShopkeeper, onSignOut, onExplore, onOpenCalendar, onResetOnboarding }: ProfileScreenProps) {
   const isMr = lang === Language.MARATHI;
   const [profileView, setProfileView] = useState<ProfileView>('main');
   const [prevView, setPrevView]       = useState<ProfileView>('main');
+  const [blinkClass, setBlinkClass]   = useState('');
   const [confirmSignOut, setConfirm]  = useState(false);
+
+  // Blink the "Become a Shopkeeper" button when directed from the Dukaan gate
+  React.useEffect(() => {
+    if (!highlightShopkeeper) return;
+    const t = setTimeout(() => {
+      setBlinkClass('shopkeeper-blink');
+      onHighlightDone?.();
+      // Remove class after animation ends so it can re-trigger if needed
+      setTimeout(() => setBlinkClass(''), 1200);
+    }, 400); // slight delay lets the screen transition finish first
+    return () => clearTimeout(t);
+  }, [highlightShopkeeper]);
 
   const navigateTo = (view: ProfileView) => {
     setPrevView(profileView);
@@ -955,7 +970,7 @@ export default function ProfileScreen({ lang, userRole, onBecomeShopkeeper, onSi
                   <div className="text-left">
                     <p className="text-[15px] font-semibold text-[#F5F0E8]">🏪 {isMr ? 'माझी दुकान' : 'My Dukaan'}</p>
                     <p className="text-[12px] text-[rgba(245,240,232,0.45)] mt-0.5">
-                      {isMr ? '"माझी दुकान" टॅबमधून पोर्टल उघडा' : 'Open portal from the My Shop tab'}
+                      {isMr ? '"माझी यादी" टॅबमधून पोर्टल उघडा' : 'Open portal from the My Listings tab'}
                     </p>
                   </div>
                   <div className="px-2.5 py-1 rounded-full text-[10px] font-semibold flex-shrink-0"
@@ -966,8 +981,8 @@ export default function ProfileScreen({ lang, userRole, onBecomeShopkeeper, onSi
               ) : (
                 <button
                   onClick={() => navigateTo('shopRegister')}
-                  className="w-full flex items-center gap-3 p-4 rounded-2xl mb-4 active:scale-[0.98] transition-all"
-                  style={{ background: 'rgba(232,200,74,0.06)', border: '1px solid rgba(232,200,74,0.2)' }}
+                  className={`w-full flex items-center gap-3 p-4 rounded-2xl mb-4 active:scale-[0.98] transition-all ${blinkClass}`}
+                  style={{ background: 'rgba(232,200,74,0.06)', border: '1px solid rgba(232,200,74,0.2)', borderRadius: '1rem' }}
                 >
                   <span className="text-2xl flex-shrink-0">🏪</span>
                   <div className="text-left">

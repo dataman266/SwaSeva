@@ -57,6 +57,12 @@ const App: React.FC = () => {
     userRole: localStorage.getItem('agrimart_user_role') === 'shopkeeper' ? 'shopkeeper' : 'farmer',
   });
   const [prevScreen, setPrevScreen] = useState<AppScreen>('HOME');
+  const [highlightShopkeeper, setHighlightShopkeeper] = useState(false);
+
+  // Keep <html data-lang="..."> in sync so CSS can apply per-script font families
+  useEffect(() => {
+    document.documentElement.dataset.lang = state.userLanguage;
+  }, [state.userLanguage]);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -112,6 +118,10 @@ const App: React.FC = () => {
             onCreateNew={() => changeScreen('SELL')}
             userRole={state.userRole}
             onOpenDukaan={() => changeScreen('DUKAAN')}
+            onNavigateToProfile={() => {
+              changeScreen('PROFILE');
+              setHighlightShopkeeper(true);
+            }}
           />
         );
       case 'DUKAAN':
@@ -121,7 +131,7 @@ const App: React.FC = () => {
           </Suspense>
         );
       case 'ORDERS':    return <OrdersScreen lang={state.userLanguage} />;
-      case 'PROFILE':   return <ProfileScreen lang={state.userLanguage} userRole={state.userRole} onBecomeShopkeeper={(role) => {
+      case 'PROFILE':   return <ProfileScreen lang={state.userLanguage} userRole={state.userRole} highlightShopkeeper={highlightShopkeeper} onHighlightDone={() => setHighlightShopkeeper(false)} onBecomeShopkeeper={(role) => {
         setState(s => ({ ...s, userRole: role }));
       }} onSignOut={() => {
         localStorage.removeItem(AUTH_TOKEN_KEY);

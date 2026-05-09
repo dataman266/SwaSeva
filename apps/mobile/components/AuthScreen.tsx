@@ -1,8 +1,9 @@
 import React, { useState, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Eye, EyeOff, Phone, Lock, User, Mail, MapPin, Hash, Camera, ChevronRight, ArrowLeft, Loader } from 'lucide-react';
+import { Eye, EyeOff, Phone, Lock, User, Mail, MapPin, Hash, Camera, ChevronRight, ArrowLeft, Loader, ChevronDown } from 'lucide-react';
 import PillButton from './atoms/PillButton.tsx';
 import SearchableDropdown, { DropdownOption } from './atoms/SearchableDropdown.tsx';
+import LanguagePicker from './LanguagePicker.tsx';
 import { Language, ShopProfile } from '../types.ts';
 import {
   INDIAN_STATES, MAHARASHTRA_DISTRICTS, getTalukasByDistrict,
@@ -131,10 +132,25 @@ function AuthShell({ children, langToggle }: { children: React.ReactNode; langTo
 // MAIN COMPONENT
 // ══════════════════════════════════════════════════════════════════════════════
 
+const LANG_LABELS: Record<Language, { native: string; short: string }> = {
+  [Language.ENGLISH]:   { native: 'English',  short: 'EN'  },
+  [Language.MARATHI]:   { native: 'मराठी',   short: 'MR'  },
+  [Language.HINDI]:     { native: 'हिंदी',    short: 'HI'  },
+  [Language.GUJARATI]:  { native: 'ગુજરાતી', short: 'GU'  },
+  [Language.TELUGU]:    { native: 'తెలుగు',  short: 'TE'  },
+  [Language.PUNJABI]:   { native: 'ਪੰਜਾਬੀ',  short: 'PA'  },
+  [Language.KANNADA]:   { native: 'ಕನ್ನಡ',   short: 'KN'  },
+  [Language.TAMIL]:     { native: 'தமிழ்',   short: 'TA'  },
+  [Language.BENGALI]:   { native: 'বাংলা',   short: 'BN'  },
+  [Language.ODIA]:      { native: 'ଓଡ଼ିଆ',   short: 'OR'  },
+  [Language.MALAYALAM]: { native: 'മലയാളം',  short: 'ML'  },
+};
+
 export default function AuthScreen({ lang, onAuthSuccess, onLanguageChange }: AuthScreenProps) {
-  const [view,      setView]      = useState<AuthView>('login');
-  const [dir,       setDir]       = useState(1);
-  const [localLang, setLocalLang] = useState(lang);
+  const [view,           setView]           = useState<AuthView>('login');
+  const [dir,            setDir]            = useState(1);
+  const [localLang,      setLocalLang]      = useState(lang);
+  const [showLangPicker, setShowLangPicker] = useState(false);
   const isMr = localLang === Language.MARATHI;
 
   const go = useCallback((next: AuthView, direction = 1) => {
@@ -142,29 +158,44 @@ export default function AuthScreen({ lang, onAuthSuccess, onLanguageChange }: Au
     setView(next);
   }, []);
 
-  const handleLangToggle = () => {
-    const next = localLang === Language.MARATHI ? Language.ENGLISH : Language.MARATHI;
-    setLocalLang(next);
-    onLanguageChange?.(next);
+  const handleLangSelect = (l: Language) => {
+    setLocalLang(l);
+    onLanguageChange?.(l);
+    setShowLangPicker(false);
   };
 
   const langToggle = (
-    <button
-      type="button"
-      onClick={handleLangToggle}
-      style={{
-        background: 'rgba(232,200,74,0.1)',
-        border: '1px solid rgba(232,200,74,0.3)',
-        borderRadius: 99,
-        padding: '6px 14px',
-        fontSize: '11px',
-        fontWeight: 600,
-        color: '#E8C84A',
-        letterSpacing: '0.06em',
-      }}
-    >
-      {isMr ? 'EN' : 'मराठी'}
-    </button>
+    <>
+      <button
+        type="button"
+        onClick={() => setShowLangPicker(s => !s)}
+        style={{
+          display: 'flex', alignItems: 'center', gap: 5,
+          background: 'rgba(232,200,74,0.1)',
+          border: '1px solid rgba(232,200,74,0.3)',
+          borderRadius: 99,
+          padding: '6px 12px',
+          fontSize: '11px',
+          fontWeight: 600,
+          color: '#E8C84A',
+          letterSpacing: '0.06em',
+          cursor: 'pointer',
+          touchAction: 'manipulation',
+        }}
+        aria-label="Select language"
+      >
+        <span style={{ fontFamily: "'Noto Sans Devanagari','Noto Sans',system-ui,sans-serif" }}>
+          {LANG_LABELS[localLang].native}
+        </span>
+        <ChevronDown size={12} style={{ opacity: 0.7, transform: showLangPicker ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }} />
+      </button>
+      <LanguagePicker
+        open={showLangPicker}
+        current={localLang}
+        onSelect={handleLangSelect}
+        onClose={() => setShowLangPicker(false)}
+      />
+    </>
   );
 
   return (
@@ -173,8 +204,7 @@ export default function AuthScreen({ lang, onAuthSuccess, onLanguageChange }: Au
         <motion.div key={view} custom={dir} variants={slide} initial="enter" animate="center" exit="exit" transition={trs}>
           {view === 'login'        && <LoginView        isMr={isMr} onRegister={() => go('register-step1')} onForgot={() => go('otp-phone')} onSuccess={onAuthSuccess} />}
           {view === 'register-step1' && <RegisterStep1  isMr={isMr} onBack={() => go('login', -1)} onNext={() => go('register-step2')} />}
-          {view === 'register-step2' && <RegisterStep2  isMr={isMr} onBack={() => go('register-step1', -1)} onSuccess={onAuthSuccess} onNextShop={() => go('register-step3')} />}
-          {view === 'register-step3' && <RegisterStep3  isMr={isMr} onBack={() => go('register-step2', -1)} onSuccess={onAuthSuccess} />}
+          {view === 'register-step2' && <RegisterStep2  isMr={isMr} onBack={() => go('register-step1', -1)} onSuccess={onAuthSuccess} />}
           {view === 'otp-phone'    && <OtpPhone         isMr={isMr} onBack={() => go('login', -1)} onSent={() => go('otp-verify')} />}
           {view === 'otp-verify'   && <OtpVerify        isMr={isMr} onBack={() => go('otp-phone', -1)} onVerified={() => go('new-password')} />}
           {view === 'new-password' && <NewPassword       isMr={isMr} onDone={() => go('login', -1)} />}
@@ -405,15 +435,21 @@ function RegisterStep1({ isMr, onBack, onNext }: { isMr: boolean; onBack: () => 
 // REGISTER STEP 2 — Address & Location
 // ══════════════════════════════════════════════════════════════════════════════
 
-function RegisterStep2({ isMr, onBack, onSuccess, onNextShop }: { isMr: boolean; onBack: () => void; onSuccess: (t: string) => void; onNextShop: () => void }) {
+function RegisterStep2({ isMr, onBack, onSuccess }: { isMr: boolean; onBack: () => void; onSuccess: (t: string) => void }) {
   const [address,       setAddress]       = useState('');
   const [pincode,       setPincode]       = useState('');
   const [state,         setState]         = useState('Maharashtra');
   const [district,      setDistrict]      = useState('');
   const [taluka,        setTaluka]        = useState('');
+  const [isShopkeeper,  setIsShopkeeper]  = useState(localStorage.getItem('agrimart_user_role') === 'shopkeeper');
+  // Shop fields (only used when isShopkeeper)
+  const [shopName,      setShopName]      = useState('');
+  const [licenseType,   setLicenseType]   = useState<'gst' | 'license'>('gst');
+  const [licenseValue,  setLicenseValue]  = useState('');
+  const [exteriorUri,   setExteriorUri]   = useState('');
+  const [interiorUri,   setInteriorUri]   = useState('');
   const [errors,        setErrors]        = useState<Record<string, string>>({});
   const [loading,       setLoading]       = useState(false);
-  const [isShopkeeper,  setIsShopkeeper]  = useState(localStorage.getItem('agrimart_user_role') === 'shopkeeper');
 
   const isMH = state === 'Maharashtra';
 
@@ -427,6 +463,11 @@ function RegisterStep2({ isMr, onBack, onSuccess, onNextShop }: { isMr: boolean;
 
   const stateOpts: DropdownOption[] = INDIAN_STATES.map(s => ({ value: s, label: s }));
 
+  const handlePhoto = (setter: (v: string) => void) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) setter(URL.createObjectURL(file));
+  };
+
   const validate = () => {
     const e: Record<string, string> = {};
     if (!address.trim())   e.address  = isMr ? 'पत्ता आवश्यक आहे'    : 'Address is required';
@@ -434,22 +475,29 @@ function RegisterStep2({ isMr, onBack, onSuccess, onNextShop }: { isMr: boolean;
     if (!state)    e.state    = isMr ? 'राज्य निवडा'          : 'State is required';
     if (!district) e.district = isMr ? 'जिल्हा निवडा'         : 'District is required';
     if (isMH && talukaOpts.length > 0 && !taluka) e.taluka = isMr ? 'तालुका निवडा' : 'Taluka is required';
+    if (isShopkeeper) {
+      if (!shopName.trim()) e.shopName = isMr ? 'दुकानाचे नाव आवश्यक आहे' : 'Shop name is required';
+      if (!licenseValue.trim()) e.license = isMr ? 'GST / परवाना क्रमांक आवश्यक आहे' : 'GST or license number is required';
+      if (!exteriorUri) e.exterior = isMr ? 'दुकानाचा बाहेरचा फोटो आवश्यक आहे' : 'Exterior photo is required';
+      if (!interiorUri) e.interior = isMr ? 'दुकानाचा आतील फोटो आवश्यक आहे' : 'Interior photo is required';
+    }
     return e;
   };
 
   const submit = async () => {
     const errs = validate();
     if (Object.keys(errs).length) { setErrors(errs); return; }
-    if (isShopkeeper) {
-      _isShopkeeper = true;
-      onNextShop();
-      return;
-    }
     setLoading(true);
-    // TODO: replace with real API call using _step1 + address fields
     await new Promise(r => setTimeout(r, 1400));
     setLoading(false);
-    localStorage.setItem('agrimart_user_role', 'farmer');
+    if (isShopkeeper) {
+      const profile = { shopName, gstOrLicense: licenseValue, exteriorPhotoUri: exteriorUri, interiorPhotoUri: interiorUri, verificationStatus: 'pending' as const };
+      localStorage.setItem('agrimart_user_role', 'shopkeeper');
+      localStorage.setItem('agrimart_shop_profile', JSON.stringify(profile));
+      _isShopkeeper = false;
+    } else {
+      localStorage.setItem('agrimart_user_role', 'farmer');
+    }
     onSuccess('mock-token-' + Date.now());
   };
 
@@ -460,8 +508,8 @@ function RegisterStep2({ isMr, onBack, onSuccess, onNextShop }: { isMr: boolean;
       </button>
 
       <div className="flex items-center gap-2 mb-3">
-        <StepDot done /><StepDot active />{isShopkeeper && <StepDot />}
-        <span className="text-[10px] tracking-[0.18em] uppercase text-[rgba(245,240,232,0.35)] ml-1">{isShopkeeper ? '2 / 3' : '2 / 2'}</span>
+        <StepDot done /><StepDot active />
+        <span className="text-[10px] tracking-[0.18em] uppercase text-[rgba(245,240,232,0.35)] ml-1">2 / 2</span>
       </div>
 
       <h1 className="text-[#F5F0E8] font-light mb-1" style={{ fontSize: 'clamp(24px,7vw,32px)', letterSpacing: '-0.03em' }}>
@@ -471,7 +519,7 @@ function RegisterStep2({ isMr, onBack, onSuccess, onNextShop }: { isMr: boolean;
         {isMr ? 'भूमिका निवडा आणि पत्ता द्या' : 'Choose your role and enter your address'}
       </p>
 
-      {/* Role selection — explicit and prominent, shown before address fields */}
+      {/* Role selection */}
       <div style={{ marginBottom: 24 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
           <span style={{ width: 16, height: 1, background: '#E8C84A', display: 'block' }} />
@@ -483,12 +531,12 @@ function RegisterStep2({ isMr, onBack, onSuccess, onNextShop }: { isMr: boolean;
           {/* Farmer */}
           <button
             type="button"
-            onClick={() => setIsShopkeeper(false)}
+            onClick={() => { setIsShopkeeper(false); setErrors({}); }}
             style={{
               width: '100%', textAlign: 'left', borderRadius: 16, padding: '14px 16px',
               background: !isShopkeeper ? 'rgba(45,90,27,0.35)' : 'rgba(245,240,232,0.04)',
               border: `1.5px solid ${!isShopkeeper ? 'rgba(74,140,42,0.5)' : 'rgba(245,240,232,0.1)'}`,
-              transition: 'all 0.15s',
+              transition: 'all 0.2s',
             }}
             role="radio"
             aria-checked={!isShopkeeper}
@@ -511,14 +559,14 @@ function RegisterStep2({ isMr, onBack, onSuccess, onNextShop }: { isMr: boolean;
           {/* Shopkeeper */}
           <button
             type="button"
-            onClick={() => setIsShopkeeper(true)}
+            onClick={() => { setIsShopkeeper(true); setErrors({}); }}
             style={{
               width: '100%', textAlign: 'left', borderRadius: 16, overflow: 'hidden',
               background: isShopkeeper
                 ? 'linear-gradient(135deg, rgba(45,90,27,0.35) 0%, rgba(76,175,80,0.12) 100%)'
                 : 'rgba(245,240,232,0.04)',
               border: `1.5px solid ${isShopkeeper ? 'rgba(76,175,80,0.5)' : 'rgba(245,240,232,0.1)'}`,
-              padding: 0, transition: 'all 0.15s',
+              padding: 0, transition: 'all 0.2s',
             }}
             role="radio"
             aria-checked={isShopkeeper}
@@ -546,40 +594,15 @@ function RegisterStep2({ isMr, onBack, onSuccess, onNextShop }: { isMr: boolean;
         </div>
       </div>
 
+      {/* Address fields */}
       <div className="flex flex-col gap-4">
         <Field label={isMr ? 'पूर्ण पत्ता' : 'Full Address'} icon={MapPin} type="text" placeholder={isMr ? 'घर नं., गल्ली, गाव' : 'House no., street, village'} value={address} onChange={e => setAddress(e.target.value)} error={errors.address} required autoComplete="street-address" />
-
         <Field label={isMr ? 'पिनकोड' : 'Pincode'} icon={Hash} type="tel" inputMode="numeric" maxLength={6} placeholder="411001" value={pincode} onChange={e => setPincode(e.target.value.replace(/\D/g,''))} error={errors.pincode} required autoComplete="postal-code" />
-
-        <SearchableDropdown
-          label={isMr ? 'राज्य' : 'State'}
-          options={stateOpts}
-          value={state}
-          onChange={v => { setState(v); setDistrict(''); setTaluka(''); }}
-          error={errors.state}
-          required
-        />
-
+        <SearchableDropdown label={isMr ? 'राज्य' : 'State'} options={stateOpts} value={state} onChange={v => { setState(v); setDistrict(''); setTaluka(''); }} error={errors.state} required />
         {isMH ? (
           <>
-            <SearchableDropdown
-              label={isMr ? 'जिल्हा' : 'District'}
-              options={districtOpts}
-              value={district}
-              onChange={v => { setDistrict(v); setTaluka(''); }}
-              error={errors.district}
-              required
-              disabled={!state}
-            />
-            <SearchableDropdown
-              label={isMr ? 'तालुका' : 'Taluka'}
-              options={talukaOpts}
-              value={taluka}
-              onChange={setTaluka}
-              error={errors.taluka}
-              required
-              disabled={!district}
-            />
+            <SearchableDropdown label={isMr ? 'जिल्हा' : 'District'} options={districtOpts} value={district} onChange={v => { setDistrict(v); setTaluka(''); }} error={errors.district} required disabled={!state} />
+            <SearchableDropdown label={isMr ? 'तालुका' : 'Taluka'} options={talukaOpts} value={taluka} onChange={setTaluka} error={errors.taluka} required disabled={!district} />
           </>
         ) : (
           <>
@@ -588,6 +611,123 @@ function RegisterStep2({ isMr, onBack, onSuccess, onNextShop }: { isMr: boolean;
           </>
         )}
       </div>
+
+      {/* ── Inline shop details — animated expansion ───────────────── */}
+      <AnimatePresence>
+        {isShopkeeper && (
+          <motion.div
+            key="shop-fields"
+            initial={{ opacity: 0, height: 0, y: -8 }}
+            animate={{ opacity: 1, height: 'auto', y: 0 }}
+            exit={{ opacity: 0, height: 0, y: -8 }}
+            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] as const }}
+            style={{ overflow: 'hidden' }}
+          >
+            {/* Divider with label */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 28, marginBottom: 16 }}>
+              <div style={{ flex: 1, height: 1, background: 'rgba(76,175,80,0.25)' }} />
+              <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(76,175,80,0.7)', whiteSpace: 'nowrap' }}>
+                🏪 {isMr ? 'दुकानाचे तपशील' : 'Shop Details'}
+              </span>
+              <div style={{ flex: 1, height: 1, background: 'rgba(76,175,80,0.25)' }} />
+            </div>
+
+            <div className="flex flex-col gap-4">
+              {/* Shop name */}
+              <Field
+                label={isMr ? 'दुकानाचे नाव' : 'Shop Name'}
+                icon={User}
+                type="text"
+                placeholder={isMr ? 'उदा. शेतकरी कृषी केंद्र' : 'e.g. Kisan Agri Centre'}
+                value={shopName}
+                onChange={e => setShopName(e.target.value)}
+                error={errors.shopName}
+                required
+              />
+
+              {/* License type toggle */}
+              <div className="flex flex-col gap-1.5">
+                <span className="text-[11px] font-medium tracking-[0.1em] uppercase" style={{ color: '#E8C84A' }}>
+                  {isMr ? 'परवाना प्रकार' : 'License Type'} <span className="text-red-400">*</span>
+                </span>
+                <div style={{ display: 'flex', gap: 8 }}>
+                  {(['gst', 'license'] as const).map(t => (
+                    <button
+                      key={t}
+                      type="button"
+                      onClick={() => setLicenseType(t)}
+                      style={{
+                        flex: 1, padding: '10px 0', borderRadius: 12, fontSize: 13, fontWeight: 500,
+                        background: licenseType === t ? 'rgba(45,90,27,0.45)' : 'rgba(245,240,232,0.04)',
+                        border: `1.5px solid ${licenseType === t ? 'rgba(76,175,80,0.5)' : 'rgba(245,240,232,0.1)'}`,
+                        color: licenseType === t ? '#F5F0E8' : 'rgba(245,240,232,0.45)',
+                        transition: 'all 0.15s',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      {t === 'gst' ? (isMr ? 'GST नंबर' : 'GST Number') : (isMr ? 'परवाना नंबर' : 'License No.')}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* GST / License value */}
+              <Field
+                label={licenseType === 'gst' ? (isMr ? 'GST क्रमांक' : 'GST Number') : (isMr ? 'परवाना क्रमांक' : 'License Number')}
+                icon={Hash}
+                type="text"
+                placeholder={licenseType === 'gst' ? '27XXXXX1234X1ZX' : (isMr ? 'परवाना क्रमांक' : 'License number')}
+                value={licenseValue}
+                onChange={e => setLicenseValue(e.target.value)}
+                error={errors.license}
+                required
+              />
+
+              {/* Photo upload — exterior */}
+              <div className="flex flex-col gap-1.5">
+                <span className="text-[11px] font-medium tracking-[0.1em] uppercase" style={{ color: '#E8C84A' }}>
+                  {isMr ? 'दुकानाचा बाहेरचा फोटो' : 'Exterior Photo'} <span className="text-red-400">*</span>
+                </span>
+                <label style={{
+                  display: 'flex', alignItems: 'center', gap: 12, height: 52,
+                  background: '#162B16', border: `1px solid ${errors.exterior ? '#EF4444' : exteriorUri ? 'rgba(76,175,80,0.4)' : 'rgba(245,240,232,0.1)'}`,
+                  borderRadius: 16, padding: '0 16px', cursor: 'pointer',
+                }}>
+                  {exteriorUri
+                    ? <img src={exteriorUri} alt="exterior" style={{ width: 32, height: 32, borderRadius: 8, objectFit: 'cover', flexShrink: 0 }} />
+                    : <Camera size={18} style={{ color: 'rgba(245,240,232,0.3)', flexShrink: 0 }} />}
+                  <span style={{ fontSize: 14, color: exteriorUri ? 'rgba(76,175,80,0.9)' : 'rgba(245,240,232,0.25)', fontWeight: 300 }}>
+                    {exteriorUri ? (isMr ? 'फोटो निवडला ✓' : 'Photo selected ✓') : (isMr ? 'फोटो निवडा' : 'Choose photo')}
+                  </span>
+                  <input type="file" accept="image/*" className="sr-only" onChange={handlePhoto(setExteriorUri)} />
+                </label>
+                {errors.exterior && <p className="text-[11px] text-red-400 mt-1 ml-1">{errors.exterior}</p>}
+              </div>
+
+              {/* Photo upload — interior */}
+              <div className="flex flex-col gap-1.5">
+                <span className="text-[11px] font-medium tracking-[0.1em] uppercase" style={{ color: '#E8C84A' }}>
+                  {isMr ? 'दुकानाचा आतील फोटो' : 'Interior Photo'} <span className="text-red-400">*</span>
+                </span>
+                <label style={{
+                  display: 'flex', alignItems: 'center', gap: 12, height: 52,
+                  background: '#162B16', border: `1px solid ${errors.interior ? '#EF4444' : interiorUri ? 'rgba(76,175,80,0.4)' : 'rgba(245,240,232,0.1)'}`,
+                  borderRadius: 16, padding: '0 16px', cursor: 'pointer',
+                }}>
+                  {interiorUri
+                    ? <img src={interiorUri} alt="interior" style={{ width: 32, height: 32, borderRadius: 8, objectFit: 'cover', flexShrink: 0 }} />
+                    : <Camera size={18} style={{ color: 'rgba(245,240,232,0.3)', flexShrink: 0 }} />}
+                  <span style={{ fontSize: 14, color: interiorUri ? 'rgba(76,175,80,0.9)' : 'rgba(245,240,232,0.25)', fontWeight: 300 }}>
+                    {interiorUri ? (isMr ? 'फोटो निवडला ✓' : 'Photo selected ✓') : (isMr ? 'फोटो निवडा' : 'Choose photo')}
+                  </span>
+                  <input type="file" accept="image/*" className="sr-only" onChange={handlePhoto(setInteriorUri)} />
+                </label>
+                {errors.interior && <p className="text-[11px] text-red-400 mt-1 ml-1">{errors.interior}</p>}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Terms */}
       <p className="text-[11px] text-[rgba(245,240,232,0.3)] mt-5 leading-relaxed text-center">
@@ -600,9 +740,7 @@ function RegisterStep2({ isMr, onBack, onSuccess, onNextShop }: { isMr: boolean;
         <PillButton variant="light" fullWidth size="lg" disabled={loading} onClick={submit}>
           {loading
             ? <Loader size={18} className="animate-spin" />
-            : isShopkeeper
-              ? (isMr ? 'पुढे — दुकान तपशील →' : 'Next — Shop Details →')
-              : (isMr ? 'नोंदणी पूर्ण करा' : 'Complete Registration')}
+            : (isMr ? 'नोंदणी पूर्ण करा' : 'Complete Registration')}
         </PillButton>
       </div>
     </div>

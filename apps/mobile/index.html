@@ -48,10 +48,10 @@
       }
     </script>
 
-    <!-- Inter — lightweight grotesque to match FarmMinerals -->
+    <!-- Inter + Noto Sans for all Indic scripts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Sans+Devanagari:wght@700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Sans+Devanagari:wght@300;400;500;600&family=Noto+Sans+Bengali:wght@300;400;500;600&family=Noto+Sans+Gujarati:wght@300;400;500;600&family=Noto+Sans+Kannada:wght@300;400;500;600&family=Noto+Sans+Malayalam:wght@300;400;500;600&family=Noto+Sans+Oriya:wght@300;400;500;600&family=Noto+Sans+Gurmukhi:wght@300;400;500;600&family=Noto+Sans+Tamil:wght@300;400;500;600&family=Noto+Sans+Telugu:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <style>
         :root {
@@ -181,6 +181,47 @@
         /* ── Active press feedback ── */
         button:active, a:active {
             opacity: 0.82;
+        }
+
+        /* ── Shopkeeper button blink highlight ── */
+        @keyframes shopkeeper-blink {
+            0%   { box-shadow: 0 0 0 0 rgba(232,200,74,0); border-color: rgba(232,200,74,0.2); }
+            30%  { box-shadow: 0 0 0 6px rgba(232,200,74,0.35); border-color: rgba(232,200,74,0.8); }
+            60%  { box-shadow: 0 0 0 0 rgba(232,200,74,0); border-color: rgba(232,200,74,0.2); }
+            85%  { box-shadow: 0 0 0 4px rgba(232,200,74,0.25); border-color: rgba(232,200,74,0.6); }
+            100% { box-shadow: 0 0 0 0 rgba(232,200,74,0); border-color: rgba(232,200,74,0.2); }
+        }
+        .shopkeeper-blink {
+            animation: shopkeeper-blink 1.1s ease-out forwards;
+        }
+
+        /* ── Per-script font families (set via data-lang on <html>) ── */
+        [data-lang="hi"], [data-lang="mr"] {
+            font-family: 'Noto Sans Devanagari', 'Inter', system-ui, sans-serif;
+        }
+        [data-lang="bn"] {
+            font-family: 'Noto Sans Bengali', system-ui, sans-serif;
+        }
+        [data-lang="gu"] {
+            font-family: 'Noto Sans Gujarati', system-ui, sans-serif;
+        }
+        [data-lang="kn"] {
+            font-family: 'Noto Sans Kannada', system-ui, sans-serif;
+        }
+        [data-lang="ml"] {
+            font-family: 'Noto Sans Malayalam', system-ui, sans-serif;
+        }
+        [data-lang="or"] {
+            font-family: 'Noto Sans Oriya', system-ui, sans-serif;
+        }
+        [data-lang="pa"] {
+            font-family: 'Noto Sans Gurmukhi', system-ui, sans-serif;
+        }
+        [data-lang="ta"] {
+            font-family: 'Noto Sans Tamil', system-ui, sans-serif;
+        }
+        [data-lang="te"] {
+            font-family: 'Noto Sans Telugu', system-ui, sans-serif;
         }
     </style>
 
