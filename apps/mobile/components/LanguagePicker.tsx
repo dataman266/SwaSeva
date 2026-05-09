@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { AnimatePresence, motion } from 'motion/react';
 import { Check } from 'lucide-react';
 import { Language } from '../types.ts';
@@ -31,7 +32,7 @@ interface LanguagePickerProps {
 }
 
 export default function LanguagePicker({ open, current, onSelect, onClose }: LanguagePickerProps) {
-  return (
+  return ReactDOM.createPortal(
     <AnimatePresence>
       {open && (
         <>
@@ -169,6 +170,7 @@ export default function LanguagePicker({ open, current, onSelect, onClose }: Lan
           </motion.div>
         </>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 }
