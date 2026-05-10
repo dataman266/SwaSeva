@@ -6,10 +6,19 @@ import { Pool } from 'pg';
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
   constructor() {
-    // Use DIRECT_URL for runtime: Supabase pooler (transaction mode) doesn't
-    // support prepared statements required by PrismaPg adapter
-    const connStr = process.env.DIRECT_URL ?? process.env.DATABASE_URL;
-    const pool = new Pool({ connectionString: connStr });
+    // Railway sets RAILWAY_ENVIRONMENT automatically; NODE_ENV may not be set.
+    // Production: use pooler URL (port 6543, IPv4-accessible from Railway).
+    // Supabase's direct connection (port 5432) is IPv6-only on free tier.
+    // Dev: prefer DIRECT_URL (port 5432) to avoid pooler prepared-statement limits.
+    const isHosted = !!(process.env.RAILWAY_ENVIRONMENT || process.env.NODE_ENV === 'production');
+    const connStr = isHosted
+      ? (process.env.DATABASE_URL ?? process.env.DIRECT_URL)
+      : (process.env.DIRECT_URL ?? process.env.DATABASE_URL);
+
+    const pool = new Pool({
+      connectionString: connStr,
+      ssl: isHosted ? { rejectUnauthorized: false } : false,
+    });
     const adapter = new PrismaPg(pool);
     super({ adapter } as ConstructorParameters<typeof PrismaClient>[0]);
   }
