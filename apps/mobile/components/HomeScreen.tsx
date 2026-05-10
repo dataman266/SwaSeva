@@ -82,6 +82,7 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
   const [isListening, setIsListening] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const recognitionRef = useRef<any>(null);
+  const productsRef = useRef<HTMLElement>(null);
   const hasSpeech = typeof window !== 'undefined' && ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window);
 
   // Simulate initial product load (800ms)
@@ -357,11 +358,17 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
         <div className="flex items-center justify-between px-5 mb-3">
           <h2 className="text-[16px] font-semibold text-[#F5F0E8]">🏪 {t.nearbyShops}</h2>
           <button
-            onClick={() => { setActiveCategory('agri-input'); haptic.light(); }}
+            type="button"
+            onClick={() => {
+              setActiveCategory('agri-input');
+              haptic.light();
+              setTimeout(() => productsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+            }}
             style={{
               fontSize: '12px', color: '#E8C84A', fontWeight: 500,
               padding: '8px 2px', minHeight: 44, display: 'flex', alignItems: 'center',
               touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent',
+              background: 'none', border: 'none', cursor: 'pointer',
             }}
           >
             {t.seeAll}
@@ -393,7 +400,7 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
       </div>
 
       {/* ── 4. PRODUCT LISTINGS ──────────────────────────────────── */}
-      <section className="px-5 pt-6">
+      <section ref={productsRef} className="px-5 pt-6">
 
         {/* Section header */}
         <SectionReveal className="flex items-baseline justify-between mb-4">
