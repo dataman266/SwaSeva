@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node dist/main",
     "start:dev": "npx ts-node --transpile-only src/main.ts",
     "start:build": "node dist/main",
     "build": "npx tsc -p tsconfig.json",
