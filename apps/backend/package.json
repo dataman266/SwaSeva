@@ -8,7 +8,7 @@
     "start": "node dist/main",
     "start:dev": "npx ts-node --transpile-only src/main.ts",
     "start:build": "node dist/main",
-    "build": "npx tsc -p tsconfig.json",
+    "build": "npx prisma generate && npx tsc -p tsconfig.json",
     "db:start": "node scripts/start-db.js",
     "db:migrate": "npx prisma migrate dev",
     "db:seed": "npx ts-node prisma/seed.ts",

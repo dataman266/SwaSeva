@@ -22,7 +22,8 @@ export default defineConfig({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   datasource: {
     // Use direct URL for all Prisma CLI operations (pooler blocks DDL statements)
-    url: process.env['DIRECT_URL'] ?? process.env['DATABASE_URL'] ?? '',
+    // Fallback dummy URL allows `prisma generate` to run in CI/build without a real DB
+    url: process.env['DIRECT_URL'] ?? process.env['DATABASE_URL'] ?? 'postgresql://dummy:dummy@localhost:5432/dummy',
   } as any,
   migrations: {
     seed: 'npx ts-node --transpile-only prisma/seed.ts',
