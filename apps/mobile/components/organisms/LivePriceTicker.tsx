@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useMemo } from 'react';
 import { TrendingUp, TrendingDown, Minus, ExternalLink } from 'lucide-react';
+import { ApiMarketPrice } from '../../services/api.ts';
 
 interface BasePriceItem {
   name: string;
@@ -138,26 +139,64 @@ function getChange(price: number, prev: number) {
   return { diff, pct: parseFloat(pct) };
 }
 
+// Map APMC district name to approximate coordinates for proximity sorting
+function districtCoords(district: string): { lat: number; lng: number } | null {
+  return CITY_COORDS[district.toLowerCase().trim()] ?? null;
+}
+
+function mapApiMarketPrices(prices: ApiMarketPrice[]): PriceItem[] {
+  const MH_APMC_URL = 'https://agrimarket.mahaonline.gov.in/';
+  return prices.map((p, i) => {
+    const modal    = parseFloat(p.modalPrice);
+    const minP     = parseFloat(p.minPrice);
+    const coords   = districtCoords(p.district);
+    // Use seeded random to generate a "yesterday" price within the day's min–max spread
+    const r        = seededRandom(p.recordedAt.slice(0, 10) + ':prev', i);
+    const prevPrice = Math.round((minP + r * (modal - minP)) / 10) * 10 || modal;
+    return {
+      name:      p.commodity_en,
+      nameMr:    p.commodity_mr ?? p.commodity_en,
+      basePrice: modal,
+      unit:      p.unit,
+      unitMr:    p.unit,
+      market:    p.market,
+      lat:       coords?.lat ?? 18.52,
+      lng:       coords?.lng ?? 73.86,
+      sourceUrl: MH_APMC_URL,
+      price:     modal,
+      prevPrice,
+    };
+  });
+}
+
 interface LivePriceTickerProps {
   isMr: boolean;
   location?: string;
+  apiMarketPrices?: ApiMarketPrice[];
 }
 
-export default function LivePriceTicker({ isMr, location = '' }: LivePriceTickerProps) {
+export default function LivePriceTicker({ isMr, location = '', apiMarketPrices }: LivePriceTickerProps) {
   const trackRef  = useRef<HTMLDivElement>(null);
   const pausedRef = useRef(false);
   const posRef    = useRef(0);
 
-  // Sort PRICE_DATA by distance to user's location (nearest first)
+  const priceData = useMemo<PriceItem[]>(() => {
+    if (apiMarketPrices && apiMarketPrices.length > 0) {
+      return mapApiMarketPrices(apiMarketPrices);
+    }
+    return PRICE_DATA;
+  }, [apiMarketPrices]);
+
+  // Sort by distance to user's location (nearest first)
   const sorted = useMemo<PriceItem[]>(() => {
     const userCoords = resolveUserCoords(location);
-    if (!userCoords) return PRICE_DATA;
-    return [...PRICE_DATA].sort(
+    if (!userCoords) return priceData;
+    return [...priceData].sort(
       (a, b) =>
         haversineKm(userCoords.lat, userCoords.lng, a.lat, a.lng) -
         haversineKm(userCoords.lat, userCoords.lng, b.lat, b.lng)
     );
-  }, [location]);
+  }, [location, priceData]);
 
   // Nearest market name (for the header label)
   const nearestMarket = useMemo(() => {

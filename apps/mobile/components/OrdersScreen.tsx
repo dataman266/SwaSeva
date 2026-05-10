@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Language } from '../types.ts';
 import {
@@ -9,6 +9,7 @@ import {
 import { getTranslations } from '../constants.tsx';
 import PillButton from './atoms/PillButton.tsx';
 import SectionReveal from './atoms/SectionReveal.tsx';
+import { ordersApi, ApiOrder, auth } from '../services/api.ts';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 type OrderStatus = 'pending' | 'transit' | 'delivered';
@@ -525,6 +526,39 @@ function OrderCard({
   );
 }
 
+// ── API mapper ────────────────────────────────────────────────────────────────
+function mapApiStatus(s: string): OrderStatus {
+  const upper = s.toUpperCase();
+  if (upper === 'SHIPPED' || upper === 'IN_TRANSIT') return 'transit';
+  if (upper === 'DELIVERED') return 'delivered';
+  return 'pending';
+}
+
+function mapApiOrders(list: ApiOrder[]): OrderEntry[] {
+  return list.map(o => {
+    const first = o.items[0];
+    const d = new Date(o.createdAt);
+    return {
+      id:                  `#${o.orderNumber}`,
+      product:             first?.product.name_en ?? 'Order',
+      productMr:           first?.product.name_mr ?? first?.product.name_en ?? 'ऑर्डर',
+      imageUrl:            first?.product.images[0] ?? 'https://images.unsplash.com/photo-1500651230702-0e2d8a49d4ad?w=800&auto=format&fit=crop',
+      amount:              parseFloat(o.totalAmount) || 0,
+      qty:                 parseFloat(first?.quantity ?? '1') || 1,
+      unit:                'units',
+      status:              mapApiStatus(o.status),
+      date:                d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
+      time:                d.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
+      counterpartyName:    'Seller',
+      counterpartyPhone:   '',
+      counterpartyLocation: o.deliveryDistrict ?? '',
+      paymentMethod:       'UPI',
+      transportMode:       'To be arranged',
+      notes:               undefined,
+    };
+  });
+}
+
 // ── Main screen ───────────────────────────────────────────────────────────────
 export default function OrdersScreen({ lang }: { lang: Language }) {
   const t = getTranslations(lang);
@@ -532,17 +566,33 @@ export default function OrdersScreen({ lang }: { lang: Language }) {
   const [tab, setTab] = useState<OrderTab>('purchased');
   const [refreshing, setRefreshing] = useState(false);
   const [selected, setSelected] = useState<OrderEntry | null>(null);
+  const [apiPurchased, setApiPurchased] = useState<OrderEntry[] | null>(null);
+  const [apiSold, setApiSold]           = useState<OrderEntry[] | null>(null);
+
+  const fetchOrders = useCallback(async () => {
+    if (!auth.getAccess()) return;
+    const [boughtRes, soldRes] = await Promise.allSettled([
+      ordersApi.bought({ limit: 50 }),
+      ordersApi.sold({ limit: 50 }),
+    ]);
+    if (boughtRes.status === 'fulfilled') setApiPurchased(mapApiOrders(boughtRes.value.data));
+    if (soldRes.status === 'fulfilled')   setApiSold(mapApiOrders(soldRes.value.data));
+  }, []);
+
+  useEffect(() => { fetchOrders(); }, [fetchOrders]);
 
   const handleRefresh = useCallback(async () => {
     setRefreshing(true);
-    await new Promise(r => setTimeout(r, 600));
+    await fetchOrders();
     setRefreshing(false);
-  }, []);
+  }, [fetchOrders]);
 
-  const orders = tab === 'purchased' ? MOCK_PURCHASED : MOCK_SOLD;
+  const purchased = apiPurchased ?? MOCK_PURCHASED;
+  const sold      = apiSold      ?? MOCK_SOLD;
+  const orders    = tab === 'purchased' ? purchased : sold;
 
-  const totalSpent   = MOCK_PURCHASED.reduce((s, o) => s + o.amount, 0);
-  const totalEarned  = MOCK_SOLD.reduce((s, o) => s + o.amount, 0);
+  const totalSpent   = purchased.reduce((s, o) => s + o.amount, 0);
+  const totalEarned  = sold.reduce((s, o) => s + o.amount, 0);
   const activeCount  = orders.filter(o => o.status === 'transit' || o.status === 'pending').length;
 
   const rupeeFormat = (n: number) =>

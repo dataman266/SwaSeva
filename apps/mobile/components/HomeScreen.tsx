@@ -12,6 +12,27 @@ declare global {
 import { haptic } from '../utils/haptic.ts';
 import { Language, Product, MappedShopProduct, ShopItem } from '../types.ts';
 import { PRODUCTS, SELLERS, CATEGORIES, MOCK_SHOP_PROFILES, MOCK_SHOP_ITEMS, getTranslations } from '../constants.tsx';
+import { productsApi, marketPricesApi, ApiProduct, ApiMarketPrice, auth } from '../services/api.ts';
+
+function mapApiProduct(p: ApiProduct): Product {
+  return {
+    id:            p.id,
+    name:          p.name_en,
+    nameMr:        p.name_mr ?? p.name_en,
+    category:      p.category.slug,
+    variety:       p.category.name_en,
+    varietyMr:     p.category.name_mr ?? p.category.name_en,
+    price:         parseFloat(p.pricePerUnit),
+    unit:          p.unit,
+    unitMr:        p.unit,
+    quantity:      parseFloat(p.quantityAvailable),
+    imageUrl:      p.images[0] ?? 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=600&auto=format',
+    photos:        p.images.length > 0 ? p.images : undefined,
+    sellerId:      p.seller.id,
+    description:   [p.district, p.taluka, p.village].filter(Boolean).join(', '),
+    descriptionMr: [p.district, p.taluka, p.village].filter(Boolean).join(', '),
+  };
+}
 
 import LivePriceTicker from './organisms/LivePriceTicker.tsx';
 import ProductCard from './molecules/ProductCard.tsx';
@@ -70,6 +91,8 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [activeCategory, setActiveCategory] = useState('all');
   const [savedIds, setSavedIds]       = useState<string[]>(getSavedIds);
+  const [apiProducts, setApiProducts]         = useState<Product[] | null>(null);
+  const [apiMarketPrices, setApiMarketPrices] = useState<ApiMarketPrice[] | undefined>(undefined);
   const [isLoading, setIsLoading]     = useState(true);
   const [refreshing, setRefreshing]   = useState(false);
   const [showFilters, setShowFilters]             = useState(false);
@@ -85,11 +108,27 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
   const productsRef = useRef<HTMLElement>(null);
   const hasSpeech = typeof window !== 'undefined' && ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window);
 
-  // Simulate initial product load (800ms)
-  useEffect(() => {
-    const t = setTimeout(() => setIsLoading(false), 800);
-    return () => clearTimeout(t);
+  // Fetch products + market prices from backend in parallel
+  const fetchProducts = useCallback(async () => {
+    if (!auth.getAccess()) { setIsLoading(false); return; }
+    setIsLoading(true);
+    try {
+      const [productsRes, pricesRes] = await Promise.allSettled([
+        productsApi.list({ limit: 50 }),
+        marketPricesApi.list(),
+      ]);
+      if (productsRes.status === 'fulfilled') {
+        setApiProducts(productsRes.value.data.map(mapApiProduct));
+      }
+      if (pricesRes.status === 'fulfilled') {
+        setApiMarketPrices(pricesRes.value.data);
+      }
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
+
+  useEffect(() => { fetchProducts(); }, [fetchProducts]);
 
   // Refresh user listings whenever HomeScreen mounts (e.g. after returning from Sell)
   useEffect(() => {
@@ -122,11 +161,9 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
 
   const handleRefresh = useCallback(async () => {
     setRefreshing(true);
-    setIsLoading(true);
-    await new Promise(r => setTimeout(r, 700));
-    setIsLoading(false);
+    await fetchProducts();
     setRefreshing(false);
-  }, []);
+  }, [fetchProducts]);
 
   const isMr = lang === Language.MARATHI;
   const t    = getTranslations(lang);
@@ -183,7 +220,7 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
 
   const userListingIds = new Set(userListings.map(l => l.id));
 
-  const allProducts = [...userListings, ...PRODUCTS];
+  const allProducts = [...userListings, ...(apiProducts ?? PRODUCTS)];
 
   const loadDukaanItems = (): MappedShopProduct[] => {
     let shopItems: ShopItem[] = MOCK_SHOP_ITEMS;
@@ -253,7 +290,7 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
     <div className="pb-28">
 
       {/* ── 1. LIVE PRICE TICKER ─────────────────────────────────── */}
-      <LivePriceTicker isMr={isMr} location={location} />
+      <LivePriceTicker isMr={isMr} location={location} apiMarketPrices={apiMarketPrices} />
 
       {/* ── 2. WEATHER + REFRESH ROW ─────────────────────────────── */}
       <div style={{

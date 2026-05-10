@@ -5,6 +5,7 @@ import { getCart, clearCart } from '../utils/cart.ts';
 import { PRODUCTS } from '../constants.tsx';
 import { haptic } from '../utils/haptic.ts';
 import SectionReveal from './atoms/SectionReveal.tsx';
+import { ordersApi, auth } from '../services/api.ts';
 
 interface CheckoutScreenProps {
   lang: Language;
@@ -47,6 +48,22 @@ export default function CheckoutScreen({ lang, onBack, onConfirmed }: CheckoutSc
   const handleConfirm = () => {
     if (!canProceed) return;
     haptic.success();
+
+    // Try to create order on backend for any real (UUID) product IDs
+    if (auth.getAccess()) {
+      const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+      const backendItems = cart
+        .filter(i => uuidPattern.test(i.productId))
+        .map(i => ({ productId: i.productId, quantity: i.quantity }));
+      if (backendItems.length > 0) {
+        ordersApi.create({
+          items: backendItems,
+          deliveryAddress: `${name.trim()}, ${village.trim()}`,
+          deliveryDistrict: village.trim(),
+        }).catch(() => { /* backend unavailable — order still proceeds locally */ });
+      }
+    }
+
     clearCart();
     setConfirmed(true);
     setTimeout(onConfirmed, 2600);

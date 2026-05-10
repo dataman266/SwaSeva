@@ -1,10 +1,12 @@
-import { Controller, Get, Post, Delete, Body, Param, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Body, Param, Query, UseGuards, HttpCode, HttpStatus } from '@nestjs/common';
 import { MarketPricesService } from './market-prices.service';
+import { CreateMarketPriceDto } from './dto/create-price.dto';
 import { CreatePriceAlertDto } from './dto/create-price-alert.dto';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
-import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
+import { CurrentUser } from '../common/decorators/current-user.decorator';
+import { RoleType } from '@prisma/client';
 
 @Controller('market-prices')
 export class MarketPricesController {
@@ -13,6 +15,13 @@ export class MarketPricesController {
   @Get()
   findAll(@Query('district') district?: string, @Query('categoryId') categoryId?: string) {
     return this.marketPricesService.findAll(district, categoryId);
+  }
+
+  @Post()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(RoleType.ADMIN)
+  create(@Body() dto: CreateMarketPriceDto) {
+    return this.marketPricesService.create(dto);
   }
 
   @Get('alerts')

@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { Language, UserRole } from '../types.ts';
 import { getTranslations } from '../constants.tsx';
+import { usersApi, ApiUser, ApiUserStats, auth, ApiError } from '../services/api.ts';
 import ShopRegistrationView from './dukaan/ShopRegistrationView.tsx';
 import {
   Settings, Bell, ShieldCheck, HelpCircle, LogOut,
   ChevronRight, Sprout, ArrowLeft, User, Phone, Mail,
-  Lock, Eye, EyeOff, Globe, Check, X, ChevronDown,
+  Globe, Check, X, ChevronDown,
   AlertCircle, Camera, FileText, Building2, Tractor,
   MessageCircle, PhoneCall, Star, Zap, TrendingUp,
   Volume2, Tag, Megaphone, Newspaper,
@@ -91,21 +92,36 @@ function SubHeader({ title, onBack }: { title: string; onBack: () => void }) {
 }
 
 /* ─── ACCOUNT SETTINGS ───────────────────────────────────── */
-function SettingsView({ lang, onBack }: { lang: Language; onBack: () => void }) {
+function SettingsView({
+  lang, onBack, apiUser, onUserUpdated,
+}: {
+  lang: Language; onBack: () => void;
+  apiUser: ApiUser | null; onUserUpdated: (u: ApiUser) => void;
+}) {
   const isMr = lang === Language.MARATHI;
   const t = getTranslations(lang);
-  const [name, setName]       = useState('Rajesh Shinde');
-  const [phone]               = useState('+91 99999 88888');
-  const [email, setEmail]     = useState('rajesh@example.com');
-  const [showOld, setShowOld] = useState(false);
-  const [showNew, setShowNew] = useState(false);
-  const [oldPwd, setOldPwd]   = useState('');
-  const [newPwd, setNewPwd]   = useState('');
-  const [saved, setSaved]     = useState(false);
+  const [name, setName]   = useState(apiUser?.name_en ?? '');
+  const phone             = apiUser?.phone ?? '';
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved]   = useState(false);
+  const [saveError, setSaveError] = useState('');
 
-  const handleSave = () => {
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2200);
+  // Sync name if apiUser loads after mount
+  useEffect(() => { if (apiUser?.name_en) setName(apiUser.name_en); }, [apiUser]);
+
+  const handleSave = async () => {
+    setSaving(true);
+    setSaveError('');
+    try {
+      const res = await usersApi.updateProfile({ name_en: name.trim() || undefined });
+      onUserUpdated(res.data);
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2200);
+    } catch (ex) {
+      setSaveError(ex instanceof ApiError ? ex.message : 'Failed to save');
+    } finally {
+      setSaving(false);
+    }
   };
 
   const Label = ({ children }: { children: React.ReactNode }) => (
@@ -154,7 +170,7 @@ function SettingsView({ lang, onBack }: { lang: Language; onBack: () => void }) 
             background: '#2E7D32', display: 'flex', alignItems: 'center', justifyContent: 'center',
             fontSize: '22px', fontWeight: 500, color: '#F5F0E8', letterSpacing: '0.02em',
           }}>
-            RS
+            {name.trim().split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2) || '?'}
           </div>
           <button
             type="button"
@@ -181,7 +197,6 @@ function SettingsView({ lang, onBack }: { lang: Language; onBack: () => void }) 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '0.75rem' }}>
           <InputField icon={User}  value={name}  onChange={setName}  placeholder={t.fullName} />
           <InputField icon={Phone} value={phone} readOnly />
-          <InputField icon={Mail}  value={email} onChange={setEmail} type="email" placeholder="email@example.com" />
         </div>
       </div>
 
@@ -224,76 +239,34 @@ function SettingsView({ lang, onBack }: { lang: Language; onBack: () => void }) 
         </div>
       </div>
 
-      {/* Change password */}
-      <div style={{
-        background: '#162B16', border: '1px solid rgba(245,240,232,0.07)',
-        borderRadius: '1.25rem', padding: '1.25rem', marginBottom: '1.5rem',
-      }}>
-        <Label>{t.changePassword}</Label>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '0.75rem' }}>
-          <div style={{
-            display: 'flex', alignItems: 'center', gap: '0.75rem',
-            background: 'rgba(245,240,232,0.06)', border: '1px solid rgba(74,140,42,0.25)',
-            borderRadius: '0.875rem', padding: '0.875rem 1rem',
-          }}>
-            <Lock size={15} style={{ color: '#4CAF50', flexShrink: 0 }} />
-            <input
-              type={showOld ? 'text' : 'password'}
-              value={oldPwd}
-              onChange={e => setOldPwd(e.target.value)}
-              placeholder={t.currentPwd}
-              style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', color: '#F5F0E8', fontSize: '14px', fontWeight: 300 }}
-            />
-            <button type="button" onClick={() => setShowOld(p => !p)} style={{ background: 'none', border: 'none', cursor: 'pointer', touchAction: 'manipulation', padding: 0 }}>
-              {showOld ? <EyeOff size={14} style={{ color: 'rgba(245,240,232,0.3)' }} /> : <Eye size={14} style={{ color: 'rgba(245,240,232,0.3)' }} />}
-            </button>
-          </div>
-          <div style={{
-            display: 'flex', alignItems: 'center', gap: '0.75rem',
-            background: 'rgba(245,240,232,0.06)', border: '1px solid rgba(74,140,42,0.25)',
-            borderRadius: '0.875rem', padding: '0.875rem 1rem',
-          }}>
-            <Lock size={15} style={{ color: '#4CAF50', flexShrink: 0 }} />
-            <input
-              type={showNew ? 'text' : 'password'}
-              value={newPwd}
-              onChange={e => setNewPwd(e.target.value)}
-              placeholder={t.newPwd}
-              style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', color: '#F5F0E8', fontSize: '14px', fontWeight: 300 }}
-            />
-            <button type="button" onClick={() => setShowNew(p => !p)} style={{ background: 'none', border: 'none', cursor: 'pointer', touchAction: 'manipulation', padding: 0 }}>
-              {showNew ? <EyeOff size={14} style={{ color: 'rgba(245,240,232,0.3)' }} /> : <Eye size={14} style={{ color: 'rgba(245,240,232,0.3)' }} />}
-            </button>
-          </div>
-          {newPwd.length > 0 && newPwd.length < 8 && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <AlertCircle size={12} style={{ color: '#E57373' }} />
-              <span style={{ fontSize: '12px', color: '#E57373', fontWeight: 300 }}>
-                {t.minChars}
-              </span>
-            </div>
-          )}
+      {saveError && (
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
+          <AlertCircle size={13} style={{ color: '#E57373', flexShrink: 0 }} />
+          <span style={{ fontSize: '13px', color: '#E57373', fontWeight: 300 }}>{saveError}</span>
         </div>
-      </div>
+      )}
 
       {/* Save button */}
       <button
         type="button"
         onClick={handleSave}
+        disabled={saving}
         style={{
           width: '100%', padding: '1rem',
-          borderRadius: '1rem', cursor: 'pointer',
+          borderRadius: '1rem', cursor: saving ? 'not-allowed' : 'pointer',
           touchAction: 'manipulation',
           WebkitTapHighlightColor: 'rgba(45,90,27,0.2)',
           background: saved ? 'rgba(74,140,42,0.2)' : '#2E7D32',
           border: `1px solid ${saved ? 'rgba(74,140,42,0.4)' : 'transparent'}`,
           color: '#F5F0E8', fontSize: '15px', fontWeight: 500,
           display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
-          transition: 'background 0.2s',
+          transition: 'background 0.2s', opacity: saving ? 0.6 : 1,
         }}
       >
         {saved ? (
           <><Check size={16} style={{ color: '#4CAF50' }} /><span style={{ color: '#4CAF50' }}>{t.saved}</span></>
+        ) : saving ? (
+          isMr ? 'जतन करत आहे…' : 'Saving…'
         ) : (
           t.saveChanges
         )}
@@ -845,6 +818,20 @@ export default function ProfileScreen({ lang, userRole, highlightShopkeeper, onH
   const [prevView, setPrevView]       = useState<ProfileView>('main');
   const [blinkClass, setBlinkClass]   = useState('');
   const [confirmSignOut, setConfirm]  = useState(false);
+  const [apiUser, setApiUser]         = useState<ApiUser | null>(null);
+  const [apiStats, setApiStats]       = useState<ApiUserStats | null>(null);
+
+  const fetchUserData = useCallback(async () => {
+    if (!auth.getAccess()) return;
+    const [userRes, statsRes] = await Promise.allSettled([
+      usersApi.me(),
+      usersApi.stats(),
+    ]);
+    if (userRes.status === 'fulfilled')  setApiUser(userRes.value.data);
+    if (statsRes.status === 'fulfilled') setApiStats(statsRes.value.data);
+  }, []);
+
+  useEffect(() => { fetchUserData(); }, [fetchUserData]);
 
   // Blink the "Become a Shopkeeper" button when directed from the Dukaan gate
   React.useEffect(() => {
@@ -910,7 +897,12 @@ export default function ProfileScreen({ lang, userRole, highlightShopkeeper, onH
           transition={slideTransition}
         >
           {profileView === 'settings' && (
-            <SettingsView lang={lang} onBack={goBack} />
+            <SettingsView
+              lang={lang}
+              onBack={goBack}
+              apiUser={apiUser}
+              onUserUpdated={u => setApiUser(u)}
+            />
           )}
           {profileView === 'notifications' && (
             <NotificationsView lang={lang} onBack={goBack} />
@@ -949,7 +941,7 @@ export default function ProfileScreen({ lang, userRole, highlightShopkeeper, onH
                       className="w-16 h-16 rounded-2xl flex items-center justify-center font-medium text-lg text-[#F5F0E8]"
                       style={{ background: '#2E7D32', letterSpacing: '0.02em' }}
                     >
-                      RS
+                      {(apiUser?.name_en ?? '?').trim().split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2) || '?'}
                     </div>
                     <div
                       className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center"
@@ -960,10 +952,12 @@ export default function ProfileScreen({ lang, userRole, highlightShopkeeper, onH
                   </div>
                   <div className="flex-1 min-w-0">
                     <h2 className="font-medium text-[#F5F0E8] truncate" style={{ fontSize: '18px', letterSpacing: '-0.02em' }}>
-                      Rajesh Shinde
+                      {isMr
+                        ? (apiUser?.name_mr ?? apiUser?.name_en ?? t.premiumFarmer)
+                        : (apiUser?.name_en ?? t.premiumFarmer)}
                     </h2>
                     <p className="font-light text-[rgba(245,240,232,0.45)] mt-0.5" style={{ fontSize: '13px' }}>
-                      +91 99999 88888
+                      {apiUser?.phone ?? ''}
                     </p>
                     <div
                       className="inline-flex items-center gap-1.5 mt-2 px-3 py-1 rounded-full"
@@ -1012,9 +1006,9 @@ export default function ProfileScreen({ lang, userRole, highlightShopkeeper, onH
               {/* ── Stats strip ──────────────────────────────────────── */}
               <div className="grid grid-cols-3 gap-3 mb-6">
                 {[
-                  { value: '12',   label: t.listingsLabel },
-                  { value: '4.8',  label: t.ratingLabel   },
-                  { value: '₹48k', label: t.salesLabel    },
+                  { value: apiStats ? String(apiStats.activeListings) : '—', label: t.listingsLabel },
+                  { value: '4.8',  label: t.ratingLabel },
+                  { value: apiStats ? String(apiStats.totalOrders)    : '—', label: t.salesLabel    },
                 ].map(({ value, label }) => (
                   <div
                     key={label}

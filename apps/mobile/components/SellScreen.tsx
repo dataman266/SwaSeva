@@ -6,6 +6,7 @@ import { CATEGORIES, getTranslations } from '../constants.tsx';
 import PillButton from './atoms/PillButton.tsx';
 import SectionReveal from './atoms/SectionReveal.tsx';
 import { haptic } from '../utils/haptic.ts';
+import { productsApi, categoriesApi, ApiCategory, auth } from '../services/api.ts';
 
 const DRAFT_KEY         = 'agrimart_sell_draft';
 const USER_LISTINGS_KEY = 'agrimart_user_listings';
@@ -303,6 +304,7 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
   const [showLocationMap, setShowLocationMap] = useState(false);
   const [identityUploaded, setIdentityUploaded] = useState(false);
   const [photos, setPhotos] = useState<string[]>([]);
+  const [apiCategories, setApiCategories] = useState<ApiCategory[]>([]);
 
   const fileInputRef     = useRef<HTMLInputElement>(null);
   const identityInputRef = useRef<HTMLInputElement>(null);
@@ -320,6 +322,11 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
     } catch {}
   }, [isSuccess, categoryId, variety, price, unit, qtyUnit, quantity, mobileNumber, description, location]);
 
+  useEffect(() => {
+    if (!auth.getAccess()) return;
+    categoriesApi.list().then(res => setApiCategories(res.data)).catch(() => {});
+  }, []);
+
   const handlePhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -332,12 +339,13 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
     if (e.target.files?.[0]) { setIdentityUploaded(true); haptic.light(); }
   };
 
-  const handlePublish = () => {
+  const handlePublish = async () => {
     const cat = CATEGORIES.find(c => c.id === categoryId);
     const catLabel = isMr ? cat?.nameMr ?? cat?.name : cat?.name ?? categoryId;
     const listingName = `${catLabel}${variety ? ` – ${variety}` : ''}`;
     const priceUnitLbl = PRICE_UNITS.find(u => u.value === unit)?.label.replace('per ', '') ?? unit;
     const qtyUnitLbl   = QTY_UNITS.find(u => u.value === qtyUnit)?.label ?? qtyUnit;
+    const fallbackImg  = 'https://images.unsplash.com/photo-1500651230702-0e2d8a49d4ad?w=800&auto=format&fit=crop';
 
     const newListing = {
       id:           `ul_${Date.now()}`,
@@ -352,8 +360,7 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
       inquiries:    0,
       status:       'active',
       daysLeft:     30,
-      // Use data URL if available (persists), fallback to generic image
-      imageUrl:     photos[0] ?? 'https://images.unsplash.com/photo-1500651230702-0e2d8a49d4ad?w=800&auto=format&fit=crop',
+      imageUrl:     photos[0] ?? fallbackImg,
       photos:       photos.length > 0 ? photos : undefined,
       mobileNumber,
       description,
@@ -374,21 +381,33 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
     try {
       saveToStorage(newListing);
     } catch {
-      // Quota exceeded — retry without photos array (keep only first image URL)
       try {
         saveToStorage({ ...newListing, photos: undefined });
       } catch {
-        // Still failing — strip even the data URL imageUrl, use fallback
         try {
-          saveToStorage({
-            ...newListing,
-            photos: undefined,
-            imageUrl: 'https://images.unsplash.com/photo-1500651230702-0e2d8a49d4ad?w=800&auto=format&fit=crop',
-          });
+          saveToStorage({ ...newListing, photos: undefined, imageUrl: fallbackImg });
         } catch { return; }
       }
     }
     localStorage.removeItem(DRAFT_KEY);
+
+    // Also create on backend if authenticated
+    if (auth.getAccess()) {
+      const backendCat = apiCategories.find(
+        ac => ac.name_en.toLowerCase() === (cat?.name ?? '').toLowerCase(),
+      );
+      if (backendCat) {
+        productsApi.create({
+          name_en:           listingName,
+          categoryId:        backendCat.id,
+          pricePerUnit:      Number(price) || 0,
+          unit,
+          quantityAvailable: Number(quantity) || 0,
+          description_en:    description || undefined,
+          district:          location ? location.split(',')[0].trim() : undefined,
+        }).catch(() => { /* backend unavailable — local save already done */ });
+      }
+    }
 
     haptic.success();
     setIsSuccess(true);

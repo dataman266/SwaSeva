@@ -4,6 +4,7 @@ import {
   UnauthorizedException,
   HttpException,
   HttpStatus,
+  Logger,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
@@ -20,6 +21,8 @@ const OTP_MAX_REQUESTS_PER_10MIN = 3;
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
     private prisma: PrismaService,
     private jwtService: JwtService,
@@ -45,7 +48,7 @@ export class AuthService {
     });
 
     // In production, integrate an SMS provider (e.g. Twilio, MSG91) here
-    console.log(`[DEV] OTP for ${dto.phone}: ${otp}`);
+    this.logger.debug(`[DEV] OTP for ${dto.phone}: ${otp}`);
 
     return { message: 'OTP sent successfully' };
   }
