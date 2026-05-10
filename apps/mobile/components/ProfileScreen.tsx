@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { Language, UserRole } from '../types.ts';
+import { getTranslations } from '../constants.tsx';
 import ShopRegistrationView from './dukaan/ShopRegistrationView.tsx';
 import {
   Settings, Bell, ShieldCheck, HelpCircle, LogOut,
@@ -92,6 +93,7 @@ function SubHeader({ title, onBack }: { title: string; onBack: () => void }) {
 /* ─── ACCOUNT SETTINGS ───────────────────────────────────── */
 function SettingsView({ lang, onBack }: { lang: Language; onBack: () => void }) {
   const isMr = lang === Language.MARATHI;
+  const t = getTranslations(lang);
   const [name, setName]       = useState('Rajesh Shinde');
   const [phone]               = useState('+91 99999 88888');
   const [email, setEmail]     = useState('rajesh@example.com');
@@ -142,7 +144,7 @@ function SettingsView({ lang, onBack }: { lang: Language; onBack: () => void }) 
 
   return (
     <div style={{ padding: '2rem 1.25rem 7rem', minHeight: '100vh', overflowY: 'auto', WebkitOverflowScrolling: 'touch' }}>
-      <SubHeader title={isMr ? 'खाते सेटिंग्ज' : 'Account Settings'} onBack={onBack} />
+      <SubHeader title={t.accountSettings} onBack={onBack} />
 
       {/* Profile photo */}
       <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2rem' }}>
@@ -175,9 +177,9 @@ function SettingsView({ lang, onBack }: { lang: Language; onBack: () => void }) 
         background: '#162B16', border: '1px solid rgba(245,240,232,0.07)',
         borderRadius: '1.25rem', padding: '1.25rem', marginBottom: '1rem',
       }}>
-        <Label>{isMr ? 'वैयक्तिक माहिती' : 'Personal Info'}</Label>
+        <Label>{t.personalInfo}</Label>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '0.75rem' }}>
-          <InputField icon={User}  value={name}  onChange={setName}  placeholder={isMr ? 'पूर्ण नाव' : 'Full name'} />
+          <InputField icon={User}  value={name}  onChange={setName}  placeholder={t.fullName} />
           <InputField icon={Phone} value={phone} readOnly />
           <InputField icon={Mail}  value={email} onChange={setEmail} type="email" placeholder="email@example.com" />
         </div>
@@ -188,7 +190,7 @@ function SettingsView({ lang, onBack }: { lang: Language; onBack: () => void }) 
         background: '#162B16', border: '1px solid rgba(245,240,232,0.07)',
         borderRadius: '1.25rem', padding: '1.25rem', marginBottom: '1rem',
       }}>
-        <Label>{isMr ? 'भाषा' : 'Language'}</Label>
+        <Label>{t.languageLabel}</Label>
         <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.75rem' }}>
           {[
             { code: 'EN', label: 'English' },
@@ -227,7 +229,7 @@ function SettingsView({ lang, onBack }: { lang: Language; onBack: () => void }) 
         background: '#162B16', border: '1px solid rgba(245,240,232,0.07)',
         borderRadius: '1.25rem', padding: '1.25rem', marginBottom: '1.5rem',
       }}>
-        <Label>{isMr ? 'पासवर्ड बदला' : 'Change Password'}</Label>
+        <Label>{t.changePassword}</Label>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '0.75rem' }}>
           <div style={{
             display: 'flex', alignItems: 'center', gap: '0.75rem',
@@ -239,7 +241,7 @@ function SettingsView({ lang, onBack }: { lang: Language; onBack: () => void }) 
               type={showOld ? 'text' : 'password'}
               value={oldPwd}
               onChange={e => setOldPwd(e.target.value)}
-              placeholder={isMr ? 'जुना पासवर्ड' : 'Current password'}
+              placeholder={t.currentPwd}
               style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', color: '#F5F0E8', fontSize: '14px', fontWeight: 300 }}
             />
             <button type="button" onClick={() => setShowOld(p => !p)} style={{ background: 'none', border: 'none', cursor: 'pointer', touchAction: 'manipulation', padding: 0 }}>
@@ -256,7 +258,7 @@ function SettingsView({ lang, onBack }: { lang: Language; onBack: () => void }) 
               type={showNew ? 'text' : 'password'}
               value={newPwd}
               onChange={e => setNewPwd(e.target.value)}
-              placeholder={isMr ? 'नवीन पासवर्ड' : 'New password'}
+              placeholder={t.newPwd}
               style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', color: '#F5F0E8', fontSize: '14px', fontWeight: 300 }}
             />
             <button type="button" onClick={() => setShowNew(p => !p)} style={{ background: 'none', border: 'none', cursor: 'pointer', touchAction: 'manipulation', padding: 0 }}>
@@ -267,7 +269,7 @@ function SettingsView({ lang, onBack }: { lang: Language; onBack: () => void }) 
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <AlertCircle size={12} style={{ color: '#E57373' }} />
               <span style={{ fontSize: '12px', color: '#E57373', fontWeight: 300 }}>
-                {isMr ? 'किमान 8 अक्षरे आवश्यक' : 'Minimum 8 characters required'}
+                {t.minChars}
               </span>
             </div>
           )}
@@ -291,9 +293,9 @@ function SettingsView({ lang, onBack }: { lang: Language; onBack: () => void }) 
         }}
       >
         {saved ? (
-          <><Check size={16} style={{ color: '#4CAF50' }} /><span style={{ color: '#4CAF50' }}>{isMr ? 'जतन झाले!' : 'Saved!'}</span></>
+          <><Check size={16} style={{ color: '#4CAF50' }} /><span style={{ color: '#4CAF50' }}>{t.saved}</span></>
         ) : (
-          isMr ? 'बदल जतन करा' : 'Save Changes'
+          t.saveChanges
         )}
       </button>
     </div>
@@ -303,6 +305,7 @@ function SettingsView({ lang, onBack }: { lang: Language; onBack: () => void }) 
 /* ─── NOTIFICATIONS ───────────────────────────────────────── */
 function NotificationsView({ lang, onBack }: { lang: Language; onBack: () => void }) {
   const isMr = lang === Language.MARATHI;
+  const t = getTranslations(lang);
 
   type NotifKey = 'orders' | 'prices' | 'schemes' | 'news' | 'push' | 'sms' | 'email';
   const [toggles, setToggles] = useState<Record<NotifKey, boolean>>({
@@ -381,10 +384,10 @@ function NotificationsView({ lang, onBack }: { lang: Language; onBack: () => voi
 
   return (
     <div style={{ padding: '2rem 1.25rem 7rem', minHeight: '100vh', overflowY: 'auto', WebkitOverflowScrolling: 'touch' }}>
-      <SubHeader title={isMr ? 'सूचना' : 'Notifications'} onBack={onBack} />
+      <SubHeader title={t.notifications} onBack={onBack} />
 
       <div style={{ background: '#162B16', border: '1px solid rgba(245,240,232,0.07)', borderRadius: '1.25rem', overflow: 'hidden', marginBottom: '1rem' }}>
-        <Section title={isMr ? 'अलर्ट' : 'Alerts'} />
+        <Section title={t.alerts} />
         <Row icon={Zap}      color="#F5C518" label="Order Updates"    labelMr="ऑर्डर अपडेट"   sub="Buyer activity on your listings" subMr="तुमच्या लिस्टिंगवर खरेदीदार क्रिया" k="orders" />
         <Row icon={TrendingUp} color="#4CAF50" label="Price Alerts"  labelMr="किंमत अलर्ट"   sub="Daily MSP & mandi rate changes"  subMr="दैनिक MSP आणि मंडी दर बदल"         k="prices" />
         <Row icon={Tag}      color="#E8C84A" label="Govt Schemes"     labelMr="सरकारी योजना"  sub="PM Kisan, subsidy announcements" subMr="PM किसान, अनुदान घोषणा"            k="schemes" />
@@ -392,7 +395,7 @@ function NotificationsView({ lang, onBack }: { lang: Language; onBack: () => voi
       </div>
 
       <div style={{ background: '#162B16', border: '1px solid rgba(245,240,232,0.07)', borderRadius: '1.25rem', overflow: 'hidden' }}>
-        <Section title={isMr ? 'चॅनेल' : 'Channels'} />
+        <Section title={t.channels} />
         <Row icon={Bell}         color="#E8C84A" label="Push Notifications" labelMr="पुश सूचना" sub="In-app and lock screen"     subMr="अ‍ॅप आणि लॉक स्क्रीन" k="push"  />
         <Row icon={Phone}        color="#4CAF50" label="SMS"                 labelMr="एसएमएस"   sub="Text alerts to your number"  subMr="तुमच्या नंबरवर SMS"    k="sms"   />
         <Row icon={Mail}         color="#7EB3FF" label="Email"               labelMr="ईमेल"     sub="Weekly digest & reports"    subMr="साप्ताहिक सारांश"      k="email" />
@@ -404,14 +407,15 @@ function NotificationsView({ lang, onBack }: { lang: Language; onBack: () => voi
 /* ─── KYC VERIFICATION ────────────────────────────────────── */
 function KYCView({ lang, onBack }: { lang: Language; onBack: () => void }) {
   const isMr = lang === Language.MARATHI;
+  const t = getTranslations(lang);
   const [step, setStep] = useState(0);
   const [expanded, setExpanded] = useState<number | null>(0);
 
   const steps = [
     {
       icon: User,
-      label: isMr ? 'आधार कार्ड' : 'Aadhaar Card',
-      sublabel: isMr ? 'ओळख पडताळणी' : 'Identity Verification',
+      label: t.aadhaarCard,
+      sublabel: t.identityVerification,
       status: 'verified',
       color: '#4CAF50',
       content: (
@@ -430,8 +434,8 @@ function KYCView({ lang, onBack }: { lang: Language; onBack: () => void }) {
     },
     {
       icon: FileText,
-      label: isMr ? 'PAN कार्ड' : 'PAN Card',
-      sublabel: isMr ? 'कर ओळख' : 'Tax Identification',
+      label: t.panCard,
+      sublabel: t.taxId,
       status: 'verified',
       color: '#4CAF50',
       content: (
@@ -450,8 +454,8 @@ function KYCView({ lang, onBack }: { lang: Language; onBack: () => void }) {
     },
     {
       icon: Building2,
-      label: isMr ? 'बँक खाते' : 'Bank Account',
-      sublabel: isMr ? 'पेमेंट लिंक करा' : 'Link for Payments',
+      label: t.bankAccount,
+      sublabel: t.linkPayments,
       status: 'pending',
       color: '#F5C518',
       content: (
@@ -464,7 +468,7 @@ function KYCView({ lang, onBack }: { lang: Language; onBack: () => void }) {
             <Building2 size={15} style={{ color: '#4CAF50', flexShrink: 0 }} />
             <input
               type="text"
-              placeholder={isMr ? 'खाते क्रमांक' : 'Account Number'}
+              placeholder={t.accountNumber}
               style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', color: '#F5F0E8', fontSize: '14px', fontWeight: 300 }}
             />
           </div>
@@ -476,7 +480,7 @@ function KYCView({ lang, onBack }: { lang: Language; onBack: () => void }) {
             <FileText size={15} style={{ color: '#4CAF50', flexShrink: 0 }} />
             <input
               type="text"
-              placeholder={isMr ? 'IFSC कोड' : 'IFSC Code'}
+              placeholder={t.ifscCode}
               style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', color: '#F5F0E8', fontSize: '14px', fontWeight: 300 }}
             />
           </div>
@@ -491,15 +495,15 @@ function KYCView({ lang, onBack }: { lang: Language; onBack: () => void }) {
               WebkitTapHighlightColor: 'rgba(45,90,27,0.2)',
             }}
           >
-            {isMr ? 'खाते लिंक करा' : 'Link Account'}
+            {t.linkAccount}
           </button>
         </div>
       ),
     },
     {
       icon: Tractor,
-      label: isMr ? 'शेत तपशील' : 'Farm Details',
-      sublabel: isMr ? 'शेतकरी ओळख' : 'Farmer Identity',
+      label: t.farmDetails,
+      sublabel: t.farmerIdentity,
       status: step >= 3 ? 'pending' : 'locked',
       color: step >= 3 ? '#F5C518' : 'rgba(245,240,232,0.2)',
       content: (
@@ -512,7 +516,7 @@ function KYCView({ lang, onBack }: { lang: Language; onBack: () => void }) {
             <Tractor size={15} style={{ color: '#4CAF50', flexShrink: 0 }} />
             <input
               type="text"
-              placeholder={isMr ? 'जमिनीचे क्षेत्रफळ (एकर)' : 'Land area (acres)'}
+              placeholder={t.landArea}
               style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', color: '#F5F0E8', fontSize: '14px', fontWeight: 300 }}
             />
           </div>
@@ -524,7 +528,7 @@ function KYCView({ lang, onBack }: { lang: Language; onBack: () => void }) {
             <FileText size={15} style={{ color: '#4CAF50', flexShrink: 0 }} />
             <input
               type="text"
-              placeholder={isMr ? '7/12 उतारा क्रमांक' : '7/12 Satbara number'}
+              placeholder={t.satbaraNumber}
               style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', color: '#F5F0E8', fontSize: '14px', fontWeight: 300 }}
             />
           </div>
@@ -536,7 +540,7 @@ function KYCView({ lang, onBack }: { lang: Language; onBack: () => void }) {
           }}>
             <Camera size={15} style={{ color: '#4CAF50' }} />
             <span style={{ fontSize: '13px', color: 'rgba(245,240,232,0.6)', fontWeight: 300 }}>
-              {isMr ? '7/12 छायाचित्र अपलोड करा' : 'Upload 7/12 photo'}
+              {t.uploadSatbara}
             </span>
           </div>
           <button
@@ -549,7 +553,7 @@ function KYCView({ lang, onBack }: { lang: Language; onBack: () => void }) {
               WebkitTapHighlightColor: 'rgba(45,90,27,0.2)',
             }}
           >
-            {isMr ? 'सबमिट करा' : 'Submit for Review'}
+            {t.submitReview}
           </button>
         </div>
       ),
@@ -561,7 +565,7 @@ function KYCView({ lang, onBack }: { lang: Language; onBack: () => void }) {
 
   return (
     <div style={{ padding: '2rem 1.25rem 7rem', minHeight: '100vh', overflowY: 'auto', WebkitOverflowScrolling: 'touch' }}>
-      <SubHeader title={isMr ? 'KYC पडताळणी' : 'KYC Verification'} onBack={onBack} />
+      <SubHeader title={t.kycVerification} onBack={onBack} />
 
       {/* Progress bar */}
       <div style={{
@@ -570,7 +574,7 @@ function KYCView({ lang, onBack }: { lang: Language; onBack: () => void }) {
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '0.75rem' }}>
           <span style={{ fontSize: '13px', fontWeight: 300, color: 'rgba(245,240,232,0.5)' }}>
-            {isMr ? 'पूर्णता' : 'Completion'}
+            {t.completion}
           </span>
           <span style={{ fontSize: '22px', fontWeight: 300, color: '#F5F0E8', letterSpacing: '-0.02em' }}>
             {completedCount}<span style={{ fontSize: '13px', color: 'rgba(245,240,232,0.4)' }}>/{steps.length}</span>
@@ -621,9 +625,9 @@ function KYCView({ lang, onBack }: { lang: Language; onBack: () => void }) {
                   </p>
                   <p style={{ fontSize: '11px', color: 'rgba(245,240,232,0.35)', marginTop: 2 }}>
                     {s.status === 'verified'
-                      ? (isMr ? '✓ पूर्ण' : '✓ Complete')
+                      ? t.complete
                       : s.status === 'locked'
-                      ? (isMr ? '🔒 लॉक' : '🔒 Locked')
+                      ? t.locked
                       : s.sublabel}
                   </p>
                 </div>
@@ -661,6 +665,7 @@ function KYCView({ lang, onBack }: { lang: Language; onBack: () => void }) {
 /* ─── HELP & SUPPORT ──────────────────────────────────────── */
 function HelpView({ lang, onBack }: { lang: Language; onBack: () => void }) {
   const isMr = lang === Language.MARATHI;
+  const t = getTranslations(lang);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   const faqs = [
@@ -699,7 +704,7 @@ function HelpView({ lang, onBack }: { lang: Language; onBack: () => void }) {
   const contactItems = [
     {
       icon: PhoneCall,
-      label: isMr ? 'फोन करा' : 'Call Us',
+      label: t.callUs,
       sub: '1800-XXX-XXXX',
       color: '#4CAF50',
       bg: 'rgba(74,140,42,0.1)',
@@ -708,14 +713,14 @@ function HelpView({ lang, onBack }: { lang: Language; onBack: () => void }) {
     {
       icon: MessageCircle,
       label: isMr ? 'WhatsApp' : 'WhatsApp',
-      sub: isMr ? 'चॅट करा' : 'Chat now',
+      sub: t.chatNow,
       color: '#25D366',
       bg: 'rgba(37,211,102,0.08)',
       border: 'rgba(37,211,102,0.2)',
     },
     {
       icon: Mail,
-      label: isMr ? 'ईमेल करा' : 'Email Us',
+      label: t.emailUs,
       sub: 'support@swaseva.in',
       color: '#7EB3FF',
       bg: 'rgba(126,179,255,0.08)',
@@ -725,7 +730,7 @@ function HelpView({ lang, onBack }: { lang: Language; onBack: () => void }) {
 
   return (
     <div style={{ padding: '2rem 1.25rem 7rem', minHeight: '100vh', overflowY: 'auto', WebkitOverflowScrolling: 'touch' }}>
-      <SubHeader title={isMr ? 'मदत आणि सहाय्य' : 'Help & Support'} onBack={onBack} />
+      <SubHeader title={t.helpSupport} onBack={onBack} />
 
       {/* Rating CTA */}
       <div style={{
@@ -743,10 +748,10 @@ function HelpView({ lang, onBack }: { lang: Language; onBack: () => void }) {
         </div>
         <div style={{ flex: 1 }}>
           <p style={{ fontSize: '14px', fontWeight: 400, color: '#F5F0E8', letterSpacing: '-0.01em' }}>
-            {isMr ? 'अ‍ॅपला रेट करा' : 'Rate the App'}
+            {t.rateApp}
           </p>
           <p style={{ fontSize: '12px', color: 'rgba(245,240,232,0.4)', marginTop: 2, fontWeight: 300 }}>
-            {isMr ? 'तुमचा अभिप्राय आम्हाला सुधारतो' : 'Your feedback helps us improve'}
+            {t.rateDesc}
           </p>
         </div>
         <ChevronRight size={14} style={{ color: 'rgba(245,240,232,0.25)', flexShrink: 0 }} />
@@ -779,7 +784,7 @@ function HelpView({ lang, onBack }: { lang: Language; onBack: () => void }) {
         textTransform: 'uppercase', color: 'rgba(245,240,232,0.3)',
         marginBottom: '0.75rem',
       }}>
-        {isMr ? 'वारंवार विचारले जाणारे प्रश्न' : 'Frequently Asked Questions'}
+        {t.faq}
       </p>
       <div style={{ background: '#162B16', border: '1px solid rgba(245,240,232,0.07)', borderRadius: '1.25rem', overflow: 'hidden' }}>
         {faqs.map((faq, i) => (
@@ -835,6 +840,7 @@ function HelpView({ lang, onBack }: { lang: Language; onBack: () => void }) {
 /* ─── MAIN PROFILE SCREEN ─────────────────────────────────── */
 export default function ProfileScreen({ lang, userRole, highlightShopkeeper, onHighlightDone, onBecomeShopkeeper, onSignOut, onExplore, onOpenCalendar, onResetOnboarding }: ProfileScreenProps) {
   const isMr = lang === Language.MARATHI;
+  const t = getTranslations(lang);
   const [profileView, setProfileView] = useState<ProfileView>('main');
   const [prevView, setPrevView]       = useState<ProfileView>('main');
   const [blinkClass, setBlinkClass]   = useState('');
@@ -843,13 +849,13 @@ export default function ProfileScreen({ lang, userRole, highlightShopkeeper, onH
   // Blink the "Become a Shopkeeper" button when directed from the Dukaan gate
   React.useEffect(() => {
     if (!highlightShopkeeper) return;
-    const t = setTimeout(() => {
+    const timer = setTimeout(() => {
       setBlinkClass('shopkeeper-blink');
       onHighlightDone?.();
       // Remove class after animation ends so it can re-trigger if needed
       setTimeout(() => setBlinkClass(''), 1200);
     }, 400); // slight delay lets the screen transition finish first
-    return () => clearTimeout(t);
+    return () => clearTimeout(timer);
   }, [highlightShopkeeper]);
 
   const navigateTo = (view: ProfileView) => {
@@ -880,6 +886,17 @@ export default function ProfileScreen({ lang, userRole, highlightShopkeeper, onH
     }
   };
 
+  const menuLabel = (action: MenuItem['action'], label: string, labelMr: string): string => {
+    const map: Partial<Record<MenuItem['action'], string>> = {
+      settings: t.accountSettings,
+      notifications: t.notifications,
+      kyc: t.kycVerification,
+      help: t.helpSupport,
+      signout: t.signOut,
+    };
+    return map[action] ?? (isMr ? labelMr : label);
+  };
+
   return (
     <div style={{ minHeight: '100vh', overflowY: profileView === 'main' ? 'auto' : 'hidden', WebkitOverflowScrolling: 'touch', position: 'relative' }}>
       <AnimatePresence mode="wait" custom={dir}>
@@ -906,7 +923,7 @@ export default function ProfileScreen({ lang, userRole, highlightShopkeeper, onH
           )}
           {profileView === 'shopRegister' && (
             <div style={{ minHeight: '100vh', background: '#0A1A0A', padding: '1rem 1.25rem 7rem' }}>
-              <SubHeader title={isMr ? 'दुकान नोंदणी' : 'Shop Registration'} onBack={goBack} />
+              <SubHeader title={t.shopRegistration} onBack={goBack} />
               <ShopRegistrationView
                 lang={lang}
                 onSave={(profile) => {
@@ -954,7 +971,7 @@ export default function ProfileScreen({ lang, userRole, highlightShopkeeper, onH
                     >
                       <Sprout size={10} className="text-[#4CAF50]" />
                       <span className="text-[9px] font-medium tracking-[0.12em] uppercase text-[#4CAF50]">
-                        {isMr ? 'प्रीमियम शेतकरी' : 'Premium Farmer'}
+                        {t.premiumFarmer}
                       </span>
                     </div>
                   </div>
@@ -968,7 +985,7 @@ export default function ProfileScreen({ lang, userRole, highlightShopkeeper, onH
                   style={{ background: 'rgba(45,90,27,0.18)', border: '1px solid rgba(74,140,42,0.2)' }}
                 >
                   <div className="text-left">
-                    <p className="text-[15px] font-semibold text-[#F5F0E8]">🏪 {isMr ? 'माझी दुकान' : 'My Dukaan'}</p>
+                    <p className="text-[15px] font-semibold text-[#F5F0E8]">🏪 {t.myDukaan}</p>
                     <p className="text-[12px] text-[rgba(245,240,232,0.45)] mt-0.5">
                       {isMr ? '"माझी यादी" टॅबमधून पोर्टल उघडा' : 'Open portal from the My Listings tab'}
                     </p>
@@ -986,7 +1003,7 @@ export default function ProfileScreen({ lang, userRole, highlightShopkeeper, onH
                 >
                   <span className="text-2xl flex-shrink-0">🏪</span>
                   <div className="text-left">
-                    <p className="text-[14px] font-semibold text-[#F5F0E8]">{isMr ? 'दुकानदार व्हा →' : 'Become a Shopkeeper →'}</p>
+                    <p className="text-[14px] font-semibold text-[#F5F0E8]">{t.becomeShopkeeper}</p>
                     <p className="text-[12px] text-[rgba(245,240,232,0.5)] mt-0.5">{isMr ? 'तुमच्या दुकानातून कृषी निविष्ठा उत्पादने विका' : 'List agri-input products from your shop'}</p>
                   </div>
                 </button>
@@ -995,9 +1012,9 @@ export default function ProfileScreen({ lang, userRole, highlightShopkeeper, onH
               {/* ── Stats strip ──────────────────────────────────────── */}
               <div className="grid grid-cols-3 gap-3 mb-6">
                 {[
-                  { value: '12',   label: isMr ? 'लिस्टिंग' : 'Listings' },
-                  { value: '4.8',  label: isMr ? 'रेटिंग'   : 'Rating'   },
-                  { value: '₹48k', label: isMr ? 'विक्री'   : 'Sales'    },
+                  { value: '12',   label: t.listingsLabel },
+                  { value: '4.8',  label: t.ratingLabel   },
+                  { value: '₹48k', label: t.salesLabel    },
                 ].map(({ value, label }) => (
                   <div
                     key={label}
@@ -1037,7 +1054,7 @@ export default function ProfileScreen({ lang, userRole, highlightShopkeeper, onH
                     <span style={{ display: 'flex', alignItems: 'center', gap: '0.875rem' }}>
                       <Icon size={16} style={{ color, flexShrink: 0 }} strokeWidth={1.75} />
                       <span style={{ fontSize: '14px', fontWeight: 300, color: action === 'signout' ? '#E57373' : '#F5F0E8', letterSpacing: '-0.01em' }}>
-                        {isMr ? labelMr : label}
+                        {menuLabel(action, label, labelMr)}
                       </span>
                     </span>
                     <ChevronRight size={14} style={{ color: 'rgba(245,240,232,0.2)', flexShrink: 0 }} />
@@ -1085,10 +1102,10 @@ export default function ProfileScreen({ lang, userRole, highlightShopkeeper, onH
                 }}
               >
                 <p className="text-[#F5F0E8] font-light text-center mb-1" style={{ fontSize: '18px', letterSpacing: '-0.02em' }}>
-                  {isMr ? 'लॉग आउट करायचे?' : 'Sign out?'}
+                  {t.signOutConfirm}
                 </p>
                 <p className="text-center text-[rgba(245,240,232,0.4)] font-light mb-6" style={{ fontSize: '13px' }}>
-                  {isMr ? 'तुम्हाला पुन्हा लॉग इन करावे लागेल' : 'You will need to log in again'}
+                  {t.signOutDesc}
                 </p>
                 <div className="flex gap-3">
                   <button
@@ -1101,7 +1118,7 @@ export default function ProfileScreen({ lang, userRole, highlightShopkeeper, onH
                       cursor: 'pointer', touchAction: 'manipulation',
                     }}
                   >
-                    {isMr ? 'रद्द करा' : 'Cancel'}
+                    {t.cancel}
                   </button>
                   <button
                     type="button"
@@ -1113,7 +1130,7 @@ export default function ProfileScreen({ lang, userRole, highlightShopkeeper, onH
                       cursor: 'pointer', touchAction: 'manipulation',
                     }}
                   >
-                    {isMr ? 'बाहेर पडा' : 'Sign Out'}
+                    {t.signOut}
                   </button>
                 </div>
               </motion.div>

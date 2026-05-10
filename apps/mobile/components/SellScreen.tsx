@@ -107,15 +107,16 @@ function farmMarkerIcon() {
 function FarmLocationModal({
   onConfirm,
   onClose,
-  isMr,
+  lang,
 }: {
   onConfirm: (label: string, lat: number, lng: number) => void;
   onClose: () => void;
-  isMr: boolean;
+  lang: Language;
 }) {
   const mapDivRef  = useRef<HTMLDivElement>(null);
   const mapRef     = useRef<L.Map | null>(null);
   const markerRef  = useRef<L.Marker | null>(null);
+  const t = getTranslations(lang);
   const [label, setLabel]       = useState('');
   const [lat, setLat]           = useState(19.7515);
   const [lng, setLng]           = useState(75.7139);
@@ -184,10 +185,10 @@ function FarmLocationModal({
         <div style={{ flexShrink: 0, padding: '14px 16px 12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(245,240,232,0.08)' }}>
           <div>
             <p style={{ fontSize: '14px', fontWeight: 500, color: '#F5F0E8', letterSpacing: '-0.01em' }}>
-              {isMr ? 'शेताचे ठिकाण' : 'Farm Location'}
+              {t.farmLocation}
             </p>
             <p style={{ fontSize: '11px', fontWeight: 300, color: 'rgba(245,240,232,0.4)', marginTop: 1 }}>
-              {isMr ? 'नकाशावर टॅप करा किंवा मार्कर ड्रॅग करा' : 'Tap on map or drag the pin'}
+              {t.tapMapDrag}
             </p>
           </div>
           <button
@@ -206,7 +207,7 @@ function FarmLocationModal({
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10 }}>
             <MapPin size={13} style={{ color: geocoding ? 'rgba(245,240,232,0.3)' : '#E8C84A', flexShrink: 0 }} />
             <span style={{ fontSize: '12px', color: geocoding ? 'rgba(245,240,232,0.35)' : '#F5F0E8', fontWeight: 300 }}>
-              {geocoding ? (isMr ? 'ठिकाण शोधत आहे...' : 'Getting address…') : (label || (isMr ? 'नकाशावर टॅप करा' : 'Tap map to select'))}
+              {geocoding ? t.gettingAddress : (label || t.tapMapSelect)}
             </span>
           </div>
           <div style={{ display: 'flex', gap: 8 }}>
@@ -214,13 +215,13 @@ function FarmLocationModal({
               onClick={onClose}
               style={{ flex: 1, height: 42, borderRadius: 12, background: 'rgba(245,240,232,0.06)', border: '1px solid rgba(245,240,232,0.1)', color: 'rgba(245,240,232,0.65)', fontSize: '13px', cursor: 'pointer' }}
             >
-              {isMr ? 'रद्द' : 'Cancel'}
+              {t.cancel}
             </button>
             <button
               onClick={() => label && onConfirm(label, lat, lng)}
               style={{ flex: 2, height: 42, borderRadius: 12, background: label ? '#2E7D32' : 'rgba(45,90,27,0.35)', border: 'none', color: '#F5F0E8', fontSize: '13px', fontWeight: 500, cursor: label ? 'pointer' : 'default', opacity: geocoding ? 0.7 : 1 }}
             >
-              {isMr ? 'ठीक आहे' : 'Confirm Location'}
+              {t.confirmLocation}
             </button>
           </div>
         </div>
@@ -230,7 +231,9 @@ function FarmLocationModal({
 }
 
 // ── Success screen ─────────────────────────────────────────────────────────
-function SuccessView({ isMr }: { isMr: boolean }) {
+function SuccessView({ lang }: { lang: Language }) {
+  const t = getTranslations(lang);
+  const isMr = lang === Language.MARATHI;
   return (
     <div className="flex flex-col items-center justify-center min-h-[80vh] px-8 text-center space-y-8 animate-[fadeUp_0.6s_cubic-bezier(0.16,1,0.3,1)_both]">
       <div
@@ -241,7 +244,7 @@ function SuccessView({ isMr }: { isMr: boolean }) {
       </div>
       <div className="space-y-3">
         <h2 className="font-light text-[#F5F0E8]" style={{ fontSize: '28px', letterSpacing: '-0.02em' }}>
-          {isMr ? 'प्रकाशित झाले!' : 'Published!'}
+          {t.published}
         </h2>
         <p className="font-light text-[rgba(245,240,232,0.45)] leading-relaxed max-w-xs" style={{ fontSize: '14px' }}>
           {isMr
@@ -392,13 +395,13 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
     setTimeout(onDone, 2000);
   };
 
-  if (isSuccess) return <SuccessView isMr={isMr} />;
+  if (isSuccess) return <SuccessView lang={lang} />;
 
   return (
     <>
     {showLocationMap && (
       <FarmLocationModal
-        isMr={isMr}
+        lang={lang}
         onConfirm={(lbl, la, lo) => {
           setLocation(lbl);
           setLocationLat(la);
@@ -416,7 +419,7 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
         <div className="flex items-center justify-between">
           <div>
             <p className="text-[10px] font-medium tracking-[0.2em] uppercase text-[rgba(245,240,232,0.35)] mb-1">
-              {isMr ? 'नवीन लिस्टिंग' : 'New Listing'}
+              {t.newListing}
             </p>
             <h1 className="font-light text-[#F5F0E8]" style={{ fontSize: '26px', letterSpacing: '-0.02em' }}>
               {t.addInventory}
@@ -439,14 +442,14 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
           ))}
         </div>
         <p className="text-[11px] font-light text-[rgba(245,240,232,0.3)]">
-          {isMr ? `पायरी ${step} / 3` : `Step ${step} of 3`}
+          {t.stepOf(step)}
         </p>
       </div>
 
       {/* ── Step 1 — Category ─────────────────────────────────────────── */}
       {step === 1 && (
         <SectionReveal className="space-y-5">
-          <Field label={isMr ? 'श्रेणी निवडा' : 'Choose a Category'}>
+          <Field label={t.chooseCategory}>
             <div className="grid grid-cols-2 gap-3">
               {CATEGORIES.map(cat => (
                 <button
@@ -478,7 +481,7 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
           <input ref={identityInputRef} type="file" accept="image/*,application/pdf" className="hidden" onChange={handleIdentityChange} />
 
           {/* Photos / Videos */}
-          <Field label={isMr ? 'फोटो / व्हिडिओ' : 'Photos / Videos'}>
+          <Field label={t.photosVideos}>
             <div className="flex gap-3 flex-wrap">
               {photos.map((src, i) => (
                 <div key={i} className="relative w-24 h-24 rounded-2xl overflow-hidden flex-shrink-0">
@@ -504,8 +507,8 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
                   </div>
                   <span className="text-[9px] font-medium tracking-[0.1em] uppercase text-center leading-tight">
                     {photos.length === 0
-                      ? (isMr ? 'फोटो / व्हिडिओ' : 'Photo / Video')
-                      : (isMr ? 'आणखी जोडा' : 'Add More')}
+                      ? t.photosVideos
+                      : t.addMore}
                   </span>
                 </button>
               )}
@@ -535,7 +538,7 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
                 style={{ color: '#E8C84A' }}
               />
             </Field>
-            <Field label={isMr ? 'किंमत एकक' : 'Price Unit'}>
+            <Field label={t.priceUnit}>
               <select value={unit} onChange={e => setUnit(e.target.value)} className={selectCls} style={{ background: '#1E3A1E' }}>
                 {PRICE_UNITS.map(u => (
                   <option key={u.value} value={u.value}>{isMr ? u.labelMr : u.label}</option>
@@ -546,7 +549,7 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
 
           {/* Quantity + Quantity Unit */}
           <div className="grid grid-cols-2 gap-4">
-            <Field label={isMr ? 'उपलब्ध साठा प्रमाण' : 'Available Stock Quantity'}>
+            <Field label={t.stockQty}>
               <input
                 type="number"
                 placeholder={isMr ? 'उदा. 500' : 'e.g. 500'}
@@ -555,7 +558,7 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
                 className={inputCls}
               />
             </Field>
-            <Field label={isMr ? 'साठा एकक' : 'Stock Unit'}>
+            <Field label={t.stockUnit}>
               <select value={qtyUnit} onChange={e => setQtyUnit(e.target.value)} className={selectCls} style={{ background: '#1E3A1E' }}>
                 {QTY_UNITS.map(u => (
                   <option key={u.value} value={u.value}>{isMr ? u.labelMr : u.label}</option>
@@ -565,7 +568,7 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
           </div>
 
           {/* Product Location picker */}
-          <Field label={isMr ? 'उत्पादन ठिकाण' : 'Product Location'}>
+          <Field label={t.productLocation}>
             <button
               onClick={() => setShowLocationMap(true)}
               className="w-full flex items-center gap-3 px-5 py-4 rounded-xl border border-[rgba(245,240,232,0.1)] active:border-[rgba(212,196,160,0.35)] transition-all text-left"
@@ -573,7 +576,7 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
             >
               <MapPin size={16} className={location ? 'text-[#4CAF50]' : 'text-[rgba(245,240,232,0.25)]'} />
               <span className={`flex-1 font-light text-[14px] ${location ? 'text-[#F5F0E8]' : 'text-[rgba(245,240,232,0.25)]'}`}>
-                {location || (isMr ? 'नकाशावर टॅप करा' : 'Pick location on map')}
+                {location || t.pickLocation}
               </span>
               {location && (
                 <button
@@ -587,7 +590,7 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
           </Field>
 
           {/* Mobile Number */}
-          <Field label={isMr ? 'मोबाईल नंबर' : 'Mobile Number'}>
+          <Field label={t.mobileNumber}>
             <input
               type="tel"
               placeholder={isMr ? 'उदा. 9876543210' : 'e.g. 9876543210'}
@@ -598,7 +601,7 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
           </Field>
 
           <PillButton variant="light" fullWidth onClick={() => setStep(3)}>
-            {isMr ? 'पुढे' : 'Next Step'}
+            {t.nextStep}
           </PillButton>
         </SectionReveal>
       )}
@@ -612,7 +615,7 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
             <div className="flex items-center gap-2 mb-1">
               <span className="w-3 h-px bg-[#E8C84A]" />
               <p className="text-[10px] font-medium tracking-[0.18em] uppercase text-[rgba(245,240,232,0.35)]">
-                {isMr ? 'विश्वास बॅज' : 'Trust Badge'}
+                {t.trustBadge}
               </p>
             </div>
             {identityUploaded ? (
@@ -623,10 +626,10 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
                 </div>
                 <div>
                   <p className="font-medium text-[#4CAF50]" style={{ fontSize: '13px' }}>
-                    {isMr ? 'ओळखपत्र अपलोड झाले' : 'Identity uploaded'}
+                    {t.identityUploaded}
                   </p>
                   <p className="font-light text-[rgba(245,240,232,0.35)]" style={{ fontSize: '11px' }}>
-                    {isMr ? 'तुम्हाला Verified Seller बॅज मिळेल' : 'Verified Seller badge will be applied'}
+                    {t.verifiedBadgeWill}
                   </p>
                 </div>
               </div>
@@ -638,17 +641,17 @@ export default function SellScreen({ lang, onDone }: SellScreenProps) {
                     : 'Upload your ID photo to earn the Verified Seller badge and build buyer trust.'}
                 </p>
                 <PillButton variant="outline" size="sm" onClick={() => identityInputRef.current?.click()}>
-                  {isMr ? 'ओळखपत्र अपलोड करा' : 'Upload Identity'}
+                  {t.uploadIdentity}
                 </PillButton>
               </>
             )}
           </div>
 
           {/* Description */}
-          <Field label={isMr ? 'वर्णन' : 'Description'}>
+          <Field label={t.description}>
             <textarea
               rows={3}
-              placeholder={isMr ? 'गुणवत्ता सांगा...' : 'Tell buyers about quality and source...'}
+              placeholder={t.descriptionHint}
               value={description}
               onChange={e => setDescription(e.target.value)}
               className={inputCls + ' resize-none'}

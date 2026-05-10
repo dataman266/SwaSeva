@@ -1,12 +1,12 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { MapPin, ArrowRight, Heart, Phone, MessageSquare } from 'lucide-react';
-import { Product, Seller, MappedShopProduct } from '../../types.ts';
+import { Product, Seller, MappedShopProduct, Language } from '../../types.ts';
 
 interface ProductCardProps {
   product: Product;
   seller?: Seller;
   index?: number;
-  lang?: 'en' | 'mr';
+  lang?: Language;
   isSelfListing?: boolean;
   onClick: () => void;
   onSelect?: (e: React.MouseEvent) => void;
@@ -25,7 +25,7 @@ export default function ProductCard({
   product,
   seller,
   index = 0,
-  lang = 'en',
+  lang = Language.ENGLISH,
   isSelfListing = false,
   onClick,
   onSelect,
@@ -36,7 +36,7 @@ export default function ProductCard({
 }: ProductCardProps) {
   const [visible, setVisible] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-  const isMr = lang === 'mr';
+  const isMr = lang === Language.MARATHI;
   const isDukaan = !!(product as MappedShopProduct).isDukaanItem;
   const dukaanProduct = isDukaan ? (product as MappedShopProduct) : null;
 
@@ -90,7 +90,7 @@ export default function ProductCard({
             {isSelfListing && (
               <span className="inline-block text-[8px] font-semibold tracking-[0.12em] uppercase px-2.5 py-0.5 rounded-full"
                 style={{ background: 'rgba(45,90,27,0.85)', border: '1px solid rgba(74,140,42,0.5)', color: '#7EC95A', backdropFilter: 'blur(8px)' }}>
-                {lang === 'mr' ? '✦ स्वतःची लिस्टिंग' : '✦ Self Listing'}
+                {isMr ? '✦ स्वतःची लिस्टिंग' : '✦ Self Listing'}
               </span>
             )}
           </div>

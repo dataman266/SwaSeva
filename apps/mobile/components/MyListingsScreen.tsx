@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Language, UserRole } from '../types.ts';
+import { getTranslations } from '../constants.tsx';
 import {
   Plus, MoreVertical, Eye, Edit2, Trash2, TrendingUp,
   Package, CheckCircle, Clock, XCircle, Sprout, RotateCcw,
@@ -154,6 +155,7 @@ interface MyListingsScreenProps {
 
 export default function MyListingsScreen({ lang, onCreateNew, userRole, onOpenDukaan, onNavigateToProfile }: MyListingsScreenProps) {
   const isMr = lang === Language.MARATHI;
+  const t = getTranslations(lang);
   const [filter, setFilter] = useState<ListingStatus | 'all'>('all');
   const [menuOpen, setMenuOpen] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
@@ -209,11 +211,11 @@ export default function MyListingsScreen({ lang, onCreateNew, userRole, onOpenDu
     if (undoTimer.current) clearTimeout(undoTimer.current);
   }, [undoItem]);
 
-  const filters: Array<{ key: ListingStatus | 'all'; label: string; labelMr: string }> = [
-    { key: 'all',     label: 'All',     labelMr: 'सर्व'      },
-    { key: 'active',  label: 'Active',  labelMr: 'सक्रिय'    },
-    { key: 'pending', label: 'Pending', labelMr: 'प्रलंबित'   },
-    { key: 'sold',    label: 'Sold',    labelMr: 'विकले'     },
+  const filters: Array<{ key: ListingStatus | 'all'; label: string }> = [
+    { key: 'all',     label: t.all    },
+    { key: 'active',  label: t.active  },
+    { key: 'pending', label: 'Pending' },
+    { key: 'sold',    label: t.sold    },
   ];
 
   const visible = filter === 'all' ? listings : listings.filter(l => l.status === filter);
@@ -237,10 +239,10 @@ export default function MyListingsScreen({ lang, onCreateNew, userRole, onOpenDu
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
         <div>
           <h1 style={{ fontSize: '22px', fontWeight: 400, color: '#F5F0E8', letterSpacing: '-0.02em' }}>
-            {isMr ? 'माझ्या लिस्टिंग' : 'My Listings'}
+            {t.myShop}
           </h1>
           <p style={{ fontSize: '12px', color: 'rgba(245,240,232,0.4)', marginTop: 2, fontWeight: 300 }}>
-            {isMr ? `${activeCount} सक्रिय लिस्टिंग` : `${activeCount} active listing${activeCount !== 1 ? 's' : ''}`}
+            {t.activeListings(activeCount)}
           </p>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -277,7 +279,7 @@ export default function MyListingsScreen({ lang, onCreateNew, userRole, onOpenDu
             }}
           >
             <Plus size={14} />
-            {isMr ? 'नवीन' : 'New'}
+            {t.newBtn}
           </button>
         </div>
       </div>
@@ -285,9 +287,9 @@ export default function MyListingsScreen({ lang, onCreateNew, userRole, onOpenDu
       {/* ── Stats strip ───────────────────────────────────────────── */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.75rem', marginBottom: '1.25rem' }}>
         {[
-          { value: activeCount, label: isMr ? 'सक्रिय' : 'Active', icon: Sprout, color: '#4CAF50' },
-          { value: totalViews,  label: isMr ? 'व्ह्यूज' : 'Views',  icon: Eye,    color: '#7EB3FF' },
-          { value: totalInquiries, label: isMr ? 'चौकशी' : 'Leads', icon: TrendingUp, color: '#E8C84A' },
+          { value: activeCount, label: t.active, icon: Sprout, color: '#4CAF50' },
+          { value: totalViews,  label: t.views,  icon: Eye,    color: '#7EB3FF' },
+          { value: totalInquiries, label: t.leads, icon: TrendingUp, color: '#E8C84A' },
         ].map(({ value, label, icon: Icon, color }) => (
           <div key={label} style={{
             padding: '0.875rem', borderRadius: '1rem', textAlign: 'center',
@@ -325,10 +327,10 @@ export default function MyListingsScreen({ lang, onCreateNew, userRole, onOpenDu
           </div>
           <div style={{ textAlign: 'left' }}>
             <p style={{ fontSize: '14px', fontWeight: 500, color: '#E8C84A', marginBottom: 2, letterSpacing: '-0.01em' }}>
-              {isMr ? 'दुकान पोर्टल' : 'Dukaan Portal'}
+              {t.dukaanPortal}
             </p>
             <p style={{ fontSize: '11px', fontWeight: 300, color: 'rgba(245,240,232,0.42)', lineHeight: 1.4 }}>
-              {isMr ? 'ऑर्डर, इन्व्हेंटरी आणि विक्री व्यवस्थापित करा' : 'Manage orders, inventory & sales'}
+              {t.manageShop}
             </p>
           </div>
         </div>
@@ -337,7 +339,7 @@ export default function MyListingsScreen({ lang, onCreateNew, userRole, onOpenDu
 
       {/* ── Filter pills ──────────────────────────────────────────── */}
       <div style={{ display: 'flex', gap: '0.5rem', overflowX: 'auto', marginBottom: '1.25rem', paddingBottom: '0.25rem' }}>
-        {filters.map(({ key, label, labelMr }) => (
+        {filters.map(({ key, label }) => (
           <button
             key={key}
             type="button"
@@ -353,7 +355,7 @@ export default function MyListingsScreen({ lang, onCreateNew, userRole, onOpenDu
               transition: 'all 0.15s',
             }}
           >
-            {isMr ? labelMr : label}
+            {label}
           </button>
         ))}
       </div>
@@ -367,7 +369,7 @@ export default function MyListingsScreen({ lang, onCreateNew, userRole, onOpenDu
         }}>
           <Package size={32} style={{ color: 'rgba(245,240,232,0.15)', margin: '0 auto 1rem' }} />
           <p style={{ fontSize: '15px', color: 'rgba(245,240,232,0.5)', fontWeight: 300 }}>
-            {isMr ? 'या श्रेणीत लिस्टिंग नाही' : 'No listings in this category'}
+            {t.noListings}
           </p>
         </div>
       ) : (
@@ -409,7 +411,7 @@ export default function MyListingsScreen({ lang, onCreateNew, userRole, onOpenDu
                           display: 'flex', alignItems: 'center', justifyContent: 'center',
                         }}>
                           <span style={{ fontSize: '10px', fontWeight: 600, color: '#E8C84A', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
-                            {isMr ? 'विकले' : 'Sold'}
+                            {t.sold}
                           </span>
                         </div>
                       )}
@@ -448,7 +450,7 @@ export default function MyListingsScreen({ lang, onCreateNew, userRole, onOpenDu
                           ₹{listing.price}
                         </span>
                         <span style={{ fontSize: '11px', color: 'rgba(245,240,232,0.35)', fontWeight: 300 }}>
-                          /{listing.unit} · {listing.quantity}{listing.unit} {isMr ? 'उपलब्ध' : 'avail.'}
+                          /{listing.unit} · {listing.quantity}{listing.unit} {t.avail}
                         </span>
                       </div>
 
@@ -461,7 +463,7 @@ export default function MyListingsScreen({ lang, onCreateNew, userRole, onOpenDu
                         }}>
                           <StatusIcon size={10} style={{ color: s.color }} />
                           <span style={{ fontSize: '10px', fontWeight: 500, color: s.color }}>
-                            {isMr ? s.labelMr : s.label}
+                            {listing.status === 'active' ? t.active : listing.status === 'sold' ? t.sold : s.label}
                             {listing.daysLeft && listing.status === 'active' ? ` · ${listing.daysLeft}d` : ''}
                           </span>
                         </div>
@@ -496,9 +498,9 @@ export default function MyListingsScreen({ lang, onCreateNew, userRole, onOpenDu
                         }}
                       >
                         {[
-                          { icon: Edit2,  label: isMr ? 'संपादित करा' : 'Edit Listing',  color: '#F5F0E8',  action: 'edit'    },
-                          { icon: Eye,    label: isMr ? 'पूर्वावलोकन' : 'Preview',        color: '#F5F0E8',  action: 'preview' },
-                          { icon: Trash2, label: isMr ? 'हटवा' : 'Delete',               color: '#E57373',  action: 'delete'  },
+                          { icon: Edit2,  label: t.editListing,  color: '#F5F0E8',  action: 'edit'    },
+                          { icon: Eye,    label: t.preview,       color: '#F5F0E8',  action: 'preview' },
+                          { icon: Trash2, label: t.delete,        color: '#E57373',  action: 'delete'  },
                         ].map(({ icon: Icon, label, color, action }, mi) => (
                           <button
                             key={label}
@@ -565,7 +567,7 @@ export default function MyListingsScreen({ lang, onCreateNew, userRole, onOpenDu
                 <AlertTriangle size={22} style={{ color: '#E57373' }} />
               </div>
               <p style={{ fontSize: '16px', fontWeight: 400, color: '#F5F0E8', marginBottom: '0.5rem', letterSpacing: '-0.01em' }}>
-                {isMr ? 'लिस्टिंग हटवायची का?' : 'Delete this listing?'}
+                {t.deleteConfirm}
               </p>
               <p style={{ fontSize: '13px', fontWeight: 300, color: 'rgba(245,240,232,0.45)', marginBottom: '1.5rem', lineHeight: 1.5 }}>
                 {isMr
@@ -583,7 +585,7 @@ export default function MyListingsScreen({ lang, onCreateNew, userRole, onOpenDu
                     touchAction: 'manipulation',
                   }}
                 >
-                  {isMr ? 'रद्द करा' : 'Cancel'}
+                  {t.cancel}
                 </button>
                 <button
                   type="button"
@@ -595,7 +597,7 @@ export default function MyListingsScreen({ lang, onCreateNew, userRole, onOpenDu
                     touchAction: 'manipulation',
                   }}
                 >
-                  {isMr ? 'हटवा' : 'Delete'}
+                  {t.delete}
                 </button>
               </div>
             </motion.div>
@@ -621,7 +623,7 @@ export default function MyListingsScreen({ lang, onCreateNew, userRole, onOpenDu
             }}
           >
             <span style={{ fontSize: '13px', fontWeight: 300, color: 'rgba(245,240,232,0.7)' }}>
-              {isMr ? 'लिस्टिंग हटवली' : 'Listing deleted'}
+              {t.listingDeleted}
             </span>
             <button
               type="button"
@@ -633,7 +635,7 @@ export default function MyListingsScreen({ lang, onCreateNew, userRole, onOpenDu
                 touchAction: 'manipulation',
               }}
             >
-              {isMr ? 'पूर्ववत करा' : 'Undo'}
+              {t.undo}
             </button>
           </motion.div>
         )}
@@ -677,7 +679,7 @@ export default function MyListingsScreen({ lang, onCreateNew, userRole, onOpenDu
               <Store size={26} style={{ color: '#E8C84A' }} />
             </div>
             <p style={{ fontSize: '16px', fontWeight: 400, color: '#F5F0E8', marginBottom: '0.625rem', letterSpacing: '-0.01em', lineHeight: 1.3 }}>
-              {isMr ? 'दुकानदार म्हणून नोंदणी करा' : 'Become a Dukandaar'}
+              {t.becomeDukandaar}
             </p>
             <p style={{ fontSize: '13px', fontWeight: 300, color: 'rgba(245,240,232,0.5)', lineHeight: 1.65, marginBottom: '1.5rem' }}>
               {isMr
@@ -698,7 +700,7 @@ export default function MyListingsScreen({ lang, onCreateNew, userRole, onOpenDu
                 cursor: 'pointer', touchAction: 'manipulation',
               }}
             >
-              {isMr ? 'दुकानदार व्हा →' : 'Become a Shopkeeper →'}
+              {t.becomeShopkeeper}
             </button>
           </motion.div>
         </motion.div>
@@ -764,9 +766,9 @@ export default function MyListingsScreen({ lang, onCreateNew, userRole, onOpenDu
             {/* Stats strip */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.625rem' }}>
               {[
-                { label: isMr ? 'मात्रा' : 'Available', value: `${selectedListing.quantity} ${selectedListing.unit}` },
-                { label: isMr ? 'व्ह्यूज' : 'Views', value: `${selectedListing.views}` },
-                { label: isMr ? 'चौकशी' : 'Leads', value: `${selectedListing.inquiries}` },
+                { label: t.availableQty, value: `${selectedListing.quantity} ${selectedListing.unit}` },
+                { label: t.views, value: `${selectedListing.views}` },
+                { label: t.leads, value: `${selectedListing.inquiries}` },
               ].map(({ label, value }) => (
                 <div key={label} style={{
                   padding: '0.875rem 0.75rem', borderRadius: '1rem', textAlign: 'center',
@@ -789,7 +791,7 @@ export default function MyListingsScreen({ lang, onCreateNew, userRole, onOpenDu
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
                   <FileText size={14} style={{ color: '#E8C84A' }} />
                   <p style={{ fontSize: '10px', fontWeight: 500, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(245,240,232,0.35)' }}>
-                    {isMr ? 'वर्णन' : 'Description'}
+                    {t.description}
                   </p>
                 </div>
                 <p style={{ fontSize: '14px', fontWeight: 300, color: 'rgba(245,240,232,0.7)', lineHeight: 1.65 }}>
@@ -814,7 +816,7 @@ export default function MyListingsScreen({ lang, onCreateNew, userRole, onOpenDu
                 </div>
                 <div>
                   <p style={{ fontSize: '10px', fontWeight: 500, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(245,240,232,0.35)', marginBottom: 3 }}>
-                    {isMr ? 'ठिकाण' : 'Farm Location'}
+                    {t.farmLocation}
                   </p>
                   <p style={{ fontSize: '14px', fontWeight: 400, color: '#F5F0E8' }}>
                     {isMr ? (selectedListing.locationMr || selectedListing.location) : selectedListing.location}
@@ -832,7 +834,7 @@ export default function MyListingsScreen({ lang, onCreateNew, userRole, onOpenDu
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.875rem' }}>
                   <Users size={14} style={{ color: '#E8C84A' }} />
                   <p style={{ fontSize: '10px', fontWeight: 500, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(245,240,232,0.35)' }}>
-                    {isMr ? 'खरेदीची विचारणा' : 'Buyer Enquiries'}
+                    {t.buyerEnquiries}
                   </p>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
@@ -853,7 +855,7 @@ export default function MyListingsScreen({ lang, onCreateNew, userRole, onOpenDu
                         background: 'rgba(212,196,160,0.1)', border: '1px solid rgba(212,196,160,0.2)',
                       }}>
                         <span style={{ fontSize: '10px', fontWeight: 500, color: '#E8C84A' }}>
-                          {isMr ? 'उत्तर द्या' : 'Reply'}
+                          {t.reply}
                         </span>
                       </div>
                     </div>
@@ -876,7 +878,7 @@ export default function MyListingsScreen({ lang, onCreateNew, userRole, onOpenDu
                 }}
               >
                 <Edit2 size={14} />
-                {isMr ? 'संपादित करा' : 'Edit'}
+                {t.edit}
               </button>
               <button
                 type="button"
@@ -890,7 +892,7 @@ export default function MyListingsScreen({ lang, onCreateNew, userRole, onOpenDu
                 }}
               >
                 <Trash2 size={14} />
-                {isMr ? 'हटवा' : 'Delete'}
+                {t.delete}
               </button>
             </div>
           </div>

@@ -307,7 +307,7 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
           >
             <PlusCircle size={22} style={{ color: '#F5F0E8', flexShrink: 0 }} />
             <span style={{ fontSize: '18px', fontWeight: 700, color: '#F5F0E8', letterSpacing: '-0.01em' }}>
-              {isMr ? 'तुमचा माल विका' : 'Sell Your Stock'}
+              {t.addInventory}
             </span>
           </button>
         </div>
@@ -339,10 +339,10 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
           </div>
           <div style={{ textAlign: 'left' }}>
             <p style={{ fontSize: '15px', fontWeight: 600, color: '#F5F0E8', letterSpacing: '-0.01em' }}>
-              {isMr ? 'बातम्या आणि आमचा प्रभाव' : 'News & Our Impact'}
+              {t.newsImpact}
             </p>
             <p style={{ fontSize: '12px', color: 'rgba(245,240,232,0.55)', marginTop: 2, fontWeight: 400 }}>
-              {isMr ? 'शेती बातम्या, MSP अपडेट आणि अधिक' : 'Farm news, MSP updates & more'}
+              {t.newsDesc}
             </p>
           </div>
         </div>
@@ -355,7 +355,7 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
       {/* ── 3b. NEARBY DUKAANDAARS SHELF ─────────────────────────── */}
       <div className="pt-5 pb-1">
         <div className="flex items-center justify-between px-5 mb-3">
-          <h2 className="text-[16px] font-semibold text-[#F5F0E8]">🏪 {isMr ? 'जवळचे दुकानदार' : 'Nearby Dukaandaars'}</h2>
+          <h2 className="text-[16px] font-semibold text-[#F5F0E8]">🏪 {t.nearbyShops}</h2>
           <button
             onClick={() => { setActiveCategory('agri-input'); haptic.light(); }}
             style={{
@@ -364,7 +364,7 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
               touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent',
             }}
           >
-            {isMr ? 'सर्व पहा →' : 'See all →'}
+            {t.seeAll}
           </button>
         </div>
         <div className="flex gap-3 overflow-x-auto px-5 pb-2" style={{ scrollbarWidth: 'none' }}>
@@ -399,14 +399,14 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
         <SectionReveal className="flex items-baseline justify-between mb-4">
           <div>
             <p className="text-[13px] font-semibold tracking-[0.1em] uppercase text-[rgba(245,240,232,0.75)] mb-1">
-              {isMr ? 'ताजे उत्पादन' : 'Fresh Listings'}
+              {t.freshListings}
             </p>
             <h2 className="font-semibold text-[#F5F0E8]" style={{ fontSize: '24px', letterSpacing: '-0.02em' }}>
               {t.nearYou}
             </h2>
           </div>
           <span className="text-[9px] font-medium tracking-[0.18em] uppercase text-[#E8C84A] bg-[rgba(212,196,160,0.1)] border border-[rgba(212,196,160,0.2)] px-3 py-1 rounded-full">
-            {isLoading ? (isMr ? 'लोड...' : 'Loading…') : 'LIVE'}
+            {isLoading ? t.loading : 'LIVE'}
           </span>
         </SectionReveal>
 
@@ -435,7 +435,7 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
           }}>
             {locationActive
               ? `${isMr ? locationFilter.regionLabelMr : locationFilter.regionLabel} · ${locationFilter.radius} km`
-              : `${isMr ? 'सर्व भारत' : 'All India'} · ${locationFilter.radius} km`}
+              : `${t.allIndia} · ${locationFilter.radius} km`}
           </span>
           {locationActive && (
             <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: '#4CAF50' }} />
@@ -489,7 +489,7 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
         <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-5">
           <CategoryTile
             icon="🛒"
-            label={isMr ? 'सर्व' : 'All'}
+            label={t.all}
             gradient="linear-gradient(145deg,#1A3A1A,#2D5A1B)"
             active={activeCategory === 'all'}
             onClick={() => setActiveCategory('all')}
@@ -506,7 +506,7 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
           ))}
           <CategoryTile
             icon="🏪"
-            label={isMr ? 'कृषी निविष्ठा' : 'Agri Inputs'}
+            label={t.agriInputs}
             gradient="linear-gradient(145deg,#1A2D3A,#1A3D5A)"
             active={activeCategory === 'agri-input'}
             onClick={() => setActiveCategory('agri-input')}
@@ -520,7 +520,7 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
           ) : filtered.length === 0 ? (
             <div className="text-center py-16">
               <p className="text-[rgba(245,240,232,0.3)] font-light text-sm">
-                {isMr ? 'कोणतेही उत्पादन सापडले नाही' : 'No products found'}
+                {t.noProducts}
               </p>
             </div>
           ) : (
@@ -534,7 +534,7 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
                     product={product}
                     seller={seller}
                     index={idx}
-                    lang={isMr ? 'mr' : 'en'}
+                    lang={lang}
                     isSelfListing={userListingIds.has(product.id)}
                     onClick={() => onViewDetails(product)}
                     onSelect={e => toggleSelect(e, product.id)}
@@ -555,7 +555,7 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
                       fontSize: '9px', fontWeight: 500, letterSpacing: '0.2em',
                       textTransform: 'uppercase', color: 'rgba(245,240,232,0.22)',
                     }}>
-                      {isMr ? 'इतर ठिकाणांहून' : 'From other areas'}
+                      {t.fromOtherAreas}
                     </span>
                     <div className="flex-1 h-px" style={{ background: 'rgba(245,240,232,0.06)' }} />
                   </div>
@@ -567,7 +567,7 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
                         product={product}
                         seller={seller}
                         index={localProducts.length + idx}
-                        lang={isMr ? 'mr' : 'en'}
+                        lang={lang}
                         isSelfListing={userListingIds.has(product.id)}
                         onClick={() => onViewDetails(product)}
                         onSelect={e => toggleSelect(e, product.id)}
@@ -588,7 +588,7 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
                   <p style={{ fontSize: '13px', color: 'rgba(245,240,232,0.3)', fontWeight: 300 }}>
                     {isMr
                       ? `${locationFilter.regionLabelMr} मध्ये कोणतेही लिस्टिंग नाही`
-                      : `No listings near ${locationFilter.regionLabel}`}
+                      : `${t.noListings} ${locationFilter.regionLabel}`}
                   </p>
                 </div>
               )}
@@ -606,7 +606,7 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
           >
             <Scale size={16} className="text-[#E8C84A]" />
             <span style={{ letterSpacing: '0.06em', fontSize: '12px' }}>
-              {isMr ? `${selectedIds.length} तुलना करा` : `Compare ${selectedIds.length}`}
+              {t.compareCount(selectedIds.length)}
             </span>
           </button>
         </div>
@@ -643,7 +643,7 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
             <div className="w-10 h-1 rounded-full bg-[rgba(245,240,232,0.15)] mx-auto mb-5" />
             <div className="flex items-center justify-between mb-6">
               <h3 className="font-light text-[#F5F0E8]" style={{ fontSize: '18px', letterSpacing: '-0.01em' }}>
-                {isMr ? 'फिल्टर करा' : 'Filter & Sort'}
+                {t.filterSort}
               </h3>
               <button
                 onClick={() => setShowFilters(false)}
@@ -656,13 +656,13 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
 
             {/* Sort */}
             <p className="text-[10px] font-medium tracking-[0.18em] uppercase text-[rgba(245,240,232,0.35)] mb-3">
-              {isMr ? 'क्रमवारी' : 'Sort By'}
+              {t.sortBy}
             </p>
             <div className="flex gap-2 mb-6 flex-wrap">
               {([
-                { key: 'newest',     label: isMr ? 'नवीन' : 'Newest' },
-                { key: 'price_asc',  label: isMr ? 'कमी किंमत' : 'Price: Low' },
-                { key: 'price_desc', label: isMr ? 'जास्त किंमत' : 'Price: High' },
+                { key: 'newest',     label: t.newest },
+                { key: 'price_asc',  label: t.priceLow },
+                { key: 'price_desc', label: t.priceHigh },
               ] as const).map(opt => (
                 <button
                   key={opt.key}
@@ -682,12 +682,12 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
 
             {/* Price range */}
             <p className="text-[10px] font-medium tracking-[0.18em] uppercase text-[rgba(245,240,232,0.35)] mb-3">
-              {isMr ? 'किंमत मर्यादा (₹)' : 'Price Range (₹)'}
+              {t.priceRange}
             </p>
             <div className="flex items-center gap-3 mb-8">
               <input
                 type="number"
-                placeholder={isMr ? 'किमान' : 'Min'}
+                placeholder={t.min}
                 value={priceMin}
                 onChange={e => setPriceMin(e.target.value)}
                 className="flex-1 px-4 py-3 rounded-xl font-light text-[#F5F0E8] text-[14px] placeholder:text-[rgba(245,240,232,0.2)] border border-[rgba(245,240,232,0.1)] focus:border-[rgba(212,196,160,0.35)] bg-[rgba(255,255,255,0.03)] outline-none"
@@ -695,7 +695,7 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
               <span className="text-[rgba(245,240,232,0.25)] text-sm">—</span>
               <input
                 type="number"
-                placeholder={isMr ? 'कमाल' : 'Max'}
+                placeholder={t.max}
                 value={priceMax}
                 onChange={e => setPriceMax(e.target.value)}
                 className="flex-1 px-4 py-3 rounded-xl font-light text-[#F5F0E8] text-[14px] placeholder:text-[rgba(245,240,232,0.2)] border border-[rgba(245,240,232,0.1)] focus:border-[rgba(212,196,160,0.35)] bg-[rgba(255,255,255,0.03)] outline-none"
@@ -709,14 +709,14 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
                 className="flex-1 py-3 rounded-full border border-[rgba(245,240,232,0.12)] text-[rgba(245,240,232,0.5)] text-[13px] font-medium"
                 style={{ touchAction: 'manipulation' }}
               >
-                {isMr ? 'रीसेट' : 'Reset'}
+                {t.reset}
               </button>
               <button
                 onClick={() => setShowFilters(false)}
                 className="flex-1 py-3 rounded-full text-[#F5F0E8] text-[13px] font-medium"
                 style={{ background: '#2E7D32', touchAction: 'manipulation' }}
               >
-                {isMr ? 'लागू करा' : 'Apply'}
+                {t.apply}
               </button>
             </div>
           </div>

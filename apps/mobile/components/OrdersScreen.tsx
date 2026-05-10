@@ -185,10 +185,12 @@ const MOCK_SOLD: OrderEntry[] = [
 
 // ── Order Detail Panel ────────────────────────────────────────────────────────
 function OrderDetailPanel({
-  order, tab, isMr, onClose,
+  order, tab, lang, onClose,
 }: {
-  order: OrderEntry; tab: OrderTab; isMr: boolean; onClose: () => void;
+  order: OrderEntry; tab: OrderTab; lang: Language; onClose: () => void;
 }) {
+  const t = getTranslations(lang);
+  const isMr = lang === Language.MARATHI;
   const currentStep = STATUS_STEP[order.status];
 
   const rupeeFormat = (n: number) =>
@@ -258,7 +260,7 @@ function OrderDetailPanel({
         }}>
           <div>
             <p style={{ fontSize: '10px', fontWeight: 500, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(245,240,232,0.35)', marginBottom: 4 }}>
-              {isMr ? 'एकूण रक्कम' : 'Total Amount'}
+              {t.totalAmount}
             </p>
             <p style={{ fontSize: '28px', fontWeight: 300, color: '#F5F0E8', letterSpacing: '-0.03em' }}>
               {rupeeFormat(order.amount)}
@@ -282,7 +284,7 @@ function OrderDetailPanel({
           background: '#162B16', border: '1px solid rgba(245,240,232,0.07)',
         }}>
           <p style={{ fontSize: '10px', fontWeight: 500, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(245,240,232,0.35)', marginBottom: '1rem' }}>
-            {isMr ? 'ट्रॅकिंग' : 'Tracking'}
+            {t.tracking}
           </p>
           <div style={{ position: 'relative' }}>
             <div style={{ position: 'absolute', left: 9, top: 10, bottom: 10, width: 1, background: 'rgba(245,240,232,0.07)' }} />
@@ -333,7 +335,7 @@ function OrderDetailPanel({
           background: '#162B16', border: '1px solid rgba(245,240,232,0.07)',
         }}>
           <p style={{ fontSize: '10px', fontWeight: 500, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(245,240,232,0.35)', marginBottom: '0.875rem' }}>
-            {isMr ? (tab === 'purchased' ? 'विक्रेता' : 'खरेदीदार') : (tab === 'purchased' ? 'Seller' : 'Buyer')}
+            {tab === 'purchased' ? t.sellerLabel : t.buyerLabel}
           </p>
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.875rem', marginBottom: '1rem' }}>
             <div style={{
@@ -400,12 +402,12 @@ function OrderDetailPanel({
           background: '#162B16', border: '1px solid rgba(245,240,232,0.07)',
         }}>
           <p style={{ fontSize: '10px', fontWeight: 500, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(245,240,232,0.35)', marginBottom: '0.875rem' }}>
-            {isMr ? 'किंमत तपशील' : 'Price Breakdown'}
+            {t.priceBreakdown}
           </p>
           {[
-            { label: isMr ? 'वस्तूची किंमत' : 'Item Total', value: `₹${subtotal.toLocaleString('en-IN')}` },
-            { label: isMr ? 'वाहतूक खर्च' : 'Transport', value: `₹${transport.toLocaleString('en-IN')}` },
-            { label: isMr ? 'पेमेंट पद्धत' : 'Payment', value: order.paymentMethod },
+            { label: t.itemTotal, value: `₹${subtotal.toLocaleString('en-IN')}` },
+            { label: t.transportCost, value: `₹${transport.toLocaleString('en-IN')}` },
+            { label: t.paymentLabel, value: order.paymentMethod },
           ].map(({ label, value }, i, arr) => (
             <div key={label} style={{
               display: 'flex', justifyContent: 'space-between', alignItems: 'center',
@@ -422,7 +424,7 @@ function OrderDetailPanel({
             marginTop: '0.75rem', paddingTop: '0.75rem',
             borderTop: '1px solid rgba(245,240,232,0.1)',
           }}>
-            <span style={{ fontSize: '14px', fontWeight: 500, color: '#F5F0E8' }}>{isMr ? 'एकूण' : 'Grand Total'}</span>
+            <span style={{ fontSize: '14px', fontWeight: 500, color: '#F5F0E8' }}>{t.grandTotal}</span>
             <span style={{ fontSize: '18px', fontWeight: 300, color: '#E8C84A', letterSpacing: '-0.02em' }}>
               ₹{order.amount.toLocaleString('en-IN')}
             </span>
@@ -448,7 +450,7 @@ function OrderDetailPanel({
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', opacity: 0.2, paddingTop: '0.5rem' }}>
           <ShieldCheck size={11} />
           <span style={{ fontSize: '9px', fontWeight: 500, letterSpacing: '0.2em', textTransform: 'uppercase' }}>
-            {isMr ? 'Swaseva संरक्षित' : 'Swaseva Protected'}
+            {t.swaSevaProtected}
           </span>
         </div>
       </div>
@@ -458,10 +460,11 @@ function OrderDetailPanel({
 
 // ── Order card ────────────────────────────────────────────────────────────────
 function OrderCard({
-  order, isMr, index, onClick,
+  order, lang, index, onClick,
 }: {
-  order: OrderEntry; isMr: boolean; index: number; onClick: () => void;
+  order: OrderEntry; lang: Language; index: number; onClick: () => void;
 }) {
+  const isMr = lang === Language.MARATHI;
   const meta       = STATUS_META[order.status];
   const StatusIcon = meta.icon;
 
@@ -524,8 +527,7 @@ function OrderCard({
 
 // ── Main screen ───────────────────────────────────────────────────────────────
 export default function OrdersScreen({ lang }: { lang: Language }) {
-  const t    = getTranslations(lang);
-  const isMr = lang === Language.MARATHI;
+  const t = getTranslations(lang);
 
   const [tab, setTab] = useState<OrderTab>('purchased');
   const [refreshing, setRefreshing] = useState(false);
@@ -555,7 +557,7 @@ export default function OrdersScreen({ lang }: { lang: Language }) {
           <div className="flex items-end justify-between">
             <div>
               <p className="text-[10px] font-medium tracking-[0.2em] uppercase text-[rgba(245,240,232,0.35)] mb-1">
-                {isMr ? 'माझे व्यवहार' : 'My Transactions'}
+                {t.myTransactions}
               </p>
               <h1 className="font-light text-[#F5F0E8]" style={{ fontSize: '26px', letterSpacing: '-0.02em' }}>
                 {t.orders}
@@ -597,9 +599,7 @@ export default function OrdersScreen({ lang }: { lang: Language }) {
                   letterSpacing: '0.02em',
                 }}
               >
-                {key === 'purchased'
-                  ? (isMr ? '🛒 खरेदी केले' : '🛒 Purchased')
-                  : (isMr ? '🌾 विकले' : '🌾 Sold')}
+                {key === 'purchased' ? t.purchased : t.soldTab}
               </button>
             ))}
           </div>
@@ -609,10 +609,10 @@ export default function OrdersScreen({ lang }: { lang: Language }) {
         <SectionReveal delay={80}>
           <div className="grid grid-cols-3 gap-3">
             {[
-              { label: isMr ? 'एकूण' : 'Orders',  value: `${orders.length}` },
-              { label: isMr ? 'सक्रिय' : 'Active',  value: `${activeCount}` },
+              { label: t.ordersLabel, value: `${orders.length}` },
+              { label: t.active,      value: `${activeCount}` },
               {
-                label: tab === 'purchased' ? (isMr ? 'खर्च' : 'Spent') : (isMr ? 'कमाई' : 'Earned'),
+                label: tab === 'purchased' ? t.spent : t.earned,
                 value: rupeeFormat(tab === 'purchased' ? totalSpent : totalEarned),
               },
             ].map(({ label, value }) => (
@@ -660,7 +660,7 @@ export default function OrdersScreen({ lang }: { lang: Language }) {
                 <OrderCard
                   key={order.id}
                   order={order}
-                  isMr={isMr}
+                  lang={lang}
                   index={i}
                   onClick={() => setSelected(order)}
                 />
@@ -674,7 +674,7 @@ export default function OrdersScreen({ lang }: { lang: Language }) {
           <div className="flex items-center justify-center gap-2 pt-2 opacity-25">
             <Package size={11} />
             <span className="text-[9px] font-medium tracking-[0.2em] uppercase">
-              {isMr ? 'Swaseva लॉजिस्टिक्स' : 'Swaseva Logistics'}
+              {t.swasevaLogistics}
             </span>
           </div>
         </SectionReveal>
@@ -686,7 +686,7 @@ export default function OrdersScreen({ lang }: { lang: Language }) {
           <OrderDetailPanel
             order={selected}
             tab={tab}
-            isMr={isMr}
+            lang={lang}
             onClose={() => setSelected(null)}
           />
         )}
