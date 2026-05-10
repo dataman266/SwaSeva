@@ -12,6 +12,9 @@ async function bootstrap() {
       'http://localhost:5173',
       'http://localhost:4173',
       /\.vercel\.app$/,
+      /\.railway\.app$/,
+      /capacitor:\/\//,
+      /ionic:\/\//,
     ],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
@@ -37,4 +40,7 @@ async function bootstrap() {
   console.log(`Backend running on http://localhost:${port}/api`);
 }
 
-bootstrap();
+bootstrap().catch(err => {
+  console.error('Fatal startup error:', err);
+  process.exit(1);
+});
