@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import {
   ArrowLeft, Phone, MessageSquare, Truck, Heart,
   MapPin, Calendar, ShieldCheck, Star, Share2, ShoppingCart, X,
@@ -6,8 +6,8 @@ import {
 import { addToCart } from '../utils/cart.ts';
 import { haptic } from '../utils/haptic.ts';
 
-const SAVED_KEY = 'agrimart_saved';
-const CONNECTIONS_KEY = 'agrimart_connections';
+const SAVED_KEY = 'swaseva_saved';
+const CONNECTIONS_KEY = 'swaseva_connections';
 import { Product, Language, MappedShopProduct } from '../types.ts';
 import { SELLERS, MOCK_SHOP_PROFILES, getTranslations } from '../constants.tsx';
 import SectionReveal from './atoms/SectionReveal.tsx';

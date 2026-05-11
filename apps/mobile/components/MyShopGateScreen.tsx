@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Store } from 'lucide-react';
 import { Language, UserRole } from '../types.ts';
 import ShopRegistrationView from './dukaan/ShopRegistrationView.tsx';
@@ -19,8 +19,8 @@ export default function MyShopGateScreen({ lang, onRegistered, onCreateNew }: Pr
       <ShopRegistrationView
         lang={lang}
         onSave={(profile) => {
-          localStorage.setItem('agrimart_user_role', 'shopkeeper');
-          localStorage.setItem('agrimart_shop_profile', JSON.stringify(profile));
+          localStorage.setItem('swaseva_user_role', 'shopkeeper');
+          localStorage.setItem('swaseva_shop_profile', JSON.stringify(profile));
           onRegistered('shopkeeper');
         }}
       />

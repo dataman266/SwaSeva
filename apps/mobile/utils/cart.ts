@@ -1,4 +1,4 @@
-const CART_KEY   = 'agrimart_cart';
+﻿const CART_KEY   = 'swaseva_cart';
 const CART_EVENT = 'cartchange';
 
 export interface CartItem {

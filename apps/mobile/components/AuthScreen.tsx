@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+﻿import React, { useState, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Eye, EyeOff, Phone, Lock, User, MapPin, Hash, Camera, ChevronRight, ArrowLeft, Loader, ChevronDown } from 'lucide-react';
 import PillButton from './atoms/PillButton.tsx';
@@ -384,7 +384,7 @@ function RegisterStep2({ isMr, onBack, onSuccess }: { isMr: boolean; onBack: () 
   const [state,         setState]         = useState('Maharashtra');
   const [district,      setDistrict]      = useState('');
   const [taluka,        setTaluka]        = useState('');
-  const [isShopkeeper,  setIsShopkeeper]  = useState(localStorage.getItem('agrimart_user_role') === 'shopkeeper');
+  const [isShopkeeper,  setIsShopkeeper]  = useState(localStorage.getItem('swaseva_user_role') === 'shopkeeper');
   // Shop fields (only used when isShopkeeper)
   const [shopName,      setShopName]      = useState('');
   const [licenseType,   setLicenseType]   = useState<'gst' | 'license'>('gst');
@@ -444,10 +444,10 @@ function RegisterStep2({ isMr, onBack, onSuccess }: { isMr: boolean; onBack: () 
       auth.setTokens(res.data.tokens.accessToken, res.data.tokens.refreshToken);
       if (isShopkeeper) {
         const profile = { shopName, gstOrLicense: licenseValue, exteriorPhotoUri: exteriorUri, interiorPhotoUri: interiorUri, verificationStatus: 'pending' as const };
-        localStorage.setItem('agrimart_user_role', 'shopkeeper');
-        localStorage.setItem('agrimart_shop_profile', JSON.stringify(profile));
+        localStorage.setItem('swaseva_user_role', 'shopkeeper');
+        localStorage.setItem('swaseva_shop_profile', JSON.stringify(profile));
       } else {
-        localStorage.setItem('agrimart_user_role', 'farmer');
+        localStorage.setItem('swaseva_user_role', 'farmer');
       }
       _isShopkeeper = false;
       onSuccess(res.data.tokens.accessToken);

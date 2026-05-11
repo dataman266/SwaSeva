@@ -2,6 +2,6 @@
 <resources>
     <string name="app_name">Swaseva</string>
     <string name="title_activity_main">Swaseva</string>
-    <string name="package_name">com.aplaagrimart.app</string>
-    <string name="custom_url_scheme">com.aplaagrimart.app</string>
+    <string name="package_name">in.swaseva.app</string>
+    <string name="custom_url_scheme">in.swaseva.app</string>
 </resources>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Language, UserRole } from '../types.ts';
 import DashboardTab from './dukaan/DashboardTab.tsx';
 import InventoryTab from './dukaan/InventoryTab.tsx';
@@ -23,7 +23,7 @@ export default function DukaanScreen({ lang, userRole }: Props) {
 
   let shopName = isMr ? 'माझे दुकान' : 'My Shop';
   try {
-    const profile = JSON.parse(localStorage.getItem('agrimart_shop_profile') ?? '{}');
+    const profile = JSON.parse(localStorage.getItem('swaseva_shop_profile') ?? '{}');
     if (profile?.shopName) shopName = profile.shopName;
   } catch { /* ignore */ }
 

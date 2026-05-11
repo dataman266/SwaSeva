@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
 import { Newspaper, TrendingUp, CloudRain, Landmark, ExternalLink } from 'lucide-react';
 import SectionReveal from '../atoms/SectionReveal.tsx';
@@ -20,7 +20,7 @@ async function fetchWithTimeout(url: string, ms: number): Promise<Response> {
 }
 
 const BACKEND_URL = (import.meta as { env?: Record<string, string> }).env?.VITE_API_URL ?? null;
-const CACHE_KEY   = 'agrimart_news_v2';
+const CACHE_KEY   = 'swaseva_news_v2';
 const CACHE_TTL   = 30 * 60 * 1000; // 30 min
 
 // ── Types ─────────────────────────────────────────────────────────────────────

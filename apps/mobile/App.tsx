@@ -1,4 +1,4 @@
-
+﻿
 import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { AppScreen, AppState, Language, Product, UserRole } from './types.ts';
@@ -23,9 +23,9 @@ import Header from './components/Header.tsx';
 
 const DukaanScreen = lazy(() => import('./components/DukaanScreen.tsx'));
 
-const ONBOARDED_KEY  = 'agrimart_onboarded';
-const AUTH_TOKEN_KEY = 'agrimart_auth_token';
-const LANG_KEY       = 'agrimart_user_language';
+const ONBOARDED_KEY  = 'swaseva_onboarded';
+const AUTH_TOKEN_KEY = 'swaseva_auth_token';
+const LANG_KEY       = 'swaseva_user_language';
 
 // Screens that push forward (slide left) vs pop back (slide right)
 const SCREEN_ORDER: AppScreen[] = ['HOME', 'DETAILS', 'SELL', 'LISTINGS', 'MESSAGES', 'ORDERS', 'PROFILE', 'DUKAAN', 'EXPLORE', 'ASSISTANT', 'CALENDAR', 'CART', 'CHECKOUT', 'SELLER_PROFILE'];
@@ -54,7 +54,7 @@ const App: React.FC = () => {
     currentScreen: localStorage.getItem(ONBOARDED_KEY) ? 'HOME' : 'ONBOARDING',
     userLanguage: (localStorage.getItem(LANG_KEY) as Language | null) ?? Language.ENGLISH,
     location: 'Detecting...',
-    userRole: localStorage.getItem('agrimart_user_role') === 'shopkeeper' ? 'shopkeeper' : 'farmer',
+    userRole: localStorage.getItem('swaseva_user_role') === 'shopkeeper' ? 'shopkeeper' : 'farmer',
   });
   const [prevScreen, setPrevScreen] = useState<AppScreen>('HOME');
   const [highlightShopkeeper, setHighlightShopkeeper] = useState(false);
@@ -135,14 +135,14 @@ const App: React.FC = () => {
         setState(s => ({ ...s, userRole: role }));
       }} onSignOut={() => {
         localStorage.removeItem(AUTH_TOKEN_KEY);
-        localStorage.removeItem('agrimart_user_role');
+        localStorage.removeItem('swaseva_user_role');
         setIsAuthenticated(false);
         setState(s => ({ ...s, userRole: 'farmer' }));
         changeScreen('HOME');
       }} onExplore={() => changeScreen('EXPLORE')} onOpenCalendar={() => changeScreen('CALENDAR')} onResetOnboarding={() => {
         localStorage.removeItem(AUTH_TOKEN_KEY);
         localStorage.removeItem(ONBOARDED_KEY);
-        localStorage.removeItem('agrimart_user_role');
+        localStorage.removeItem('swaseva_user_role');
         setIsAuthenticated(false);
         setState(s => ({ ...s, userRole: 'farmer' }));
         changeScreen('ONBOARDING');
@@ -165,7 +165,7 @@ const App: React.FC = () => {
           lang={state.userLanguage}
           onComplete={(role) => {
             localStorage.setItem(ONBOARDED_KEY, 'true');
-            localStorage.setItem('agrimart_user_role', role);
+            localStorage.setItem('swaseva_user_role', role);
             setState(s => ({ ...s, userRole: role }));
             changeScreen('HOME');
           }}
@@ -182,7 +182,7 @@ const App: React.FC = () => {
         lang={state.userLanguage}
         onAuthSuccess={(token) => {
           localStorage.setItem(AUTH_TOKEN_KEY, token);
-          const role: UserRole = localStorage.getItem('agrimart_user_role') === 'shopkeeper' ? 'shopkeeper' : 'farmer';
+          const role: UserRole = localStorage.getItem('swaseva_user_role') === 'shopkeeper' ? 'shopkeeper' : 'farmer';
           setState(prev => ({ ...prev, userRole: role }));
           setIsAuthenticated(true);
         }}

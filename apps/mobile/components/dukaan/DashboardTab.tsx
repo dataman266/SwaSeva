@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { AlertTriangle } from 'lucide-react';
 import { Language, ShopItem } from '../../types.ts';
 
@@ -22,7 +22,7 @@ const STATUS_STYLE: Record<string, { bg: string; color: string; label: string; l
 
 function loadInventory(): ShopItem[] {
   try {
-    const raw = localStorage.getItem('agrimart_shop_inventory');
+    const raw = localStorage.getItem('swaseva_shop_inventory');
     return raw ? JSON.parse(raw) : [];
   } catch { return []; }
 }

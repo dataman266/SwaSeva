@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+﻿import React, { useState, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { Language, UserRole } from '../types.ts';
@@ -866,7 +866,7 @@ export default function ProfileScreen({ lang, userRole, highlightShopkeeper, onH
       case 'calendar':      onOpenCalendar();                break;
       case 'help':          navigateTo('help');              break;
       case 'onboarding': {
-        try { localStorage.removeItem('agrimart_onboarded'); } catch {}
+        try { localStorage.removeItem('swaseva_onboarded'); } catch {}
         onResetOnboarding();
         break;
       }
@@ -919,8 +919,8 @@ export default function ProfileScreen({ lang, userRole, highlightShopkeeper, onH
               <ShopRegistrationView
                 lang={lang}
                 onSave={(profile) => {
-                  localStorage.setItem('agrimart_user_role', 'shopkeeper');
-                  localStorage.setItem('agrimart_shop_profile', JSON.stringify(profile));
+                  localStorage.setItem('swaseva_user_role', 'shopkeeper');
+                  localStorage.setItem('swaseva_shop_profile', JSON.stringify(profile));
                   onBecomeShopkeeper('shopkeeper');
                   goBack();
                 }}

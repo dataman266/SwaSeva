@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Plus, Edit2, Trash2 } from 'lucide-react';
 import { ShopItem, ShopItemCategory, Language } from '../../types.ts';
 import { MOCK_SHOP_ITEMS } from '../../constants.tsx';
@@ -14,7 +14,7 @@ const FILTER_CATS: { id: ShopItemCategory | 'all'; en: string; mr: string }[] = 
   { id: 'other',      en: 'Other',      mr: 'इतर'       },
 ];
 
-const STORAGE_KEY = 'agrimart_shop_inventory';
+const STORAGE_KEY = 'swaseva_shop_inventory';
 
 function loadItems(): ShopItem[] {
   try {
@@ -35,7 +35,7 @@ export default function InventoryTab({ lang }: { lang: Language }) {
   const [editItem,  setEditItem]  = useState<ShopItem | undefined>();
   const [deleteId,  setDeleteId]  = useState<string | null>(null);
 
-  const shopProfile = JSON.parse(localStorage.getItem('agrimart_shop_profile') ?? '{}');
+  const shopProfile = JSON.parse(localStorage.getItem('swaseva_shop_profile') ?? '{}');
   const shopkeeperId = (shopProfile?.shopkeeperId as string) ?? 'my_shop';
 
   const persist = (next: ShopItem[]) => { setItems(next); saveItems(next); };

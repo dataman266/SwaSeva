@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef, useEffect } from 'react';
+﻿import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Language, UserRole } from '../types.ts';
 import { getTranslations } from '../constants.tsx';
@@ -38,7 +38,7 @@ interface Listing {
   leads?: InquiryLead[];
 }
 
-const USER_LISTINGS_KEY = 'agrimart_user_listings';
+const USER_LISTINGS_KEY = 'swaseva_user_listings';
 
 function loadUserListings(): Listing[] {
   try {

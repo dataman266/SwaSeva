@@ -1,4 +1,4 @@
-# AgriMart Android Release Build Script
+# Swaseva Android Release Build Script
 # Run this from anywhere:  .\build-android.ps1
 
 $env:JAVA_HOME    = "E:\android_studio\jbr"

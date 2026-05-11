@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef, lazy, Suspense } from 'react';
+﻿import React, { useState, useEffect, useCallback, useRef, lazy, Suspense } from 'react';
 import { Search, Filter, Scale, Newspaper, TrendingUp, ChevronRight, RotateCcw, X, MapPin, PlusCircle, Mic, MicOff } from 'lucide-react';
 
 declare global {
@@ -42,7 +42,7 @@ import WeatherWidget from './atoms/WeatherWidget.tsx';
 import { LocationFilter, DEFAULT_LOCATION_FILTER } from './locationTypes.ts';
 const LocationPickerModal = lazy(() => import('./LocationPickerModal.tsx'));
 
-const CONNECTIONS_KEY = 'agrimart_connections';
+const CONNECTIONS_KEY = 'swaseva_connections';
 
 interface HomeScreenProps {
   lang: Language;
@@ -55,8 +55,8 @@ interface HomeScreenProps {
   onOpenSellerProfile?: (id: string) => void;
 }
 
-const SAVED_KEY = 'agrimart_saved';
-const USER_LISTINGS_KEY = 'agrimart_user_listings';
+const SAVED_KEY = 'swaseva_saved';
+const USER_LISTINGS_KEY = 'swaseva_user_listings';
 
 function getSavedIds(): string[] {
   try { return JSON.parse(localStorage.getItem(SAVED_KEY) || '[]'); } catch { return []; }
@@ -225,7 +225,7 @@ export default function HomeScreen({ lang, location, onViewDetails, onOpenAssist
   const loadDukaanItems = (): MappedShopProduct[] => {
     let shopItems: ShopItem[] = MOCK_SHOP_ITEMS;
     try {
-      const raw = localStorage.getItem('agrimart_shop_inventory');
+      const raw = localStorage.getItem('swaseva_shop_inventory');
       if (raw) shopItems = [...JSON.parse(raw), ...MOCK_SHOP_ITEMS];
     } catch { /* use mock */ }
     return shopItems

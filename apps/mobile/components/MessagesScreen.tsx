@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { ArrowLeft, MessageSquare, Phone } from 'lucide-react';
 import { Language } from '../types.ts';
 import { SELLERS, getTranslations } from '../constants.tsx';
 
-const CONNECTIONS_KEY = 'agrimart_connections';
+const CONNECTIONS_KEY = 'swaseva_connections';
 
 interface Connection {
   id: string;

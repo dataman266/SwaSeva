@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+﻿import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Camera, Video, CheckCircle, ChevronLeft, X, ShieldCheck, MapPin } from 'lucide-react';
 import L from 'leaflet';
 import { Language } from '../types.ts';
@@ -8,8 +8,8 @@ import SectionReveal from './atoms/SectionReveal.tsx';
 import { haptic } from '../utils/haptic.ts';
 import { productsApi, categoriesApi, ApiCategory, auth } from '../services/api.ts';
 
-const DRAFT_KEY         = 'agrimart_sell_draft';
-const USER_LISTINGS_KEY = 'agrimart_user_listings';
+const DRAFT_KEY         = 'swaseva_sell_draft';
+const USER_LISTINGS_KEY = 'swaseva_user_listings';
 
 const PRICE_UNITS = [
   { value: 'kg',      label: 'per kg',      labelMr: 'प्रति किलो'      },

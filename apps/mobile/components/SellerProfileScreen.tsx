@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import {
   ArrowLeft, Phone, MessageSquare, ShieldCheck, Star,
   MapPin, Package, Calendar, TrendingUp,
@@ -7,7 +7,7 @@ import { Language, Product, MappedShopProduct } from '../types.ts';
 import { SELLERS, PRODUCTS, MOCK_SHOP_PROFILES, MOCK_SHOP_ITEMS, getTranslations } from '../constants.tsx';
 import SectionReveal from './atoms/SectionReveal.tsx';
 
-const CONNECTIONS_KEY = 'agrimart_connections';
+const CONNECTIONS_KEY = 'swaseva_connections';
 
 interface SellerProfileScreenProps {
   sellerId: string;

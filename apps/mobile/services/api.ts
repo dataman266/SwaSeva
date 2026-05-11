@@ -1,12 +1,12 @@
-// ─── AgriMart API client ──────────────────────────────────────────────────────
+﻿// ─── Swaseva API client ───────────────────────────────────────────────────────
 // Single source of truth for all backend calls. Handles token lifecycle.
 
 const BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:3000/api';
 
 const KEYS = {
-  access:  'agrimart_auth_token',
-  refresh: 'agrimart_refresh_token',
-  phone:   'agrimart_otp_phone',
+  access:  'swaseva_auth_token',
+  refresh: 'swaseva_refresh_token',
+  phone:   'swaseva_otp_phone',
 } as const;
 
 // ─── Token helpers ────────────────────────────────────────────────────────────
@@ -47,7 +47,7 @@ async function req<T>(
     const refreshed = await tryRefresh();
     if (refreshed) return req<T>(path, options, false);
     auth.clear();
-    window.dispatchEvent(new Event('agrimart:unauthenticated'));
+    window.dispatchEvent(new Event('swaseva:unauthenticated'));
     throw new ApiError(401, 'Session expired');
   }
 
