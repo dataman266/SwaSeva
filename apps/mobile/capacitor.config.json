@@ -1,6 +1,6 @@
 
 {
-  "appId": "com.aplaagrimart.app",
+  "appId": "in.swaseva.app",
   "appName": "Swaseva",
   "webDir": "dist",
   "bundledWebRuntime": false,
