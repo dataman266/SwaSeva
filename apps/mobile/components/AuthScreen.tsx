@@ -202,7 +202,7 @@ export default function AuthScreen({ lang, onAuthSuccess, onLanguageChange }: Au
     <AuthShell langToggle={langToggle}>
       <AnimatePresence mode="wait" custom={dir}>
         <motion.div key={view} custom={dir} variants={slide} initial="enter" animate="center" exit="exit" transition={trs}>
-          {view === 'login'          && <LoginView      isMr={isMr} onRegister={() => go('register-step1')} onSentOtp={() => go('otp-verify')} />}
+          {view === 'login'          && <LoginView      isMr={isMr} onSentOtp={() => go('otp-verify')} />}
           {view === 'otp-verify'     && <OtpVerify     isMr={isMr} onBack={() => go('login', -1)} onSuccess={onAuthSuccess} onNewUser={() => go('register-step1')} />}
           {view === 'register-step1' && <RegisterStep1  isMr={isMr} onBack={() => go('login', -1)} onNext={() => go('register-step2')} />}
           {view === 'register-step2' && <RegisterStep2  isMr={isMr} onBack={() => go('register-step1', -1)} onSuccess={onAuthSuccess} />}
@@ -216,8 +216,8 @@ export default function AuthScreen({ lang, onAuthSuccess, onLanguageChange }: Au
 // LOGIN VIEW
 // ══════════════════════════════════════════════════════════════════════════════
 
-function LoginView({ isMr, onRegister, onSentOtp }: {
-  isMr: boolean; onRegister: () => void; onSentOtp: () => void;
+function LoginView({ isMr, onSentOtp }: {
+  isMr: boolean; onSentOtp: () => void;
 }) {
   const [mobile,  setMobile]  = useState('');
   const [error,   setError]   = useState('');
@@ -273,21 +273,11 @@ function LoginView({ isMr, onRegister, onSentOtp }: {
         </PillButton>
       </div>
 
-      <div className="flex items-center gap-3 my-6">
-        <div className="flex-1 h-px bg-[rgba(245,240,232,0.08)]" />
-        <span className="text-[11px] text-[rgba(245,240,232,0.3)]">{isMr ? 'किंवा' : 'or'}</span>
-        <div className="flex-1 h-px bg-[rgba(245,240,232,0.08)]" />
-      </div>
-
-      <button
-        type="button"
-        onClick={onRegister}
-        className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl border transition-colors active:bg-[rgba(245,240,232,0.05)]"
-        style={{ borderColor: 'rgba(245,240,232,0.12)', color: '#F5F0E8', fontSize: 14, fontWeight: 300 }}
-      >
-        {isMr ? 'नवीन खाते तयार करा' : 'Create new account'}
-        <ChevronRight size={16} />
-      </button>
+      <p className="text-center text-[12px] mt-5" style={{ color: 'rgba(245,240,232,0.35)', lineHeight: 1.6 }}>
+        {isMr
+          ? 'नवीन आहात? वरील नंबर टाका — OTP सत्यापनानंतर आपोआप नोंदणी होईल.'
+          : 'New to Swaseva? Enter your number above — we\'ll register you automatically after OTP verification.'}
+      </p>
     </form>
   );
 }
@@ -379,8 +369,6 @@ function RegisterStep1({ isMr, onBack, onNext }: { isMr: boolean; onBack: () => 
 // ══════════════════════════════════════════════════════════════════════════════
 
 function RegisterStep2({ isMr, onBack, onSuccess }: { isMr: boolean; onBack: () => void; onSuccess: (t: string) => void }) {
-  const [address,       setAddress]       = useState('');
-  const [pincode,       setPincode]       = useState('');
   const [state,         setState]         = useState('Maharashtra');
   const [district,      setDistrict]      = useState('');
   const [taluka,        setTaluka]        = useState('');
@@ -413,8 +401,6 @@ function RegisterStep2({ isMr, onBack, onSuccess }: { isMr: boolean; onBack: () 
 
   const validate = () => {
     const e: Record<string, string> = {};
-    if (!address.trim())   e.address  = isMr ? 'पत्ता आवश्यक आहे'    : 'Address is required';
-    if (!pincode || !/^\d{6}$/.test(pincode)) e.pincode = isMr ? 'बरोबर ६ अंकी पिनकोड' : 'Enter valid 6-digit pincode';
     if (!state)    e.state    = isMr ? 'राज्य निवडा'          : 'State is required';
     if (!district) e.district = isMr ? 'जिल्हा निवडा'         : 'District is required';
     if (isMH && talukaOpts.length > 0 && !taluka) e.taluka = isMr ? 'तालुका निवडा' : 'Taluka is required';
@@ -474,7 +460,7 @@ function RegisterStep2({ isMr, onBack, onSuccess }: { isMr: boolean; onBack: () 
         {isMr ? 'तुमचा तपशील' : 'Your Details'}
       </h1>
       <p className="text-[rgba(245,240,232,0.45)] font-light mb-5" style={{ fontSize: 13 }}>
-        {isMr ? 'भूमिका निवडा आणि पत्ता द्या' : 'Choose your role and enter your address'}
+        {isMr ? 'भूमिका व स्थान निवडा' : 'Choose your role and location'}
       </p>
 
       {/* Role selection */}
@@ -552,10 +538,8 @@ function RegisterStep2({ isMr, onBack, onSuccess }: { isMr: boolean; onBack: () 
         </div>
       </div>
 
-      {/* Address fields */}
+      {/* Location fields */}
       <div className="flex flex-col gap-4">
-        <Field label={isMr ? 'पूर्ण पत्ता' : 'Full Address'} icon={MapPin} type="text" placeholder={isMr ? 'घर नं., गल्ली, गाव' : 'House no., street, village'} value={address} onChange={e => setAddress(e.target.value)} error={errors.address} required autoComplete="street-address" />
-        <Field label={isMr ? 'पिनकोड' : 'Pincode'} icon={Hash} type="tel" inputMode="numeric" maxLength={6} placeholder="411001" value={pincode} onChange={e => setPincode(e.target.value.replace(/\D/g,''))} error={errors.pincode} required autoComplete="postal-code" />
         <SearchableDropdown label={isMr ? 'राज्य' : 'State'} options={stateOpts} value={state} onChange={v => { setState(v); setDistrict(''); setTaluka(''); }} error={errors.state} required />
         {isMH ? (
           <>
