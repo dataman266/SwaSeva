@@ -1,4 +1,4 @@
-package com.aplaagrimart.app;
+package in.swaseva.app;
 
 import com.getcapacitor.BridgeActivity;
 
