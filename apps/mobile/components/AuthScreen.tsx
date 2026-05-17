@@ -151,6 +151,7 @@ export default function AuthScreen({ lang, onAuthSuccess, onLanguageChange }: Au
   const [dir,            setDir]            = useState(1);
   const [localLang,      setLocalLang]      = useState(lang);
   const [showLangPicker, setShowLangPicker] = useState(false);
+  const [devOtp,         setDevOtp]         = useState<string | undefined>();
   const isMr = localLang === Language.MARATHI;
 
   const go = useCallback((next: AuthView, direction = 1) => {
@@ -202,8 +203,8 @@ export default function AuthScreen({ lang, onAuthSuccess, onLanguageChange }: Au
     <AuthShell langToggle={langToggle}>
       <AnimatePresence mode="wait" custom={dir}>
         <motion.div key={view} custom={dir} variants={slide} initial="enter" animate="center" exit="exit" transition={trs}>
-          {view === 'login'          && <LoginView      isMr={isMr} onSentOtp={() => go('otp-verify')} />}
-          {view === 'otp-verify'     && <OtpVerify     isMr={isMr} onBack={() => go('login', -1)} onSuccess={onAuthSuccess} onNewUser={() => go('register-step1')} />}
+          {view === 'login'          && <LoginView      isMr={isMr} onSentOtp={(otp) => { setDevOtp(otp); go('otp-verify'); }} />}
+          {view === 'otp-verify'     && <OtpVerify     isMr={isMr} onBack={() => go('login', -1)} onSuccess={onAuthSuccess} onNewUser={() => go('register-step1')} devOtp={devOtp} />}
           {view === 'register-step1' && <RegisterStep1  isMr={isMr} onBack={() => go('login', -1)} onNext={() => go('register-step2')} />}
           {view === 'register-step2' && <RegisterStep2  isMr={isMr} onBack={() => go('register-step1', -1)} onSuccess={onAuthSuccess} />}
         </motion.div>
@@ -217,7 +218,7 @@ export default function AuthScreen({ lang, onAuthSuccess, onLanguageChange }: Au
 // ══════════════════════════════════════════════════════════════════════════════
 
 function LoginView({ isMr, onSentOtp }: {
-  isMr: boolean; onSentOtp: () => void;
+  isMr: boolean; onSentOtp: (devOtp?: string) => void;
 }) {
   const [mobile,  setMobile]  = useState('');
   const [error,   setError]   = useState('');
@@ -232,9 +233,9 @@ function LoginView({ isMr, onSentOtp }: {
     setError('');
     setLoading(true);
     try {
-      await authApi.sendOtp('+91' + mobile.trim());
+      const res = await authApi.sendOtp('+91' + mobile.trim());
       auth.setPhone('+91' + mobile.trim());
-      onSentOtp();
+      onSentOtp(res.data.otp);
     } catch (ex) {
       const detail = ex instanceof ApiError
         ? ex.message
@@ -701,13 +702,14 @@ function RegisterStep2({ isMr, onBack, onSuccess }: { isMr: boolean; onBack: () 
 // ══════════════════════════════════════════════════════════════════════════════
 
 
-function OtpVerify({ isMr, onBack, onSuccess, onNewUser }: {
+function OtpVerify({ isMr, onBack, onSuccess, onNewUser, devOtp }: {
   isMr: boolean;
   onBack: () => void;
   onSuccess: (token: string) => void;
   onNewUser: () => void;
+  devOtp?: string;
 }) {
-  const [digits,    setDigits]    = useState(['','','','','','']);
+  const [digits,    setDigits]    = useState(devOtp ? devOtp.split('') : ['','','','','','']);
   const [error,     setError]     = useState('');
   const [loading,   setLoading]   = useState(false);
   const [resending, setResending] = useState(false);
@@ -765,9 +767,15 @@ function OtpVerify({ isMr, onBack, onSuccess, onNewUser }: {
       <h1 className="text-[#F5F0E8] font-light mb-1" style={{ fontSize: 'clamp(24px,7vw,32px)', letterSpacing: '-0.03em' }}>
         {isMr ? 'OTP टाका' : 'Enter OTP'}
       </h1>
-      <p className="text-[rgba(245,240,232,0.45)] font-light mb-8" style={{ fontSize: 13 }}>
+      <p className="text-[rgba(245,240,232,0.45)] font-light mb-4" style={{ fontSize: 13 }}>
         {isMr ? `${phone} वर OTP पाठवला` : `6-digit code sent to ${phone}`}
       </p>
+      {devOtp && (
+        <div className="mb-6 rounded-xl px-4 py-3" style={{ background: 'rgba(232,200,74,0.12)', border: '1px solid rgba(232,200,74,0.3)' }}>
+          <p style={{ fontSize: 11, color: '#E8C84A', fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 2 }}>Dev — no SMS configured</p>
+          <p style={{ fontSize: 18, color: '#F5F0E8', fontWeight: 600, letterSpacing: '0.3em' }}>{devOtp}</p>
+        </div>
+      )}
 
       <div className="flex gap-3 justify-center mb-2">
         {digits.map((d, i) => (
