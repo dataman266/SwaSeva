@@ -48,7 +48,7 @@ export class AuthService {
     });
 
     // In production, integrate an SMS provider (e.g. Twilio, MSG91) here
-    this.logger.debug(`[DEV] OTP for ${dto.phone}: ${otp}`);
+    this.logger.log(`[DEV] OTP for ${dto.phone}: ${otp}`);
 
     return { message: 'OTP sent successfully' };
   }
