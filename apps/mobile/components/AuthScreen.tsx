@@ -236,7 +236,10 @@ function LoginView({ isMr, onSentOtp }: {
       auth.setPhone('+91' + mobile.trim());
       onSentOtp();
     } catch (ex) {
-      setError(ex instanceof ApiError ? ex.message : (isMr ? 'OTP पाठवता आला नाही' : 'Could not send OTP. Try again.'));
+      const detail = ex instanceof ApiError
+        ? ex.message
+        : `Network error: ${ex instanceof Error ? ex.message : String(ex)}`;
+      setError(detail);
     } finally {
       setLoading(false);
     }
