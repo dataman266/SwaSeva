@@ -122,8 +122,8 @@ export default function OnboardingScreen({ lang, onComplete }: OnboardingScreenP
       {!isLast && (
         <button
           onClick={finish}
-          className="absolute top-safe right-5 mt-5 z-10 text-[rgba(245,240,232,0.4)] active:text-[rgba(245,240,232,0.7)] transition-colors"
-          style={{ fontSize: '12px', fontWeight: 500, letterSpacing: '0.08em', minHeight: 44, minWidth: 44, display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}
+          className="absolute right-5 z-10 text-[rgba(245,240,232,0.4)] active:text-[rgba(245,240,232,0.7)] transition-colors"
+          style={{ top: 'max(20px, env(safe-area-inset-top))', fontSize: '12px', fontWeight: 500, letterSpacing: '0.08em', minHeight: 44, minWidth: 44, display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}
         >
           {isMr ? 'वगळा' : 'Skip'}
         </button>
