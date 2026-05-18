@@ -53,11 +53,20 @@ export class AuthService {
   }
 
   async verifyOtp(dto: VerifyOtpDto) {
+    const now = new Date();
+    const recent = await this.prisma.otpSession.findMany({
+      where: { phone: dto.phone },
+      orderBy: { createdAt: 'desc' },
+      take: 3,
+      select: { id: true, usedAt: true, expiresAt: true, createdAt: true },
+    });
+    this.logger.log(`verifyOtp now=${now.toISOString()} sessions=${JSON.stringify(recent)}`);
+
     const session = await this.prisma.otpSession.findFirst({
       where: {
         phone: dto.phone,
         usedAt: null,
-        expiresAt: { gt: new Date() },
+        expiresAt: { gt: now },
       },
       orderBy: { createdAt: 'desc' },
     });
