@@ -166,23 +166,54 @@ export class AuthService {
   }
 
   private async sendSms(phone: string, otp: string): Promise<void> {
-    const authKey    = process.env.MSG91_AUTH_KEY;
-    const templateId = process.env.MSG91_TEMPLATE_ID;
+    const token         = process.env.WHATSAPP_TOKEN;
+    const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
+    const templateName  = process.env.WHATSAPP_OTP_TEMPLATE ?? 'swaseva_otp';
 
-    if (!authKey || !templateId) {
-      this.logger.warn('MSG91 credentials not set — OTP not sent via SMS');
+    if (!token || !phoneNumberId) {
+      this.logger.warn('WhatsApp credentials not set — OTP not delivered');
       return;
     }
 
-    // MSG91 Send OTP API  — mobile must be digits only (no + prefix)
-    const mobile = phone.replace(/^\+/, '');
+    // WhatsApp numbers must not have + prefix
+    const to = phone.replace(/^\+/, '');
 
-    const url = `https://api.msg91.com/api/v5/otp?template_id=${templateId}&mobile=${mobile}&authkey=${authKey}&otp=${otp}`;
+    const res = await fetch(
+      `https://graph.facebook.com/v19.0/${phoneNumberId}/messages`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          messaging_product: 'whatsapp',
+          to,
+          type: 'template',
+          template: {
+            name: templateName,
+            language: { code: 'en' },
+            components: [
+              {
+                type: 'body',
+                parameters: [{ type: 'text', text: otp }],
+              },
+              // Copy-code button (optional — remove if your template has none)
+              {
+                type: 'button',
+                sub_type: 'url',
+                index: 0,
+                parameters: [{ type: 'text', text: otp }],
+              },
+            ],
+          },
+        }),
+      },
+    );
 
-    const res = await fetch(url);
     if (!res.ok) {
       const body = await res.text();
-      this.logger.error(`MSG91 send failed: ${res.status} ${body}`);
+      this.logger.error(`WhatsApp OTP send failed: ${res.status} ${body}`);
       throw new HttpException('Failed to send OTP. Please try again.', HttpStatus.SERVICE_UNAVAILABLE);
     }
   }
