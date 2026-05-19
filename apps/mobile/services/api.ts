@@ -196,7 +196,7 @@ export interface ApiUserStats {
 
 export const authApi = {
   sendOtp: (phone: string) =>
-    req<ApiResponse<{ message: string; otp?: string }>>('/auth/otp/send', {
+    req<ApiResponse<{ message: string }>>('/auth/otp/send', {
       method: 'POST',
       body: JSON.stringify({ phone }),
     }),

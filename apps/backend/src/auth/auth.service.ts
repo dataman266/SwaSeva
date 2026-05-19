@@ -47,9 +47,8 @@ export class AuthService {
       data: { phone: dto.phone, otpHash, expiresAt },
     });
 
-    // In production, integrate an SMS provider (e.g. Twilio, MSG91) here
-    // No SMS provider — return OTP in response for testing
-    return { message: 'OTP sent successfully', otp };
+    await this.sendSms(dto.phone, otp);
+    return { message: 'OTP sent successfully' };
   }
 
   async verifyOtp(dto: VerifyOtpDto) {
@@ -164,5 +163,27 @@ export class AuthService {
 
   private sanitizeUser(user: { id: string; phone: string; name_en: string | null; name_mr: string | null }) {
     return { id: user.id, phone: user.phone, name_en: user.name_en, name_mr: user.name_mr };
+  }
+
+  private async sendSms(phone: string, otp: string): Promise<void> {
+    const authKey    = process.env.MSG91_AUTH_KEY;
+    const templateId = process.env.MSG91_TEMPLATE_ID;
+
+    if (!authKey || !templateId) {
+      this.logger.warn('MSG91 credentials not set — OTP not sent via SMS');
+      return;
+    }
+
+    // MSG91 Send OTP API  — mobile must be digits only (no + prefix)
+    const mobile = phone.replace(/^\+/, '');
+
+    const url = `https://api.msg91.com/api/v5/otp?template_id=${templateId}&mobile=${mobile}&authkey=${authKey}&otp=${otp}`;
+
+    const res = await fetch(url);
+    if (!res.ok) {
+      const body = await res.text();
+      this.logger.error(`MSG91 send failed: ${res.status} ${body}`);
+      throw new HttpException('Failed to send OTP. Please try again.', HttpStatus.SERVICE_UNAVAILABLE);
+    }
   }
 }
